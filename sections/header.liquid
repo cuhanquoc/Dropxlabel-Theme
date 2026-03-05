@@ -8,6 +8,7 @@
     color: rgba(255, 255, 255, 0.9);
     transition: opacity 250ms ease;
     position: relative;
+    text-decoration: none;
   }
 
   .nav-link::after {
@@ -81,6 +82,204 @@
     font-weight: 600;
     line-height: 1;
   }
+
+  /* ═══════════════════════════════════════
+     MEGA MENU — Full-width Catalog Dropdown
+     ═══════════════════════════════════════ */
+  .mega-trigger {
+    position: relative;
+  }
+
+  .mega-trigger .nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .mega-trigger .nav-link .chevron-down {
+    transition: transform 0.3s ease;
+    width: 10px;
+    height: 10px;
+  }
+
+  .mega-trigger:hover .nav-link .chevron-down {
+    transform: rotate(180deg);
+  }
+
+  .mega-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #ffffff;
+    z-index: 100;
+    display: flex;
+    /* Animation: clip from top */
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      clip-path   0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity     0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .mega-trigger:hover .mega-menu {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Left half: 2 image panels */
+  .mega-images {
+    display: flex;
+    width: 50%;
+    height: 100%;
+  }
+
+  .mega-img-panel {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    text-decoration: none;
+    color: #ffffff;
+  }
+
+  .mega-img-panel img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .mega-img-panel:hover img {
+    transform: scale(1.05);
+  }
+
+  .mega-img-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .mega-img-label {
+    position: absolute;
+    bottom: 1.8rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 2;
+  }
+
+  .mega-img-label-text {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.01em;
+  }
+
+  .mega-img-label-arrow {
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  .mega-img-panel:hover .mega-img-label-arrow {
+    background-color: #ffffff;
+    border-color: #ffffff;
+  }
+
+  .mega-img-label-arrow svg {
+    color: #ffffff;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .mega-img-panel:hover .mega-img-label-arrow svg {
+    color: #0a0a0a;
+    transform: rotate(-45deg);
+  }
+
+  /* Right half: collection columns */
+  .mega-cols {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    gap: 0;
+    padding: 7rem 4rem 3rem 3rem;
+    overflow-y: auto;
+  }
+
+  .mega-col {
+    flex: 1;
+    padding: 0 1.5rem;
+  }
+
+  .mega-col-title {
+    font-family: var(--font-heading);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    margin-bottom: 1.5rem;
+  }
+
+  .mega-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mega-col li {
+    margin-bottom: 0.7rem;
+  }
+
+  .mega-col a {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: #555555;
+    text-decoration: none;
+    transition: color 0.25s ease;
+    line-height: 1.5;
+  }
+
+  .mega-col a:hover {
+    color: #0a0a0a;
+  }
+
+  /* Close button inside mega menu */
+  .mega-close {
+    position: absolute;
+    top: 1.8rem;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: #333333;
+    transition: transform 0.3s ease;
+    z-index: 110;
+  }
+
+  .mega-close:hover {
+    transform: rotate(90deg);
+  }
 </style>
 
 <header class="absolute top-0 left-0 w-full z-50 flex justify-between items-center px-10 py-6 text-white bg-transparent">
@@ -88,7 +287,118 @@
   <!-- LEFT: Navigation Links -->
   <nav class="flex items-center gap-8">
     <a href="{{ routes.root_url }}" class="nav-link">Home</a>
-    <a href="{{ routes.collections_url }}" class="nav-link">Catalog</a>
+
+    <!-- Catalog with Mega Menu -->
+    <div class="mega-trigger">
+      <a href="{{ routes.collections_url }}" class="nav-link">
+        Catalog
+        <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m6 9 6 6 6-6"/>
+        </svg>
+      </a>
+
+      <!-- ═══ MEGA MENU PANEL ═══ -->
+      <div class="mega-menu">
+
+        <!-- Left: 2 Image Panels -->
+        <div class="mega-images">
+
+          <!-- Panel 1 -->
+          <a href="{{ routes.collections_url }}" class="mega-img-panel">
+            <img
+              src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=75&auto=format&fit=crop"
+              alt="Women's Fashion"
+              loading="lazy"
+            />
+            <div class="mega-img-label">
+              <span class="mega-img-label-text">Women's Fashion</span>
+              <span class="mega-img-label-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 17 17 7M7 7h10v10"/>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+          <!-- Panel 2 -->
+          <a href="{{ routes.collections_url }}" class="mega-img-panel">
+            <img
+              src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=75&auto=format&fit=crop"
+              alt="Men's Fashion"
+              loading="lazy"
+            />
+            <div class="mega-img-label">
+              <span class="mega-img-label-text">Men's Fashion</span>
+              <span class="mega-img-label-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M7 17 17 7M7 7h10v10"/>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- Right: Collection Columns -->
+        <div class="mega-cols">
+
+          <!-- Column 1: Summer Essentials -->
+          <div class="mega-col">
+            <p class="mega-col-title">Summer Essentials</p>
+            <ul>
+              <li><a href="{{ routes.collections_url }}">Chic Soft Teddy Coat</a></li>
+              <li><a href="{{ routes.collections_url }}">Fitted Sleeveless Shirt</a></li>
+              <li><a href="{{ routes.collections_url }}">Classic Zip Front Shirt</a></li>
+              <li><a href="{{ routes.collections_url }}">Cropped Trucker Shirt</a></li>
+              <li><a href="{{ routes.collections_url }}">Crop Top Co-ord Set</a></li>
+              <li><a href="{{ routes.collections_url }}">Loose T-shirt</a></li>
+              <li><a href="{{ routes.collections_url }}">Sports Tee</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 2: Sportswear -->
+          <div class="mega-col">
+            <p class="mega-col-title">Sportswear</p>
+            <ul>
+              <li><a href="{{ routes.collections_url }}">Long-Sleeve Sports Tee</a></li>
+              <li><a href="{{ routes.collections_url }}">Polyester Gym Suit</a></li>
+              <li><a href="{{ routes.collections_url }}">Racerback Sports Bra</a></li>
+              <li><a href="{{ routes.collections_url }}">Round Neck T-shirt</a></li>
+              <li><a href="{{ routes.collections_url }}">Outdoor Sports Jacket</a></li>
+              <li><a href="{{ routes.collections_url }}">Racer Back Sports Top</a></li>
+              <li><a href="{{ routes.collections_url }}">Round Neck T-shirt</a></li>
+            </ul>
+          </div>
+
+          <!-- Column 3: Winter Wardrobe -->
+          <div class="mega-col">
+            <p class="mega-col-title">Winter Wardrobe</p>
+            <ul>
+              <li><a href="{{ routes.collections_url }}">Oversized Hoodie</a></li>
+              <li><a href="{{ routes.collections_url }}">Warm and Soft Hoodie</a></li>
+              <li><a href="{{ routes.collections_url }}">Winter Hoodie</a></li>
+              <li><a href="{{ routes.collections_url }}">Wool Overcoat</a></li>
+              <li><a href="{{ routes.collections_url }}">Women Sweater</a></li>
+              <li><a href="{{ routes.collections_url }}">Soft Winter Hoodie</a></li>
+              <li><a href="{{ routes.collections_url }}">Warm Winter Jacket</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <!-- Close button -->
+        <button class="mega-close" onclick="this.closest('.mega-menu').style.pointerEvents='none'; this.closest('.mega-menu').style.clipPath='inset(0 0 100% 0)'; this.closest('.mega-menu').style.opacity='0';">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+
+      </div>
+      <!-- / MEGA MENU PANEL -->
+
+    </div>
+    <!-- / Catalog with Mega Menu -->
+
     <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="nav-link">About</a>
     <a href="{{ routes.blogs_url }}" class="nav-link">Blogs</a>
   </nav>
