@@ -46,29 +46,53 @@
     animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
   }
 
-  /* ─── CTA Button ─── */
-  .btn-maya-solid {
-    display: inline-block;
+  /* ─── CTA Button: Magnetic Merge Arrow ─── */
+  .maya-magnetic-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .mm-pill {
     background-color: #ffffff;
     color: #0a0a0a;
-    padding: 1rem 3.5rem;
+    padding: 1.1rem 3.5rem;
     border-radius: 9999px;
     font-family: var(--font-body);
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
-    will-change: transform;
+    transition: all 0.6s cubic-bezier(0.87, 0, 0.13, 1);
   }
 
-  .btn-maya-solid:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  .mm-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 58px;
+    height: 58px;
+    background-color: #ffffff;
     color: #0a0a0a;
+    border-radius: 50%;
+    transition: all 0.6s cubic-bezier(0.87, 0, 0.13, 1);
+    flex-shrink: 0;
+  }
+
+  /* Hover: hút vào nhau */
+  .maya-magnetic-wrap:hover { gap: 0px; }
+
+  .maya-magnetic-wrap:hover .mm-pill {
+    padding-right: 4.5rem;
+    background-color: #e5e5e5;
+  }
+
+  .maya-magnetic-wrap:hover .mm-circle {
+    transform: translateX(-52px) rotate(-45deg);
+    background-color: #0a0a0a;
+    color: #ffffff;
   }
 
   /* ─── Marquee ─── */
@@ -139,7 +163,14 @@
     </p>
 
     <!-- CTA Button -->
-    <a href="{{ routes.collections_url }}" class="btn-maya-solid hero-cta">Explore Now</a>
+    <a href="{{ routes.collections_url }}" class="maya-magnetic-wrap hero-cta">
+      <span class="mm-pill">Explore Now</span>
+      <span class="mm-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </span>
+    </a>
 
 
 
