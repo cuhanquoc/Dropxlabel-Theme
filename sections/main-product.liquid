@@ -525,6 +525,53 @@
                 </svg>
               </button>
             </div>
+
+            <!-- Dynamic Checkout Buttons (Apple Pay, Shop Pay, PayPal, etc.) -->
+            <div class="mt-3">
+              {{ form | payment_button }}
+            </div>
+
+            <style>
+              /* ─── Dynamic Checkout Button Styling ─── */
+              .shopify-payment-button {
+                margin-top: 0;
+              }
+              .shopify-payment-button__button {
+                border-radius: 9999px !important;
+                min-height: 52px !important;
+                font-family: var(--font-body) !important;
+                font-size: 0.75rem !important;
+                letter-spacing: 0.08em !important;
+                transition: opacity 300ms ease, transform 200ms ease !important;
+              }
+              .shopify-payment-button__button:hover {
+                opacity: 0.9 !important;
+                transform: translateY(-1px) !important;
+              }
+              .shopify-payment-button__button--unbranded {
+                background-color: var(--color-text) !important;
+                color: var(--color-bg) !important;
+                border-radius: 9999px !important;
+              }
+              .shopify-payment-button__more-options {
+                font-family: var(--font-body) !important;
+                font-size: 0.68rem !important;
+                letter-spacing: 0.12em !important;
+                text-transform: uppercase !important;
+                color: var(--color-muted) !important;
+                margin-top: 0.75rem !important;
+                transition: color 250ms ease !important;
+              }
+              .shopify-payment-button__more-options:hover {
+                color: var(--color-accent) !important;
+              }
+
+              @media (max-width: 767px) {
+                .shopify-payment-button__button {
+                  min-height: 48px !important;
+                }
+              }
+            </style>
           </div>
 
           <!-- ── Product Accordion (Description + Material) ── -->
