@@ -595,17 +595,17 @@
   <!-- Horizontal Scroll Product Track -->
   <div class="fc-scroll-track" id="fc-grid">
 
-    {%- assign collection = section.settings.collection -%}
-    {%- assign limit = section.settings.products_count -%}
+    {% if section.blocks.size > 0 %}
 
-    {% if collection != blank and collection.products.size > 0 %}
-
-      {% for product in collection.products limit: limit %}
+      {% for block in section.blocks %}
+        {%- assign product = block.settings.product -%}
+        {% if product != blank %}
         <!-- Product Card #{{ forloop.index }} -->
         <div
           class="product-card"
           data-product-url="{{ product.url }}"
           data-product-id="{{ product.id }}"
+          {{ block.shopify_attributes }}
         >
 
           <!-- ── Image Wrapper ── -->
@@ -685,7 +685,7 @@
 
         </div>
         <!-- / Product Card #{{ forloop.index }} -->
-
+        {% endif %}
       {% endfor %}
 
     {% else %}
@@ -696,8 +696,8 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
           </div>
           <div class="pc-info">
-            <p class="product-title" style="color:rgba(255,255,255,0.3);">Select a collection</p>
-            <p class="product-price" style="color:rgba(255,255,255,0.15);">in theme settings</p>
+            <p class="product-title" style="color:rgba(255,255,255,0.3);">Add products</p>
+            <p class="product-price" style="color:rgba(255,255,255,0.15);">via + Add block</p>
           </div>
         </div>
       {% endfor %}
@@ -707,10 +707,10 @@
   </div>
 
   <!-- View All CTA -->
-  {% if collection != blank %}
+  {% if section.settings.cta_url != blank %}
     <div style="text-align:center; margin-top:2.5rem; padding:0 2rem;">
       <a
-        href="{{ collection.url }}"
+        href="{{ section.settings.cta_url }}"
         style="
           display: inline-block;
           padding: 0.85rem 3rem;
@@ -1038,6 +1038,7 @@
 {
   "name": "Featured Collection",
   "tag": "section",
+  "max_blocks": 16,
   "settings": [
     {
       "type": "text",
@@ -1046,30 +1047,42 @@
       "default": "Trending Products"
     },
     {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection"
-    },
-    {
-      "type": "range",
-      "id": "products_count",
-      "min": 4,
-      "max": 16,
-      "step": 1,
-      "default": 8,
-      "label": "Products to show",
-      "info": "Maximum 16 products"
-    },
-    {
       "type": "text",
       "id": "cta_text",
       "label": "Button Text",
       "default": "View All"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button Link",
+      "info": "Link to a collection page or any URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_item",
+      "name": "Product",
+      "limit": 16,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product",
+          "info": "Select a product to display"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Featured Collection"
+      "name": "Featured Collection",
+      "blocks": [
+        { "type": "product_item" },
+        { "type": "product_item" },
+        { "type": "product_item" },
+        { "type": "product_item" }
+      ]
     }
   ]
 }
