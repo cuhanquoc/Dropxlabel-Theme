@@ -1,0 +1,567 @@
+{%- comment -%}
+  ─────────────────────────────────────────
+  CART DRAWER SNIPPET
+  Include in layout/theme.liquid via:
+    {% render 'cart-drawer' %}
+  Open/close via window.CartDrawer.open() / .close()
+  ─────────────────────────────────────────
+{%- endcomment -%}
+
+<style>
+  /* ─── Cart Drawer ─── */
+
+  #cart-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    z-index: 200;
+    pointer-events: none;
+    transition: background 400ms ease;
+  }
+
+  #cart-overlay.open {
+    background: rgba(0, 0, 0, 0.5);
+    pointer-events: all;
+  }
+
+  #cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(420px, 100vw);
+    height: 100dvh;
+    background-color: #ffffff;
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%); /* GSAP controls this */
+    will-change: transform;
+    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Header bar */
+  .cd-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.75rem 2rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .cd-title {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .cd-count {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--color-muted);
+  }
+
+  .cd-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: background-color 200ms ease, border-color 200ms ease;
+    flex-shrink: 0;
+  }
+
+  .cd-close-btn:hover {
+    background-color: var(--color-text);
+    border-color: var(--color-text);
+    color: #ffffff;
+  }
+
+  /* Item list (scrollable) */
+  .cd-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem 2rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  .cd-items::-webkit-scrollbar        { width: 4px; }
+  .cd-items::-webkit-scrollbar-track  { background: transparent; }
+  .cd-items::-webkit-scrollbar-thumb  { background: var(--color-border); border-radius: 9999px; }
+
+  /* Single cart item */
+  .cd-item {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--color-border);
+    align-items: flex-start;
+  }
+
+  .cd-item:last-child {
+    border-bottom: none;
+  }
+
+  .cd-item-img {
+    flex-shrink: 0;
+    width: 80px;
+    aspect-ratio: 3/4;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f5f4f1;
+  }
+
+  .cd-item-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .cd-item-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .cd-item-vendor {
+    font-family: var(--font-body);
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 0.3rem;
+  }
+
+  .cd-item-name {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: var(--color-text);
+    line-height: 1.4;
+    margin-bottom: 0.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cd-item-variant {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: var(--color-muted);
+    margin-bottom: 0.75rem;
+  }
+
+  .cd-item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .cd-item-price {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--color-text);
+    letter-spacing: 0.04em;
+  }
+
+  /* Remove item button */
+  .cd-remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-muted);
+    padding: 2px;
+    transition: color 200ms ease;
+    display: flex;
+    align-items: center;
+  }
+
+  .cd-remove-btn:hover {
+    color: var(--color-text);
+  }
+
+  /* Qty inline control */
+  .cd-qty {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .cd-qty-btn {
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 150ms ease;
+  }
+
+  .cd-qty-btn:hover { background-color: var(--color-border); }
+
+  .cd-qty-val {
+    width: 28px;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: var(--color-text);
+    border: none;
+    background: transparent;
+    pointer-events: none;
+    outline: none;
+  }
+
+  /* Empty state */
+  .cd-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+    text-align: center;
+    color: var(--color-muted);
+  }
+
+  .cd-empty-icon {
+    color: var(--color-border);
+  }
+
+  .cd-empty p {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+  }
+
+  /* Footer: subtotal + checkout */
+  .cd-footer {
+    border-top: 1px solid var(--color-border);
+    padding: 1.5rem 2rem 2rem;
+    flex-shrink: 0;
+  }
+
+  .cd-subtotal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.25rem;
+  }
+
+  .cd-subtotal-label {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .cd-subtotal-value {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text);
+    letter-spacing: 0.04em;
+  }
+
+  .btn-checkout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 100%;
+    height: 56px;
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    border: 2px solid var(--color-text);
+    border-radius: 9999px;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 350ms ease, color 350ms ease;
+    margin-bottom: 0.75rem;
+  }
+
+  .btn-checkout:hover {
+    background-color: transparent;
+    color: var(--color-text);
+  }
+
+  .btn-continue {
+    display: block;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 200ms ease;
+    cursor: pointer;
+    background: none;
+    border: none;
+    width: 100%;
+  }
+
+  .btn-continue:hover {
+    color: var(--color-text);
+  }
+</style>
+
+<!-- ── Overlay ── -->
+<div id="cart-overlay" role="dialog" aria-modal="true" aria-label="Shopping Bag" onclick="CartDrawer.close()"></div>
+
+<!-- ── Drawer Panel ── -->
+<div id="cart-drawer">
+
+  <!-- Header -->
+  <div class="cd-header">
+    <div>
+      <p class="cd-title">Shopping Bag</p>
+      <p class="cd-count" id="cd-count">
+        {{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}
+      </p>
+    </div>
+    <button class="cd-close-btn" onclick="CartDrawer.close()" aria-label="Close shopping bag">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 6 6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Item List -->
+  <div class="cd-items" id="cd-items-wrap">
+
+    {% if cart.item_count > 0 %}
+
+      {% for item in cart.items %}
+        <article class="cd-item" data-key="{{ item.key }}">
+
+          <!-- Thumbnail -->
+          <div class="cd-item-img">
+            {% if item.image %}
+              <img
+                src="{{ item.image | image_url: width: 200 }}"
+                alt="{{ item.title | escape }}"
+                loading="lazy"
+                width="80"
+                height="107"
+              />
+            {% else %}
+              <div style="width:100%;height:100%;background:var(--color-border);"></div>
+            {% endif %}
+          </div>
+
+          <!-- Info -->
+          <div class="cd-item-info">
+            {% if item.vendor != blank %}
+              <p class="cd-item-vendor">{{ item.vendor }}</p>
+            {% endif %}
+            <p class="cd-item-name">{{ item.product_title }}</p>
+
+            {% unless item.variant_title == 'Default Title' %}
+              <p class="cd-item-variant">{{ item.variant_title }}</p>
+            {% endunless %}
+
+            <div class="cd-item-footer">
+
+              <!-- Inline Qty -->
+              <div class="cd-qty">
+                <button
+                  class="cd-qty-btn"
+                  aria-label="Decrease quantity"
+                  onclick="CartDrawer.updateQty('{{ item.key }}', {{ item.quantity | minus: 1 }})"
+                >−</button>
+                <span class="cd-qty-val">{{ item.quantity }}</span>
+                <button
+                  class="cd-qty-btn"
+                  aria-label="Increase quantity"
+                  onclick="CartDrawer.updateQty('{{ item.key }}', {{ item.quantity | plus: 1 }})"
+                >+</button>
+              </div>
+
+              <p class="cd-item-price">{{ item.final_line_price | money }}</p>
+            </div>
+          </div>
+
+          <!-- Remove -->
+          <button
+            class="cd-remove-btn"
+            aria-label="Remove {{ item.title | escape }}"
+            onclick="CartDrawer.removeItem('{{ item.key }}')"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
+
+        </article>
+      {% endfor %}
+
+    {% else %}
+
+      <!-- Empty state -->
+      <div class="cd-empty">
+        <svg class="cd-empty-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+          <path d="M3 6h18"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        <p>Your bag is empty.</p>
+        <p style="font-size: 0.72rem;">Add pieces you love.</p>
+      </div>
+
+    {% endif %}
+
+  </div>
+  <!-- / Item List -->
+
+  <!-- Footer -->
+  {% if cart.item_count > 0 %}
+    <div class="cd-footer">
+
+      <!-- Subtotal only — no shipping copy per brand guidelines -->
+      <div class="cd-subtotal-row">
+        <span class="cd-subtotal-label">Subtotal</span>
+        <span class="cd-subtotal-value" id="cd-subtotal">{{ cart.total_price | money }}</span>
+      </div>
+
+      <!-- Checkout CTA -->
+      <a href="{{ routes.cart_url }}/checkout" class="btn-checkout">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+        Checkout
+      </a>
+
+      <button class="btn-continue" onclick="CartDrawer.close()">Continue Shopping</button>
+
+    </div>
+  {% endif %}
+
+</div>
+<!-- / Drawer Panel -->
+
+
+<script>
+  /* ─────────────────────────────────────────────────────
+     CartDrawer — GSAP-powered slide-in/out
+     Requires: gsap.min.js (loaded in theme.liquid)
+  ───────────────────────────────────────────────────── */
+  window.CartDrawer = (function () {
+
+    const DRAWER  = document.getElementById('cart-drawer');
+    const OVERLAY = document.getElementById('cart-overlay');
+    let   isOpen  = false;
+
+    function open() {
+      if (isOpen) return;
+      isOpen = true;
+      document.body.style.overflow = 'hidden';
+      OVERLAY.classList.add('open');
+
+      if (typeof gsap !== 'undefined') {
+        gsap.fromTo(DRAWER,
+          { x: '100%' },
+          { x: '0%', duration: 0.6, ease: 'power4.out' }
+        );
+      } else {
+        DRAWER.style.transform = 'translateX(0)';
+      }
+    }
+
+    function close() {
+      if (!isOpen) return;
+      isOpen = false;
+      document.body.style.overflow = '';
+      OVERLAY.classList.remove('open');
+
+      if (typeof gsap !== 'undefined') {
+        gsap.to(DRAWER, {
+          x: '100%',
+          duration: 0.45,
+          ease: 'power3.in'
+        });
+      } else {
+        DRAWER.style.transform = 'translateX(100%)';
+      }
+    }
+
+    function toggle() {
+      isOpen ? close() : open();
+    }
+
+    /* Remove item via Shopify AJAX Cart API */
+    function removeItem(key) {
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: key, quantity: 0 })
+      })
+      .then(r => r.json())
+      .then(refreshDrawer)
+      .catch(console.error);
+    }
+
+    /* Update quantity via AJAX */
+    function updateQty(key, qty) {
+      if (qty < 0) return;
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: key, quantity: qty })
+      })
+      .then(r => r.json())
+      .then(refreshDrawer)
+      .catch(console.error);
+    }
+
+    /* Refresh visible subtotal + count without page reload */
+    function refreshDrawer(cart) {
+      const subtotalEl = document.getElementById('cd-subtotal');
+      const countEl    = document.getElementById('cd-count');
+
+      if (subtotalEl) {
+        subtotalEl.textContent = (cart.total_price / 100).toLocaleString('vi-VN') + '₫';
+      }
+      if (countEl) {
+        const n = cart.item_count;
+        countEl.textContent = n + (n === 1 ? ' item' : ' items');
+      }
+
+      /* Full re-render via page reload on item removal for simplicity;
+         replace with Liquid template fetch for SPA behaviour */
+      window.location.reload();
+    }
+
+    /* ESC key support */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isOpen) close();
+    });
+
+    return { open, close, toggle, removeItem, updateQty };
+
+  }());
+</script>
