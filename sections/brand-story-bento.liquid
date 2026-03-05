@@ -1,0 +1,329 @@
+<style>
+  /* ─────────────────────────────────────────
+     BRAND STORY BENTO — Styles
+  ───────────────────────────────────────── */
+
+  /* Titanium Silver Gradient for Block 2 */
+  .bento-gradient {
+    background: linear-gradient(
+      145deg,
+      #e8e4de 0%,    /* Warm pearl      */
+      #d6d0c8 35%,   /* Silver sand     */
+      #c9c3bb 60%,   /* Titanium mid    */
+      #bfb9b0 100%   /* Deep warm grey  */
+    );
+  }
+
+  /* Accent pill tag */
+  .bento-tag {
+    display: inline-block;
+    padding: 0.35rem 1.1rem;
+    border: 1px solid rgba(197, 168, 128, 0.6);
+    border-radius: 9999px;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1.25rem;
+  }
+
+  /* Block 1 — image overlay gradient */
+  .bento-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(20, 18, 16, 0.78) 0%,
+      rgba(20, 18, 16, 0.15) 55%,
+      transparent 100%
+    );
+    border-radius: inherit;
+  }
+
+  /* Block 1 — floating text at bottom */
+  .bento-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2.25rem;
+  }
+
+  /* Ken Burns subtle on bento images */
+  @keyframes bentoPan {
+    0%   { transform: scale(1)    translateX(0);    }
+    100% { transform: scale(1.06) translateX(-1%);  }
+  }
+
+  .bento-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: inherit;
+    transition: transform 0.6s ease;
+  }
+
+  .bento-block:hover .bento-img {
+    transform: scale(1.04);
+  }
+
+  /* Number counter style */
+  .bento-stat-number {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .bento-stat-label {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-top: 0.3rem;
+  }
+
+  /* Divider line */
+  .bento-divider {
+    width: 32px;
+    height: 1.5px;
+    background-color: var(--color-accent);
+    margin: 1.25rem 0;
+  }
+</style>
+
+{%- comment -%}
+  ─────────────────────────────────────────
+  BRAND STORY BENTO SECTION
+  ─────────────────────────────────────────
+{%- endcomment -%}
+
+<section
+  id="brand-story"
+  class="py-24 px-6 md:px-10"
+  style="background-color: var(--color-bg);"
+>
+  <div class="max-w-screen-xl mx-auto">
+
+    <!-- ── Bento Grid: 3 blocks ── -->
+    <div
+      class="grid gap-4 md:gap-5"
+      style="grid-template-columns: 1fr 1fr; grid-template-rows: auto auto;"
+    >
+
+      <!-- ════════════════════════════════
+           BLOCK 1 — Left, Large (2 rows)
+           Image vertical 3:4 — Journey of Style
+      ════════════════════════════════ -->
+      <div
+        class="bento-block relative overflow-hidden rounded-[40px]"
+        style="grid-column: 1; grid-row: 1 / span 2; aspect-ratio: 3/4;"
+        data-bento="block"
+      >
+        <!-- Background Image -->
+        <img
+          src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900&q=85&auto=format&fit=crop"
+          alt="Journey of Style — editorial fashion"
+          class="bento-img absolute inset-0"
+          loading="lazy"
+          width="900"
+          height="1200"
+        />
+
+        <!-- Overlay -->
+        <div class="bento-img-overlay"></div>
+
+        <!-- Text content at bottom -->
+        <div class="bento-caption">
+          <span class="bento-tag">Since 2021</span>
+
+          <h2
+            style="
+              font-family: var(--font-heading);
+              font-size: clamp(1.8rem, 3vw, 2.8rem);
+              font-weight: 600;
+              color: #ffffff;
+              line-height: 1.1;
+              letter-spacing: -0.01em;
+              margin-bottom: 0.9rem;
+            "
+          >
+            Journey<br>of Style
+          </h2>
+
+          <p
+            style="
+              font-family: var(--font-body);
+              font-size: 0.82rem;
+              line-height: 1.8;
+              color: rgba(255,255,255,0.68);
+              max-width: 340px;
+            "
+          >
+            Born from a quiet obsession with fabric, form, and feeling —
+            every piece carries the weight of intention.
+          </p>
+        </div>
+
+      </div>
+      <!-- /BLOCK 1 -->
+
+
+      <!-- ════════════════════════════════
+           BLOCK 2 — Right, Top
+           Titanium Gradient — Timeless Pieces
+      ════════════════════════════════ -->
+      <div
+        class="bento-block bento-gradient rounded-[40px] flex flex-col justify-between"
+        style="grid-column: 2; grid-row: 1; padding: 2.5rem; min-height: 320px;"
+        data-bento="block"
+      >
+
+        <!-- Top row: stats -->
+        <div class="flex items-start gap-10">
+          <div>
+            <p class="bento-stat-number">200<span style="color: var(--color-accent);">+</span></p>
+            <p class="bento-stat-label">Curated Pieces</p>
+          </div>
+          <div>
+            <p class="bento-stat-number">12</p>
+            <p class="bento-stat-label">Collections</p>
+          </div>
+        </div>
+
+        <!-- Bottom: heading + copy -->
+        <div>
+          <div class="bento-divider"></div>
+
+          <h3
+            style="
+              font-family: var(--font-heading);
+              font-size: clamp(1.5rem, 2.5vw, 2rem);
+              font-weight: 600;
+              color: var(--color-text);
+              letter-spacing: -0.01em;
+              line-height: 1.15;
+              margin-bottom: 0.85rem;
+            "
+          >
+            Timeless Pieces
+          </h3>
+
+          <p
+            style="
+              font-family: var(--font-body);
+              font-size: 0.82rem;
+              line-height: 1.85;
+              color: var(--color-muted);
+              max-width: 320px;
+            "
+          >
+            Crafted for the woman who understands that true luxury
+            whispers — in the press of pure linen, the weight of
+            Italian crepe, the silence of a perfect silhouette.
+          </p>
+        </div>
+
+      </div>
+      <!-- /BLOCK 2 -->
+
+
+      <!-- ════════════════════════════════
+           BLOCK 3 — Right, Bottom
+           Horizontal image — fabric / accessory detail
+      ════════════════════════════════ -->
+      <div
+        class="bento-block relative overflow-hidden rounded-[40px]"
+        style="grid-column: 2; grid-row: 2; aspect-ratio: 16/9;"
+        data-bento="block"
+      >
+        <!-- Background Image: close-up fabric / accessory -->
+        <img
+          src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=85&auto=format&fit=crop"
+          alt="Fabric texture — material detail"
+          class="bento-img absolute inset-0"
+          loading="lazy"
+          width="900"
+          height="506"
+        />
+
+        <!-- Subtle bottom overlay for legibility -->
+        <div
+          class="absolute inset-0"
+          style="
+            background: linear-gradient(
+              to right,
+              rgba(10,9,8,0.55) 0%,
+              transparent 55%
+            );
+            border-radius: inherit;
+          "
+        ></div>
+
+        <!-- Text overlay -->
+        <div
+          style="
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 2rem;
+          "
+        >
+          <span class="bento-tag" style="border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.85);">
+            Material
+          </span>
+          <p
+            style="
+              font-family: var(--font-heading);
+              font-size: clamp(1rem, 1.8vw, 1.4rem);
+              font-weight: 500;
+              color: #ffffff;
+              letter-spacing: 0.02em;
+              line-height: 1.3;
+            "
+          >
+            Italian Wool &amp; Pure Linen.<br>
+            <span style="font-weight: 400; font-style: italic; color: rgba(255,255,255,0.7);">Feel the difference.</span>
+          </p>
+        </div>
+
+      </div>
+      <!-- /BLOCK 3 -->
+
+    </div>
+    <!-- / Bento Grid -->
+
+  </div>
+</section>
+
+
+<script>
+  /* ─────────────────────────────────────────────────────
+     GSAP ScrollTrigger — Bento blocks stagger entrance
+     Requires: gsap.min.js + ScrollTrigger.min.js
+     (already loaded in layout/theme.liquid)
+  ───────────────────────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from('#brand-story [data-bento="block"]', {
+      scrollTrigger: {
+        trigger: '#brand-story',
+        start: 'top 78%',   /* fire when section top hits 78% of viewport */
+        once: true,          /* animate only once */
+      },
+      y: 64,
+      opacity: 0,
+      duration: 1.5,
+      ease: 'power4.out',
+      stagger: 0.2,          /* 0.2s between each block */
+    });
+  });
+</script>
