@@ -1,0 +1,301 @@
+<style>
+  /* ─── Featured Collection ─── */
+
+  /* Section heading underline accent */
+  .fc-heading::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1.5px;
+    background-color: var(--color-accent);
+    margin: 1rem auto 0;
+  }
+
+  /* Staggered entrance animation */
+  @keyframes cardFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(32px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .product-card {
+    animation: cardFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  /* Stagger delays for 8 cards */
+  .product-card:nth-child(1) { animation-delay: 0.05s; }
+  .product-card:nth-child(2) { animation-delay: 0.12s; }
+  .product-card:nth-child(3) { animation-delay: 0.19s; }
+  .product-card:nth-child(4) { animation-delay: 0.26s; }
+  .product-card:nth-child(5) { animation-delay: 0.33s; }
+  .product-card:nth-child(6) { animation-delay: 0.40s; }
+  .product-card:nth-child(7) { animation-delay: 0.47s; }
+  .product-card:nth-child(8) { animation-delay: 0.54s; }
+
+  /* Product name subtle hover */
+  .product-title {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    color: var(--color-text);
+    transition: color 250ms ease;
+  }
+
+  .product-card:hover .product-title {
+    color: var(--color-accent);
+  }
+
+  /* Price */
+  .product-price {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--color-accent);
+    margin-top: 0.35rem;
+  }
+
+  /* Quick View button */
+  .quick-view-btn {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    background-color: #ffffff;
+    color: var(--color-text);
+    border: none;
+    border-radius: 9999px;
+    padding: 0.45rem 1rem 0.45rem 0.65rem;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    transition:
+      background-color 250ms ease,
+      color 250ms ease,
+      box-shadow 250ms ease;
+  }
+
+  .quick-view-btn:hover {
+    background-color: var(--color-accent);
+    color: #ffffff;
+    box-shadow: 0 4px 18px rgba(197, 168, 128, 0.35);
+  }
+</style>
+
+{%- comment -%}
+  ─────────────────────────────────────────────────
+  FEATURED COLLECTION SECTION
+  Replace the mock loop below with a real collection:
+    {% assign col = collections['your-handle'] %}
+    {% for product in col.products limit: 8 %}
+  ─────────────────────────────────────────────────
+{%- endcomment -%}
+
+{%-
+  assign mock_images = "
+    photo-1515886657613-9f3515b0c78f,
+    photo-1469334031218-e382a71b716b,
+    photo-1485968579580-b6d095142e6e,
+    photo-1509631179647-0177331693ae,
+    photo-1479064555552-3ef4d0d87f10,
+    photo-1490481651871-ab68de25d43d,
+    photo-1572804013309-59a88b7e92f1,
+    photo-1539109136881-3be0616acf4b"
+  | split: ","
+-%}
+
+{%-
+  assign mock_hover = "
+    photo-1539109136881-3be0616acf4b,
+    photo-1479064555552-3ef4d0d87f10,
+    photo-1509631179647-0177331693ae,
+    photo-1485968579580-b6d095142e6e,
+    photo-1490481651871-ab68de25d43d,
+    photo-1469334031218-e382a71b716b,
+    photo-1515886657613-9f3515b0c78f,
+    photo-1572804013309-59a88b7e92f1"
+  | split: ","
+-%}
+
+{%-
+  assign mock_names = "
+    Sculptural Linen Coat,
+    Minimal Silk Blouse,
+    The Cashmere Set,
+    Draped Crepe Dress,
+    Tailored Wide Trousers,
+    Raw Edge Knit Top,
+    The Atelier Blazer,
+    Asymmetric Hem Skirt"
+  | split: ","
+-%}
+
+{%-
+  assign mock_prices = "
+    4,200,000đ,
+    2,800,000đ,
+    5,600,000đ,
+    3,900,000đ,
+    3,200,000đ,
+    2,400,000đ,
+    6,100,000đ,
+    2,950,000đ"
+  | split: ","
+-%}
+
+<section class="py-24" style="background-color: var(--color-bg);">
+  <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+
+    <!-- Section Heading -->
+    <div class="text-center mb-16">
+      <h2
+        class="fc-heading"
+        style="
+          font-family: var(--font-heading);
+          font-size: clamp(1.4rem, 3vw, 2rem);
+          font-weight: 600;
+          letter-spacing: 0.25em;
+          text-transform: uppercase;
+          color: var(--color-text);
+        "
+      >
+        Trending Products
+      </h2>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12">
+
+      {% for i in (1..8) %}
+        {%- assign idx = forloop.index0 -%}
+        {%- assign img_id    = mock_images[idx]  | strip -%}
+        {%- assign hover_id  = mock_hover[idx]   | strip -%}
+        {%- assign prod_name = mock_names[idx]   | strip -%}
+        {%- assign prod_price= mock_prices[idx]  | strip -%}
+
+        <!-- Product Card #{{ forloop.index }} -->
+        <a
+          href="#"
+          class="product-card group block cursor-pointer"
+          aria-label="{{ prod_name }}"
+        >
+
+          <!-- ── Image Wrapper ── -->
+          <div
+            class="relative aspect-[3/4] overflow-hidden bg-gray-50"
+            style="border-radius: 2px;"
+          >
+
+            <!-- Primary Image (default visible) -->
+            <img
+              src="https://images.unsplash.com/{{ img_id }}?w=600&q=80&auto=format&fit=crop"
+              alt="{{ prod_name }}"
+              class="
+                absolute inset-0 w-full h-full object-cover
+                transition-opacity duration-500 ease-in-out
+                opacity-100 group-hover:opacity-0
+              "
+              loading="lazy"
+              width="600"
+              height="800"
+            />
+
+            <!-- Hover / Lifestyle Image (hidden by default) -->
+            <img
+              src="https://images.unsplash.com/{{ hover_id }}?w=600&q=80&auto=format&fit=crop"
+              alt="{{ prod_name }} — lifestyle"
+              class="
+                absolute inset-0 w-full h-full object-cover
+                transition-opacity duration-500 ease-in-out
+                opacity-0 group-hover:opacity-100
+              "
+              loading="lazy"
+              width="600"
+              height="800"
+            />
+
+            <!-- Quick View Button -->
+            <button
+              class="
+                quick-view-btn
+                opacity-0 translate-y-4
+                group-hover:opacity-100 group-hover:translate-y-0
+                transition-all duration-300 ease-out
+              "
+              aria-label="Quick view {{ prod_name }}"
+              onclick="event.preventDefault(); /* TODO: open quick-view modal */"
+            >
+              <!-- Eye Icon -->
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              Quick View
+            </button>
+
+          </div>
+          <!-- ── / Image Wrapper ── -->
+
+          <!-- ── Product Info ── -->
+          <div class="text-center mt-6">
+            <p class="product-title">{{ prod_name }}</p>
+            <p class="product-price">{{ prod_price }}</p>
+          </div>
+          <!-- ── / Product Info ── -->
+
+        </a>
+        <!-- / Product Card #{{ forloop.index }} -->
+
+      {% endfor %}
+
+    </div>
+    <!-- / Product Grid -->
+
+    <!-- View All CTA -->
+    <div class="text-center mt-16">
+      <a
+        href="{{ routes.collections_url }}"
+        style="
+          display: inline-block;
+          padding: 0.85rem 3rem;
+          border: 1px solid var(--color-text);
+          font-family: var(--font-body);
+          font-size: 0.65rem;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: var(--color-text);
+          border-radius: 9999px;
+          text-decoration: none;
+          transition: background-color 350ms ease, color 350ms ease, border-color 350ms ease;
+        "
+        onmouseover="this.style.backgroundColor='var(--color-text)';this.style.color='var(--color-bg)';"
+        onmouseout="this.style.backgroundColor='transparent';this.style.color='var(--color-text)';"
+      >
+        View All
+      </a>
+    </div>
+
+  </div>
+</section>
