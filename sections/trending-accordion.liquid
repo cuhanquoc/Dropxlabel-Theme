@@ -181,6 +181,40 @@
     letter-spacing: 0.14em;
     color: rgba(10, 10, 10, 0.4);
   }
+
+  /* ─── Mobile: Tap-to-Expand State ─── */
+  @media (max-width: 767px) {
+    .accordion-name {
+      font-size: clamp(1.4rem, 5vw, 2rem);
+    }
+    .accordion-inner {
+      padding: 0 1.25rem;
+    }
+    .accordion-item.expanded {
+      height: 11rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    }
+    .accordion-item.expanded .accordion-img {
+      opacity: 1;
+      transform: scale(1) translateX(0);
+      width: 70px;
+      height: 90px;
+      border-radius: 14px;
+    }
+    .accordion-item.expanded .accordion-name {
+      text-align: left;
+      transform: translateX(0.5rem);
+    }
+    .accordion-item.expanded .accordion-arrow {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+      width: 36px;
+      height: 36px;
+    }
+    .accordion-item.expanded .accordion-tag {
+      opacity: 1;
+    }
+  }
 </style>
 
 {%- comment -%}
@@ -382,5 +416,32 @@
     );
   });
 
+</script>
+
+<script>
+  /* ─── Mobile: Tap-to-Expand Accordion ─── */
+  (function () {
+    if (window.matchMedia('(hover: hover)').matches) return;
+
+    document.querySelectorAll('#trending-accordion .accordion-item').forEach(item => {
+      item.addEventListener('click', function (e) {
+        e.preventDefault();
+        const isExpanded = this.classList.contains('expanded');
+
+        /* Close all others first */
+        document.querySelectorAll('#trending-accordion .accordion-item.expanded').forEach(other => {
+          if (other !== this) other.classList.remove('expanded');
+        });
+
+        /* Toggle current */
+        this.classList.toggle('expanded', !isExpanded);
+
+        /* If already expanded and tapped again, navigate */
+        if (isExpanded) {
+          window.location.href = this.getAttribute('href');
+        }
+      });
+    });
+  }());
 </script>
 

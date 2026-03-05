@@ -286,6 +286,40 @@
     border-color: var(--color-text);
     color: var(--color-bg);
   }
+
+  /* ─── Mobile Responsive ─── */
+  @media (max-width: 767px) {
+    #main-product {
+      padding-top: 1.5rem;
+      padding-bottom: 2rem;
+    }
+    #main-product .sticky {
+      position: relative !important;
+      top: auto !important;
+    }
+    .size-btn {
+      min-width: 44px;
+      height: 44px;
+    }
+    .color-swatch {
+      width: 36px;
+      height: 36px;
+    }
+    .qty-btn {
+      width: 44px;
+      height: 44px;
+    }
+    .btn-add-to-cart {
+      height: 54px;
+    }
+    .btn-wishlist {
+      width: 54px;
+      height: 54px;
+    }
+    .product-title {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+    }
+  }
 </style>
 
 {%- comment -%}

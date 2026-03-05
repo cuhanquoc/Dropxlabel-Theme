@@ -313,6 +313,36 @@
     margin-bottom: 2rem;
     text-align: center;
   }
+
+  /* ─── Mobile Responsive ─── */
+  @media (max-width: 767px) {
+    #main-article header {
+      padding-top: 7rem;
+    }
+    .ma-title {
+      font-size: clamp(1.6rem, 6vw, 3rem);
+    }
+    .ma-share-bar {
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .ma-share-btn {
+      font-size: 0.6rem;
+      padding: 0.35rem 0.8rem;
+    }
+    .ma-author-card {
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+      padding: 1.5rem;
+    }
+    .ma-cover {
+      padding: 0 0.75rem;
+    }
+    .article-content p {
+      font-size: 1rem;
+    }
+  }
 </style>
 
 {%- comment -%}

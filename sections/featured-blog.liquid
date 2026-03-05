@@ -86,6 +86,16 @@
       gap: 0.85rem;
     }
   }
+
+  /* ─── Mobile Responsive ─── */
+  @media (max-width: 767px) {
+    .blog-excerpt {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
 </style>
 
 {%- comment -%}
@@ -148,6 +158,13 @@
 
           <!-- Image -->
           <div class="relative w-full overflow-hidden mb-6" style="aspect-ratio: 4/5; border-radius: 24px;">
+            <style>
+              @media (max-width: 767px) {
+                #featured-blog .blog-card [style*="border-radius: 24px"] {
+                  border-radius: 16px !important;
+                }
+              }
+            </style>
             <img
               src="https://images.unsplash.com/{{ img }}?w=800&q=80&auto=format&fit=crop"
               alt="{{ title }}"

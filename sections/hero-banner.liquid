@@ -75,6 +75,22 @@
     line-height: 1;
     user-select: none;
   }
+
+  /* ─── Mobile Responsive ─── */
+  @media (max-width: 767px) {
+    .marquee-text {
+      font-size: clamp(1.8rem, 8vw, 3rem);
+      padding-right: 2rem;
+    }
+    .maya-merge-text {
+      padding: 1rem 2rem;
+      font-size: 0.7rem;
+    }
+    .maya-merge-circle {
+      width: 48px;
+      height: 48px;
+    }
+  }
   /* ─── CTA: Magnetic Merge Button ─── */
   .maya-merge-btn {
     display: inline-flex;
@@ -153,6 +169,11 @@
 
   <!-- Nội dung Hero giữa ảnh -->
   <div class="absolute inset-0 flex flex-col justify-center items-start px-6 md:px-20" style="padding-bottom: 14vh;">
+    <style>
+      @media (max-width: 767px) {
+        .hero-content-wrap { padding-bottom: 8vh !important; }
+      }
+    </style>
 
     <!-- Eyebrow label -->
     <p class="hero-eyebrow" style="font-family: var(--font-body); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 1.25rem;">
@@ -160,7 +181,7 @@
     </p>
 
     <!-- Headline -->
-    <h1 class="hero-headline" style="font-family: var(--font-heading); font-size: clamp(3.5rem, 12vw, 9rem); font-weight: 600; line-height: 0.9; color: #ffffff; max-width: 780px; letter-spacing: -0.03em; margin-bottom: 1.5rem;">
+    <h1 class="hero-headline" style="font-family: var(--font-heading); font-size: clamp(2.2rem, 10vw, 9rem); font-weight: 600; line-height: 0.9; color: #ffffff; max-width: 780px; letter-spacing: -0.03em; margin-bottom: 1.5rem;">
       Timeless<br>Fashion Essence
     </h1>
 

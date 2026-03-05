@@ -93,7 +93,14 @@
   | split: "|"
 -%}
 
-<section class="py-16 md:py-32 lg:py-40" style="background-color: var(--color-bg);">
+<section id="featured-collection" class="py-16 md:py-32 lg:py-40" style="background-color: var(--color-bg);">
+  <style>
+    @media (max-width: 767px) {
+      #featured-collection { padding-top: 3rem; padding-bottom: 3rem; }
+      #featured-collection .text-center.mb-16 { margin-bottom: 2.5rem; }
+      #featured-collection .text-center.mt-16 { margin-top: 2.5rem; }
+    }
+  </style>
   <div class="max-w-screen-xl mx-auto px-6 md:px-10">
 
     <!-- Section Heading -->

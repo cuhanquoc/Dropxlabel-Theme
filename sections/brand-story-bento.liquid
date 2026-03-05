@@ -115,6 +115,27 @@
       @media (min-width: 768px) {
         #brand-story .grid { grid-template-columns: 1fr 1fr !important; grid-template-rows: auto auto !important; }
       }
+      /* Mobile: force all blocks into single column */
+      @media (max-width: 767px) {
+        #brand-story .bento-block {
+          grid-column: 1 !important;
+          grid-row: auto !important;
+          aspect-ratio: 1/1 !important;
+        }
+        #brand-story .bento-gradient {
+          min-height: 280px !important;
+          padding: 1.75rem !important;
+        }
+        #brand-story .bento-block[style*="16/9"] {
+          aspect-ratio: 16/9 !important;
+        }
+        .bento-caption {
+          padding: 1.5rem;
+        }
+        .bento-block {
+          border-radius: 20px !important;
+        }
+      }
     </style>
 
       <!-- ════════════════════════════════
