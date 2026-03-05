@@ -1,0 +1,328 @@
+<style>
+  /* ─────────────────────────────────────────
+     TRENDING ACCORDION — Dark Edition
+  ───────────────────────────────────────── */
+
+  /* CTA Arrow Button */
+  .ta-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 9999px;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-decoration: none;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+  }
+
+  .ta-cta-btn:hover {
+    background-color: #ffffff;
+    color: #0a0a0a;
+    border-color: #ffffff;
+    opacity: 1;
+  }
+
+  .ta-cta-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    transition: background 300ms ease;
+    flex-shrink: 0;
+  }
+
+  .ta-cta-btn:hover .ta-cta-arrow {
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  /* Accordion track */
+  .accordion-item {
+    height: 5.5rem;           /* ~h-22 — collapsed default */
+    border-radius: 40px;
+    overflow: hidden;
+    cursor: pointer;
+    transition:
+      height 500ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 300ms ease;
+    position: relative;
+    will-change: height;
+  }
+
+  .accordion-item:hover {
+    height: 13rem;            /* ~h-52 — expanded */
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  }
+
+  /* Product image — hidden until hover */
+  .accordion-img {
+    width: 100px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 20px;
+    opacity: 0;
+    transform: scale(0.88) translateX(-8px);
+    transition:
+      opacity 450ms cubic-bezier(0.16, 1, 0.3, 1) 80ms,
+      transform 500ms cubic-bezier(0.16, 1, 0.3, 1) 80ms;
+    flex-shrink: 0;
+  }
+
+  .accordion-item:hover .accordion-img {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+
+  /* Product name — shifts on expand */
+  .accordion-name {
+    font-family: var(--font-heading);
+    font-size: clamp(1.3rem, 2.5vw, 2rem);
+    font-weight: 600;
+    color: #0a0a0a;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    transition: transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: center;
+    flex: 1;
+  }
+
+  .accordion-item:hover .accordion-name {
+    text-align: left;
+    transform: translateX(1rem);
+  }
+
+  /* Arrow circle button — slides in from right */
+  .accordion-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #0a0a0a;
+    color: #ffffff;
+    flex-shrink: 0;
+    opacity: 0;
+    transform: translateX(16px) scale(0.8);
+    transition:
+      opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 100ms,
+      transform 450ms cubic-bezier(0.16, 1, 0.3, 1) 100ms;
+  }
+
+  .accordion-item:hover .accordion-arrow {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+
+  /* Accordion inner layout */
+  .accordion-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 1.75rem;
+    gap: 1.25rem;
+    transition: justify-content 400ms ease;
+  }
+
+  .accordion-item:hover .accordion-inner {
+    justify-content: space-between;
+  }
+
+  /* Category tag in collapsed state */
+  .accordion-tag {
+    font-family: var(--font-body);
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(10, 10, 10, 0.5);
+    position: absolute;
+    top: 1.2rem;
+    right: 1.75rem;
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .accordion-item:hover .accordion-tag {
+    opacity: 1;
+  }
+
+  /* Number label at top-left */
+  .accordion-num {
+    position: absolute;
+    top: 1.1rem;
+    left: 1.75rem;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    color: rgba(10, 10, 10, 0.4);
+  }
+</style>
+
+{%- comment -%}
+  ─────────────────────────────────────────
+  TRENDING ACCORDION SECTION
+  ─────────────────────────────────────────
+{%- endcomment -%}
+
+{%- assign acc_colors  = "#FDE68A|#D8B4E2|#93C5FD|#86EFAC|#F9A8D4" | split: "|" -%}
+{%- assign acc_names   = "Drape & Flow|Minimal Edge|Structured Grace|Raw Linen Series|The Silk Edit" | split: "|" -%}
+{%- assign acc_tags    = "Dresses|Outerwear|Tailoring|Essentials|Eveningwear" | split: "|" -%}
+{%- assign acc_nums    = "01|02|03|04|05" | split: "|" -%}
+{%- assign acc_imgs    = "photo-1515886657613-9f3515b0c78f|photo-1509631179647-0177331693ae|photo-1479064555552-3ef4d0d87f10|photo-1469334031218-e382a71b716b|photo-1490481651871-ab68de25d43d" | split: "|" -%}
+
+<section
+  id="trending-accordion"
+  class="py-32 px-6 md:px-10"
+  style="background-color: #0a0a0a;"
+>
+  <div class="max-w-screen-xl mx-auto">
+    <div class="grid md:grid-cols-2 gap-16 relative">
+
+      <!-- ══════════════════════════════════
+           STICKY LEFT COLUMN
+      ══════════════════════════════════ -->
+      <div class="hidden md:block sticky top-24 self-start">
+
+        <!-- Eyebrow -->
+        <p style="
+          font-family: var(--font-body);
+          font-size: 0.6rem;
+          letter-spacing: 0.24em;
+          text-transform: uppercase;
+          color: var(--color-accent);
+          margin-bottom: 1.5rem;
+        ">New Arrivals</p>
+
+        <!-- Heading -->
+        <h2 style="
+          font-family: var(--font-heading);
+          font-size: clamp(2rem, 3.5vw, 3.2rem);
+          font-weight: 600;
+          color: #ffffff;
+          line-height: 1.08;
+          letter-spacing: -0.02em;
+          margin-bottom: 1.75rem;
+        ">
+          Trending<br>Styles You<br>Can't Miss.
+        </h2>
+
+        <!-- Divider -->
+        <div style="width: 36px; height: 1.5px; background-color: var(--color-accent); margin-bottom: 1.75rem;"></div>
+
+        <!-- Description -->
+        <p style="
+          font-family: var(--font-body);
+          font-size: 0.85rem;
+          line-height: 1.85;
+          color: #6b7280;
+          max-width: 320px;
+          margin-bottom: 2.5rem;
+        ">
+          Each style is a statement — restrained, intentional, and made
+          to outlast every passing season.
+        </p>
+
+        <!-- CTA -->
+        <a href="{{ routes.collections_url }}" class="ta-cta-btn">
+          <span class="ta-cta-arrow" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </span>
+          Shop Now
+        </a>
+
+        <!-- Scroll hint -->
+        <p style="
+          font-family: var(--font-body);
+          font-size: 0.6rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #374151;
+          margin-top: 4rem;
+        ">Hover to explore →</p>
+
+      </div>
+      <!-- / Left Column -->
+
+      <!-- ══════════════════════════════════
+           RIGHT COLUMN — Accordion List
+      ══════════════════════════════════ -->
+      <div class="flex flex-col gap-4">
+
+        <!-- Mobile-only heading -->
+        <h2 class="block md:hidden mb-6" style="
+          font-family: var(--font-heading);
+          font-size: 2rem;
+          font-weight: 600;
+          color: #ffffff;
+          line-height: 1.1;
+        ">Trending Styles</h2>
+
+        {% for i in (1..5) %}
+          {%- assign idx   = forloop.index0 -%}
+          {%- assign color = acc_colors[idx] -%}
+          {%- assign name  = acc_names[idx] -%}
+          {%- assign tag   = acc_tags[idx] -%}
+          {%- assign num   = acc_nums[idx] -%}
+          {%- assign img   = acc_imgs[idx] -%}
+
+          <!-- Accordion Item {{ num }} -->
+          <a
+            href="{{ routes.collections_url }}"
+            class="accordion-item block"
+            style="background-color: {{ color }};"
+            aria-label="Browse {{ name }}"
+          >
+            <!-- Number -->
+            <span class="accordion-num">{{ num }}</span>
+
+            <!-- Category tag (visible on hover) -->
+            <span class="accordion-tag">{{ tag }}</span>
+
+            <!-- Inner layout -->
+            <div class="accordion-inner">
+
+              <!-- Product Thumbnail (appears on hover) -->
+              <img
+                src="https://images.unsplash.com/{{ img }}?w=300&q=80&auto=format&fit=crop"
+                alt="{{ name }}"
+                class="accordion-img"
+                loading="lazy"
+                width="100"
+                height="130"
+              />
+
+              <!-- Style Name (always visible) -->
+              <p class="accordion-name">{{ name }}</p>
+
+              <!-- Arrow Button (appears on hover) -->
+              <span class="accordion-arrow" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </span>
+
+            </div>
+          </a>
+          <!-- / Accordion Item {{ num }} -->
+
+        {% endfor %}
+
+      </div>
+      <!-- / Right Column -->
+
+    </div>
+  </div>
+</section>
