@@ -1,0 +1,31 @@
+{
+    "sections": {
+        "hero-banner": {
+            "type": "hero-banner",
+            "settings": {}
+        },
+        "featured-collection": {
+            "type": "featured-collection",
+            "settings": {}
+        },
+        "brand-story-bento": {
+            "type": "brand-story-bento",
+            "settings": {}
+        },
+        "trending-accordion": {
+            "type": "trending-accordion",
+            "settings": {}
+        },
+        "featured-blog": {
+            "type": "featured-blog",
+            "settings": {}
+        }
+    },
+    "order": [
+        "hero-banner",
+        "featured-collection",
+        "brand-story-bento",
+        "trending-accordion",
+        "featured-blog"
+    ]
+}
