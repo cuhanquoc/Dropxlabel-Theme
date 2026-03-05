@@ -23,6 +23,7 @@
   <!-- GSAP (GreenSock Animation Platform) v3.12.5 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js" defer></script>
 
   <!-- Global CSS: Quiet Luxury Design System -->
   <style>
@@ -132,5 +133,19 @@
 {% section 'footer' %}
 {% render 'cart-drawer' %}
 {% render 'predictive-search' %}
+
+<script>
+  /* Lenis Smooth Scroll — Awwwards-level easing, integrated with GSAP */
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof Lenis === 'undefined' || typeof gsap === 'undefined') return;
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+  });
+</script>
 </body>
 </html>
