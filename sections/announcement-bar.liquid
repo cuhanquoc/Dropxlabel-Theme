@@ -100,6 +100,9 @@
     style="
       background-color: {{ section.settings.bg_color }};
       color: {{ section.settings.text_color }};
+      font-size: {{ section.settings.font_size | default: 11 }}px;
+      padding-top: {{ section.settings.padding | default: 10 }}px;
+      padding-bottom: {{ section.settings.padding | default: 10 }}px;
     "
     role="region"
     aria-label="Announcement"
@@ -148,6 +151,31 @@
       "id": "link",
       "label": "Link (optional)",
       "info": "Makes the entire bar clickable"
+    },
+    {
+      "type": "header",
+      "content": "Sizing"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 8,
+      "max": 16,
+      "step": 1,
+      "default": 11,
+      "unit": "px",
+      "label": "Font Size"
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "min": 4,
+      "max": 20,
+      "step": 2,
+      "default": 10,
+      "unit": "px",
+      "label": "Vertical Padding",
+      "info": "Controls the height of the bar"
     },
     {
       "type": "header",
