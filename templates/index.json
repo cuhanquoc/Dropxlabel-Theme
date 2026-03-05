@@ -17,14 +17,17 @@
         "subheadline": "Curated pieces that transcend seasons — wear what endures beyond trends.",
         "cta_text": "Explore Now",
         "cta_url": "shopify://collections/all",
-        "marquee_text": "Elegance • Style • Luxury • Forever •"
+        "marquee_text": "Elegance • Style • Luxury • Forever •",
+        "marquee_color": "#ffffff99",
+        "marquee_speed": 22,
+        "marquee_direction": "left"
       }
     },
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
         "heading": "Trending Products",
-        "collection": "",
+        "collection": "greenland",
         "products_count": 8,
         "cta_text": "View All"
       }
