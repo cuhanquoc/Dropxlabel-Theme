@@ -141,17 +141,10 @@
   | split: ","
 -%}
 
+{%- comment -%} Dùng '|' làm delimiter vì giá có dấu phẩy ngàn {%- endcomment -%}
 {%-
-  assign mock_prices = "
-    4,200,000đ,
-    2,800,000đ,
-    5,600,000đ,
-    3,900,000đ,
-    3,200,000đ,
-    2,400,000đ,
-    6,100,000đ,
-    2,950,000đ"
-  | split: ","
+  assign mock_prices = "4.200.000đ|2.800.000đ|5.600.000đ|3.900.000đ|3.200.000đ|2.400.000đ|6.100.000đ|2.950.000đ"
+  | split: "|"
 -%}
 
 <section class="py-24" style="background-color: var(--color-bg);">
@@ -234,7 +227,7 @@
                 transition-all duration-300 ease-out
               "
               aria-label="Quick view {{ prod_name }}"
-              onclick="event.preventDefault(); /* TODO: open quick-view modal */"
+              onclick="event.preventDefault(); event.stopPropagation(); /* TODO: open quick-view modal */"
             >
               <!-- Eye Icon -->
               <svg

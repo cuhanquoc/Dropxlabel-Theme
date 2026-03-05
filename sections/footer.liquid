@@ -1,0 +1,321 @@
+<style>
+  /* ─────────────────────────────────────────
+     FOOTER — Quiet Luxury / Dark Edition
+  ───────────────────────────────────────── */
+
+  /* Giant headline stroke text */
+  .footer-giant-text {
+    font-family: var(--font-heading);
+    font-size: 7vw;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
+    white-space: nowrap;
+    display: block;
+    transition: -webkit-text-stroke 500ms ease, color 500ms ease;
+    cursor: default;
+    user-select: none;
+  }
+
+  .footer-giant-text:hover {
+    color: rgba(255, 255, 255, 0.92);
+    -webkit-text-stroke: 1px transparent;
+  }
+
+  /* Column headings */
+  .footer-col-title {
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #ffffff;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Footer nav links */
+  .footer-link {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: #9ca3af; /* gray-400 */
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+    transition: color 250ms ease;
+    line-height: 1;
+  }
+
+  .footer-link:hover {
+    color: var(--color-accent);
+    opacity: 1;
+  }
+
+  /* Newsletter input */
+  .footer-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #4b5563; /* gray-600 */
+    color: #ffffff;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    padding: 0.6rem 0;
+    outline: none;
+    transition: border-color 300ms ease;
+    letter-spacing: 0.04em;
+  }
+
+  .footer-input::placeholder {
+    color: #6b7280; /* gray-500 */
+    letter-spacing: 0.04em;
+  }
+
+  .footer-input:focus {
+    border-bottom-color: var(--color-accent);
+  }
+
+  /* Subscribe button */
+  .footer-subscribe-btn {
+    margin-top: 1.25rem;
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    background: transparent;
+    border: 1px solid rgba(197, 168, 128, 0.45);
+    border-radius: 9999px;
+    padding: 0.55rem 1.5rem;
+    cursor: pointer;
+    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+  }
+
+  .footer-subscribe-btn:hover {
+    background-color: var(--color-accent);
+    color: #181818;
+    border-color: var(--color-accent);
+  }
+
+  /* Social icon buttons */
+  .footer-social {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #9ca3af;
+    text-decoration: none;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    margin-bottom: 0.85rem;
+    transition: color 250ms ease;
+  }
+
+  .footer-social:hover {
+    color: var(--color-accent);
+    opacity: 1;
+  }
+
+  .footer-social svg {
+    flex-shrink: 0;
+  }
+
+  /* Payment icons */
+  .payment-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 22px;
+    padding: 0 8px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.55rem;
+    letter-spacing: 0.08em;
+    color: #9ca3af;
+    text-transform: uppercase;
+  }
+</style>
+
+<footer
+  id="site-footer"
+  class="pt-32 pb-10 overflow-hidden"
+  style="background-color: #181818;"
+  role="contentinfo"
+>
+
+  <!-- ── Giant Typography ── -->
+  <div
+    id="footer-giant"
+    class="w-full overflow-hidden px-6 md:px-10 mb-4"
+  >
+    <span class="footer-giant-text">
+      Elevate Your Wardrobe at&nbsp;Dropxlabel
+    </span>
+  </div>
+
+  <!-- Thin accent divider -->
+  <div
+    class="mx-6 md:mx-10 mb-20"
+    style="height: 1px; background: linear-gradient(to right, var(--color-accent), transparent);"
+  ></div>
+
+  <!-- ── Footer 4-Column Grid ── -->
+  <div
+    id="footer-grid"
+    class="grid grid-cols-1 md:grid-cols-4 gap-12 px-6 md:px-10"
+  >
+
+    <!-- COL 1: Newsletter -->
+    <div data-footer-col>
+      <p class="footer-col-title">Join the Club</p>
+      <p style="font-family: var(--font-body); font-size: 0.82rem; line-height: 1.75; color: #6b7280; margin-bottom: 1.75rem;">
+        Đăng ký để nhận những bộ sưu tập mới nhất và đặc quyền dành riêng cho hội viên nội bộ.
+      </p>
+
+      <form
+        action="/contact#contact_form"
+        method="post"
+        onsubmit="event.preventDefault();"
+        novalidate
+      >
+        <input type="hidden" name="form_type" value="customer" />
+        <input type="hidden" name="utf8"      value="✓" />
+        <input type="hidden" name="contact[tags]" value="newsletter" />
+
+        <label for="footer-email" class="sr-only">Email address</label>
+        <input
+          id="footer-email"
+          name="contact[email]"
+          type="email"
+          class="footer-input"
+          placeholder="your@email.com"
+          required
+          autocomplete="email"
+        />
+        <button type="submit" class="footer-subscribe-btn">Subscribe</button>
+      </form>
+    </div>
+
+    <!-- COL 2: Quick Links -->
+    <div data-footer-col>
+      <p class="footer-col-title">Explore</p>
+      <nav aria-label="Footer quick links">
+        <a href="{{ routes.root_url }}"        class="footer-link">Home</a>
+        <a href="{{ routes.collections_url }}" class="footer-link">Catalog</a>
+        <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="footer-link">About Us</a>
+        <a href="{{ blogs.news.url | default: '/blogs/journal' }}"      class="footer-link">Journal</a>
+      </nav>
+    </div>
+
+    <!-- COL 3: Support -->
+    <div data-footer-col>
+      <p class="footer-col-title">Support</p>
+      <nav aria-label="Footer support links">
+        <a href="{{ pages['privacy-policy'].url | default: '/policies/privacy-policy' }}" class="footer-link">Privacy Policy</a>
+        <a href="{{ pages['refund-policy'].url  | default: '/policies/refund-policy' }}"  class="footer-link">Refund Policy</a>
+        <a href="{{ pages['shipping-policy'].url | default: '/policies/shipping-policy' }}" class="footer-link">Shipping Policy</a>
+        <a href="{{ pages['faq'].url | default: '/pages/faq' }}" class="footer-link">FAQ</a>
+      </nav>
+    </div>
+
+    <!-- COL 4: Social -->
+    <div data-footer-col>
+      <p class="footer-col-title">Follow Us</p>
+
+      <!-- Instagram -->
+      <a href="https://instagram.com/dropxlabel" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Dropxlabel on Instagram">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+        Instagram
+      </a>
+
+      <!-- TikTok -->
+      <a href="https://tiktok.com/@dropxlabel" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Dropxlabel on TikTok">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
+        </svg>
+        TikTok
+      </a>
+
+      <!-- Pinterest -->
+      <a href="https://pinterest.com/dropxlabel" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Dropxlabel on Pinterest">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.18-.76 1.22-5.16 1.22-5.16s-.31-.62-.31-1.54c0-1.45.84-2.53 1.88-2.53.89 0 1.32.67 1.32 1.47 0 .9-.57 2.24-.87 3.49-.25 1.04.52 1.88 1.54 1.88 1.85 0 3.09-2.37 3.09-5.18 0-2.14-1.45-3.74-4.07-3.74-2.96 0-4.79 2.21-4.79 4.67 0 .85.25 1.44.64 1.9.18.21.2.29.14.53-.05.18-.15.6-.19.77-.06.25-.25.33-.46.24-1.31-.54-1.92-1.98-1.92-3.6 0-2.67 2.25-5.87 6.72-5.87 3.6 0 5.97 2.61 5.97 5.41 0 3.71-2.06 6.49-5.1 6.49-1.02 0-1.97-.55-2.3-1.18l-.64 2.46c-.23.87-.69 1.74-1.06 2.42.8.24 1.64.37 2.52.37 5.52 0 10-4.48 10-10S17.52 2 12 2z"/>
+        </svg>
+        Pinterest
+      </a>
+    </div>
+
+  </div>
+  <!-- / Footer Grid -->
+
+  <!-- ── Bottom Bar ── -->
+  <div
+    class="border-t mt-20 pt-8 px-6 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4"
+    style="border-color: #1f2937;" <!-- gray-800 -->
+  >
+    <!-- Copyright -->
+    <p style="font-family: var(--font-body); font-size: 0.72rem; letter-spacing: 0.08em; color: #4b5563;">
+      &copy; {{ 'now' | date: '%Y' }} Dropxlabel. All rights reserved.
+    </p>
+
+    <!-- Payment Icons -->
+    <div class="flex items-center gap-2" aria-label="Accepted payment methods">
+      <span class="payment-icon">Visa</span>
+      <span class="payment-icon">MC</span>
+      <span class="payment-icon">PayPal</span>
+      <span class="payment-icon">Momo</span>
+      <span class="payment-icon">VNPay</span>
+    </div>
+  </div>
+  <!-- / Bottom Bar -->
+
+</footer>
+
+
+<script>
+  /* ─────────────────────────────────────────────────────
+     GSAP ScrollTrigger — Footer entrance animations
+     Requires: gsap.min.js + ScrollTrigger.min.js
+     (already loaded via defer in layout/theme.liquid)
+  ───────────────────────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* 1. Giant headline slides up */
+    gsap.from('#footer-giant .footer-giant-text', {
+      scrollTrigger: {
+        trigger: '#site-footer',
+        start: 'top 85%',
+        once: true,
+      },
+      y: 80,
+      opacity: 0,
+      duration: 1.4,
+      ease: 'power4.out',
+    });
+
+    /* 2. Grid columns stagger in */
+    gsap.from('#footer-grid [data-footer-col]', {
+      scrollTrigger: {
+        trigger: '#footer-grid',
+        start: 'top 88%',
+        once: true,
+      },
+      y: 48,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power3.out',
+      stagger: 0.18,
+    });
+  });
+</script>
