@@ -333,10 +333,8 @@
      1. Left col: heading + text + button stagger fade-up
      2. Right col: accordion items stagger fade-up
   ───────────────────────────────────────────────────── */
-  document.addEventListener('DOMContentLoaded', function () {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
-    gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger);
 
     /* 1. Left sticky column — children fade up sequentially */
     gsap.fromTo(
@@ -363,6 +361,6 @@
         stagger: 0.15,
       }
     );
-  });
+
 </script>
 

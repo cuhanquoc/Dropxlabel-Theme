@@ -11,9 +11,8 @@
     margin: 1rem auto 0;
   }
 
-  /* Card entrance handled by GSAP ScrollTrigger (see inline script below) */
+  /* Card entrance: GSAP fromTo manages initial opacity via from-state */
   .product-card {
-    opacity: 0; /* GSAP animates to 1 on scroll */
   }
 
   /* Product name subtle hover */
@@ -246,10 +245,8 @@
      1. Heading trồi lên trước
      2. Product cards dây chuyền stagger sau
   ───────────────────────────────────────────────────── */
-  document.addEventListener('DOMContentLoaded', function () {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
-    gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger);
 
     /* 1. Section heading fades up first */
     gsap.fromTo('.fc-heading', { y: 40, opacity: 0 }, {
@@ -268,7 +265,7 @@
         ease: 'power3.out',
       }
     );
-  });
+
 </script>
 
 

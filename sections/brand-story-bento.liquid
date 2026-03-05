@@ -302,10 +302,8 @@
   /* ─────────────────────────────────────────────────────
      BRAND STORY BENTO — Quiet Luxury Scroll Animation
   ───────────────────────────────────────────────────── */
-  document.addEventListener('DOMContentLoaded', function () {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
-    gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger);
 
     gsap.fromTo('#brand-story [data-bento="block"]',
       { y: 50, opacity: 0 },
@@ -317,6 +315,6 @@
         stagger: 0.2,
       }
     );
-  });
+
 </script>
 

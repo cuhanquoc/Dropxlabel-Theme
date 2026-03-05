@@ -286,10 +286,8 @@
      Requires: gsap.min.js + ScrollTrigger.min.js
      (already loaded via defer in layout/theme.liquid)
   ───────────────────────────────────────────────────── */
-  document.addEventListener('DOMContentLoaded', function () {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
-    gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger);
 
     /* 1. Giant headline slides up */
     gsap.from('#footer-giant .footer-giant-text', {
@@ -317,5 +315,5 @@
       ease: 'power3.out',
       stagger: 0.18,
     });
-  });
+
 </script>

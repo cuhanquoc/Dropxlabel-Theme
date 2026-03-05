@@ -246,10 +246,8 @@
      1. Heading trồi lên trước
      2. Blog cards dây chuyền stagger sau
   ───────────────────────────────────────────────────── */
-  document.addEventListener('DOMContentLoaded', function () {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
-    gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger);
 
     /* 1. Heading fades up first */
     gsap.fromTo('.fb-heading', { y: 40, opacity: 0 }, {
@@ -276,6 +274,6 @@
       card.addEventListener('mouseenter', () => gsap.to(img, { scale: 1.05, duration: 0.7, ease: 'power2.out' }));
       card.addEventListener('mouseleave', () => gsap.to(img, { scale: 1,    duration: 0.6, ease: 'power2.out' }));
     });
-  });
+
 </script>
 
