@@ -50,19 +50,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     color: rgba(255, 255, 255, 0.9);
-    transition: opacity 250ms ease, transform 250ms ease;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), filter 0.35s ease, opacity 0.25s ease;
     cursor: pointer;
     background: none;
     border: none;
     padding: 0;
+    will-change: transform;
   }
 
   .icon-btn:hover {
-    opacity: 0.7;
-    transform: scale(1.1);
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+    opacity: 1;
   }
 
   .cart-count {
@@ -577,51 +579,47 @@
 
         </div>
 
-        <!-- Right: Collection Columns -->
+        <!-- Right: Collection Columns (dynamic blocks) -->
         <div class="mega-cols">
-
-          <!-- Column 1: Summer Essentials -->
-          <div class="mega-col">
-            <p class="mega-col-title">Summer Essentials</p>
-            <ul>
-              <li><a href="{{ routes.collections_url }}">Chic Soft Teddy Coat</a></li>
-              <li><a href="{{ routes.collections_url }}">Fitted Sleeveless Shirt</a></li>
-              <li><a href="{{ routes.collections_url }}">Classic Zip Front Shirt</a></li>
-              <li><a href="{{ routes.collections_url }}">Cropped Trucker Shirt</a></li>
-              <li><a href="{{ routes.collections_url }}">Crop Top Co-ord Set</a></li>
-              <li><a href="{{ routes.collections_url }}">Loose T-shirt</a></li>
-              <li><a href="{{ routes.collections_url }}">Sports Tee</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 2: Sportswear -->
-          <div class="mega-col">
-            <p class="mega-col-title">Sportswear</p>
-            <ul>
-              <li><a href="{{ routes.collections_url }}">Long-Sleeve Sports Tee</a></li>
-              <li><a href="{{ routes.collections_url }}">Polyester Gym Suit</a></li>
-              <li><a href="{{ routes.collections_url }}">Racerback Sports Bra</a></li>
-              <li><a href="{{ routes.collections_url }}">Round Neck T-shirt</a></li>
-              <li><a href="{{ routes.collections_url }}">Outdoor Sports Jacket</a></li>
-              <li><a href="{{ routes.collections_url }}">Racer Back Sports Top</a></li>
-              <li><a href="{{ routes.collections_url }}">Round Neck T-shirt</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 3: Winter Wardrobe -->
-          <div class="mega-col">
-            <p class="mega-col-title">Winter Wardrobe</p>
-            <ul>
-              <li><a href="{{ routes.collections_url }}">Oversized Hoodie</a></li>
-              <li><a href="{{ routes.collections_url }}">Warm and Soft Hoodie</a></li>
-              <li><a href="{{ routes.collections_url }}">Winter Hoodie</a></li>
-              <li><a href="{{ routes.collections_url }}">Wool Overcoat</a></li>
-              <li><a href="{{ routes.collections_url }}">Women Sweater</a></li>
-              <li><a href="{{ routes.collections_url }}">Soft Winter Hoodie</a></li>
-              <li><a href="{{ routes.collections_url }}">Warm Winter Jacket</a></li>
-            </ul>
-          </div>
-
+          {% for block in section.blocks %}
+            {% if block.type == 'mega_column' %}
+              <div class="mega-col" {{ block.shopify_attributes }}>
+                <p class="mega-col-title" style="
+                  font-size: {{ block.settings.title_font_size | default: 14 }}px;
+                  font-weight: {{ block.settings.title_font_weight | default: '700' }};
+                  color: {{ block.settings.title_color | default: '#1a1a1a' }};
+                ">
+                  {{ block.settings.title | default: 'Collection' }}
+                </p>
+                <ul>
+                  {% if block.settings.link_1_label != blank %}
+                    <li><a href="{{ block.settings.link_1_url | default: routes.collections_url }}">{{ block.settings.link_1_label }}</a></li>
+                  {% endif %}
+                  {% if block.settings.link_2_label != blank %}
+                    <li><a href="{{ block.settings.link_2_url | default: routes.collections_url }}">{{ block.settings.link_2_label }}</a></li>
+                  {% endif %}
+                  {% if block.settings.link_3_label != blank %}
+                    <li><a href="{{ block.settings.link_3_url | default: routes.collections_url }}">{{ block.settings.link_3_label }}</a></li>
+                  {% endif %}
+                  {% if block.settings.link_4_label != blank %}
+                    <li><a href="{{ block.settings.link_4_url | default: routes.collections_url }}">{{ block.settings.link_4_label }}</a></li>
+                  {% endif %}
+                  {% if block.settings.link_5_label != blank %}
+                    <li><a href="{{ block.settings.link_5_url | default: routes.collections_url }}">{{ block.settings.link_5_label }}</a></li>
+                  {% endif %}
+                  {% if block.settings.link_6_label != blank %}
+                    <li><a href="{{ block.settings.link_6_url | default: routes.collections_url }}">{{ block.settings.link_6_label }}</a></li>
+                  {% endif %}
+                  {% if block.settings.link_7_label != blank %}
+                    <li><a href="{{ block.settings.link_7_url | default: routes.collections_url }}">{{ block.settings.link_7_label }}</a></li>
+                  {% endif %}
+                  {% if block.settings.link_8_label != blank %}
+                    <li><a href="{{ block.settings.link_8_url | default: routes.collections_url }}">{{ block.settings.link_8_label }}</a></li>
+                  {% endif %}
+                </ul>
+              </div>
+            {% endif %}
+          {% endfor %}
         </div>
 
         <!-- Close button -->
@@ -657,11 +655,11 @@
   </a>
 
   <!-- RIGHT: Icon Actions -->
-  <div class="flex items-center gap-5 header-right-icons">
+  <div class="flex items-center gap-6 header-right-icons">
 
     <!-- Search Icon -->
     <button class="icon-btn" aria-label="Search" onclick="PredictiveSearch.open()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/>
         <path d="m21 21-4.3-4.3"/>
       </svg>
@@ -669,7 +667,7 @@
 
     <!-- Account Icon -->
     <a href="{{ routes.account_url }}" class="icon-btn" aria-label="My Account">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="8" r="4"/>
         <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
       </svg>
@@ -677,7 +675,7 @@
 
     <!-- Cart Icon -->
     <button class="icon-btn relative" aria-label="Shopping Cart" onclick="CartDrawer.open()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
         <path d="M3 6h18"/>
         <path d="M16 10a4 4 0 0 1-8 0"/>
@@ -836,6 +834,103 @@
       "type": "url",
       "id": "mega_video_link",
       "label": "Panel 2 Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mega_column",
+      "name": "Collection Column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Column Title",
+          "default": "Summer Essentials"
+        },
+        {
+          "type": "range",
+          "id": "title_font_size",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "default": 14,
+          "unit": "px",
+          "label": "Title Font Size"
+        },
+        {
+          "type": "select",
+          "id": "title_font_weight",
+          "label": "Title Font Weight",
+          "options": [
+            { "value": "400", "label": "Regular" },
+            { "value": "500", "label": "Medium" },
+            { "value": "600", "label": "Semi-Bold" },
+            { "value": "700", "label": "Bold" },
+            { "value": "800", "label": "Extra Bold" }
+          ],
+          "default": "700"
+        },
+        {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title Color",
+          "default": "#1a1a1a"
+        },
+        {
+          "type": "header",
+          "content": "Links (leave label blank to hide)"
+        },
+        { "type": "text", "id": "link_1_label", "label": "Link 1 Label", "default": "Product 1" },
+        { "type": "url",  "id": "link_1_url",   "label": "Link 1 URL" },
+        { "type": "text", "id": "link_2_label", "label": "Link 2 Label", "default": "Product 2" },
+        { "type": "url",  "id": "link_2_url",   "label": "Link 2 URL" },
+        { "type": "text", "id": "link_3_label", "label": "Link 3 Label", "default": "Product 3" },
+        { "type": "url",  "id": "link_3_url",   "label": "Link 3 URL" },
+        { "type": "text", "id": "link_4_label", "label": "Link 4 Label" },
+        { "type": "url",  "id": "link_4_url",   "label": "Link 4 URL" },
+        { "type": "text", "id": "link_5_label", "label": "Link 5 Label" },
+        { "type": "url",  "id": "link_5_url",   "label": "Link 5 URL" },
+        { "type": "text", "id": "link_6_label", "label": "Link 6 Label" },
+        { "type": "url",  "id": "link_6_url",   "label": "Link 6 URL" },
+        { "type": "text", "id": "link_7_label", "label": "Link 7 Label" },
+        { "type": "url",  "id": "link_7_url",   "label": "Link 7 URL" },
+        { "type": "text", "id": "link_8_label", "label": "Link 8 Label" },
+        { "type": "url",  "id": "link_8_url",   "label": "Link 8 URL" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Header",
+      "blocks": [
+        {
+          "type": "mega_column",
+          "settings": {
+            "title": "Summer Essentials",
+            "link_1_label": "Chic Soft Teddy Coat",
+            "link_2_label": "Fitted Sleeveless Shirt",
+            "link_3_label": "Classic Zip Front Shirt"
+          }
+        },
+        {
+          "type": "mega_column",
+          "settings": {
+            "title": "Sportswear",
+            "link_1_label": "Long-Sleeve Sports Tee",
+            "link_2_label": "Polyester Gym Suit",
+            "link_3_label": "Racerback Sports Bra"
+          }
+        },
+        {
+          "type": "mega_column",
+          "settings": {
+            "title": "Winter Wardrobe",
+            "link_1_label": "Oversized Hoodie",
+            "link_2_label": "Warm and Soft Hoodie",
+            "link_3_label": "Winter Hoodie"
+          }
+        }
+      ]
     }
   ]
 }
