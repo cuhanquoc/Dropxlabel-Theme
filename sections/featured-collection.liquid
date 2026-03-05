@@ -5,7 +5,7 @@
 
   .fc-section {
     background-color: #0a0a0a;
-    padding: 4rem 0;
+    padding: 5rem 0 4rem;
     position: relative;
     overflow: hidden;
   }
@@ -44,24 +44,40 @@
   /* ── Product Card ── */
   .product-card {
     flex: 0 0 auto;
-    width: 200px;
+    width: 210px;
     scroll-snap-align: start;
     text-decoration: none;
     cursor: pointer;
     display: block;
     position: relative;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .product-card:hover {
+    transform: translateY(-4px);
   }
 
   @media (min-width: 768px) {
-    .product-card { width: 220px; }
+    .product-card { width: 260px; }
+  }
+
+  @media (min-width: 1200px) {
+    .product-card { width: 280px; }
   }
 
   .pc-img-wrap {
+    display: block;
     position: relative;
     aspect-ratio: 3/4;
     overflow: hidden;
-    border-radius: 20px;
-    background-color: #1a1a1a;
+    border-radius: 16px;
+    background-color: #161616;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    transition: box-shadow 0.5s ease;
+  }
+
+  .product-card:hover .pc-img-wrap {
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
   }
 
   /* ── MAYA Image Swap ── */
@@ -139,16 +155,17 @@
   /* ── Product Info ── */
   .pc-info {
     text-align: center;
-    padding: 0.75rem 0.25rem 0;
+    padding: 1rem 0.5rem 0;
   }
 
   .product-title {
     font-family: var(--font-heading);
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 500;
     color: #ffffff;
-    line-height: 1.3;
-    transition: color 250ms ease;
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+    transition: color 350ms cubic-bezier(0.25, 1, 0.5, 1);
   }
 
   .product-card:hover .product-title {
@@ -564,10 +581,11 @@
 
   @media (max-width: 767px) {
     .fc-section { padding: 2.5rem 0; }
-    .fc-scroll-track { gap: 1rem; padding: 0 1rem 1rem; }
-    .product-card { width: 160px; }
-    .fc-placeholder { width: 160px; }
+    .fc-scroll-track { gap: 1rem; padding: 0 1.25rem 1rem; }
+    .product-card { width: 170px; }
+    .fc-placeholder { width: 170px; }
     .pc-variant-thumb { width: 28px; height: 28px; }
+    .pc-img-wrap { border-radius: 12px; }
   }
 </style>
 
