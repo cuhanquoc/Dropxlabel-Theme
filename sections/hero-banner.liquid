@@ -79,7 +79,7 @@
   .maya-merge-btn {
     display: inline-flex;
     align-items: center;
-    gap: 20px; /* Trạng thái mặc định: Tách rời nhau */
+    gap: 16px;
     text-decoration: none;
     cursor: pointer;
   }
@@ -94,8 +94,8 @@
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    /* Gia tốc nảy cực mạnh chuẩn Awwwards */
-    transition: all 0.7s cubic-bezier(0.76, 0, 0.24, 1); 
+    transition: padding 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.65s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .maya-merge-circle {
@@ -108,31 +108,34 @@
     border: 1px solid rgba(255, 255, 255, 0.5);
     color: #ffffff;
     border-radius: 50%;
-    transition: all 0.7s cubic-bezier(0.76, 0, 0.24, 1);
+    flex-shrink: 0;
+    will-change: transform, background-color;
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                background-color 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.65s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .maya-merge-circle svg {
-    transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1);
+    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* ─── KHI HOVER: PHÉP MÀU XẢY RA ─── */
-  .maya-merge-btn:hover {
-    gap: 0px; /* Khoảng cách biến mất, kéo 2 khối lại gần */
-  }
+  /* ─── HOVER: Vòng tròn bay sang PHẢI, hút vào phín trái của pill ─── */
+  .maya-merge-btn:hover { gap: 0px; }
 
   .maya-merge-btn:hover .maya-merge-text {
-    padding-right: 4.5rem; /* Chữ tự động né sang trái để nhường chỗ */
+    padding-left: 4.5rem; /* tạo khoảng trống bên trái để chứa circle */
+    padding-right: 2.5rem;
   }
 
   .maya-merge-btn:hover .maya-merge-circle {
-    transform: translateX(-56px); /* Vòng tròn bay tọt vào trong khối chữ */
-    background-color: #0a0a0a; /* Biến thành màu đen */
+    transform: translateX(56px); /* bay sang PHẢI vào trong pill */
+    background-color: #0a0a0a;
     border-color: #0a0a0a;
     color: #ffffff;
   }
 
   .maya-merge-btn:hover .maya-merge-circle svg {
-    transform: rotate(-45deg); /* Mũi tên xếch lên đầy kiêu hãnh */
+    transform: rotate(-45deg);
   }
 </style>
 
@@ -174,12 +177,12 @@
 
     <!-- CTA Button -->
     <a href="{{ routes.collections_url }}" class="maya-merge-btn hero-cta">
-      <span class="maya-merge-text">Explore Now</span>
       <span class="maya-merge-circle">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M5 12h14M12 5l7 7-7 7"/>
         </svg>
       </span>
+      <span class="maya-merge-text">Explore Now</span>
     </a>
 
 
