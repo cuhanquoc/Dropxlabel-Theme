@@ -1,0 +1,321 @@
+{% comment %}
+  ═══════════════════════════════════════════════════════════════
+  SCROLL REVEAL — Pinned Scrubbing Reveal (Quiet Luxury)
+  Cuộn chuột để điều khiển timeline: Light → Dark transition
+  GSAP ScrollTrigger | pin: true | scrub: 1
+  ═══════════════════════════════════════════════════════════════
+{% endcomment %}
+
+<style>
+  /* ═══ Section Container ═══ */
+  .sr-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: #f5f0eb;
+  }
+
+  /* ═══ Light Layer (bottom) ═══ */
+  .sr-light {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .sr-text-light {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 7vw, 6.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    text-align: center;
+    max-width: 900px;
+    will-change: transform, opacity;
+  }
+
+  .sr-sub-light {
+    font-family: var(--font-body);
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(10, 10, 10, 0.5);
+    margin-top: 1.5rem;
+    will-change: transform, opacity;
+  }
+
+  /* ═══ Dark Overlay (top — clip-path hidden initially) ═══ */
+  .sr-dark-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+    will-change: clip-path;
+  }
+
+  .sr-text-dark {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 7vw, 6.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-align: center;
+    max-width: 900px;
+    will-change: transform, opacity;
+  }
+
+  .sr-sub-dark {
+    font-family: var(--font-body);
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+    margin-top: 1.5rem;
+    will-change: transform, opacity;
+  }
+
+  /* ═══ Decorative accent line ═══ */
+  .sr-accent-line {
+    width: 48px;
+    height: 1px;
+    margin-bottom: 2rem;
+    will-change: transform, opacity;
+  }
+
+  .sr-accent-line--light {
+    background-color: rgba(10, 10, 10, 0.2);
+  }
+
+  .sr-accent-line--dark {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+</style>
+
+<section class="sr-section" id="scroll-reveal">
+
+  <!-- ══ LIGHT LAYER ══ -->
+  <div class="sr-light">
+    <div class="sr-accent-line sr-accent-line--light sr-line-light"></div>
+    <h2 class="sr-text-light">
+      {{ section.settings.light_heading | default: 'The Art of Timeless Design' }}
+    </h2>
+    <p class="sr-sub-light">
+      {{ section.settings.light_subtext | default: 'Where tradition meets innovation' }}
+    </p>
+  </div>
+
+  <!-- ══ DARK OVERLAY ══ -->
+  <div class="sr-dark-overlay">
+    <div class="sr-accent-line sr-accent-line--dark sr-line-dark"></div>
+    <h2 class="sr-text-dark">
+      {{ section.settings.dark_heading | default: 'Crafted for Those Who Dare' }}
+    </h2>
+    <p class="sr-sub-dark">
+      {{ section.settings.dark_subtext | default: 'Redefining luxury, one detail at a time' }}
+    </p>
+  </div>
+
+</section>
+
+<script>
+  /* ═══════════════════════════════════════════════════════════
+     PINNED SCRUBBING REVEAL — GSAP ScrollTrigger
+     Rule 2: pin + scrub: 1
+     Rule 4: GPU-accelerated — transform, opacity, clip-path only
+     Rule 5: Clean init function + matchMedia
+  ═══════════════════════════════════════════════════════════ */
+  (function initScrollReveal() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    var section = document.querySelector('#scroll-reveal');
+    if (!section) return;
+
+    var mm = gsap.matchMedia();
+
+    /* ── Desktop (≥768px): full cinematic experience ── */
+    mm.add('(min-width: 768px)', function () {
+      var tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          pin: true,
+          scrub: 1,
+          start: 'top top',
+          end: '+=150%',
+          anticipatePin: 1,
+        },
+      });
+
+      /* Step 1: Light text flies diagonally up-left + fades */
+      tl.to('.sr-text-light', {
+        x: '-20vw',
+        y: '-30vh',
+        opacity: 0,
+        duration: 1,
+        ease: 'none',
+      });
+
+      tl.to('.sr-sub-light', {
+        x: '-15vw',
+        y: '-25vh',
+        opacity: 0,
+        duration: 1,
+        ease: 'none',
+      }, '<0.1');
+
+      tl.to('.sr-line-light', {
+        x: '-10vw',
+        y: '-20vh',
+        opacity: 0,
+        duration: 0.8,
+        ease: 'none',
+      }, '<');
+
+      /* Step 2: Dark curtain pulls up via clip-path (starts slightly after) */
+      tl.to('.sr-dark-overlay', {
+        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+        duration: 1.5,
+        ease: 'none',
+      }, '<0.5');
+
+      /* Step 3: Dark text emerges upward */
+      tl.from('.sr-line-dark', {
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        ease: 'none',
+      }, '-=0.5');
+
+      tl.from('.sr-text-dark', {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        ease: 'none',
+      }, '-=0.5');
+
+      tl.from('.sr-sub-dark', {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'none',
+      }, '-=0.6');
+    });
+
+    /* ── Mobile (<768px): shorter scroll distance ── */
+    mm.add('(max-width: 767px)', function () {
+      var tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          pin: true,
+          scrub: 1,
+          start: 'top top',
+          end: '+=100%',
+          anticipatePin: 1,
+        },
+      });
+
+      /* Step 1: Light text fades straight up (no diagonal on mobile) */
+      tl.to('.sr-text-light', {
+        y: '-20vh',
+        opacity: 0,
+        duration: 1,
+        ease: 'none',
+      });
+
+      tl.to('.sr-sub-light', {
+        y: '-15vh',
+        opacity: 0,
+        duration: 0.8,
+        ease: 'none',
+      }, '<0.1');
+
+      tl.to('.sr-line-light', {
+        opacity: 0,
+        duration: 0.6,
+        ease: 'none',
+      }, '<');
+
+      /* Step 2: Dark curtain */
+      tl.to('.sr-dark-overlay', {
+        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)',
+        duration: 1.2,
+        ease: 'none',
+      }, '<0.3');
+
+      /* Step 3: Dark text */
+      tl.from('.sr-text-dark', {
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'none',
+      }, '-=0.4');
+
+      tl.from('.sr-sub-dark', {
+        y: 20,
+        opacity: 0,
+        duration: 0.6,
+        ease: 'none',
+      }, '-=0.4');
+    });
+  }());
+</script>
+
+{% schema %}
+{
+  "name": "Scroll Reveal",
+  "tag": "section",
+  "class": "scroll-reveal-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Light Mode (Before Scroll)"
+    },
+    {
+      "type": "textarea",
+      "id": "light_heading",
+      "label": "Light Heading",
+      "default": "The Art of Timeless Design"
+    },
+    {
+      "type": "text",
+      "id": "light_subtext",
+      "label": "Light Sub-text",
+      "default": "Where tradition meets innovation"
+    },
+    {
+      "type": "header",
+      "content": "Dark Mode (After Scroll)"
+    },
+    {
+      "type": "textarea",
+      "id": "dark_heading",
+      "label": "Dark Heading",
+      "default": "Crafted for Those Who Dare"
+    },
+    {
+      "type": "text",
+      "id": "dark_subtext",
+      "label": "Dark Sub-text",
+      "default": "Redefining luxury, one detail at a time"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scroll Reveal"
+    }
+  ]
+}
+{% endschema %}
