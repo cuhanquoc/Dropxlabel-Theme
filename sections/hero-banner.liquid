@@ -47,27 +47,28 @@
   }
 
   /* ─── CTA Button ─── */
-  .btn-outline-white {
+  .btn-maya-solid {
     display: inline-block;
-    padding: 0.85rem 2.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    color: #ffffff;
-    background-color: transparent;
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    background-color: #ffffff;
+    color: #0a0a0a;
+    padding: 1rem 3.5rem;
     border-radius: 9999px;
-    cursor: pointer;
-    transition: background-color 400ms ease, color 400ms ease, border-color 400ms ease;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
     text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+    will-change: transform;
   }
 
-  .btn-outline-white:hover {
-    background-color: #ffffff;
-    color: #222222;
-    border-color: #ffffff;
-    opacity: 1;
+  .btn-maya-solid:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    color: #0a0a0a;
   }
 
   /* ─── Marquee ─── */
@@ -138,9 +139,9 @@
     </p>
 
     <!-- CTA Button -->
-    <a href="{{ routes.collections_url }}" class="btn-outline-white hero-cta">
-      Explore Now
-    </a>
+    <a href="{{ routes.collections_url }}" class="btn-maya-solid hero-cta">Explore Now</a>
+
+
 
   </div>
 
