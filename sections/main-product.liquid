@@ -623,4 +623,110 @@
     trigger.setAttribute('aria-expanded', !isOpen);
     body.classList.toggle('open', !isOpen);
   }
+
+  /* ─────────────────────────────────────────────────
+     AJAX ADD TO CART
+     - Intercepts form#product-form submit
+     - POST /cart/add.js → on success: open CartDrawer
+     - Updates header cart count without page reload
+     - Falls back to native submit on any fetch error
+  ───────────────────────────────────────────────── */
+  (function () {
+    const form   = document.getElementById('product-form');
+    const btn    = document.getElementById('add-to-cart-btn');
+    if (!form || !btn) return;
+
+    /* ── Button state helpers ── */
+    const ICON_SVG = btn.querySelector('svg') ? btn.querySelector('svg').outerHTML : '';
+
+    function setBtnLoading() {
+      btn.disabled = true;
+      btn.style.opacity = '0.65';
+      btn.innerHTML = ICON_SVG + ' Adding\u2026';
+    }
+
+    function setBtnSuccess() {
+      btn.innerHTML = ICON_SVG + ' Added!';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      setTimeout(resetBtn, 1600);
+    }
+
+    function setBtnError(msg) {
+      btn.innerHTML = ICON_SVG + ' ' + (msg || 'Try again');
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      setTimeout(resetBtn, 2000);
+    }
+
+    function resetBtn() {
+      btn.innerHTML = ICON_SVG + ' Add to Cart';
+      btn.disabled  = false;
+      btn.style.opacity = '1';
+    }
+
+    /* ── Refresh cart count on all badges ── */
+    function refreshCartCount() {
+      fetch('/cart.js')
+        .then(r => r.json())
+        .then(cart => {
+          /* Update cart-drawer count text */
+          const countEl = document.getElementById('cd-count');
+          if (countEl) {
+            const n = cart.item_count;
+            countEl.textContent = n + (n === 1 ? ' item' : ' items');
+          }
+          /* Update header badge */
+          document.querySelectorAll('.cart-count').forEach(el => {
+            el.textContent = cart.item_count;
+            el.style.display = cart.item_count > 0 ? '' : 'none';
+          });
+          /* Update drawer subtotal */
+          const subtotalEl = document.getElementById('cd-subtotal');
+          if (subtotalEl) {
+            subtotalEl.textContent = (cart.total_price / 100).toLocaleString('vi-VN') + '\u20ab';
+          }
+        })
+        .catch(() => {});
+    }
+
+    /* ── AJAX Submit ── */
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const variantId = document.getElementById('selected-variant-id')?.value;
+      const quantity  = parseInt(document.getElementById('qty-input')?.value || 1);
+
+      if (!variantId) { form.submit(); return; } /* safety fallback */
+
+      setBtnLoading();
+
+      fetch('/cart/add.js', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: parseInt(variantId), quantity: quantity }),
+      })
+      .then(async r => {
+        if (!r.ok) {
+          const err = await r.json().catch(() => ({}));
+          throw new Error(err.description || 'Could not add item');
+        }
+        return r.json();
+      })
+      .then(() => {
+        setBtnSuccess();
+        refreshCartCount();
+
+        /* Open the CartDrawer */
+        if (typeof window.CartDrawer !== 'undefined') {
+          window.CartDrawer.open();
+        }
+      })
+      .catch(err => {
+        setBtnError(err.message);
+      });
+    });
+  }());
+
 </script>
+
