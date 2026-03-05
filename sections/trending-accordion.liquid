@@ -45,9 +45,8 @@
     background: rgba(0, 0, 0, 0.12);
   }
 
-  /* Accordion track */
   .accordion-item {
-    height: 5.5rem;           /* ~h-22 — collapsed default */
+    height: 5.5rem;
     border-radius: 40px;
     overflow: hidden;
     cursor: pointer;
@@ -58,12 +57,21 @@
     will-change: height;
   }
 
-  .accordion-item:hover {
-    height: 13rem;            /* ~h-52 — expanded */
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  @media (hover: hover) {
+    .accordion-item:hover {
+      height: 13rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    }
   }
 
-  /* Product image — hidden until hover */
+  /* Mobile: smaller collapsed, no hover expand */
+  @media (max-width: 767px) {
+    .accordion-item {
+      height: 4.5rem;
+      border-radius: 24px;
+    }
+  }
+
   .accordion-img {
     width: 100px;
     height: 130px;
@@ -77,9 +85,11 @@
     flex-shrink: 0;
   }
 
-  .accordion-item:hover .accordion-img {
-    opacity: 1;
-    transform: scale(1) translateX(0);
+  @media (hover: hover) {
+    .accordion-item:hover .accordion-img {
+      opacity: 1;
+      transform: scale(1) translateX(0);
+    }
   }
 
   /* Product name — shifts on expand */
@@ -95,9 +105,11 @@
     flex: 1;
   }
 
-  .accordion-item:hover .accordion-name {
-    text-align: left;
-    transform: translateX(1rem);
+  @media (hover: hover) {
+    .accordion-item:hover .accordion-name {
+      text-align: left;
+      transform: translateX(1rem);
+    }
   }
 
   /* Arrow circle button — slides in from right */
@@ -118,9 +130,11 @@
       transform 450ms cubic-bezier(0.16, 1, 0.3, 1) 100ms;
   }
 
-  .accordion-item:hover .accordion-arrow {
-    opacity: 1;
-    transform: translateX(0) scale(1);
+  @media (hover: hover) {
+    .accordion-item:hover .accordion-arrow {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
   }
 
   /* Accordion inner layout */
@@ -183,11 +197,11 @@
 
 <section
   id="trending-accordion"
-  class="py-32 px-6 md:px-10"
+  class="py-16 md:py-32 px-6 md:px-10"
   style="background-color: #0a0a0a;"
 >
   <div class="max-w-screen-xl mx-auto">
-    <div class="grid md:grid-cols-2 gap-16 relative">
+    <div class="grid md:grid-cols-2 gap-8 md:gap-16 relative">
 
       <!-- ══════════════════════════════════
            STICKY LEFT COLUMN
@@ -336,31 +350,37 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
-    /* 1. Left sticky column — children fade up sequentially */
+  let mmAcc = gsap.matchMedia();
+
+  mmAcc.add("(min-width: 768px)", () => {
     gsap.fromTo(
       '#trending-accordion .hidden.md\\:block > *',
       { y: 40, opacity: 0, immediateRender: false },
       {
         scrollTrigger: { trigger: '#trending-accordion', start: 'top 85%', once: true },
-        y: 0, opacity: 1,
-        duration: 1.2,
-        ease: 'power3.out',
-        stagger: 0.15,
+        y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', stagger: 0.15,
       }
     );
-
-    /* 2. Right column — accordion items stagger up as a wave */
     gsap.fromTo(
       '#trending-accordion .accordion-item',
       { y: 50, opacity: 0, immediateRender: false },
       {
         scrollTrigger: { trigger: '#trending-accordion', start: 'top 85%', once: true },
-        y: 0, opacity: 1,
-        duration: 1.3,
-        ease: 'power3.out',
-        stagger: 0.15,
+        y: 0, opacity: 1, duration: 1.3, ease: 'power3.out', stagger: 0.15,
       }
     );
+  });
+
+  mmAcc.add("(max-width: 767px)", () => {
+    gsap.fromTo(
+      '#trending-accordion .accordion-item',
+      { y: 20, opacity: 0, immediateRender: false },
+      {
+        scrollTrigger: { trigger: '#trending-accordion', start: 'top 90%', once: true },
+        y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.05,
+      }
+    );
+  });
 
 </script>
 

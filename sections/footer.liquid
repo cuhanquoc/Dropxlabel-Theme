@@ -20,9 +20,11 @@
     user-select: none;
   }
 
-  .footer-giant-text:hover {
-    color: rgba(255, 255, 255, 0.92);
-    -webkit-text-stroke: 1px transparent;
+  @media (hover: hover) {
+    .footer-giant-text:hover {
+      color: rgba(255, 255, 255, 0.92);
+      -webkit-text-stroke: 1px transparent;
+    }
   }
 
   /* Column headings */
@@ -142,7 +144,7 @@
 
 <footer
   id="site-footer"
-  class="pt-32 pb-10 overflow-hidden"
+  class="pt-16 md:pt-32 pb-10 overflow-hidden"
   style="background-color: #181818;"
   role="contentinfo"
 >
@@ -159,7 +161,7 @@
 
   <!-- Thin accent divider -->
   <div
-    class="mx-6 md:mx-10 mb-20"
+    class="mx-6 md:mx-10 mb-10 md:mb-20"
     style="height: 1px; background: linear-gradient(to right, var(--color-accent), transparent);"
   ></div>
 
@@ -258,7 +260,7 @@
 
   <!-- ── Bottom Bar ── -->
   <div
-    class="border-t mt-20 pt-8 px-6 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4"
+    class="border-t mt-10 md:mt-20 pt-8 px-6 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4"
     style="border-color: #1f2937;"
   >
     <!-- Copyright -->
@@ -289,23 +291,28 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
-    /* 1. Giant headline slides up */
+  let mmFooter = gsap.matchMedia();
+
+  mmFooter.add("(min-width: 768px)", () => {
     gsap.from('#footer-giant .footer-giant-text', {
       scrollTrigger: { trigger: '#site-footer', start: 'top 85%', once: true },
-      y: 80, opacity: 0,
-      duration: 1.4,
-      ease: 'power4.out',
-      immediateRender: false,
+      y: 80, opacity: 0, duration: 1.4, ease: 'power4.out', immediateRender: false,
     });
-
-    /* 2. Grid columns stagger in */
     gsap.from('#footer-grid [data-footer-col]', {
       scrollTrigger: { trigger: '#footer-grid', start: 'top 88%', once: true },
-      y: 48, opacity: 0,
-      duration: 1.2,
-      ease: 'power3.out',
-      stagger: 0.18,
-      immediateRender: false,
+      y: 48, opacity: 0, duration: 1.2, ease: 'power3.out', stagger: 0.18, immediateRender: false,
     });
+  });
+
+  mmFooter.add("(max-width: 767px)", () => {
+    gsap.from('#footer-giant .footer-giant-text', {
+      scrollTrigger: { trigger: '#site-footer', start: 'top 90%', once: true },
+      y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', immediateRender: false,
+    });
+    gsap.from('#footer-grid [data-footer-col]', {
+      scrollTrigger: { trigger: '#footer-grid', start: 'top 90%', once: true },
+      y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.05, immediateRender: false,
+    });
+  });
 
 </script>

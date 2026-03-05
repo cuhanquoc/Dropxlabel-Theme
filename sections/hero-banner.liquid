@@ -119,19 +119,17 @@
       color            0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* ─── HOVER: pill trượt PHẢI bao phủ circle, circle đổi đen ─── */
-  .maya-merge-btn:hover { gap: 0; }
-
-  .maya-merge-btn:hover .maya-merge-text {
-    /* pill mở rộng bên phải để nuốt circle */
-    padding-right: 5.5rem;
-  }
-
-  .maya-merge-btn:hover .maya-merge-circle {
-    /* ĐỨNG IM — chỉ đổi màu */
-    background-color: #111111;
-    border-color: #111111;
-    color: #ffffff;
+  /* ─── HOVER: pill đẩy sang phải bao phủ circle (chỉ desktop) ─── */
+  @media (hover: hover) {
+    .maya-merge-btn:hover { gap: 0; }
+    .maya-merge-btn:hover .maya-merge-text {
+      padding-right: 5.5rem;
+    }
+    .maya-merge-btn:hover .maya-merge-circle {
+      background-color: #111111;
+      border-color: #111111;
+      color: #ffffff;
+    }
   }
 </style>
 
@@ -154,7 +152,7 @@
   <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 45%);"></div>
 
   <!-- Nội dung Hero giữa ảnh -->
-  <div class="absolute inset-0 flex flex-col justify-center items-start px-20" style="padding-bottom: 14vh;">
+  <div class="absolute inset-0 flex flex-col justify-center items-start px-6 md:px-20" style="padding-bottom: 14vh;">
 
     <!-- Eyebrow label -->
     <p class="hero-eyebrow" style="font-family: var(--font-body); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 1.25rem;">
