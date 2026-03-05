@@ -82,6 +82,7 @@
     <div class="text-center mb-16">
       <h2
         class="fc-heading"
+        id="fc-heading"
         style="
           font-family: var(--font-heading);
           font-size: clamp(2rem, 5vw, 3.5rem);
@@ -89,6 +90,7 @@
           letter-spacing: 0.12em;
           text-transform: uppercase;
           color: var(--color-text);
+          overflow: hidden;
         "
       >
         {{ section.settings.heading }}
@@ -250,40 +252,126 @@
 
 <script>
   /* ─────────────────────────────────────────────────────
-     FEATURED COLLECTION — Quiet Luxury Scroll Animation
+     FEATURED COLLECTION — Water Slide In Animation
+     Scroll Down → characters slide up with wave stagger
+     Scroll Up   → heading fades out smoothly
   ───────────────────────────────────────────────────── */
 
   gsap.registerPlugin(ScrollTrigger);
 
-  let mm = gsap.matchMedia();
+  /* ── Water Slide: Split heading into characters ── */
+  (function () {
+    const heading = document.getElementById('fc-heading');
+    if (!heading) return;
 
-  mm.add("(min-width: 768px)", () => {
-    gsap.fromTo('.fc-heading', { y: 40, opacity: 0 }, {
-      scrollTrigger: { trigger: '#featured-collection', start: 'top 85%', once: true },
-      y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', immediateRender: false,
-    });
-    gsap.fromTo('#fc-grid .product-card',
-      { y: 60, opacity: 0, immediateRender: false },
-      {
-        scrollTrigger: { trigger: '#fc-grid', start: 'top 85%', once: true },
-        y: 0, opacity: 1, duration: 1.4, stagger: 0.15, ease: 'power3.out',
-      }
-    );
-  });
+    const text = heading.textContent.trim();
+    heading.innerHTML = '';
 
-  mm.add("(max-width: 767px)", () => {
-    gsap.fromTo('.fc-heading', { y: 20, opacity: 0 }, {
-      scrollTrigger: { trigger: '#featured-collection', start: 'top 90%', once: true },
-      y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', immediateRender: false,
+    /* Split every character into a span inside a wrapper (for overflow clip) */
+    text.split('').forEach(function (char) {
+      const wrapper = document.createElement('span');
+      wrapper.style.display = 'inline-block';
+      wrapper.style.overflow = 'hidden';
+      wrapper.style.verticalAlign = 'top';
+
+      const span = document.createElement('span');
+      span.textContent = char === ' ' ? '\u00A0' : char;
+      span.style.display = 'inline-block';
+      span.style.willChange = 'transform, opacity';
+      span.className = 'fc-char';
+
+      wrapper.appendChild(span);
+      heading.appendChild(wrapper);
     });
-    gsap.fromTo('#fc-grid .product-card',
-      { y: 20, opacity: 0, immediateRender: false },
-      {
-        scrollTrigger: { trigger: '#fc-grid', start: 'top 90%', once: true },
-        y: 0, opacity: 1, duration: 0.8, stagger: 0.05, ease: 'power3.out',
-      }
-    );
-  });
+
+    const chars = heading.querySelectorAll('.fc-char');
+
+    let mm = gsap.matchMedia();
+
+    /* ── Desktop: full water slide ── */
+    mm.add('(min-width: 768px)', function () {
+      /* Initial state: hidden below */
+      gsap.set(chars, { y: '110%', opacity: 0 });
+
+      /* Scroll down → Water Slide In */
+      ScrollTrigger.create({
+        trigger: '#featured-collection',
+        start: 'top 80%',
+        onEnter: function () {
+          gsap.to(chars, {
+            y: '0%',
+            opacity: 1,
+            duration: 1.0,
+            stagger: 0.03,
+            ease: 'expo.out',
+          });
+        },
+        /* Scroll up → Fade Out */
+        onLeaveBack: function () {
+          gsap.to(chars, {
+            y: '110%',
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.015,
+            ease: 'power2.in',
+          });
+        },
+      });
+    });
+
+    /* ── Mobile: lighter version ── */
+    mm.add('(max-width: 767px)', function () {
+      gsap.set(chars, { y: '100%', opacity: 0 });
+
+      ScrollTrigger.create({
+        trigger: '#featured-collection',
+        start: 'top 90%',
+        onEnter: function () {
+          gsap.to(chars, {
+            y: '0%',
+            opacity: 1,
+            duration: 0.7,
+            stagger: 0.02,
+            ease: 'expo.out',
+          });
+        },
+        onLeaveBack: function () {
+          gsap.to(chars, {
+            y: '100%',
+            opacity: 0,
+            duration: 0.35,
+            stagger: 0.01,
+            ease: 'power2.in',
+          });
+        },
+      });
+    });
+  }());
+
+  /* ── Product Cards animation (unchanged) ── */
+  (function () {
+    let mm2 = gsap.matchMedia();
+
+    mm2.add('(min-width: 768px)', function () {
+      gsap.fromTo('#fc-grid .product-card',
+        { y: 60, opacity: 0, immediateRender: false },
+        {
+          scrollTrigger: { trigger: '#fc-grid', start: 'top 85%', once: true },
+          y: 0, opacity: 1, duration: 1.4, stagger: 0.15, ease: 'power3.out',
+        }
+      );
+    });
+
+    mm2.add('(max-width: 767px)', function () {
+      gsap.fromTo('#fc-grid .product-card',
+        { y: 20, opacity: 0, immediateRender: false },
+        {
+          scrollTrigger: { trigger: '#fc-grid', start: 'top 90%', once: true },
+          y: 0, opacity: 1, duration: 0.8, stagger: 0.05, ease: 'power3.out',
+        }
+      );
+    });
+  }());
 
 </script>
 
