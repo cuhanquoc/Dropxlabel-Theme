@@ -1,0 +1,192 @@
+{% comment %}
+  ─────────────────────────────────────────
+  ANNOUNCEMENT BAR — Top Banner
+  Editable text, colors, and animation
+  ─────────────────────────────────────────
+{% endcomment %}
+
+<style>
+  .announcement-bar {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    z-index: 60;
+    padding: 10px 1rem;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .announcement-bar a {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .announcement-bar a:hover {
+    opacity: 0.75;
+  }
+
+  /* ── Animation: Slide Down ── */
+  @keyframes ab-slide-down {
+    from { transform: translateY(-100%); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+  }
+
+  /* ── Animation: Fade In ── */
+  @keyframes ab-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── Animation: Marquee Scroll ── */
+  @keyframes ab-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  .announcement-bar[data-animation="slide_down"] {
+    animation: ab-slide-down 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .announcement-bar[data-animation="fade_in"] {
+    animation: ab-fade-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .announcement-bar[data-animation="marquee"] .ab-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: ab-marquee 18s linear infinite;
+    will-change: transform;
+  }
+
+  .announcement-bar[data-animation="marquee"] .ab-marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  .ab-marquee-item {
+    white-space: nowrap;
+    padding: 0 3rem;
+  }
+
+  .ab-static-text {
+    display: inline-block;
+  }
+
+  /* Hide marquee track for non-marquee modes */
+  .announcement-bar:not([data-animation="marquee"]) .ab-marquee-track {
+    display: none;
+  }
+
+  .announcement-bar[data-animation="marquee"] .ab-static-text {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .announcement-bar {
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      padding: 8px 0.75rem;
+    }
+  }
+</style>
+
+{% if section.settings.show_bar %}
+  <div
+    class="announcement-bar"
+    data-animation="{{ section.settings.animation }}"
+    style="
+      background-color: {{ section.settings.bg_color }};
+      color: {{ section.settings.text_color }};
+    "
+    role="region"
+    aria-label="Announcement"
+  >
+    <!-- Static text (for slide_down & fade_in) -->
+    {% if section.settings.link != blank %}
+      <a href="{{ section.settings.link }}" class="ab-static-text">
+        {{ section.settings.text }}
+      </a>
+    {% else %}
+      <span class="ab-static-text">{{ section.settings.text }}</span>
+    {% endif %}
+
+    <!-- Marquee track (for marquee animation) -->
+    <div class="ab-marquee-track">
+      {% for i in (1..6) %}
+        {% if section.settings.link != blank %}
+          <a href="{{ section.settings.link }}" class="ab-marquee-item">{{ section.settings.text }}</a>
+        {% else %}
+          <span class="ab-marquee-item">{{ section.settings.text }}</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_bar",
+      "label": "Show Announcement Bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Announcement Text",
+      "default": "Free Domestic Shipping over $150 and 30 Day Returns"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link (optional)",
+      "info": "Makes the entire bar clickable"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#d4c8b0"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "select",
+      "id": "animation",
+      "label": "Animation Style",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "slide_down", "label": "Slide Down" },
+        { "value": "fade_in", "label": "Fade In" },
+        { "value": "marquee", "label": "Marquee (scrolling)" }
+      ],
+      "default": "fade_in",
+      "info": "Choose how the bar appears on page load"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Bar"
+    }
+  ]
+}
+{% endschema %}

@@ -89,6 +89,15 @@
   @media (max-width: 767px) {
     header.site-header {
       padding: 1rem 1.25rem !important;
+      display: grid !important;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+    }
+    header.site-header .header-logo-wrap {
+      justify-self: center;
+    }
+    header.site-header .header-right-icons {
+      justify-self: end;
     }
   }
 
@@ -633,10 +642,22 @@
   </nav>
 
   <!-- CENTER: Brand Logo -->
-  <a href="{{ routes.root_url }}" class="header-logo">Dropxlabel</a>
+  <a href="{{ routes.root_url }}" class="header-logo header-logo-wrap">
+    {% if section.settings.logo_image != blank %}
+      <img
+        src="{{ section.settings.logo_image | image_url: width: 400 }}"
+        alt="{{ shop.name }}"
+        class="header-logo-img"
+        style="max-width: {{ section.settings.logo_width | default: 120 }}px; height: auto;"
+        loading="eager"
+      />
+    {% else %}
+      {{ section.settings.logo_text | default: shop.name }}
+    {% endif %}
+  </a>
 
   <!-- RIGHT: Icon Actions -->
-  <div class="flex items-center gap-5">
+  <div class="flex items-center gap-5 header-right-icons">
 
     <!-- Search Icon -->
     <button class="icon-btn" aria-label="Search" onclick="PredictiveSearch.open()">
@@ -746,6 +767,34 @@
   "name": "Header",
   "tag": "section",
   "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo Image",
+      "info": "Recommended: PNG with transparent background, max 400×100px. If set, replaces text logo."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 60,
+      "max": 300,
+      "step": 10,
+      "default": 120,
+      "unit": "px",
+      "label": "Logo Max Width",
+      "info": "Controls the maximum width of the logo image on desktop"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo Text (fallback)",
+      "default": "Dropxlabel",
+      "info": "Shown when no logo image is uploaded"
+    },
     {
       "type": "header",
       "content": "Mega Menu — Panel 1 (Image)"
