@@ -251,7 +251,7 @@
 
     gsap.fromTo(
       '#fc-grid .product-card',
-      { y: 80, opacity: 0 },
+      { y: 100, opacity: 0 },
       {
         scrollTrigger: {
           trigger: '#fc-grid',
@@ -260,9 +260,9 @@
         },
         y:        0,
         opacity:  1,
-        duration: 1.2,
+        duration: 1.5,
         stagger:  0.15,
-        ease:     'power4.out',
+        ease:     'expo.out',
       }
     );
   });

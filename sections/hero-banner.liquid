@@ -1,10 +1,11 @@
 <style>
   /* ─── Ken Burns Effect ─── */
   @keyframes kenBurns {
-    0%   { transform: scale(1)    translateX(0)     translateY(0); }
-    33%  { transform: scale(1.06) translateX(-1%)   translateY(-0.5%); }
-    66%  { transform: scale(1.12) translateX(1%)    translateY(-1%); }
-    100% { transform: scale(1.15) translateX(-0.5%) translateY(-1.5%); }
+    0%   { transform: scale(1)    translateX(0)     translateY(0);      filter: blur(10px); }
+    15%  { filter: blur(0px); }
+    33%  { transform: scale(1.05) translateX(-1%)   translateY(-0.5%);  filter: blur(0px); }
+    66%  { transform: scale(1.10) translateX(1%)    translateY(-1%);    filter: blur(0px); }
+    100% { transform: scale(1.15) translateX(-0.5%) translateY(-1.5%);  filter: blur(0px); }
   }
 
   .hero-image {
@@ -12,7 +13,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center top;
-    animation: kenBurns 20s ease-in-out infinite alternate;
+    animation: kenBurns 30s ease-in-out infinite alternate;
     transform-origin: center center;
     will-change: transform;
   }
