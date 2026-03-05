@@ -50,8 +50,6 @@
     padding: 2.25rem;
   }
 
-  /* Ken Burns subtle on bento: handled via .bento-block:hover .bento-img (transition) */
-
   .bento-img {
     width: 100%;
     height: 100%;
@@ -92,12 +90,6 @@
     margin: 1.25rem 0;
   }
 </style>
-
-{%- comment -%}
-  ─────────────────────────────────────────
-  BRAND STORY BENTO SECTION
-  ─────────────────────────────────────────
-{%- endcomment -%}
 
 <section
   id="brand-story"
@@ -140,7 +132,6 @@
 
       <!-- ════════════════════════════════
            BLOCK 1 — Left, Large (2 rows)
-           Image vertical 3:4 — Journey of Style
       ════════════════════════════════ -->
       <div
         class="bento-block relative overflow-hidden rounded-[20px] md:rounded-[60px]"
@@ -153,21 +144,32 @@
         }
       </style>
         <!-- Background Image -->
-        <img
-          src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900&q=85&auto=format&fit=crop"
-          alt="Journey of Style — editorial fashion"
-          class="bento-img absolute inset-0"
-          loading="lazy"
-          width="900"
-          height="1200"
-        />
+        {% if section.settings.block1_image != blank %}
+          <img
+            src="{{ section.settings.block1_image | image_url: width: 900 }}"
+            alt="{{ section.settings.block1_image.alt | default: section.settings.block1_heading }}"
+            class="bento-img absolute inset-0"
+            loading="lazy"
+            width="900"
+            height="1200"
+          />
+        {% else %}
+          <img
+            src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900&q=85&auto=format&fit=crop"
+            alt="Journey of Style — editorial fashion"
+            class="bento-img absolute inset-0"
+            loading="lazy"
+            width="900"
+            height="1200"
+          />
+        {% endif %}
 
         <!-- Overlay -->
         <div class="bento-img-overlay"></div>
 
         <!-- Text content at bottom -->
         <div class="bento-caption">
-          <span class="bento-tag">Since 2021</span>
+          <span class="bento-tag">{{ section.settings.block1_tag }}</span>
 
           <h2
             style="
@@ -180,7 +182,7 @@
               margin-bottom: 0.9rem;
             "
           >
-            Journey<br>of Style
+            {{ section.settings.block1_heading }}
           </h2>
 
           <p
@@ -192,8 +194,7 @@
               max-width: 340px;
             "
           >
-            Born from a quiet obsession with fabric, form, and feeling —
-            every piece carries the weight of intention.
+            {{ section.settings.block1_description }}
           </p>
         </div>
 
@@ -214,12 +215,12 @@
         <!-- Top row: stats -->
         <div class="flex items-start gap-10">
           <div>
-            <p class="bento-stat-number">200<span style="color: var(--color-accent);">+</span></p>
-            <p class="bento-stat-label">Curated Pieces</p>
+            <p class="bento-stat-number">{{ section.settings.stat1_number }}<span style="color: var(--color-accent);">+</span></p>
+            <p class="bento-stat-label">{{ section.settings.stat1_label }}</p>
           </div>
           <div>
-            <p class="bento-stat-number">12</p>
-            <p class="bento-stat-label">Collections</p>
+            <p class="bento-stat-number">{{ section.settings.stat2_number }}</p>
+            <p class="bento-stat-label">{{ section.settings.stat2_label }}</p>
           </div>
         </div>
 
@@ -238,7 +239,7 @@
               margin-bottom: 0.85rem;
             "
           >
-            Timeless Pieces
+            {{ section.settings.block2_heading }}
           </h3>
 
           <p
@@ -250,9 +251,7 @@
               max-width: 320px;
             "
           >
-            Crafted for the woman who understands that true luxury
-            whispers — in the press of pure linen, the weight of
-            Italian crepe, the silence of a perfect silhouette.
+            {{ section.settings.block2_description }}
           </p>
         </div>
 
@@ -262,24 +261,34 @@
 
       <!-- ════════════════════════════════
            BLOCK 3 — Right, Bottom
-           Horizontal image — fabric / accessory detail
       ════════════════════════════════ -->
       <div
         class="bento-block relative overflow-hidden rounded-[40px] md:rounded-[60px]"
         style="grid-column: 2; grid-row: 2; aspect-ratio: 16/9;"
         data-bento="block"
       >
-        <!-- Background Image: close-up fabric / accessory -->
-        <img
-          src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=85&auto=format&fit=crop"
-          alt="Fabric texture — material detail"
-          class="bento-img absolute inset-0"
-          loading="lazy"
-          width="900"
-          height="506"
-        />
+        <!-- Background Image -->
+        {% if section.settings.block3_image != blank %}
+          <img
+            src="{{ section.settings.block3_image | image_url: width: 900 }}"
+            alt="{{ section.settings.block3_image.alt | default: section.settings.block3_heading }}"
+            class="bento-img absolute inset-0"
+            loading="lazy"
+            width="900"
+            height="506"
+          />
+        {% else %}
+          <img
+            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=85&auto=format&fit=crop"
+            alt="Fabric texture — material detail"
+            class="bento-img absolute inset-0"
+            loading="lazy"
+            width="900"
+            height="506"
+          />
+        {% endif %}
 
-        <!-- Subtle bottom overlay for legibility -->
+        <!-- Subtle overlay -->
         <div
           class="absolute inset-0"
           style="
@@ -302,7 +311,7 @@
           "
         >
           <span class="bento-tag" style="border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.85);">
-            Material
+            {{ section.settings.block3_tag }}
           </span>
           <p
             style="
@@ -314,8 +323,7 @@
               line-height: 1.3;
             "
           >
-            Italian Wool &amp; Pure Linen.<br>
-            <span style="font-weight: 400; font-style: italic; color: rgba(255,255,255,0.7);">Feel the difference.</span>
+            {{ section.settings.block3_heading }}
           </p>
         </div>
 
@@ -360,3 +368,104 @@
 
 </script>
 
+{% schema %}
+{
+  "name": "Brand Story Bento",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Block 1 — Large Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "block1_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "block1_tag",
+      "label": "Tag Text",
+      "default": "Since 2021"
+    },
+    {
+      "type": "textarea",
+      "id": "block1_heading",
+      "label": "Heading",
+      "default": "Journey<br>of Style"
+    },
+    {
+      "type": "textarea",
+      "id": "block1_description",
+      "label": "Description",
+      "default": "Born from a quiet obsession with fabric, form, and feeling — every piece carries the weight of intention."
+    },
+    {
+      "type": "header",
+      "content": "Block 2 — Stats & Info"
+    },
+    {
+      "type": "text",
+      "id": "stat1_number",
+      "label": "Stat 1 Number",
+      "default": "200"
+    },
+    {
+      "type": "text",
+      "id": "stat1_label",
+      "label": "Stat 1 Label",
+      "default": "Curated Pieces"
+    },
+    {
+      "type": "text",
+      "id": "stat2_number",
+      "label": "Stat 2 Number",
+      "default": "12"
+    },
+    {
+      "type": "text",
+      "id": "stat2_label",
+      "label": "Stat 2 Label",
+      "default": "Collections"
+    },
+    {
+      "type": "text",
+      "id": "block2_heading",
+      "label": "Heading",
+      "default": "Timeless Pieces"
+    },
+    {
+      "type": "textarea",
+      "id": "block2_description",
+      "label": "Description",
+      "default": "Crafted for the woman who understands that true luxury whispers — in the press of pure linen, the weight of Italian crepe, the silence of a perfect silhouette."
+    },
+    {
+      "type": "header",
+      "content": "Block 3 — Bottom Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "block3_image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "block3_tag",
+      "label": "Tag Text",
+      "default": "Material"
+    },
+    {
+      "type": "textarea",
+      "id": "block3_heading",
+      "label": "Heading",
+      "default": "Italian Wool & Pure Linen.<br><span style=\"font-weight: 400; font-style: italic; color: rgba(255,255,255,0.7);\">Feel the difference.</span>"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brand Story Bento"
+    }
+  ]
+}
+{% endschema %}

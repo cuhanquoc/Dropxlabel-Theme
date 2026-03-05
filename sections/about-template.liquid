@@ -347,11 +347,9 @@
   <section class="pt-40 pb-20 px-6 md:px-10" style="background-color: var(--color-bg);">
     <div class="max-w-screen-xl mx-auto">
 
-      <span class="at-eyebrow">The Journey of Style</span>
+      <span class="at-eyebrow">{{ section.settings.eyebrow }}</span>
       <p class="at-quote" id="at-quote">
-        From the soft drape of a blouse to the structured silhouette
-        of a tailored jacket, every element is curated to
-        empower you — not define you.
+        {{ section.settings.quote_text }}
       </p>
 
     </div>
@@ -363,14 +361,25 @@
   <div id="at-parallax-wrap">
 
     <!-- Parallax Background Image -->
-    <img
-      id="at-parallax-img"
-      src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&q=85&auto=format&fit=crop"
-      alt="Dropxlabel — where street style meets high fashion"
-      loading="lazy"
-      width="1920"
-      height="1280"
-    />
+    {% if section.settings.parallax_image != blank %}
+      <img
+        id="at-parallax-img"
+        src="{{ section.settings.parallax_image | image_url: width: 1920 }}"
+        alt="{{ section.settings.parallax_image.alt | default: 'About us hero' }}"
+        loading="lazy"
+        width="1920"
+        height="1280"
+      />
+    {% else %}
+      <img
+        id="at-parallax-img"
+        src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&q=85&auto=format&fit=crop"
+        alt="Dropxlabel — where street style meets high fashion"
+        loading="lazy"
+        width="1920"
+        height="1280"
+      />
+    {% endif %}
 
     <!-- Overlay -->
     <div id="at-parallax-overlay"></div>
@@ -378,7 +387,7 @@
     <!-- Hero Text (bottom-left) -->
     <div class="at-hero-text">
       <h2 class="at-hero-headline">
-        Where Street Style<br>Meets High Fashion.
+        {{ section.settings.hero_headline }}
       </h2>
     </div>
 
@@ -419,22 +428,14 @@
        3. BRAND VALUES STRIP
   ══════════════════════════════════════ -->
   <div class="at-values-strip px-0" style="background-color: var(--color-bg);">
-    <div class="at-value-item">
-      <p class="at-value-number">200<span style="color: var(--color-accent);">+</span></p>
-      <p class="at-value-label">Curated Pieces</p>
-    </div>
-    <div class="at-value-item">
-      <p class="at-value-number">12</p>
-      <p class="at-value-label">Collections</p>
-    </div>
-    <div class="at-value-item">
-      <p class="at-value-number">5K<span style="color: var(--color-accent);">+</span></p>
-      <p class="at-value-label">Happy Clients</p>
-    </div>
-    <div class="at-value-item">
-      <p class="at-value-number">4</p>
-      <p class="at-value-label">Years of Craft</p>
-    </div>
+    {% for block in section.blocks %}
+      {% if block.type == 'value_item' %}
+        <div class="at-value-item" {{ block.shopify_attributes }}>
+          <p class="at-value-number">{{ block.settings.number }}<span style="color: var(--color-accent);">{{ block.settings.suffix }}</span></p>
+          <p class="at-value-label">{{ block.settings.label }}</p>
+        </div>
+      {% endif %}
+    {% endfor %}
   </div>
 
   <!-- ══════════════════════════════════════
@@ -464,44 +465,40 @@
       <!-- Horizontal review strip -->
       <div class="at-reviews-strip px-6 md:px-10" id="at-reviews-strip">
 
-        {%- assign review_texts  = "The quality of the fabric is unlike anything I have found at this price point. Minimal, considered, and completely my style.|Wearing Dropxlabel feels like wearing confidence. The linen coat fits perfectly and drapes beautifully.|Every piece I have ordered has exceeded expectations. The attention to detail is evident in every seam.|Understated, sophisticated, timeless. Exactly what I was looking for. The silk edit is perfection." | split: "|" -%}
-        {%- assign review_names  = "Linh N.|Anh T.|Mai P.|Thanh H." | split: "|" -%}
-        {%- assign review_cities = "Hà Nội|TP. Hồ Chí Minh|Đà Nẵng|Hà Nội" | split: "|" -%}
-        {%- assign review_photos = "photo-1494790108377-be9c29b29330|photo-1438761681033-6461ffad8d80|photo-1527980965255-d3b416303d12|photo-1492562080023-ab3db95bfbce" | split: "|" -%}
+        {% for block in section.blocks %}
+          {% if block.type == 'review_card' %}
+            <article class="at-review-card" data-review-card {{ block.shopify_attributes }}>
 
-        {% for i in (1..4) %}
-          {%- assign ri    = forloop.index0 -%}
-          {%- assign rtext = review_texts[ri]  -%}
-          {%- assign rname = review_names[ri]  -%}
-          {%- assign rcity = review_cities[ri] -%}
-          {%- assign rphoto= review_photos[ri] -%}
+              <!-- Stars -->
+              <p class="at-review-stars" aria-label="{{ block.settings.stars }} stars">
+                {% for i in (1..5) %}{% if i <= block.settings.stars %}★{% else %}☆{% endif %}{% endfor %}
+              </p>
 
-          <article class="at-review-card" data-review-card>
+              <!-- Review text -->
+              <blockquote class="at-review-text">"{{ block.settings.text }}"</blockquote>
 
-            <!-- Stars -->
-            <p class="at-review-stars" aria-label="5 stars">★★★★★</p>
-
-            <!-- Review text -->
-            <blockquote class="at-review-text">"{{ rtext }}"</blockquote>
-
-            <!-- Author -->
-            <div class="at-review-author">
-              <img
-                src="https://images.unsplash.com/{{ rphoto }}?w=80&h=80&q=80&auto=format&fit=crop&crop=face"
-                alt="{{ rname }}"
-                class="at-review-avatar"
-                loading="lazy"
-                width="40"
-                height="40"
-              />
-              <div>
-                <p class="at-review-name">{{ rname }}</p>
-                <p class="at-review-location">{{ rcity }}</p>
+              <!-- Author -->
+              <div class="at-review-author">
+                {% if block.settings.avatar != blank %}
+                  <img
+                    src="{{ block.settings.avatar | image_url: width: 80 }}"
+                    alt="{{ block.settings.name }}"
+                    class="at-review-avatar"
+                    loading="lazy"
+                    width="40"
+                    height="40"
+                  />
+                {% else %}
+                  <div class="at-review-avatar" style="background: var(--color-border); display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--color-muted);">{{ block.settings.name | slice: 0 }}</div>
+                {% endif %}
+                <div>
+                  <p class="at-review-name">{{ block.settings.name }}</p>
+                  <p class="at-review-location">{{ block.settings.location }}</p>
+                </div>
               </div>
-            </div>
 
-          </article>
-
+            </article>
+          {% endif %}
         {% endfor %}
 
       </div>
@@ -596,3 +593,133 @@
     });
   }());
 </script>
+
+{% schema %}
+{
+  "name": "About Page",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Editorial Intro"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "The Journey of Style"
+    },
+    {
+      "type": "textarea",
+      "id": "quote_text",
+      "label": "Quote Text",
+      "default": "From the soft drape of a blouse to the structured silhouette of a tailored jacket, every element is curated to empower you — not define you."
+    },
+    {
+      "type": "header",
+      "content": "Parallax Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "parallax_image",
+      "label": "Hero Image",
+      "info": "Recommended: 1920×1280px"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_headline",
+      "label": "Hero Headline",
+      "default": "Where Street Style<br>Meets High Fashion."
+    },
+    {
+      "type": "header",
+      "content": "Reviews Section"
+    },
+    {
+      "type": "textarea",
+      "id": "reviews_heading",
+      "label": "Reviews Heading",
+      "default": "Success Stories That Inspire —<br><em style=\"font-weight: 400;\">See What Real Customers Say</em>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "value_item",
+      "name": "Brand Value",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "200"
+        },
+        {
+          "type": "text",
+          "id": "suffix",
+          "label": "Suffix (e.g. +)",
+          "default": "+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Curated Pieces"
+        }
+      ]
+    },
+    {
+      "type": "review_card",
+      "name": "Customer Review",
+      "settings": [
+        {
+          "type": "range",
+          "id": "stars",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Star Rating"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Review Text",
+          "default": "The quality of the fabric is unlike anything I have found at this price point."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Customer Name",
+          "default": "Customer Name"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "City"
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Avatar Photo"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Page",
+      "blocks": [
+        { "type": "value_item", "settings": { "number": "200", "suffix": "+", "label": "Curated Pieces" } },
+        { "type": "value_item", "settings": { "number": "12", "suffix": "", "label": "Collections" } },
+        { "type": "value_item", "settings": { "number": "5K", "suffix": "+", "label": "Happy Clients" } },
+        { "type": "value_item", "settings": { "number": "4", "suffix": "", "label": "Years of Craft" } },
+        { "type": "review_card", "settings": { "text": "The quality of the fabric is unlike anything I have found at this price point. Minimal, considered, and completely my style.", "name": "Linh N.", "location": "Hà Nội" } },
+        { "type": "review_card", "settings": { "text": "Wearing Dropxlabel feels like wearing confidence. The linen coat fits perfectly and drapes beautifully.", "name": "Anh T.", "location": "TP. Hồ Chí Minh" } },
+        { "type": "review_card", "settings": { "text": "Every piece I have ordered has exceeded expectations. The attention to detail is evident in every seam.", "name": "Mai P.", "location": "Đà Nẵng" } },
+        { "type": "review_card", "settings": { "text": "Understated, sophisticated, timeless. Exactly what I was looking for. The silk edit is perfection.", "name": "Thanh H.", "location": "Hà Nội" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

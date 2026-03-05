@@ -162,7 +162,7 @@
     class="w-full overflow-hidden px-6 md:px-10 mb-4"
   >
     <span class="footer-giant-text">
-      Elevate Your Wardrobe at&nbsp;Dropxlabel
+      {{ section.settings.giant_text }}
     </span>
   </div>
 
@@ -180,9 +180,9 @@
 
     <!-- COL 1: Newsletter -->
     <div data-footer-col>
-      <p class="footer-col-title">Join the Club</p>
+      <p class="footer-col-title">{{ section.settings.newsletter_heading }}</p>
       <p style="font-family: var(--font-body); font-size: 0.82rem; line-height: 1.75; color: #6b7280; margin-bottom: 1.75rem;">
-        Đăng ký để nhận những bộ sưu tập mới nhất và đặc quyền dành riêng cho hội viên nội bộ.
+        {{ section.settings.newsletter_text }}
       </p>
 
       <form
@@ -236,7 +236,8 @@
       <p class="footer-col-title">Follow Us</p>
 
       <!-- Instagram -->
-      <a href="https://instagram.com/dropxlabel" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Dropxlabel on Instagram">
+      {% if section.settings.instagram_url != blank %}
+      <a href="{{ section.settings.instagram_url }}" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
@@ -244,22 +245,27 @@
         </svg>
         Instagram
       </a>
+      {% endif %}
 
       <!-- TikTok -->
-      <a href="https://tiktok.com/@dropxlabel" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Dropxlabel on TikTok">
+      {% if section.settings.tiktok_url != blank %}
+      <a href="{{ section.settings.tiktok_url }}" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
         </svg>
         TikTok
       </a>
+      {% endif %}
 
-      <!-- Pinterest -->
-      <a href="https://pinterest.com/dropxlabel" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Dropxlabel on Pinterest">
+      <!-- Facebook -->
+      {% if section.settings.facebook_url != blank %}
+      <a href="{{ section.settings.facebook_url }}" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.18-.76 1.22-5.16 1.22-5.16s-.31-.62-.31-1.54c0-1.45.84-2.53 1.88-2.53.89 0 1.32.67 1.32 1.47 0 .9-.57 2.24-.87 3.49-.25 1.04.52 1.88 1.54 1.88 1.85 0 3.09-2.37 3.09-5.18 0-2.14-1.45-3.74-4.07-3.74-2.96 0-4.79 2.21-4.79 4.67 0 .85.25 1.44.64 1.9.18.21.2.29.14.53-.05.18-.15.6-.19.77-.06.25-.25.33-.46.24-1.31-.54-1.92-1.98-1.92-3.6 0-2.67 2.25-5.87 6.72-5.87 3.6 0 5.97 2.61 5.97 5.41 0 3.71-2.06 6.49-5.1 6.49-1.02 0-1.97-.55-2.3-1.18l-.64 2.46c-.23.87-.69 1.74-1.06 2.42.8.24 1.64.37 2.52.37 5.52 0 10-4.48 10-10S17.52 2 12 2z"/>
+          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
         </svg>
-        Pinterest
+        Facebook
       </a>
+      {% endif %}
     </div>
 
   </div>
@@ -323,3 +329,53 @@
   });
 
 </script>
+
+{% schema %}
+{
+  "name": "Footer",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "giant_text",
+      "label": "Giant Text",
+      "default": "Elevate Your Wardrobe at\u00a0Dropxlabel"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter Heading",
+      "default": "Join the Club"
+    },
+    {
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter Description",
+      "default": "Đăng ký để nhận những bộ sưu tập mới nhất và đặc quyền dành riêng cho hội viên nội bộ."
+    },
+    {
+      "type": "header",
+      "content": "Social Links"
+    },
+    {
+      "type": "url",
+      "id": "instagram_url",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "url",
+      "id": "facebook_url",
+      "label": "Facebook URL"
+    }
+  ]
+}
+{% endschema %}

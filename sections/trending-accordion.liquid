@@ -217,18 +217,6 @@
   }
 </style>
 
-{%- comment -%}
-  ─────────────────────────────────────────
-  TRENDING ACCORDION SECTION
-  ─────────────────────────────────────────
-{%- endcomment -%}
-
-{%- assign acc_colors  = "#FDE68A|#D8B4E2|#93C5FD|#86EFAC|#F9A8D4" | split: "|" -%}
-{%- assign acc_names   = "Drape & Flow|Minimal Edge|Structured Grace|Raw Linen Series|The Silk Edit" | split: "|" -%}
-{%- assign acc_tags    = "Dresses|Outerwear|Tailoring|Essentials|Eveningwear" | split: "|" -%}
-{%- assign acc_nums    = "01|02|03|04|05" | split: "|" -%}
-{%- assign acc_imgs    = "photo-1515886657613-9f3515b0c78f|photo-1509631179647-0177331693ae|photo-1479064555552-3ef4d0d87f10|photo-1469334031218-e382a71b716b|photo-1490481651871-ab68de25d43d" | split: "|" -%}
-
 <section
   id="trending-accordion"
   class="py-16 md:py-32 px-6 md:px-10"
@@ -250,7 +238,7 @@
           text-transform: uppercase;
           color: var(--color-accent);
           margin-bottom: 1.5rem;
-        ">New Arrivals</p>
+        ">{{ section.settings.eyebrow }}</p>
 
         <!-- Heading -->
         <h2 style="
@@ -262,7 +250,7 @@
           letter-spacing: -0.03em;
           margin-bottom: 1.75rem;
         ">
-          Trending<br>Styles You<br>Can't Miss.
+          {{ section.settings.heading }}
         </h2>
 
         <!-- Divider -->
@@ -277,18 +265,17 @@
           max-width: 320px;
           margin-bottom: 2.5rem;
         ">
-          Each style is a statement — restrained, intentional, and made
-          to outlast every passing season.
+          {{ section.settings.description }}
         </p>
 
         <!-- CTA -->
-        <a href="{{ routes.collections_url }}" class="ta-cta-btn">
+        <a href="{{ section.settings.cta_url }}" class="ta-cta-btn">
           <span class="ta-cta-arrow" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
           </span>
-          Shop Now
+          {{ section.settings.cta_text }}
         </a>
 
         <!-- Scroll hint -->
@@ -316,56 +303,62 @@
           font-weight: 600;
           color: #ffffff;
           line-height: 1.1;
-        ">Trending Styles</h2>
+        ">{{ section.settings.mobile_heading | default: section.settings.heading }}</h2>
 
-        {% for i in (1..5) %}
-          {%- assign idx   = forloop.index0 -%}
-          {%- assign color = acc_colors[idx] -%}
-          {%- assign name  = acc_names[idx] -%}
-          {%- assign tag   = acc_tags[idx] -%}
-          {%- assign num   = acc_nums[idx] -%}
-          {%- assign img   = acc_imgs[idx] -%}
+        {% for block in section.blocks %}
+          {% if block.type == 'accordion_item' %}
+            <!-- Accordion Item {{ forloop.index }} -->
+            <a
+              href="{{ block.settings.link | default: routes.collections_url }}"
+              class="accordion-item block"
+              style="background-color: {{ block.settings.color }};"
+              aria-label="Browse {{ block.settings.name }}"
+              {{ block.shopify_attributes }}
+            >
+              <!-- Number -->
+              <span class="accordion-num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
 
-          <!-- Accordion Item {{ num }} -->
-          <a
-            href="{{ routes.collections_url }}"
-            class="accordion-item block"
-            style="background-color: {{ color }};"
-            aria-label="Browse {{ name }}"
-          >
-            <!-- Number -->
-            <span class="accordion-num">{{ num }}</span>
+              <!-- Category tag (visible on hover) -->
+              <span class="accordion-tag">{{ block.settings.tag }}</span>
 
-            <!-- Category tag (visible on hover) -->
-            <span class="accordion-tag">{{ tag }}</span>
+              <!-- Inner layout -->
+              <div class="accordion-inner">
 
-            <!-- Inner layout -->
-            <div class="accordion-inner">
+                <!-- Product Thumbnail (appears on hover) -->
+                {% if block.settings.image != blank %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 300 }}"
+                    alt="{{ block.settings.name }}"
+                    class="accordion-img"
+                    loading="lazy"
+                    width="100"
+                    height="130"
+                  />
+                {% else %}
+                  <img
+                    src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80&auto=format&fit=crop"
+                    alt="{{ block.settings.name }}"
+                    class="accordion-img"
+                    loading="lazy"
+                    width="100"
+                    height="130"
+                  />
+                {% endif %}
 
-              <!-- Product Thumbnail (appears on hover) -->
-              <img
-                src="https://images.unsplash.com/{{ img }}?w=300&q=80&auto=format&fit=crop"
-                alt="{{ name }}"
-                class="accordion-img"
-                loading="lazy"
-                width="100"
-                height="130"
-              />
+                <!-- Style Name (always visible) -->
+                <p class="accordion-name">{{ block.settings.name }}</p>
 
-              <!-- Style Name (always visible) -->
-              <p class="accordion-name">{{ name }}</p>
+                <!-- Arrow Button (appears on hover) -->
+                <span class="accordion-arrow" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </span>
 
-              <!-- Arrow Button (appears on hover) -->
-              <span class="accordion-arrow" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </span>
-
-            </div>
-          </a>
-          <!-- / Accordion Item {{ num }} -->
-
+              </div>
+            </a>
+            <!-- / Accordion Item {{ forloop.index }} -->
+          {% endif %}
         {% endfor %}
 
       </div>
@@ -376,12 +369,6 @@
 </section>
 
 <script>
-  /* ─────────────────────────────────────────────────────
-     TRENDING ACCORDION — Quiet Luxury Scroll Animation
-     1. Left col: heading + text + button stagger fade-up
-     2. Right col: accordion items stagger fade-up
-  ───────────────────────────────────────────────────── */
-
   gsap.registerPlugin(ScrollTrigger);
 
   let mmAcc = gsap.matchMedia();
@@ -445,3 +432,97 @@
   }());
 </script>
 
+{% schema %}
+{
+  "name": "Trending Accordion",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "New Arrivals"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Trending<br>Styles You<br>Can't Miss."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Each style is a statement — restrained, intentional, and made to outlast every passing season."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button Link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "text",
+      "id": "mobile_heading",
+      "label": "Mobile Heading",
+      "default": "Trending Styles",
+      "info": "Shorter heading for mobile view"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion_item",
+      "name": "Style Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Style Name",
+          "default": "Drape & Flow"
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Category Tag",
+          "default": "Dresses"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Background Color",
+          "default": "#FDE68A"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Thumbnail Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "default": "/collections/all"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trending Accordion",
+      "blocks": [
+        { "type": "accordion_item", "settings": { "name": "Drape & Flow", "tag": "Dresses", "color": "#FDE68A" } },
+        { "type": "accordion_item", "settings": { "name": "Minimal Edge", "tag": "Outerwear", "color": "#D8B4E2" } },
+        { "type": "accordion_item", "settings": { "name": "Structured Grace", "tag": "Tailoring", "color": "#93C5FD" } },
+        { "type": "accordion_item", "settings": { "name": "Raw Linen Series", "tag": "Essentials", "color": "#86EFAC" } },
+        { "type": "accordion_item", "settings": { "name": "The Silk Edit", "tag": "Eveningwear", "color": "#F9A8D4" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
