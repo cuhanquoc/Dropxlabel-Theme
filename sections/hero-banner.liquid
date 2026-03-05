@@ -40,7 +40,19 @@
   }
 
   .hero-headline {
-    animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
+    /* Animation handled by GSAP stagger — no CSS animation */
+  }
+
+  /* Staggered Text Reveal masks */
+  .hero-line-mask {
+    display: block;
+    overflow: hidden;
+  }
+
+  .hero-line {
+    display: block;
+    transform: translateY(100%);
+    will-change: transform;
   }
 
   .hero-copy {
@@ -223,8 +235,8 @@
       {{ section.settings.eyebrow_text }}
     </p>
 
-    <!-- Headline -->
-    <h1 class="hero-headline" style="font-family: var(--font-heading); font-size: clamp(2.2rem, 10vw, 9rem); font-weight: 600; line-height: 0.9; color: #ffffff; max-width: 780px; letter-spacing: -0.03em; margin-bottom: 28px;">
+    <!-- Headline (GSAP Staggered Text Reveal) -->
+    <h1 id="hero-heading" class="hero-headline" style="font-family: var(--font-heading); font-size: clamp(2.2rem, 10vw, 9rem); font-weight: 600; line-height: 0.9; color: #ffffff; max-width: 780px; letter-spacing: -0.03em; margin-bottom: 28px;">
       {{ section.settings.headline }}
     </h1>
 
@@ -260,6 +272,50 @@
   </div>
 
 </section>
+
+<script>
+  /* ═══════════════════════════════════════════════════════════
+     STAGGERED TEXT REVEAL — GSAP expo.out
+     Splits h1 by <br> → overflow-hidden masks → y: 100% → 0%
+  ═══════════════════════════════════════════════════════════ */
+  (function initHeroTextReveal() {
+    var heading = document.getElementById('hero-heading');
+    if (!heading || typeof gsap === 'undefined') return;
+
+    /* ── Step 1: Split content by <br> into masked lines ── */
+    var raw = heading.innerHTML;
+    var parts = raw.split(/<br\s*\/?>/gi);
+
+    heading.innerHTML = '';
+
+    parts.forEach(function (text) {
+      var trimmed = text.trim();
+      if (!trimmed) return;
+
+      var mask = document.createElement('span');
+      mask.className = 'hero-line-mask';
+
+      var line = document.createElement('span');
+      line.className = 'hero-line';
+      line.innerHTML = trimmed;
+
+      mask.appendChild(line);
+      heading.appendChild(mask);
+    });
+
+    /* ── Step 2: GSAP stagger animation ── */
+    var lines = heading.querySelectorAll('.hero-line');
+    if (lines.length === 0) return;
+
+    gsap.to(lines, {
+      y: '0%',
+      duration: 1.2,
+      ease: 'expo.out',
+      stagger: 0.15,
+      delay: 0.55,
+    });
+  }());
+</script>
 
 {% schema %}
 {
