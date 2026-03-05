@@ -277,7 +277,9 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 60vh;
+    min-height: 480px;
+    max-height: 680px;
     background-color: #ffffff;
     z-index: 100;
     display: flex;
@@ -288,12 +290,43 @@
     transition:
       clip-path   0.5s cubic-bezier(0.22, 1, 0.36, 1),
       opacity     0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 12px 60px rgba(0, 0, 0, 0.15);
   }
 
   .mega-trigger:hover .mega-menu {
     clip-path: inset(0 0 0 0);
     opacity: 1;
     pointer-events: auto;
+  }
+
+  /* Video panel styling */
+  .mega-video-panel {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    text-decoration: none;
+    color: #ffffff;
+  }
+
+  .mega-video-panel video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .mega-video-panel:hover video {
+    transform: scale(1.05);
+  }
+
+  .mega-video-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
+    pointer-events: none;
   }
 
   /* Left half: 2 image panels */
@@ -383,7 +416,7 @@
     height: 100%;
     display: flex;
     gap: 0;
-    padding: 7rem 4rem 3rem 3rem;
+    padding: 4rem 4rem 2rem 3rem;
     overflow-y: auto;
   }
 
@@ -477,14 +510,22 @@
         <div class="mega-images">
 
           <!-- Panel 1 -->
-          <a href="{{ routes.collections_url }}" class="mega-img-panel">
-            <img
-              src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=75&auto=format&fit=crop"
-              alt="Women's Fashion"
-              loading="lazy"
-            />
+          <a href="{{ section.settings.mega_image_link | default: routes.collections_url }}" class="mega-img-panel">
+            {% if section.settings.mega_image != blank %}
+              <img
+                src="{{ section.settings.mega_image | image_url: width: 800 }}"
+                alt="{{ section.settings.mega_image_label | default: 'Fashion' }}"
+                loading="lazy"
+              />
+            {% else %}
+              <img
+                src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=75&auto=format&fit=crop"
+                alt="Women's Fashion"
+                loading="lazy"
+              />
+            {% endif %}
             <div class="mega-img-label">
-              <span class="mega-img-label-text">Women's Fashion</span>
+              <span class="mega-img-label-text">{{ section.settings.mega_image_label | default: "Women's Fashion" }}</span>
               <span class="mega-img-label-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M7 17 17 7M7 7h10v10"/>
@@ -493,15 +534,30 @@
             </div>
           </a>
 
-          <!-- Panel 2 -->
-          <a href="{{ routes.collections_url }}" class="mega-img-panel">
-            <img
-              src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=75&auto=format&fit=crop"
-              alt="Men's Fashion"
-              loading="lazy"
-            />
+          <!-- Panel 2 — Video -->
+          <a href="{{ section.settings.mega_video_link | default: routes.collections_url }}" class="mega-video-panel">
+            {% if section.settings.mega_video != blank %}
+              <video
+                src="{{ section.settings.mega_video.sources[1].url }}"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+              ></video>
+            {% else %}
+              <video
+                src="https://cdn.shopify.com/videos/c/o/v/bf5b2a3f95c84e6fbb94b32d06a85f42.mp4"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                poster="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=75&auto=format&fit=crop"
+              ></video>
+            {% endif %}
             <div class="mega-img-label">
-              <span class="mega-img-label-text">Men's Fashion</span>
+              <span class="mega-img-label-text">{{ section.settings.mega_video_label | default: "Men's Fashion" }}</span>
               <span class="mega-img-label-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M7 17 17 7M7 7h10v10"/>
@@ -684,3 +740,54 @@
     return { open, close, toggle };
   }());
 </script>
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Mega Menu — Panel 1 (Image)"
+    },
+    {
+      "type": "image_picker",
+      "id": "mega_image",
+      "label": "Panel 1 Image",
+      "info": "Left image in the Catalog dropdown"
+    },
+    {
+      "type": "text",
+      "id": "mega_image_label",
+      "label": "Panel 1 Label",
+      "default": "Women's Fashion"
+    },
+    {
+      "type": "url",
+      "id": "mega_image_link",
+      "label": "Panel 1 Link"
+    },
+    {
+      "type": "header",
+      "content": "Mega Menu — Panel 2 (Video)"
+    },
+    {
+      "type": "video",
+      "id": "mega_video",
+      "label": "Panel 2 Video",
+      "info": "Short video (<10s) for the right panel"
+    },
+    {
+      "type": "text",
+      "id": "mega_video_label",
+      "label": "Panel 2 Label",
+      "default": "Men's Fashion"
+    },
+    {
+      "type": "url",
+      "id": "mega_video_link",
+      "label": "Panel 2 Link"
+    }
+  ]
+}
+{% endschema %}
