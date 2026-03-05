@@ -339,7 +339,7 @@
     /* 1. Left sticky column — children fade up sequentially */
     gsap.fromTo(
       '#trending-accordion .hidden.md\\:block > *',
-      { y: 40, opacity: 0 },
+      { y: 40, opacity: 0, immediateRender: false },
       {
         scrollTrigger: { trigger: '#trending-accordion', start: 'top 85%', once: true },
         y: 0, opacity: 1,
@@ -352,7 +352,7 @@
     /* 2. Right column — accordion items stagger up as a wave */
     gsap.fromTo(
       '#trending-accordion .accordion-item',
-      { y: 50, opacity: 0 },
+      { y: 50, opacity: 0, immediateRender: false },
       {
         scrollTrigger: { trigger: '#trending-accordion', start: 'top 85%', once: true },
         y: 0, opacity: 1,

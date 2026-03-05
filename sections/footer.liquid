@@ -291,29 +291,21 @@
 
     /* 1. Giant headline slides up */
     gsap.from('#footer-giant .footer-giant-text', {
-      scrollTrigger: {
-        trigger: '#site-footer',
-        start: 'top 85%',
-        once: true,
-      },
-      y: 80,
-      opacity: 0,
+      scrollTrigger: { trigger: '#site-footer', start: 'top 85%', once: true },
+      y: 80, opacity: 0,
       duration: 1.4,
       ease: 'power4.out',
+      immediateRender: false,
     });
 
     /* 2. Grid columns stagger in */
     gsap.from('#footer-grid [data-footer-col]', {
-      scrollTrigger: {
-        trigger: '#footer-grid',
-        start: 'top 88%',
-        once: true,
-      },
-      y: 48,
-      opacity: 0,
+      scrollTrigger: { trigger: '#footer-grid', start: 'top 88%', once: true },
+      y: 48, opacity: 0,
       duration: 1.2,
       ease: 'power3.out',
       stagger: 0.18,
+      immediateRender: false,
     });
 
 </script>

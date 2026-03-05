@@ -250,14 +250,14 @@
   gsap.registerPlugin(ScrollTrigger);
 
     /* 1. Heading fades up first */
-    gsap.fromTo('.fb-heading', { y: 40, opacity: 0 }, {
+    gsap.fromTo('.fb-heading', { y: 40, opacity: 0, immediateRender: false }, {
       scrollTrigger: { trigger: '#featured-blog', start: 'top 85%', once: true },
       y: 0, opacity: 1, duration: 1.2, ease: 'power3.out',
     });
 
     /* 2. Blog cards stagger in after heading */
     gsap.fromTo('#featured-blog [data-blog-card]',
-      { y: 60, opacity: 0 },
+      { y: 60, opacity: 0, immediateRender: false },
       {
         scrollTrigger: { trigger: '#featured-blog', start: 'top 85%', once: true },
         y: 0, opacity: 1,

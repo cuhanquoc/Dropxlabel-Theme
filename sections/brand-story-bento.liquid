@@ -306,7 +306,7 @@
   gsap.registerPlugin(ScrollTrigger);
 
     gsap.fromTo('#brand-story [data-bento="block"]',
-      { y: 50, opacity: 0 },
+      { y: 50, opacity: 0, immediateRender: false },
       {
         scrollTrigger: { trigger: '#brand-story', start: 'top 85%', once: true },
         y: 0, opacity: 1,
