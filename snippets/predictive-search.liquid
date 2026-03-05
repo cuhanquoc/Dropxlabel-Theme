@@ -1,0 +1,423 @@
+{%- comment -%}
+  ─────────────────────────────────────────
+  PREDICTIVE SEARCH SNIPPET
+  Include in layout/theme.liquid via:
+    {% render 'predictive-search' %}
+  Open via: PredictiveSearch.open()
+  ─────────────────────────────────────────
+{%- endcomment -%}
+
+<style>
+  /* ─── Predictive Search Overlay ─── */
+
+  #search-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    /* GSAP controls visibility */
+  }
+
+  #search-overlay.is-open {
+    pointer-events: all;
+  }
+
+  /* Top bar: input + close */
+  .ps-top {
+    flex-shrink: 0;
+    padding: 5rem 2.5rem 2.5rem;
+    border-bottom: 1px solid var(--color-border);
+    position: relative;
+  }
+
+  @media (min-width: 768px) {
+    .ps-top { padding: 5rem 8rem 2.5rem; }
+  }
+
+  /* Giant input */
+  .ps-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #d1d5db; /* gray-300 */
+    outline: none;
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: var(--color-text);
+    line-height: 1.2;
+    padding: 0.5rem 0 1rem;
+    letter-spacing: -0.01em;
+    caret-color: var(--color-accent);
+    transition: border-color 300ms ease;
+  }
+
+  .ps-input::placeholder {
+    color: #d1d5db;
+  }
+
+  .ps-input:focus {
+    border-bottom-color: var(--color-text);
+  }
+
+  /* Close button */
+  .ps-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.75rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+  }
+
+  .ps-close:hover {
+    background-color: var(--color-text);
+    border-color: var(--color-text);
+    color: #ffffff;
+  }
+
+  /* Results area */
+  .ps-results {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2.5rem 2.5rem 5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+  }
+
+  @media (min-width: 768px) {
+    .ps-results { padding: 3rem 8rem 5rem; }
+  }
+
+  /* Results label */
+  .ps-results-label {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 2rem;
+  }
+
+  /* Product card — image + name only */
+  .ps-card {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .ps-card-img {
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    border-radius: 8px;
+    background-color: #f5f4f1;
+    margin-bottom: 0.9rem;
+  }
+
+  .ps-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .ps-card:hover .ps-card-img img {
+    transform: scale(1.04);
+  }
+
+  .ps-card-name {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: var(--color-text);
+    line-height: 1.4;
+    transition: color 200ms ease;
+  }
+
+  .ps-card:hover .ps-card-name {
+    color: var(--color-accent);
+  }
+
+  /* Empty / idle state */
+  .ps-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 240px;
+    gap: 1rem;
+    color: #9ca3af; /* gray-400 */
+    text-align: center;
+  }
+
+  .ps-empty p {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* Skeleton shimmer for loading */
+  @keyframes shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position:  600px 0; }
+  }
+
+  .ps-skeleton {
+    background: linear-gradient(90deg, #f0efed 25%, #e8e6e3 50%, #f0efed 75%);
+    background-size: 600px 100%;
+    animation: shimmer 1.2s ease-in-out infinite;
+    border-radius: 8px;
+  }
+
+  /* Trending tags (shown before typing) */
+  .ps-tag {
+    display: inline-block;
+    padding: 0.45rem 1.1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background-color 250ms ease, border-color 250ms ease, color 250ms ease;
+    margin: 0.3rem;
+  }
+
+  .ps-tag:hover {
+    background-color: var(--color-text);
+    border-color: var(--color-text);
+    color: var(--color-bg);
+    opacity: 1;
+  }
+</style>
+
+<!-- ── Search Overlay ── -->
+<div id="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
+
+  <!-- Top: Giant Input -->
+  <div class="ps-top">
+    <button
+      class="ps-close"
+      onclick="PredictiveSearch.close()"
+      aria-label="Close search"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 6 6 18M6 6l12 12"/>
+      </svg>
+    </button>
+
+    <label for="ps-input" class="sr-only">Search products</label>
+    <input
+      id="ps-input"
+      type="search"
+      class="ps-input"
+      placeholder="Search..."
+      autocomplete="off"
+      autocorrect="off"
+      spellcheck="false"
+      aria-label="Search products"
+    />
+  </div>
+
+  <!-- Results Area -->
+  <div class="ps-results" id="ps-results-area">
+
+    <!-- Default (before typing): Trending suggestions -->
+    <div id="ps-default-state">
+      <p class="ps-results-label">Trending</p>
+      <div>
+        <a href="{{ routes.collections_url }}/linen" class="ps-tag">Linen</a>
+        <a href="{{ routes.collections_url }}/silk" class="ps-tag">Silk</a>
+        <a href="{{ routes.collections_url }}/coats" class="ps-tag">Coats</a>
+        <a href="{{ routes.collections_url }}/sets" class="ps-tag">Co-ord Sets</a>
+        <a href="{{ routes.collections_url }}/minimal" class="ps-tag">Minimal</a>
+        <a href="{{ routes.collections_url }}/eveningwear" class="ps-tag">Eveningwear</a>
+      </div>
+    </div>
+
+    <!-- Loading skeletons (hidden by default) -->
+    <div id="ps-loading-state" style="display:none;">
+      <p class="ps-results-label">Searching...</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+        {% for i in (1..4) %}
+          <div>
+            <div class="ps-skeleton" style="aspect-ratio: 3/4; margin-bottom: 0.9rem;"></div>
+            <div class="ps-skeleton" style="height: 14px; width: 70%; border-radius: 4px;"></div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Empty state (no results) -->
+    <div id="ps-empty-state" style="display:none;" class="ps-empty">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-border);" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.3-4.3"/>
+      </svg>
+      <p>No results found.</p>
+    </div>
+
+    <!-- Live results grid (populated by JS) -->
+    <div id="ps-results-grid" style="display:none;">
+      <p class="ps-results-label" id="ps-results-label">Results</p>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8" id="ps-grid"></div>
+    </div>
+
+  </div>
+  <!-- / Results Area -->
+
+</div>
+<!-- / Search Overlay -->
+
+
+<script>
+  /* ─────────────────────────────────────────────────────
+     PredictiveSearch — GSAP-powered full-screen overlay
+     + Shopify Predictive Search API
+     Requires: gsap.min.js (loaded in theme.liquid)
+  ───────────────────────────────────────────────────── */
+  window.PredictiveSearch = (function () {
+
+    const OVERLAY    = document.getElementById('search-overlay');
+    const INPUT      = document.getElementById('ps-input');
+    const DEFAULT    = document.getElementById('ps-default-state');
+    const LOADING    = document.getElementById('ps-loading-state');
+    const EMPTY      = document.getElementById('ps-empty-state');
+    const GRID_WRAP  = document.getElementById('ps-results-grid');
+    const GRID       = document.getElementById('ps-grid');
+    const LABEL      = document.getElementById('ps-results-label');
+    let   isOpen     = false;
+    let   debounceId = null;
+
+    /* ── Open ── */
+    function open() {
+      if (isOpen) return;
+      isOpen = true;
+      OVERLAY.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+
+      if (typeof gsap !== 'undefined') {
+        gsap.fromTo(OVERLAY,
+          { opacity: 0, y: '-6%' },
+          { opacity: 1, y: '0%', duration: 0.6, ease: 'power3.out',
+            onComplete: () => INPUT.focus() }
+        );
+      } else {
+        OVERLAY.style.opacity = 1;
+        INPUT.focus();
+      }
+    }
+
+    /* ── Close ── */
+    function close() {
+      if (!isOpen) return;
+
+      if (typeof gsap !== 'undefined') {
+        gsap.to(OVERLAY, {
+          opacity: 0,
+          y: '-4%',
+          duration: 0.4,
+          ease: 'power3.in',
+          onComplete: () => {
+            isOpen = false;
+            OVERLAY.classList.remove('is-open');
+            document.body.style.overflow = '';
+            INPUT.value = '';
+            showDefault();
+          }
+        });
+      } else {
+        isOpen = false;
+        OVERLAY.style.opacity = 0;
+        OVERLAY.classList.remove('is-open');
+        document.body.style.overflow = '';
+        INPUT.value = '';
+        showDefault();
+      }
+    }
+
+    /* ── State helpers ── */
+    function showDefault()  { DEFAULT.style.display=''; LOADING.style.display='none'; EMPTY.style.display='none'; GRID_WRAP.style.display='none'; }
+    function showLoading()  { DEFAULT.style.display='none'; LOADING.style.display=''; EMPTY.style.display='none'; GRID_WRAP.style.display='none'; }
+    function showEmpty()    { DEFAULT.style.display='none'; LOADING.style.display='none'; EMPTY.style.display=''; GRID_WRAP.style.display='none'; }
+    function showResults()  { DEFAULT.style.display='none'; LOADING.style.display='none'; EMPTY.style.display='none'; GRID_WRAP.style.display=''; }
+
+    /* ── Shopify Predictive Search API ── */
+    function fetchResults(query) {
+      const url = '/search/suggest.json?q=' + encodeURIComponent(query)
+               + '&resources[type]=product&resources[limit]=8&resources[options][fields]=title,product_type,variants.title';
+
+      fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          const items = data?.resources?.results?.products || [];
+          if (!items.length) { showEmpty(); return; }
+
+          LABEL.textContent = items.length + (items.length === 1 ? ' Result' : ' Results');
+          GRID.innerHTML = items.map(product => `
+            <a href="${product.url}" class="ps-card">
+              <div class="ps-card-img">
+                ${product.featured_image?.url
+                  ? `<img src="${product.featured_image.url}&width=400" alt="${escHtml(product.title)}" loading="lazy" width="400" height="533"/>`
+                  : `<div style="width:100%;height:100%;background:var(--color-border);"></div>`
+                }
+              </div>
+              <p class="ps-card-name">${escHtml(product.title)}</p>
+            </a>
+          `).join('');
+
+          showResults();
+
+          /* Stagger product cards in */
+          if (typeof gsap !== 'undefined') {
+            gsap.from(GRID.querySelectorAll('.ps-card'), {
+              opacity: 0, y: 24,
+              duration: 0.5, ease: 'power3.out',
+              stagger: 0.07
+            });
+          }
+        })
+        .catch(() => showEmpty());
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    /* ── Input handler with 300ms debounce ── */
+    INPUT.addEventListener('input', () => {
+      const q = INPUT.value.trim();
+      clearTimeout(debounceId);
+
+      if (!q) { showDefault(); return; }
+
+      showLoading();
+      debounceId = setTimeout(() => fetchResults(q), 300);
+    });
+
+    /* ── ESC key ── */
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && isOpen) close();
+    });
+
+    return { open, close };
+
+  }());
+</script>
