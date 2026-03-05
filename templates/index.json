@@ -1,31 +1,76 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections": {
-        "hero-banner": {
-            "type": "hero-banner",
-            "settings": {}
-        },
-        "featured-collection": {
-            "type": "featured-collection",
-            "settings": {}
-        },
-        "brand-story-bento": {
-            "type": "brand-story-bento",
-            "settings": {}
-        },
-        "trending-accordion": {
-            "type": "trending-accordion",
-            "settings": {}
-        },
-        "featured-blog": {
-            "type": "featured-blog",
-            "settings": {}
-        }
+  "sections": {
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {
+        "eyebrow_text": "New Collection 2026",
+        "headline": "Timeless<br>Fashion Essence",
+        "subheadline": "Curated pieces that transcend seasons — wear what endures beyond trends.",
+        "cta_text": "Explore Now",
+        "cta_url": "shopify://collections/all",
+        "marquee_text": "Elegance • Style • Luxury • Forever •"
+      }
     },
-    "order": [
-        "hero-banner",
-        "featured-collection",
-        "brand-story-bento",
-        "trending-accordion",
-        "featured-blog"
-    ]
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Trending Products",
+        "collection": "",
+        "products_count": 8,
+        "cta_text": "View All"
+      }
+    },
+    "brand-story-bento": {
+      "type": "brand-story-bento",
+      "settings": {
+        "block1_tag": "Since 2021",
+        "block1_heading": "Journey<br>of Style",
+        "block1_description": "Born from a quiet obsession with fabric, form, and feeling — every piece carries the weight of intention.",
+        "stat1_number": "200",
+        "stat1_label": "Curated Pieces",
+        "stat2_number": "12",
+        "stat2_label": "Collections",
+        "block2_heading": "Timeless Pieces",
+        "block2_description": "Crafted for the woman who understands that true luxury whispers — in the press of pure linen, the weight of Italian crepe, the silence of a perfect silhouette.",
+        "block3_tag": "Material",
+        "block3_heading": "Italian Wool & Pure Linen.<br><span style=\"font-weight: 400; font-style: italic; color: rgba(255,255,255,0.7);\">Feel the difference.</span>"
+      }
+    },
+    "trending-accordion": {
+      "type": "trending-accordion",
+      "settings": {
+        "eyebrow": "New Arrivals",
+        "heading": "Trending<br>Styles You<br>Can't Miss.",
+        "description": "Each style is a statement — restrained, intentional, and made to outlast every passing season.",
+        "cta_text": "Shop Now",
+        "cta_url": "shopify://collections/all",
+        "mobile_heading": "Trending Styles"
+      }
+    },
+    "featured-blog": {
+      "type": "featured-blog",
+      "settings": {
+        "heading": "Stories to Inspire You",
+        "blog": "",
+        "articles_count": 3,
+        "cta_text": "View All Stories"
+      }
+    }
+  },
+  "order": [
+    "hero-banner",
+    "featured-collection",
+    "brand-story-bento",
+    "trending-accordion",
+    "featured-blog"
+  ]
 }
