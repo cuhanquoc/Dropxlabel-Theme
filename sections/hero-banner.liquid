@@ -75,25 +75,28 @@
     line-height: 1;
     user-select: none;
   }
-  /* ─── MAYA MAGNETIC MERGE BUTTON ─── */
   /* ─── CTA: Magnetic Merge Button ─── */
   .maya-merge-btn {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
     text-decoration: none;
     cursor: pointer;
+    /* gap phải được animate để không bị nhảy đột ngột */
+    transition: gap 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .maya-merge-circle {
+    position: relative;
+    z-index: 2;                          /* nổi LÊN TRÊN pill khi merge */
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 58px;
-    height: 58px;
-    background-color: #ffffff;       /* Nền trắng rõ — giống reference */
-    border: 2px solid #111111;       /* Viền đen */
-    color: #111111;                  /* Mũi tên màu đen */
+    width: 64px;
+    height: 64px;
+    background-color: #ffffff;
+    border: 2px solid #111111;
+    color: #111111;
     border-radius: 50%;
     flex-shrink: 0;
     will-change: transform, background-color;
@@ -109,12 +112,13 @@
   }
 
   .maya-merge-text {
+    position: relative;
     background-color: #ffffff;
     color: #0a0a0a;
-    padding: 1.15rem 2.8rem;
+    padding: 1.35rem 3rem;
     border-radius: 9999px;
     font-family: var(--font-body);
-    font-size: 0.75rem;
+    font-size: 0.78rem;
     font-weight: 600;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -122,23 +126,25 @@
     transition: padding 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* ─── HOVER: circle đổi đen, bay vào phương trái của pill ─── */
+  /* ─── HOVER: circle bay vào trong pill từ trái ─── */
   .maya-merge-btn:hover { gap: 0; }
 
   .maya-merge-btn:hover .maya-merge-circle {
-    transform: translateX(56px);        /* trượt sang phải vào trong pill */
+    /* gap(14px) + nửa circle(32px) + muốn circle vào sâu ~24px = 70px */
+    transform: translateX(70px);
     background-color: #111111;
     border-color: #111111;
     color: #ffffff;
   }
 
   .maya-merge-btn:hover .maya-merge-text {
-    padding-left: 4.8rem;               /* tạo khoảng trống đờn circle */
-    padding-right: 2.2rem;
+    /* đủ chỗ cho circle (64px) + breathing room */
+    padding-left: 5.5rem;
+    padding-right: 2.5rem;
   }
 
   .maya-merge-btn:hover .maya-merge-circle svg {
-    transform: rotate(-45deg);
+    transform: rotate(-45deg) scale(1.1);
   }
 </style>
 
