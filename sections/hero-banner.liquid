@@ -76,62 +76,65 @@
     user-select: none;
   }
   /* ─── MAYA MAGNETIC MERGE BUTTON ─── */
+  /* ─── CTA: Magnetic Merge Button ─── */
   .maya-merge-btn {
     display: inline-flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     text-decoration: none;
     cursor: pointer;
-  }
-
-  .maya-merge-text {
-    background-color: #ffffff;
-    color: #0a0a0a;
-    padding: 1.2rem 3rem;
-    border-radius: 9999px;
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    transition: padding 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-                background-color 0.65s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .maya-merge-circle {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
-    background-color: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    color: #ffffff;
+    width: 58px;
+    height: 58px;
+    background-color: #ffffff;       /* Nền trắng rõ — giống reference */
+    border: 2px solid #111111;       /* Viền đen */
+    color: #111111;                  /* Mũi tên màu đen */
     border-radius: 50%;
     flex-shrink: 0;
     will-change: transform, background-color;
-    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-                background-color 0.65s cubic-bezier(0.22, 1, 0.36, 1),
-                border-color 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transition:
+      transform          0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color   0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color       0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      color              0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .maya-merge-circle svg {
-    transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
-  /* ─── HOVER: Vòng tròn bay sang PHẢI, hút vào phín trái của pill ─── */
-  .maya-merge-btn:hover { gap: 0px; }
-
-  .maya-merge-btn:hover .maya-merge-text {
-    padding-left: 4.5rem; /* tạo khoảng trống bên trái để chứa circle */
-    padding-right: 2.5rem;
+  .maya-merge-text {
+    background-color: #ffffff;
+    color: #0a0a0a;
+    padding: 1.15rem 2.8rem;
+    border-radius: 9999px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: padding 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   }
+
+  /* ─── HOVER: circle đổi đen, bay vào phương trái của pill ─── */
+  .maya-merge-btn:hover { gap: 0; }
 
   .maya-merge-btn:hover .maya-merge-circle {
-    transform: translateX(56px); /* bay sang PHẢI vào trong pill */
-    background-color: #0a0a0a;
-    border-color: #0a0a0a;
+    transform: translateX(56px);        /* trượt sang phải vào trong pill */
+    background-color: #111111;
+    border-color: #111111;
     color: #ffffff;
+  }
+
+  .maya-merge-btn:hover .maya-merge-text {
+    padding-left: 4.8rem;               /* tạo khoảng trống đờn circle */
+    padding-right: 2.2rem;
   }
 
   .maya-merge-btn:hover .maya-merge-circle svg {
