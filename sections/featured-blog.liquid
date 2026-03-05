@@ -1,0 +1,274 @@
+<style>
+  /* ─────────────────────────────────────────
+     FEATURED BLOG — Dark Magazine Edition
+  ───────────────────────────────────────── */
+
+  /* Section heading underline */
+  .fb-heading::after {
+    content: '';
+    display: block;
+    width: 36px;
+    height: 1.5px;
+    background-color: var(--color-accent);
+    margin: 1rem auto 0;
+  }
+
+  /* Article card */
+  .blog-card {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Meta: author · date */
+  .blog-meta {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #9ca3af; /* gray-400 */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .blog-meta-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  /* Article title */
+  .blog-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.85rem;
+    transition: color 300ms ease;
+  }
+
+  .blog-card:hover .blog-title {
+    color: var(--color-accent);
+  }
+
+  /* Excerpt */
+  .blog-excerpt {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    line-height: 1.75;
+    color: #6b7280; /* gray-500 */
+  }
+
+  /* Read more pill */
+  .blog-read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    transition: gap 250ms ease;
+  }
+
+  .blog-card:hover .blog-read-more {
+    gap: 0.85rem;
+  }
+</style>
+
+{%- comment -%}
+  ─────────────────────────────────────────
+  FEATURED BLOG SECTION
+  Replace mock data with real blog when connected:
+    {% assign blog = blogs['journal'] %}
+    {% for article in blog.articles limit: 3 %}
+  ─────────────────────────────────────────
+{%- endcomment -%}
+
+{%- assign fb_imgs    = "photo-1515886657613-9f3515b0c78f|photo-1558769132-cb1aea458c5e|photo-1490481651871-ab68de25d43d" | split: "|" -%}
+{%- assign fb_titles  = "The Art of Dressing With Restraint|How Linen Became the Fabric of Modern Luxury|Five Pieces That Will Outlast Every Trend" | split: "|" -%}
+{%- assign fb_authors = "Shine Design|The Atelier|Style Archive" | split: "|" -%}
+{%- assign fb_dates   = "March 10, 2026|February 28, 2026|February 14, 2026" | split: "|" -%}
+{%- assign fb_excerpts = "True style is never loud. We explore the quiet gestures that define a wardrobe built to last.|From Italian mills to minimal silhouettes, linen is having its quiet revolution in contemporary fashion.|Beyond trends and seasonal noise — a considered guide to the five investment pieces that endure." | split: "|" -%}
+
+<section
+  id="featured-blog"
+  class="py-32 px-6 md:px-10"
+  style="background-color: #0a0a0a;"
+>
+  <div class="max-w-screen-xl mx-auto">
+
+    <!-- Section Heading -->
+    <div class="text-center mb-20">
+      <h2
+        class="fb-heading"
+        style="
+          font-family: var(--font-heading);
+          font-size: clamp(1.4rem, 3vw, 2rem);
+          font-weight: 600;
+          letter-spacing: 0.25em;
+          text-transform: uppercase;
+          color: #ffffff;
+        "
+      >
+        Stories to Inspire You
+      </h2>
+    </div>
+
+    <!-- Blog Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+      {% for i in (1..3) %}
+        {%- assign idx     = forloop.index0 -%}
+        {%- assign img     = fb_imgs[idx] -%}
+        {%- assign title   = fb_titles[idx] -%}
+        {%- assign author  = fb_authors[idx] -%}
+        {%- assign date    = fb_dates[idx] -%}
+        {%- assign excerpt = fb_excerpts[idx] -%}
+
+        <!-- Article Card #{{ forloop.index }} -->
+        <a
+          href="{{ blogs['journal'].articles[idx].url | default: '/blogs/journal' }}"
+          class="blog-card"
+          data-blog-card
+          aria-label="{{ title }}"
+        >
+
+          <!-- Image -->
+          <div class="relative w-full overflow-hidden mb-6" style="aspect-ratio: 4/5; border-radius: 24px;">
+            <img
+              src="https://images.unsplash.com/{{ img }}?w=800&q=80&auto=format&fit=crop"
+              alt="{{ title }}"
+              class="w-full h-full object-cover transition-transform duration-700 ease-out"
+              style="transform-origin: center center;"
+              loading="lazy"
+              width="800"
+              height="1000"
+            />
+
+            <!-- Subtle dark overlay -->
+            <div
+              class="absolute inset-0"
+              style="background: linear-gradient(to top, rgba(10,10,10,0.45) 0%, transparent 50%); border-radius: inherit;"
+            ></div>
+
+            <!-- Article number badge -->
+            <span
+              style="
+                position: absolute;
+                top: 1.25rem;
+                left: 1.25rem;
+                font-family: var(--font-body);
+                font-size: 0.55rem;
+                letter-spacing: 0.22em;
+                text-transform: uppercase;
+                color: rgba(255,255,255,0.7);
+                background: rgba(0,0,0,0.35);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                padding: 0.35rem 0.75rem;
+                border-radius: 9999px;
+              "
+            >0{{ forloop.index }}</span>
+          </div>
+
+          <!-- Text -->
+          <div>
+            <!-- Meta: author · date -->
+            <div class="blog-meta">
+              <span>{{ author }}</span>
+              <span class="blog-meta-dot" aria-hidden="true"></span>
+              <span>{{ date }}</span>
+            </div>
+
+            <!-- Title -->
+            <h3 class="blog-title">{{ title }}</h3>
+
+            <!-- Excerpt -->
+            <p class="blog-excerpt">{{ excerpt }}</p>
+
+            <!-- Read more -->
+            <span class="blog-read-more" aria-hidden="true">
+              Read More
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </span>
+          </div>
+
+        </a>
+        <!-- / Article Card #{{ forloop.index }} -->
+
+      {% endfor %}
+
+    </div>
+    <!-- / Blog Grid -->
+
+    <!-- View All Articles CTA -->
+    <div class="text-center mt-16">
+      <a
+        href="{{ blogs['journal'].url | default: '/blogs/journal' }}"
+        style="
+          display: inline-block;
+          padding: 0.85rem 2.75rem;
+          border: 1px solid rgba(255,255,255,0.25);
+          font-family: var(--font-body);
+          font-size: 0.62rem;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.75);
+          border-radius: 9999px;
+          text-decoration: none;
+          transition: border-color 300ms ease, color 300ms ease, background-color 300ms ease;
+        "
+        onmouseover="this.style.borderColor='rgba(255,255,255,0.8)';this.style.color='#ffffff';"
+        onmouseout="this.style.borderColor='rgba(255,255,255,0.25)';this.style.color='rgba(255,255,255,0.75)';"
+      >
+        View All Stories
+      </a>
+    </div>
+
+  </div>
+</section>
+
+
+<script>
+  /* ─────────────────────────────────────────────────────
+     GSAP ScrollTrigger — Blog cards stagger entrance
+  ───────────────────────────────────────────────────── */
+  document.addEventListener('DOMContentLoaded', function () {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* Cards fade up with stagger */
+    gsap.from('#featured-blog [data-blog-card]', {
+      scrollTrigger: {
+        trigger: '#featured-blog',
+        start: 'top 78%',
+        once: true,
+      },
+      y: 56,
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power4.out',
+      stagger: 0.2,
+    });
+
+    /* Hover: image zoom via GSAP for butter-smooth 60fps */
+    document.querySelectorAll('#featured-blog [data-blog-card]').forEach(card => {
+      const img = card.querySelector('img');
+      if (!img) return;
+      card.addEventListener('mouseenter', () => gsap.to(img, { scale: 1.05, duration: 0.7, ease: 'power2.out' }));
+      card.addEventListener('mouseleave', () => gsap.to(img, { scale: 1,    duration: 0.6, ease: 'power2.out' }));
+    });
+  });
+</script>
