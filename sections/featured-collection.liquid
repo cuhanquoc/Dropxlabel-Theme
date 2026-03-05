@@ -1,7 +1,21 @@
 <style>
-  /* ─── Featured Collection ─── */
+  /* ═══════════════════════════════════════
+     FEATURED COLLECTION — Horizontal Scroll
+  ═══════════════════════════════════════ */
 
-  /* Section heading underline accent */
+  .fc-section {
+    background-color: #0a0a0a;
+    padding: 4rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fc-section .fc-heading-wrap {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 0 2rem;
+  }
+
   .fc-heading::after {
     content: '';
     display: block;
@@ -11,69 +25,46 @@
     margin: 1rem auto 0;
   }
 
-  /* Product name subtle hover */
-  .product-title {
-    font-family: var(--font-heading);
-    font-size: 1.05rem;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-    color: #222222;
-    transition: color 250ms ease;
-    line-height: 1.25;
-  }
-
-  .product-card:hover .product-title {
-    color: var(--color-accent);
-  }
-
-  /* Price */
-  .product-price {
-    font-family: var(--font-body);
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
-    color: var(--color-accent);
-    margin-top: 0.35rem;
-  }
-
-  /* Quick View button */
-  .quick-view-btn {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
+  /* ── Horizontal Scroll Track ── */
+  .fc-scroll-track {
     display: flex;
-    align-items: center;
-    gap: 0.45rem;
-    background-color: #ffffff;
-    color: var(--color-text);
-    border: none;
-    border-radius: 9999px;
-    padding: 0.45rem 1rem 0.45rem 0.65rem;
-    font-family: var(--font-body);
-    font-size: 0.6rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 2.5rem 1.5rem;
+    scrollbar-width: none;
+  }
+
+  .fc-scroll-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Product Card ── */
+  .product-card {
+    flex: 0 0 auto;
+    width: 200px;
+    scroll-snap-align: start;
+    text-decoration: none;
     cursor: pointer;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
-    /* MAYA: default hidden, slide-up on hover */
-    opacity: 0;
-    transform: translateY(15px);
-    transition:
-      opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.1s,
-      transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.1s,
-      background-color 250ms ease,
-      color 250ms ease,
-      box-shadow 250ms ease;
-    will-change: transform, opacity;
+    display: block;
+    position: relative;
   }
 
-  .quick-view-btn:hover {
-    background-color: var(--color-accent);
-    color: #ffffff;
-    box-shadow: 0 4px 18px rgba(197, 168, 128, 0.35);
+  @media (min-width: 768px) {
+    .product-card { width: 220px; }
   }
 
-  /* ═══ MAYA Product Card Hover System ═══ */
+  .pc-img-wrap {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    border-radius: 20px;
+    background-color: #1a1a1a;
+  }
+
+  /* ── MAYA Image Swap ── */
   .pc-img-primary,
   .pc-img-secondary {
     position: absolute;
@@ -82,6 +73,7 @@
     height: 100%;
     object-fit: cover;
     will-change: transform, opacity;
+    border-radius: inherit;
   }
 
   .pc-img-primary {
@@ -100,7 +92,6 @@
       transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
-  /* ── Hover state ── */
   .product-card:hover .pc-img-primary {
     opacity: 0;
     transform: scale(1.08);
@@ -111,206 +102,871 @@
     transform: scale(1);
   }
 
+  /* ── Quick View Button ── */
+  .quick-view-btn {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(15px);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 12px;
+    padding: 0.6rem 1rem;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    transition:
+      opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.1s,
+      transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) 0.1s;
+    will-change: transform, opacity;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+
   .product-card:hover .quick-view-btn {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── Product Info ── */
+  .pc-info {
+    text-align: center;
+    padding: 0.75rem 0.25rem 0;
+  }
+
+  .product-title {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 1.3;
+    transition: color 250ms ease;
+  }
+
+  .product-card:hover .product-title {
+    color: var(--color-accent);
+  }
+
+  .product-price {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.6);
+    margin-top: 0.25rem;
+  }
+
+  /* ── Variant Swatches (below price) ── */
+  .pc-variants {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 0.6rem;
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+      transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .product-card:hover .pc-variants {
     opacity: 1;
     transform: translateY(0);
   }
+
+  .pc-variant-thumb {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .pc-variant-thumb.is-active,
+  .pc-variant-thumb:hover {
+    border-color: var(--color-accent);
+  }
+
+  .pc-variant-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ═══ Quick View Modal ═══ */
+  .qv-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .qv-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .qv-modal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 90vw;
+    max-width: 960px;
+    max-height: 90vh;
+    background-color: #0e0e0e;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    transform: scale(0.95) translateY(20px);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .qv-overlay.is-open .qv-modal {
+    transform: scale(1) translateY(0);
+  }
+
+  @media (max-width: 767px) {
+    .qv-modal {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr auto;
+      width: 95vw;
+      max-height: 95vh;
+      overflow-y: auto;
+    }
+  }
+
+  /* ── Modal: Left (Image Gallery) ── */
+  .qv-gallery {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background-color: #1a1a1a;
+  }
+
+  .qv-gallery img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .qv-gallery img.is-active {
+    opacity: 1;
+  }
+
+  .qv-gallery-thumbs {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+  }
+
+  .qv-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.25s ease;
+    background-color: #2a2a2a;
+  }
+
+  .qv-thumb.is-active {
+    border-color: #ffffff;
+  }
+
+  .qv-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Gallery navigation arrows */
+  .qv-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.5);
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    transition: background-color 0.25s ease;
+  }
+
+  .qv-arrow:hover {
+    background-color: rgba(0,0,0,0.8);
+  }
+
+  .qv-arrow--prev { left: 0.75rem; }
+  .qv-arrow--next { right: 0.75rem; }
+
+  /* ── Modal: Right (Product Details) ── */
+  .qv-details {
+    padding: 2rem 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    color: #ffffff;
+    overflow-y: auto;
+  }
+
+  .qv-title {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .qv-sku {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.05em;
+  }
+
+  .qv-price {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .qv-stock {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .qv-stock-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #22c55e;
+  }
+
+  .qv-option-label {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  .qv-color-swatches {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .qv-color-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .qv-color-swatch.is-active,
+  .qv-color-swatch:hover {
+    border-color: #ffffff;
+    transform: scale(1.1);
+  }
+
+  .qv-size-swatches {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .qv-size-swatch {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    background: none;
+    cursor: pointer;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .qv-size-swatch.is-active,
+  .qv-size-swatch:hover {
+    background-color: #ffffff;
+    color: #0a0a0a;
+    border-color: #ffffff;
+  }
+
+  /* Quantity selector */
+  .qv-qty {
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    width: fit-content;
+  }
+
+  .qv-qty button {
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+
+  .qv-qty button:hover {
+    background-color: rgba(255,255,255,0.1);
+  }
+
+  .qv-qty-value {
+    width: 48px;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  /* Action buttons */
+  .qv-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: auto;
+  }
+
+  .qv-btn {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 9999px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    transition: opacity 0.25s ease, transform 0.2s ease;
+    border: none;
+    text-decoration: none;
+    display: block;
+  }
+
+  .qv-btn:hover {
+    opacity: 0.9;
+    transform: scale(0.98);
+  }
+
+  .qv-btn--cart {
+    background-color: #ffffff;
+    color: #0a0a0a;
+  }
+
+  .qv-btn--buy {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+
+  /* Close button */
+  .qv-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.5);
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    transition: background-color 0.25s ease;
+  }
+
+  .qv-close:hover {
+    background-color: rgba(0,0,0,0.8);
+  }
+
+  /* ── Info rows ── */
+  .qv-info-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.72rem;
+    padding: 0.6rem 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.7);
+  }
+
+  .qv-info-row svg {
+    flex-shrink: 0;
+  }
+
+  /* Placeholder card */
+  .fc-placeholder {
+    flex: 0 0 auto;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 768px) {
+    .fc-placeholder { width: 220px; }
+  }
+
+  @media (max-width: 767px) {
+    .fc-section { padding: 2.5rem 0; }
+    .fc-scroll-track { gap: 1rem; padding: 0 1rem 1rem; }
+    .product-card { width: 160px; }
+    .fc-placeholder { width: 160px; }
+    .pc-variant-thumb { width: 28px; height: 28px; }
+  }
 </style>
 
-<section id="featured-collection" class="py-16 md:py-32 lg:py-40" style="background-color: var(--color-bg);">
-  <style>
-    @media (max-width: 767px) {
-      #featured-collection { padding-top: 3rem; padding-bottom: 3rem; }
-      #featured-collection .text-center.mb-16 { margin-bottom: 2.5rem; }
-      #featured-collection .text-center.mt-16 { margin-top: 2.5rem; }
-    }
-  </style>
-  <div class="max-w-screen-xl mx-auto px-6 md:px-10">
+<section id="featured-collection" class="fc-section">
 
-    <!-- Section Heading -->
-    <div class="text-center mb-16">
-      <h2
-        class="fc-heading"
-        id="fc-heading"
-        style="
-          font-family: var(--font-heading);
-          font-size: clamp(2rem, 5vw, 3.5rem);
-          font-weight: 600;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: var(--color-text);
-          overflow: hidden;
-        "
-      >
-        {{ section.settings.heading }}
-      </h2>
-    </div>
+  <!-- Section Heading -->
+  <div class="fc-heading-wrap">
+    <h2
+      class="fc-heading"
+      id="fc-heading"
+      style="
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #ffffff;
+        overflow: hidden;
+      "
+    >
+      {{ section.settings.heading }}
+    </h2>
+  </div>
 
-    <!-- Product Grid -->
-    <div id="fc-grid" class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-12 md:gap-y-16">
+  <!-- Horizontal Scroll Product Track -->
+  <div class="fc-scroll-track" id="fc-grid">
 
-      {%- assign collection = section.settings.collection -%}
-      {%- assign limit = section.settings.products_count -%}
+    {%- assign collection = section.settings.collection -%}
+    {%- assign limit = section.settings.products_count -%}
 
-      {% if collection != blank and collection.products.size > 0 %}
+    {% if collection != blank and collection.products.size > 0 %}
 
-        {% for product in collection.products limit: limit %}
-          <!-- Product Card #{{ forloop.index }} -->
-          <a
-            href="{{ product.url }}"
-            class="product-card group block cursor-pointer"
-            aria-label="{{ product.title }}"
-          >
+      {% for product in collection.products limit: limit %}
+        <!-- Product Card #{{ forloop.index }} -->
+        <div
+          class="product-card"
+          data-product-url="{{ product.url }}"
+          data-product-id="{{ product.id }}"
+        >
 
-            <!-- ── Image Wrapper ── -->
-            <div
-              class="relative aspect-[3/4] overflow-hidden bg-gray-50"
-              style="border-radius: 2px;"
+          <!-- ── Image Wrapper ── -->
+          <a href="{{ product.url }}" class="pc-img-wrap" aria-label="{{ product.title }}">
+
+            <!-- Primary Image -->
+            {% if product.featured_image %}
+              <img
+                src="{{ product.featured_image | image_url: width: 500 }}"
+                alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                class="pc-img-primary"
+                id="pc-main-{{ product.id }}"
+                loading="lazy"
+                width="500"
+                height="667"
+              />
+            {% endif %}
+
+            <!-- Hover / Second Image -->
+            {% if product.images.size > 1 %}
+              <img
+                src="{{ product.images[1] | image_url: width: 500 }}"
+                alt="{{ product.title | escape }} — lifestyle"
+                class="pc-img-secondary"
+                loading="lazy"
+                width="500"
+                height="667"
+              />
+            {% endif %}
+
+            <!-- Quick View Button -->
+            <button
+              class="quick-view-btn"
+              aria-label="Quick view {{ product.title | escape }}"
+              onclick="event.preventDefault(); event.stopPropagation(); QuickView.open(this);"
+              data-product-handle="{{ product.handle }}"
+              data-product-title="{{ product.title | escape }}"
+              data-product-price="{{ product.price | money }}"
+              data-product-sku="{{ product.selected_or_first_available_variant.sku }}"
+              data-product-available="{{ product.available }}"
+              data-product-url="{{ product.url }}"
+              data-product-images='[{% for img in product.images %}"{{ img | image_url: width: 800 }}"{% unless forloop.last %},{% endunless %}{% endfor %}]'
+              data-product-options='{{ product.options_with_values | json }}'
+              data-product-variants='{{ product.variants | json }}'
             >
-
-              <!-- Primary Image -->
-              {% if product.featured_image %}
-                <img
-                  src="{{ product.featured_image | image_url: width: 600 }}"
-                  alt="{{ product.featured_image.alt | default: product.title | escape }}"
-                  class="pc-img-primary"
-                  loading="lazy"
-                  width="600"
-                  height="800"
-                />
-              {% endif %}
-
-              <!-- Hover / Second Image -->
-              {% if product.images.size > 1 %}
-                <img
-                  src="{{ product.images[1] | image_url: width: 600 }}"
-                  alt="{{ product.title | escape }} — lifestyle"
-                  class="pc-img-secondary"
-                  loading="lazy"
-                  width="600"
-                  height="800"
-                />
-              {% endif %}
-
-              <!-- Quick View Button -->
-              <button
-                class="quick-view-btn"
-                aria-label="Quick view {{ product.title | escape }}"
-                onclick="event.preventDefault(); event.stopPropagation();"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="13"
-                  height="13"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-                  <circle cx="12" cy="12" r="3"/>
-                </svg>
-                Quick View
-              </button>
-
-            </div>
-            <!-- ── / Image Wrapper ── -->
-
-            <!-- ── Product Info ── -->
-            <div class="text-center mt-6">
-              <p class="product-title">{{ product.title }}</p>
-              <p class="product-price">{{ product.price | money }}</p>
-            </div>
-            <!-- ── / Product Info ── -->
+              QUICK VIEW
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
 
           </a>
-          <!-- / Product Card #{{ forloop.index }} -->
+          <!-- ── / Image Wrapper ── -->
 
-        {% endfor %}
+          <!-- ── Product Info ── -->
+          <div class="pc-info">
+            <p class="product-title">{{ product.title }}</p>
+            <p class="product-price">{{ product.price | money }}</p>
 
-      {% else %}
-
-        {%- comment -%} Placeholder cards when no collection assigned {%- endcomment -%}
-        {% for i in (1..8) %}
-          <div class="product-card group block">
-            <div class="relative aspect-[3/4] overflow-hidden bg-gray-100" style="border-radius: 2px;">
-              <div class="flex items-center justify-center h-full text-gray-300">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
-                  <circle cx="9" cy="9" r="2"/>
-                  <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
-                </svg>
+            <!-- Variant Swatches (thumbnail images) -->
+            {% if product.variants.size > 1 %}
+              <div class="pc-variants">
+                {% for variant in product.variants limit: 5 %}
+                  {% if variant.featured_image %}
+                    <span
+                      class="pc-variant-thumb{% if forloop.first %} is-active{% endif %}"
+                      data-variant-img="{{ variant.featured_image | image_url: width: 500 }}"
+                      data-target-id="pc-main-{{ product.id }}"
+                      onclick="VariantSwap.change(this)"
+                    >
+                      <img src="{{ variant.featured_image | image_url: width: 80 }}" alt="{{ variant.title | escape }}" loading="lazy" />
+                    </span>
+                  {% endif %}
+                {% endfor %}
               </div>
-            </div>
-            <div class="text-center mt-6">
-              <p class="product-title" style="color: var(--color-muted);">Select a collection</p>
-              <p class="product-price" style="color: var(--color-border);">in theme settings</p>
-            </div>
+            {% endif %}
           </div>
-        {% endfor %}
+          <!-- ── / Product Info ── -->
 
-      {% endif %}
+        </div>
+        <!-- / Product Card #{{ forloop.index }} -->
 
-    </div>
-    <!-- / Product Grid -->
+      {% endfor %}
 
-    <!-- View All CTA -->
-    {% if collection != blank %}
-      <div class="text-center mt-16">
-        <a
-          href="{{ collection.url }}"
-          style="
-            display: inline-block;
-            padding: 0.85rem 3rem;
-            border: 1px solid var(--color-text);
-            font-family: var(--font-body);
-            font-size: 0.65rem;
-            letter-spacing: 0.22em;
-            text-transform: uppercase;
-            color: var(--color-text);
-            border-radius: 9999px;
-            text-decoration: none;
-            transition: background-color 350ms ease, color 350ms ease, border-color 350ms ease;
-          "
-          onmouseover="this.style.backgroundColor='var(--color-text)';this.style.color='var(--color-bg)';"
-          onmouseout="this.style.backgroundColor='transparent';this.style.color='var(--color-text)';"
-        >
-          {{ section.settings.cta_text }}
-        </a>
-      </div>
+    {% else %}
+
+      {% for i in (1..8) %}
+        <div class="fc-placeholder">
+          <div class="pc-img-wrap" style="display:flex;align-items:center;justify-content:center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+          </div>
+          <div class="pc-info">
+            <p class="product-title" style="color:rgba(255,255,255,0.3);">Select a collection</p>
+            <p class="product-price" style="color:rgba(255,255,255,0.15);">in theme settings</p>
+          </div>
+        </div>
+      {% endfor %}
+
     {% endif %}
 
   </div>
+
+  <!-- View All CTA -->
+  {% if collection != blank %}
+    <div style="text-align:center; margin-top:2.5rem; padding:0 2rem;">
+      <a
+        href="{{ collection.url }}"
+        style="
+          display: inline-block;
+          padding: 0.85rem 3rem;
+          border: 1px solid rgba(255,255,255,0.4);
+          font-family: var(--font-body);
+          font-size: 0.65rem;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          color: #ffffff;
+          border-radius: 9999px;
+          text-decoration: none;
+          transition: background-color 350ms ease, color 350ms ease;
+        "
+        onmouseover="this.style.backgroundColor='#ffffff';this.style.color='#0a0a0a';"
+        onmouseout="this.style.backgroundColor='transparent';this.style.color='#ffffff';"
+      >
+        {{ section.settings.cta_text }}
+      </a>
+    </div>
+  {% endif %}
+
 </section>
 
-<script>
-  /* ─────────────────────────────────────────────────────
-     FEATURED COLLECTION — Water Slide In Animation
-     Scroll Down → characters slide up with wave stagger
-     Scroll Up   → heading fades out smoothly
-  ───────────────────────────────────────────────────── */
+<!-- ═══ Quick View Modal ═══ -->
+<div class="qv-overlay" id="qv-overlay" onclick="if(event.target===this)QuickView.close();">
+  <div class="qv-modal">
 
+    <button class="qv-close" onclick="QuickView.close();">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <!-- Left: Gallery -->
+    <div class="qv-gallery" id="qv-gallery">
+      <!-- Images injected by JS -->
+      <div class="qv-gallery-thumbs" id="qv-gallery-thumbs"></div>
+      <button class="qv-arrow qv-arrow--prev" onclick="QuickView.prevImg();">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <button class="qv-arrow qv-arrow--next" onclick="QuickView.nextImg();">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <!-- Right: Details -->
+    <div class="qv-details" id="qv-details">
+      <h3 class="qv-title" id="qv-title"></h3>
+      <span class="qv-sku" id="qv-sku"></span>
+      <p class="qv-price" id="qv-price"></p>
+
+      <div class="qv-stock" id="qv-stock">
+        <span class="qv-stock-dot"></span>
+        <span id="qv-stock-text">In stock</span>
+      </div>
+
+      <!-- Options injected by JS -->
+      <div id="qv-options"></div>
+
+      <!-- Quantity -->
+      <div>
+        <p class="qv-option-label">Quantity</p>
+        <div class="qv-qty">
+          <button onclick="QuickView.qty(-1);">−</button>
+          <span class="qv-qty-value" id="qv-qty">1</span>
+          <button onclick="QuickView.qty(1);">+</button>
+        </div>
+      </div>
+
+      <!-- Info rows -->
+      <div class="qv-info-row">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9h18V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="m9 22 3-7 3 7"/></svg>
+        Free delivery estimated
+      </div>
+      <div class="qv-info-row">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></svg>
+        Free + easy returns
+      </div>
+
+      <!-- Actions -->
+      <div class="qv-actions">
+        <button class="qv-btn qv-btn--cart" id="qv-add-cart" onclick="QuickView.addToCart();">Add to cart</button>
+        <a class="qv-btn qv-btn--buy" id="qv-buy-link" href="#">Buy it now</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* ═══════════════════════════════════════════════════
+     QUICK VIEW MODAL — Full Product Details
+  ═══════════════════════════════════════════════════ */
+  var QuickView = (function () {
+    var overlay = document.getElementById('qv-overlay');
+    var gallery = document.getElementById('qv-gallery');
+    var thumbsWrap = document.getElementById('qv-gallery-thumbs');
+    var imgs = [];
+    var currentIdx = 0;
+    var qtyVal = 1;
+
+    function open(btn) {
+      var title = btn.getAttribute('data-product-title');
+      var price = btn.getAttribute('data-product-price');
+      var sku = btn.getAttribute('data-product-sku');
+      var available = btn.getAttribute('data-product-available') === 'true';
+      var url = btn.getAttribute('data-product-url');
+
+      document.getElementById('qv-title').textContent = title;
+      document.getElementById('qv-sku').textContent = sku || '';
+      document.getElementById('qv-price').textContent = price;
+      document.getElementById('qv-stock-text').textContent = available ? 'In stock' : 'Out of stock';
+      document.getElementById('qv-buy-link').href = url;
+
+      /* Images */
+      try { imgs = JSON.parse(btn.getAttribute('data-product-images')); } catch (e) { imgs = []; }
+      var galleryImgs = gallery.querySelectorAll('img.qv-main-img');
+      galleryImgs.forEach(function (el) { el.remove(); });
+      thumbsWrap.innerHTML = '';
+
+      imgs.forEach(function (src, i) {
+        var img = document.createElement('img');
+        img.src = src;
+        img.className = 'qv-main-img' + (i === 0 ? ' is-active' : '');
+        img.loading = 'lazy';
+        gallery.insertBefore(img, gallery.firstChild);
+
+        var thumb = document.createElement('span');
+        thumb.className = 'qv-thumb' + (i === 0 ? ' is-active' : '');
+        thumb.innerHTML = '<img src="' + src + '" loading="lazy" />';
+        thumb.onclick = function () { goTo(i); };
+        thumbsWrap.appendChild(thumb);
+      });
+      currentIdx = 0;
+
+      /* Options */
+      var optionsWrap = document.getElementById('qv-options');
+      optionsWrap.innerHTML = '';
+      try {
+        var options = JSON.parse(btn.getAttribute('data-product-options'));
+        var variants = JSON.parse(btn.getAttribute('data-product-variants'));
+
+        options.forEach(function (opt) {
+          var div = document.createElement('div');
+          div.style.marginBottom = '0.75rem';
+
+          var label = document.createElement('p');
+          label.className = 'qv-option-label';
+          label.textContent = opt.name;
+          div.appendChild(label);
+
+          var isColor = opt.name.toLowerCase().indexOf('color') > -1 || opt.name.toLowerCase().indexOf('colour') > -1;
+
+          var swatchWrap = document.createElement('div');
+          swatchWrap.className = isColor ? 'qv-color-swatches' : 'qv-size-swatches';
+
+          opt.values.forEach(function (val, idx) {
+            if (isColor) {
+              var swatch = document.createElement('span');
+              swatch.className = 'qv-color-swatch' + (idx === 0 ? ' is-active' : '');
+              /* Try to find a variant with this color to get its image color */
+              var colorMap = { 'green': '#2d5a2d', 'blue': '#2d4a7a', 'red': '#8b2020', 'black': '#1a1a1a', 'white': '#f5f5f5', 'grey': '#888888', 'gray': '#888888', 'purple': '#5a2d6a', 'pink': '#d4638f', 'brown': '#6b4226', 'navy': '#1a2744', 'beige': '#d4c8a8', 'cream': '#fffdd0', 'orange': '#d4782d', 'yellow': '#d4c42d' };
+              var bgColor = colorMap[val.toLowerCase()] || '#' + Math.floor(Math.random()*16777215).toString(16);
+              swatch.style.backgroundColor = bgColor;
+              swatch.title = val;
+              swatch.onclick = function () {
+                swatchWrap.querySelectorAll('.qv-color-swatch').forEach(function (s) { s.classList.remove('is-active'); });
+                swatch.classList.add('is-active');
+              };
+              swatchWrap.appendChild(swatch);
+            } else {
+              var btn2 = document.createElement('button');
+              btn2.className = 'qv-size-swatch' + (idx === 0 ? ' is-active' : '');
+              btn2.textContent = val;
+              btn2.onclick = function () {
+                swatchWrap.querySelectorAll('.qv-size-swatch').forEach(function (s) { s.classList.remove('is-active'); });
+                btn2.classList.add('is-active');
+              };
+              swatchWrap.appendChild(btn2);
+            }
+          });
+
+          div.appendChild(swatchWrap);
+          optionsWrap.appendChild(div);
+        });
+      } catch (e) {}
+
+      qtyVal = 1;
+      document.getElementById('qv-qty').textContent = '1';
+      overlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      overlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    function goTo(idx) {
+      var allImgs = gallery.querySelectorAll('img.qv-main-img');
+      var allThumbs = thumbsWrap.querySelectorAll('.qv-thumb');
+      allImgs.forEach(function (el) { el.classList.remove('is-active'); });
+      allThumbs.forEach(function (el) { el.classList.remove('is-active'); });
+      if (allImgs[idx]) allImgs[idx].classList.add('is-active');
+      if (allThumbs[idx]) allThumbs[idx].classList.add('is-active');
+      currentIdx = idx;
+    }
+
+    function prevImg() { goTo(currentIdx > 0 ? currentIdx - 1 : imgs.length - 1); }
+    function nextImg() { goTo(currentIdx < imgs.length - 1 ? currentIdx + 1 : 0); }
+
+    function qty(delta) {
+      qtyVal = Math.max(1, qtyVal + delta);
+      document.getElementById('qv-qty').textContent = qtyVal;
+    }
+
+    function addToCart() {
+      /* Placeholder: would integrate with Shopify Ajax Cart API */
+      alert('Added ' + qtyVal + ' item(s) to cart! (Connect to Cart API)');
+    }
+
+    return { open: open, close: close, prevImg: prevImg, nextImg: nextImg, qty: qty, addToCart: addToCart };
+  }());
+
+  /* ═══════════════════════════════════════════════════
+     VARIANT SWAP — Click thumbnail to change main image
+  ═══════════════════════════════════════════════════ */
+  var VariantSwap = {
+    change: function (el) {
+      var newSrc = el.getAttribute('data-variant-img');
+      var targetId = el.getAttribute('data-target-id');
+      var mainImg = document.getElementById(targetId);
+      if (mainImg && newSrc) mainImg.src = newSrc;
+
+      /* Toggle active state */
+      var siblings = el.parentElement.querySelectorAll('.pc-variant-thumb');
+      siblings.forEach(function (s) { s.classList.remove('is-active'); });
+      el.classList.add('is-active');
+    }
+  };
+
+  /* ── Water Slide Heading Animation ── */
   gsap.registerPlugin(ScrollTrigger);
 
-  /* ── Water Slide: Split heading into characters ── */
   (function () {
-    const heading = document.getElementById('fc-heading');
+    var heading = document.getElementById('fc-heading');
     if (!heading) return;
 
-    const text = heading.textContent.trim();
+    var text = heading.textContent.trim();
     heading.innerHTML = '';
 
-    /* Split every character into a span inside a wrapper (for overflow clip) */
     text.split('').forEach(function (char) {
-      const wrapper = document.createElement('span');
+      var wrapper = document.createElement('span');
       wrapper.style.display = 'inline-block';
       wrapper.style.overflow = 'hidden';
       wrapper.style.verticalAlign = 'top';
 
-      const span = document.createElement('span');
+      var span = document.createElement('span');
       span.textContent = char === ' ' ? '\u00A0' : char;
       span.style.display = 'inline-block';
       span.style.willChange = 'transform, opacity';
@@ -320,80 +976,48 @@
       heading.appendChild(wrapper);
     });
 
-    const chars = heading.querySelectorAll('.fc-char');
+    var chars = heading.querySelectorAll('.fc-char');
+    var mm = gsap.matchMedia();
 
-    let mm = gsap.matchMedia();
-
-    /* ── Desktop: full water slide ── */
     mm.add('(min-width: 768px)', function () {
-      /* Initial state: hidden below */
       gsap.set(chars, { y: '110%', opacity: 0 });
-
-      /* Scroll down → Water Slide In */
       ScrollTrigger.create({
         trigger: '#featured-collection',
         start: 'top 80%',
         onEnter: function () {
-          gsap.to(chars, {
-            y: '0%',
-            opacity: 1,
-            duration: 1.0,
-            stagger: 0.03,
-            ease: 'expo.out',
-          });
+          gsap.to(chars, { y: '0%', opacity: 1, duration: 1.0, stagger: 0.03, ease: 'expo.out' });
         },
-        /* Scroll up → Fade Out */
         onLeaveBack: function () {
-          gsap.to(chars, {
-            y: '110%',
-            opacity: 0,
-            duration: 0.5,
-            stagger: 0.015,
-            ease: 'power2.in',
-          });
+          gsap.to(chars, { y: '110%', opacity: 0, duration: 0.5, stagger: 0.015, ease: 'power2.in' });
         },
       });
     });
 
-    /* ── Mobile: lighter version ── */
     mm.add('(max-width: 767px)', function () {
       gsap.set(chars, { y: '100%', opacity: 0 });
-
       ScrollTrigger.create({
         trigger: '#featured-collection',
         start: 'top 90%',
         onEnter: function () {
-          gsap.to(chars, {
-            y: '0%',
-            opacity: 1,
-            duration: 0.7,
-            stagger: 0.02,
-            ease: 'expo.out',
-          });
+          gsap.to(chars, { y: '0%', opacity: 1, duration: 0.7, stagger: 0.02, ease: 'expo.out' });
         },
         onLeaveBack: function () {
-          gsap.to(chars, {
-            y: '100%',
-            opacity: 0,
-            duration: 0.35,
-            stagger: 0.01,
-            ease: 'power2.in',
-          });
+          gsap.to(chars, { y: '100%', opacity: 0, duration: 0.35, stagger: 0.01, ease: 'power2.in' });
         },
       });
     });
   }());
 
-  /* ── Product Cards animation (unchanged) ── */
+  /* ── Product Cards stagger entrance ── */
   (function () {
-    let mm2 = gsap.matchMedia();
+    var mm2 = gsap.matchMedia();
 
     mm2.add('(min-width: 768px)', function () {
       gsap.fromTo('#fc-grid .product-card',
         { y: 60, opacity: 0, immediateRender: false },
         {
           scrollTrigger: { trigger: '#fc-grid', start: 'top 85%', once: true },
-          y: 0, opacity: 1, duration: 1.4, stagger: 0.15, ease: 'power3.out',
+          y: 0, opacity: 1, duration: 1.4, stagger: 0.1, ease: 'power3.out',
         }
       );
     });
@@ -408,7 +1032,6 @@
       );
     });
   }());
-
 </script>
 
 {% schema %}
@@ -431,10 +1054,11 @@
       "type": "range",
       "id": "products_count",
       "min": 4,
-      "max": 12,
+      "max": 16,
       "step": 1,
       "default": 8,
-      "label": "Products to show"
+      "label": "Products to show",
+      "info": "Maximum 16 products"
     },
     {
       "type": "text",
