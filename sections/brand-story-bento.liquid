@@ -108,7 +108,7 @@
 
     <!-- ── Bento Grid: 3 blocks ── -->
     <div
-      class="grid gap-4 md:gap-5"
+      class="grid gap-6 md:gap-8"
       style="grid-template-columns: 1fr 1fr; grid-template-rows: auto auto;"
     >
 
@@ -117,7 +117,7 @@
            Image vertical 3:4 — Journey of Style
       ════════════════════════════════ -->
       <div
-        class="bento-block relative overflow-hidden rounded-[40px]"
+        class="bento-block relative overflow-hidden rounded-[40px] md:rounded-[60px]"
         style="grid-column: 1; grid-row: 1 / span 2; aspect-ratio: 3/4;"
         data-bento="block"
       >
@@ -175,7 +175,7 @@
            Titanium Gradient — Timeless Pieces
       ════════════════════════════════ -->
       <div
-        class="bento-block bento-gradient rounded-[40px] flex flex-col justify-between"
+        class="bento-block bento-gradient rounded-[40px] md:rounded-[60px] flex flex-col justify-between"
         style="grid-column: 2; grid-row: 1; padding: 2.5rem; min-height: 320px;"
         data-bento="block"
       >
@@ -234,7 +234,7 @@
            Horizontal image — fabric / accessory detail
       ════════════════════════════════ -->
       <div
-        class="bento-block relative overflow-hidden rounded-[40px]"
+        class="bento-block relative overflow-hidden rounded-[40px] md:rounded-[60px]"
         style="grid-column: 2; grid-row: 2; aspect-ratio: 16/9;"
         data-bento="block"
       >
@@ -300,26 +300,23 @@
 
 <script>
   /* ─────────────────────────────────────────────────────
-     GSAP ScrollTrigger — Bento blocks stagger entrance
-     Requires: gsap.min.js + ScrollTrigger.min.js
-     (already loaded in layout/theme.liquid)
+     BRAND STORY BENTO — Quiet Luxury Scroll Animation
   ───────────────────────────────────────────────────── */
   document.addEventListener('DOMContentLoaded', function () {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
     gsap.registerPlugin(ScrollTrigger);
 
-    gsap.from('#brand-story [data-bento="block"]', {
-      scrollTrigger: {
-        trigger: '#brand-story',
-        start: 'top 78%',   /* fire when section top hits 78% of viewport */
-        once: true,          /* animate only once */
-      },
-      y: 64,
-      opacity: 0,
-      duration: 1.5,
-      ease: 'power4.out',
-      stagger: 0.2,          /* 0.2s between each block */
-    });
+    gsap.fromTo('#brand-story [data-bento="block"]',
+      { y: 50, opacity: 0 },
+      {
+        scrollTrigger: { trigger: '#brand-story', start: 'top 85%', once: true },
+        y: 0, opacity: 1,
+        duration: 1.5,
+        ease: 'power4.out',
+        stagger: 0.2,
+      }
+    );
   });
 </script>
+
