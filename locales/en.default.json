@@ -1,0 +1,37 @@
+{
+    "general": {
+        "welcome": "Welcome to Dropxlabel"
+    },
+    "products": {
+        "product": {
+            "add_to_cart": "Add to Cart",
+            "sold_out": "Sold Out",
+            "unavailable": "Unavailable",
+            "quantity": "Quantity"
+        }
+    },
+    "cart": {
+        "title": "Shopping Bag",
+        "empty": "Your bag is empty.",
+        "checkout": "Checkout",
+        "subtotal": "Subtotal"
+    },
+    "search": {
+        "placeholder": "Search for pieces...",
+        "no_results": "No results for",
+        "results_with_count": {
+            "one": "{{ count }} result for \"{{ terms }}\"",
+            "other": "{{ count }} results for \"{{ terms }}\""
+        }
+    },
+    "blogs": {
+        "comments": {
+            "title": "Leave a comment",
+            "submit": "Post Comment"
+        }
+    },
+    "pagination": {
+        "previous": "Previous",
+        "next": "Next"
+    }
+}
