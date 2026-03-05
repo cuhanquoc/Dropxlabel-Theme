@@ -8,7 +8,8 @@
     100% { transform: scale(1.15) translateX(-0.5%) translateY(-1.5%);  filter: blur(0px); }
   }
 
-  .hero-image {
+  .hero-image,
+  .hero-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -16,6 +17,10 @@
     animation: kenBurns 30s ease-in-out infinite alternate;
     transform-origin: center center;
     will-change: transform;
+  }
+
+  .hero-video {
+    animation: none; /* video tự có motion, không cần Ken Burns */
   }
 
   /* ─── Hero Text Entrance ─── */
@@ -152,9 +157,25 @@
 
 <section class="relative w-full h-screen overflow-hidden bg-black">
 
-  <!-- Ảnh nền với Ken Burns Animation -->
+  <!-- Nền: Video hoặc Ảnh (video ưu tiên nếu có) -->
   <div class="absolute inset-0 overflow-hidden">
-    {% if section.settings.background_image != blank %}
+    {% if section.settings.background_video != blank %}
+      <!-- Video nền -->
+      <video
+        class="hero-video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        poster="{% if section.settings.background_image != blank %}{{ section.settings.background_image | image_url: width: 1920 }}{% endif %}"
+      >
+        {% for source in section.settings.background_video.sources %}
+          <source src="{{ source.url }}" type="{{ source.mime_type }}">
+        {% endfor %}
+      </video>
+    {% elsif section.settings.background_image != blank %}
+      <!-- Ảnh nền -->
       <img
         src="{{ section.settings.background_image | image_url: width: 1920 }}"
         alt="{{ section.settings.background_image.alt | default: 'Hero background' }}"
@@ -163,6 +184,7 @@
         fetchpriority="high"
       />
     {% else %}
+      <!-- Fallback -->
       <img
         src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=1920&q=80&auto=format&fit=crop"
         alt="High fashion editorial — warm tones"
@@ -232,10 +254,20 @@
   "class": "hero-banner-section",
   "settings": [
     {
+      "type": "header",
+      "content": "Background Media"
+    },
+    {
       "type": "image_picker",
       "id": "background_image",
       "label": "Background Image",
-      "info": "Recommended: 1920×1080px or larger"
+      "info": "Recommended: 1920×1080px. Used as fallback if no video is set."
+    },
+    {
+      "type": "video",
+      "id": "background_video",
+      "label": "Background Video",
+      "info": "Short loop video (<10s). If set, this takes priority over the image."
     },
     {
       "type": "text",
