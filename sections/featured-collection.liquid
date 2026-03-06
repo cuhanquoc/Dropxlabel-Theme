@@ -426,33 +426,34 @@
 
     /* Stock — text with green check */
     .qv-stock {
-      color: #0a0a0a;
-      background: none;
+      color: #0a0a0a !important;
+      background: none !important;
       display: flex;
       align-items: center;
       gap: 0.5rem;
       padding: 0;
       font-size: 0.82rem;
       font-weight: 500;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
     }
 
     .qv-stock-dot {
       width: 20px;
       height: 20px;
+      min-width: 20px;
       background-color: #22c55e;
       border-radius: 50%;
     }
 
     /* Option labels */
     .qv-option-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       font-weight: 700;
-      color: #0a0a0a;
-      margin-bottom: 0.6rem;
-      margin-top: 1rem;
+      color: #0a0a0a !important;
+      margin-bottom: 0.5rem;
+      margin-top: 0.75rem;
     }
 
     /* Color swatches */
@@ -470,38 +471,39 @@
 
     /* Size swatches */
     .qv-size-swatch {
-      color: #0a0a0a;
-      border: 1.5px solid #bbb;
+      color: #0a0a0a !important;
+      border: 1.5px solid #999 !important;
       padding: 0.45rem 1rem;
       font-size: 0.82rem;
       font-weight: 600;
       border-radius: 8px;
-      background-color: #ffffff;
+      background-color: #ffffff !important;
     }
 
     .qv-size-swatch.is-active {
-      background-color: #0a0a0a;
-      color: #ffffff;
-      border-color: #0a0a0a;
+      background-color: #0a0a0a !important;
+      color: #ffffff !important;
+      border-color: #0a0a0a !important;
     }
 
     /* Quantity */
     .qv-qty {
-      border: 1.5px solid rgba(0,0,0,0.15);
-      border-radius: 14px;
-      background-color: #ffffff;
+      border: 1.5px solid #999 !important;
+      border-radius: 10px;
+      background-color: #ffffff !important;
     }
 
     .qv-qty button {
-      color: #0a0a0a;
-      width: 52px;
-      height: 52px;
-      font-size: 1.3rem;
+      color: #0a0a0a !important;
+      width: 48px;
+      height: 48px;
+      font-size: 1.2rem;
+      background: none !important;
     }
 
     .qv-qty-value {
-      color: #0a0a0a;
-      font-size: 1rem;
+      color: #0a0a0a !important;
+      font-size: 1.05rem;
       font-weight: 700;
     }
 
@@ -511,12 +513,12 @@
       gap: 0.65rem;
       font-size: 0.82rem;
       font-weight: 500;
-      color: #222;
+      color: #222 !important;
       padding: 0.75rem 0;
-      border-top: 1px solid #e5e5e5;
+      border-top: 1px solid #e5e5e5 !important;
     }
 
-    .qv-info-row svg { color: #222; }
+    .qv-info-row svg { color: #222 !important; flex-shrink: 0; }
 
     .qv-pickup-row {
       background-color: #edfbf1;
@@ -552,14 +554,14 @@
     }
 
     .qv-btn--cart {
-      background-color: #0a0a0a;
-      color: #ffffff;
+      background-color: #0a0a0a !important;
+      color: #ffffff !important;
     }
 
     .qv-btn--buy {
-      background-color: #0a0a0a;
-      color: #ffffff;
-      border: none;
+      background-color: #0a0a0a !important;
+      color: #ffffff !important;
+      border: none !important;
     }
   }
 
