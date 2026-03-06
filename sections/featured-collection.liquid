@@ -242,6 +242,11 @@
     line-height: 1.35;
     letter-spacing: 0.01em;
     transition: color 350ms cubic-bezier(0.25, 1, 0.5, 1);
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .product-card:hover .product-title {
@@ -255,6 +260,21 @@
     letter-spacing: 0.04em;
     color: var(--color-accent, #999999);
     margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  .product-price-compare {
+    text-decoration: line-through;
+    opacity: 0.5;
+    font-weight: 400;
+  }
+
+  .product-price-sale {
+    color: #e53935;
+    font-weight: 600;
   }
 
   /* ── Variant Thumbnails (below price) ── */
@@ -1184,8 +1204,15 @@
 
           <!-- ── Product Info ── -->
           <div class="pc-info">
-            <p class="product-title">{{ product.title }}</p>
-            <p class="product-price">{{ product.price | money }}</p>
+            <p class="product-title">{{ product.title | truncate: 40 }}</p>
+            <p class="product-price">
+              {% if product.compare_at_price > product.price %}
+                <span class="product-price-sale">{{ product.price | money }}</span>
+                <span class="product-price-compare">{{ product.compare_at_price | money }}</span>
+              {% else %}
+                {{ product.price | money }}
+              {% endif %}
+            </p>
 
             <!-- Variant Swatches (thumbnail images) -->
             {% if product.variants.size > 1 %}
