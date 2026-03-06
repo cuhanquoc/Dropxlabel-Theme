@@ -1,377 +1,371 @@
 <style>
-  /* ─────────────────────────────────────────
-     FOOTER — Quiet Luxury / Dark Edition
-  ───────────────────────────────────────── */
+  /* ─────────────────────────────────────────────────
+     FOOTER — Quiet Luxury / Art Director Edition
+     Principles: Editorial Whitespace · Serif Hierarchy
+     Muted Palette · Sharp Geometry
+  ───────────────────────────────────────────────── */
 
-  /* Giant headline stroke text */
-  .footer-giant-text {
+  /* ── Marquee Giant Text ── */
+  .ft-giant {
     font-family: var(--font-heading);
-    font-size: 7vw;
-    font-weight: 600;
+    font-size: clamp(4rem, 8vw, 9rem);
+    font-weight: 300;
+    font-style: italic;
     text-transform: uppercase;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    color: #ffffff;
-    -webkit-text-stroke: none;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    color: rgba(255,255,255,0.92);
     white-space: nowrap;
     display: inline-block;
-    transition: -webkit-text-stroke 500ms ease, color 500ms ease;
     cursor: default;
     user-select: none;
-    padding-right: 2vw;
+    padding-right: 3vw;
   }
 
-  /* Marquee track */
-  .footer-marquee {
+  .ft-marquee-track {
     display: flex;
     width: max-content;
-    animation: footer-scroll var(--ft-speed, 20s) linear infinite;
+    animation: ft-drift var(--ft-speed, 20s) linear infinite;
   }
 
-  #footer-giant:hover .footer-marquee {
+  .ft-marquee-wrap:hover .ft-marquee-track {
     animation-play-state: paused;
   }
 
-  @keyframes footer-scroll {
-    0% { transform: translateX(0); }
+  @keyframes ft-drift {
+    0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
 
-
-
-  /* Column headings */
-  .footer-col-title {
-    font-family: var(--font-heading);
-    font-size: 1.05rem;
-    color: #ffffff;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    letter-spacing: 0.01em;
-  }
-
-  /* Footer nav container */
-  #site-footer nav {
-    display: flex !important;
-    flex-direction: column !important;
-  }
-
-  /* Footer nav links */
-  .footer-link {
-    display: block !important;
+  /* ── Eyebrow Labels (Column Titles) ── */
+  .ft-eyebrow {
     font-family: var(--font-body);
-    font-size: 0.92rem;
-    color: #9ca3af;
-    text-decoration: none;
-    margin-bottom: 0.85rem;
-    transition: color 250ms ease;
-    line-height: 1.2;
-  }
-
-  .footer-link:hover {
-    color: #ffffff;
-  }
-
-  /* Newsletter promo text */
-  .footer-promo {
-    font-family: var(--font-heading);
-    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    font-size: 10px;
     font-weight: 500;
-    color: #ffffff;
-    line-height: 1.45;
-    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 2rem;
+    line-height: 1;
   }
 
-  .footer-promo-highlight {
-    color: #e53e3e;
-    font-weight: 700;
-  }
-
-  /* Newsletter inline input */
-  .footer-newsletter-row {
+  /* ── Nav Stacking ── */
+  .ft-nav {
     display: flex;
-    align-items: stretch;
-    border-bottom: 1px solid #4b5563;
-    max-width: 280px;
+    flex-direction: column;
+    gap: 0;
   }
 
-  .footer-input {
+  /* ── Link Style ── */
+  .ft-link {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    padding: 0.5rem 0;
+    transition: color 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    line-height: 1;
+    border: none;
+    background: none;
+  }
+
+  .ft-link:hover {
+    color: rgba(255,255,255,0.95);
+  }
+
+  /* ── Newsletter Promo ── */
+  .ft-promo-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 2.5rem;
+  }
+
+  .ft-promo-heading em {
+    font-style: italic;
+    color: #c9a96e;
+    font-weight: 400;
+  }
+
+  /* ── Email Input ── */
+  .ft-email-row {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    max-width: 320px;
+    padding-bottom: 2px;
+  }
+
+  .ft-email-input {
     flex: 1;
     background: transparent;
     border: none;
-    color: #ffffff;
+    color: rgba(255,255,255,0.85);
     font-family: var(--font-body);
     font-size: 0.82rem;
-    padding: 0.6rem 0;
-    outline: none;
     letter-spacing: 0.04em;
+    padding: 0.75rem 0;
+    outline: none;
     min-width: 0;
   }
 
-  .footer-input::placeholder {
-    color: #6b7280;
-    letter-spacing: 0.04em;
-  }
-
-  /* Subscribe button — inline */
-  .footer-subscribe-btn {
-    background: transparent;
-    border: none;
-    font-family: var(--font-body);
-    font-size: 0.72rem;
+  .ft-email-input::placeholder {
+    color: rgba(255,255,255,0.25);
     letter-spacing: 0.06em;
-    color: #9ca3af;
-    cursor: pointer;
-    padding: 0.6rem 0 0.6rem 1rem;
-    transition: color 300ms ease;
-    white-space: nowrap;
   }
 
-  .footer-subscribe-btn:hover {
-    color: #ffffff;
-  }
-
-  /* Social icon buttons */
-  /* .footer-social {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    color: #9ca3af;
-    text-decoration: none;
+  /* Subscribe — Pill Button */
+  .ft-subscribe {
     font-family: var(--font-body);
-    font-size: 0.8rem;
-    margin-bottom: 0.85rem;
-    transition: color 250ms ease;
-  }
-
-  .footer-social:hover {
-    color: var(--color-accent);
-    opacity: 1;
-  }
-
-  .footer-social svg {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: rgba(255,255,255,0.6);
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 9999px;
+    padding: 0.55rem 1.6rem;
+    cursor: pointer;
+    transition: color 350ms ease, border-color 350ms ease, background 350ms ease;
+    white-space: nowrap;
+    margin-left: 1.5rem;
     flex-shrink: 0;
-  } */
+  }
 
-  /* Payment icons */
-  .payment-icon {
+  .ft-subscribe:hover {
+    color: #181818;
+    background: rgba(255,255,255,0.9);
+    border-color: rgba(255,255,255,0.9);
+  }
+
+  /* ── Vertical Divider ── */
+  .ft-vdivider {
+    width: 1px;
+    background: rgba(255,255,255,0.08);
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+
+  /* ── Payment Badge ── */
+  .ft-pay {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 22px;
-    padding: 0 8px;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 4px;
+    height: 24px;
+    padding: 0 10px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.1);
     font-family: var(--font-body);
-    font-size: 0.55rem;
-    letter-spacing: 0.08em;
-    color: #9ca3af;
+    font-size: 9px;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
   }
 
-  /* ─── Mobile Responsive ─── */
+  /* ── Copyright ── */
+  .ft-copyright {
+    font-family: var(--font-body);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* ── Responsive ── */
   @media (max-width: 767px) {
-    .footer-giant-text {
-      font-size: 10vw;
-    }
-    .footer-newsletter-row { max-width: 100%; }
-    .footer-main {
+    .ft-giant { font-size: 12vw; }
+    .ft-desktop-layout {
       flex-direction: column !important;
-      gap: 2rem !important;
+      gap: 3rem !important;
     }
-    .footer-main > div:first-child {
+    .ft-newsletter-col {
       max-width: 100% !important;
       padding-right: 0 !important;
+      padding-bottom: 3rem !important;
+      border-bottom: 1px solid rgba(255,255,255,0.06) !important;
     }
-    .footer-vdivider { display: none !important; }
-    .footer-links-grid {
+    .ft-vdivider { display: none !important; }
+    .ft-links-grid {
       grid-template-columns: repeat(2, 1fr) !important;
       padding-left: 0 !important;
+      gap: 2.5rem !important;
     }
-  }
-
-  @media (min-width: 768px) {
-    .footer-vdivider { display: block !important; }
+    .ft-email-row { max-width: 100%; }
+    .ft-promo-heading { font-size: 1.4rem; }
+    .ft-bottom-bar {
+      flex-direction: column !important;
+      gap: 1.5rem !important;
+    }
   }
 </style>
 
+<!-- ══════════════════════════════════════════════
+     FOOTER — Quiet Luxury
+     ══════════════════════════════════════════════ -->
 <footer
   id="site-footer"
-  class="pt-16 md:pt-32 pb-10 overflow-hidden"
-  style="background-color: #181818;"
   role="contentinfo"
+  style="background: #141414;"
+  class="pt-24 md:pt-40 pb-12 md:pb-16 overflow-hidden"
 >
 
-  <!-- ── Giant Typography ── -->
-  <div
-    id="footer-giant"
-    class="w-full overflow-hidden mb-4"
-  >
-    <div class="footer-marquee" style="--ft-speed: {{ section.settings.giant_speed | default: 20 }}s;">
-      <span class="footer-giant-text">{{ section.settings.giant_text }}</span>
-      <span class="footer-giant-text">{{ section.settings.giant_text }}</span>
-      <span class="footer-giant-text">{{ section.settings.giant_text }}</span>
-      <span class="footer-giant-text">{{ section.settings.giant_text }}</span>
+  <!-- ── Giant Marquee ── -->
+  <div id="footer-giant" class="ft-marquee-wrap w-full overflow-hidden mb-16 md:mb-24">
+    <div class="ft-marquee-track" style="--ft-speed: {{ section.settings.giant_speed | default: 20 }}s;">
+      <span class="ft-giant">{{ section.settings.giant_text }}</span>
+      <span class="ft-giant">{{ section.settings.giant_text }}</span>
+      <span class="ft-giant">{{ section.settings.giant_text }}</span>
+      <span class="ft-giant">{{ section.settings.giant_text }}</span>
     </div>
   </div>
 
-  <!-- Thin accent divider -->
-  <div
-    class="mx-6 md:mx-10 mb-10 md:mb-16"
-    style="height: 1px; background: linear-gradient(to right, rgba(255,255,255,0.15), transparent);"
-  ></div>
+  <!-- ── Hairline Divider ── -->
+  <div class="mx-8 md:mx-16 lg:mx-24 mb-16 md:mb-28" style="height: 1px; background: rgba(255,255,255,0.06);"></div>
 
-  <!-- ── Footer Layout ── -->
-  <div id="footer-grid" class="px-6 md:px-10" style="display: flex; flex-direction: column; gap: 2.5rem;">
+  <!-- ── Main Content: Newsletter + 4 Columns ── -->
+  <div id="footer-grid" class="px-8 md:px-16 lg:px-24">
+    <div class="ft-desktop-layout" style="display: flex; gap: 0; align-items: flex-start;">
 
-    <!-- Desktop: 2-part layout -->
-    <div class="footer-main" style="display: flex; gap: 0; align-items: stretch;">
+      <!-- LEFT: Newsletter -->
+      <div data-footer-col class="ft-newsletter-col" style="flex: 0 0 30%; max-width: 380px; padding-right: 4rem;">
+        <p class="ft-eyebrow">Newsletter</p>
 
-      <!-- LEFT: Newsletter Promo -->
-      <div data-footer-col style="flex: 0 0 28%; max-width: 320px; padding-right: 2.5rem;">
-        <p class="footer-promo">
+        <p class="ft-promo-heading">
           {{ section.settings.newsletter_text }}
         </p>
 
-        <form
-          action="/contact#contact_form"
-          method="post"
-          onsubmit="event.preventDefault();"
-          novalidate
-        >
+        <form action="/contact#contact_form" method="post" onsubmit="event.preventDefault();" novalidate>
           <input type="hidden" name="form_type" value="customer" />
-          <input type="hidden" name="utf8"      value="✓" />
+          <input type="hidden" name="utf8" value="✓" />
           <input type="hidden" name="contact[tags]" value="newsletter" />
 
-          <div class="footer-newsletter-row">
+          <div class="ft-email-row">
             <label for="footer-email" class="sr-only">Email address</label>
             <input
               id="footer-email"
               name="contact[email]"
               type="email"
-              class="footer-input"
-              placeholder="Enter your email"
+              class="ft-email-input"
+              placeholder="Your email address"
               required
               autocomplete="email"
             />
-            <button type="submit" class="footer-subscribe-btn">Subscribe</button>
+          </div>
+          <div style="margin-top: 1.5rem;">
+            <button type="submit" class="ft-subscribe">Subscribe</button>
           </div>
         </form>
       </div>
 
-      <!-- VERTICAL DIVIDER -->
-      <div style="width: 1px; background: rgba(255,255,255,0.1); flex-shrink: 0; display: none;" class="footer-vdivider"></div>
+      <!-- DIVIDER -->
+      <div class="ft-vdivider hidden md:block"></div>
 
-      <!-- RIGHT: 4 link columns -->
-      <div style="flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; padding-left: 2.5rem;" class="footer-links-grid">
+      <!-- RIGHT: 4 Link Columns -->
+      <div class="ft-links-grid" style="flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; padding-left: 4rem;">
 
         <!-- Company -->
         <div data-footer-col>
-          <p class="footer-col-title">{{ section.settings.col2_title | default: 'Company' }}</p>
-          <nav aria-label="Company links">
-            {% if section.settings.c2_link1_label != blank %}<a href="{{ section.settings.c2_link1_url | default: '#' }}" class="footer-link">{{ section.settings.c2_link1_label }}</a>{% endif %}
-            {% if section.settings.c2_link2_label != blank %}<a href="{{ section.settings.c2_link2_url | default: '#' }}" class="footer-link">{{ section.settings.c2_link2_label }}</a>{% endif %}
-            {% if section.settings.c2_link3_label != blank %}<a href="{{ section.settings.c2_link3_url | default: '#' }}" class="footer-link">{{ section.settings.c2_link3_label }}</a>{% endif %}
-            {% if section.settings.c2_link4_label != blank %}<a href="{{ section.settings.c2_link4_url | default: '#' }}" class="footer-link">{{ section.settings.c2_link4_label }}</a>{% endif %}
+          <p class="ft-eyebrow">{{ section.settings.col2_title | default: 'Company' }}</p>
+          <nav class="ft-nav" aria-label="Company">
+            {% if section.settings.c2_link1_label != blank %}<a href="{{ section.settings.c2_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link1_label }}</a>{% endif %}
+            {% if section.settings.c2_link2_label != blank %}<a href="{{ section.settings.c2_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link2_label }}</a>{% endif %}
+            {% if section.settings.c2_link3_label != blank %}<a href="{{ section.settings.c2_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link3_label }}</a>{% endif %}
+            {% if section.settings.c2_link4_label != blank %}<a href="{{ section.settings.c2_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link4_label }}</a>{% endif %}
           </nav>
         </div>
 
         <!-- Customer Care -->
         <div data-footer-col>
-          <p class="footer-col-title">{{ section.settings.col3_title | default: 'Customer Care' }}</p>
-          <nav aria-label="Customer care links">
-            {% if section.settings.c3_link1_label != blank %}<a href="{{ section.settings.c3_link1_url | default: '#' }}" class="footer-link">{{ section.settings.c3_link1_label }}</a>{% endif %}
-            {% if section.settings.c3_link2_label != blank %}<a href="{{ section.settings.c3_link2_url | default: '#' }}" class="footer-link">{{ section.settings.c3_link2_label }}</a>{% endif %}
-            {% if section.settings.c3_link3_label != blank %}<a href="{{ section.settings.c3_link3_url | default: '#' }}" class="footer-link">{{ section.settings.c3_link3_label }}</a>{% endif %}
-            {% if section.settings.c3_link4_label != blank %}<a href="{{ section.settings.c3_link4_url | default: '#' }}" class="footer-link">{{ section.settings.c3_link4_label }}</a>{% endif %}
+          <p class="ft-eyebrow">{{ section.settings.col3_title | default: 'Customer Care' }}</p>
+          <nav class="ft-nav" aria-label="Customer Care">
+            {% if section.settings.c3_link1_label != blank %}<a href="{{ section.settings.c3_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link1_label }}</a>{% endif %}
+            {% if section.settings.c3_link2_label != blank %}<a href="{{ section.settings.c3_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link2_label }}</a>{% endif %}
+            {% if section.settings.c3_link3_label != blank %}<a href="{{ section.settings.c3_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link3_label }}</a>{% endif %}
+            {% if section.settings.c3_link4_label != blank %}<a href="{{ section.settings.c3_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link4_label }}</a>{% endif %}
           </nav>
         </div>
 
         <!-- Terms & Policies -->
         <div data-footer-col>
-          <p class="footer-col-title">{{ section.settings.col4_title | default: 'Terms & Policies' }}</p>
-          <nav aria-label="Terms and policies links">
-            {% if section.settings.c4_link1_label != blank %}<a href="{{ section.settings.c4_link1_url | default: '#' }}" class="footer-link">{{ section.settings.c4_link1_label }}</a>{% endif %}
-            {% if section.settings.c4_link2_label != blank %}<a href="{{ section.settings.c4_link2_url | default: '#' }}" class="footer-link">{{ section.settings.c4_link2_label }}</a>{% endif %}
-            {% if section.settings.c4_link3_label != blank %}<a href="{{ section.settings.c4_link3_url | default: '#' }}" class="footer-link">{{ section.settings.c4_link3_label }}</a>{% endif %}
-            {% if section.settings.c4_link4_label != blank %}<a href="{{ section.settings.c4_link4_url | default: '#' }}" class="footer-link">{{ section.settings.c4_link4_label }}</a>{% endif %}
+          <p class="ft-eyebrow">{{ section.settings.col4_title | default: 'Terms & Policies' }}</p>
+          <nav class="ft-nav" aria-label="Terms and Policies">
+            {% if section.settings.c4_link1_label != blank %}<a href="{{ section.settings.c4_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link1_label }}</a>{% endif %}
+            {% if section.settings.c4_link2_label != blank %}<a href="{{ section.settings.c4_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link2_label }}</a>{% endif %}
+            {% if section.settings.c4_link3_label != blank %}<a href="{{ section.settings.c4_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link3_label }}</a>{% endif %}
+            {% if section.settings.c4_link4_label != blank %}<a href="{{ section.settings.c4_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link4_label }}</a>{% endif %}
           </nav>
         </div>
 
         <!-- Follow Us -->
         <div data-footer-col>
-          <p class="footer-col-title">{{ section.settings.col5_title | default: 'Follow us' }}</p>
-          <nav aria-label="Social links">
-            {% if section.settings.c5_link1_label != blank %}<a href="{{ section.settings.c5_link1_url | default: '#' }}" class="footer-link" target="_blank" rel="noopener">{{ section.settings.c5_link1_label }}</a>{% endif %}
-            {% if section.settings.c5_link2_label != blank %}<a href="{{ section.settings.c5_link2_url | default: '#' }}" class="footer-link" target="_blank" rel="noopener">{{ section.settings.c5_link2_label }}</a>{% endif %}
-            {% if section.settings.c5_link3_label != blank %}<a href="{{ section.settings.c5_link3_url | default: '#' }}" class="footer-link" target="_blank" rel="noopener">{{ section.settings.c5_link3_label }}</a>{% endif %}
-            {% if section.settings.c5_link4_label != blank %}<a href="{{ section.settings.c5_link4_url | default: '#' }}" class="footer-link" target="_blank" rel="noopener">{{ section.settings.c5_link4_label }}</a>{% endif %}
+          <p class="ft-eyebrow">{{ section.settings.col5_title | default: 'Follow Us' }}</p>
+          <nav class="ft-nav" aria-label="Social">
+            {% if section.settings.c5_link1_label != blank %}<a href="{{ section.settings.c5_link1_url | default: '#' }}" class="ft-link" target="_blank" rel="noopener">{{ section.settings.c5_link1_label }}</a>{% endif %}
+            {% if section.settings.c5_link2_label != blank %}<a href="{{ section.settings.c5_link2_url | default: '#' }}" class="ft-link" target="_blank" rel="noopener">{{ section.settings.c5_link2_label }}</a>{% endif %}
+            {% if section.settings.c5_link3_label != blank %}<a href="{{ section.settings.c5_link3_url | default: '#' }}" class="ft-link" target="_blank" rel="noopener">{{ section.settings.c5_link3_label }}</a>{% endif %}
+            {% if section.settings.c5_link4_label != blank %}<a href="{{ section.settings.c5_link4_url | default: '#' }}" class="ft-link" target="_blank" rel="noopener">{{ section.settings.c5_link4_label }}</a>{% endif %}
           </nav>
         </div>
 
       </div>
     </div>
-
   </div>
-  <!-- / Footer Layout -->
 
   <!-- ── Bottom Bar ── -->
   <div
-    class="border-t mt-10 md:mt-20 pt-8 px-6 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4"
-    style="border-color: #1f2937;"
+    class="ft-bottom-bar mt-24 md:mt-36 pt-10 mx-8 md:mx-16 lg:mx-24 flex flex-row justify-between items-center"
+    style="border-top: 1px solid rgba(255,255,255,0.06);"
   >
-    <!-- Copyright -->
-    <p style="font-family: var(--font-body); font-size: 0.72rem; letter-spacing: 0.08em; color: #4b5563;">
-      &copy; {{ 'now' | date: '%Y' }} Dropxlabel. All rights reserved.
+    <p class="ft-copyright">
+      &copy; {{ 'now' | date: '%Y' }} Dropxlabel. All Rights Reserved.
     </p>
 
-    <!-- Payment Icons -->
-    <div class="flex items-center gap-2" aria-label="Accepted payment methods">
-      <span class="payment-icon">Visa</span>
-      <span class="payment-icon">MC</span>
-      <span class="payment-icon">PayPal</span>
-      <span class="payment-icon">Momo</span>
-      <span class="payment-icon">VNPay</span>
+    <div class="flex items-center gap-3" aria-label="Accepted payment methods">
+      <span class="ft-pay">Visa</span>
+      <span class="ft-pay">MC</span>
+      <span class="ft-pay">PayPal</span>
+      <span class="ft-pay">Momo</span>
+      <span class="ft-pay">VNPay</span>
     </div>
   </div>
-  <!-- / Bottom Bar -->
 
 </footer>
 
 
 <script>
-  /* ─────────────────────────────────────────────────────
-     GSAP ScrollTrigger — Footer entrance animations
-     Requires: gsap.min.js + ScrollTrigger.min.js
-     (already loaded via defer in layout/theme.liquid)
-  ───────────────────────────────────────────────────── */
-
   gsap.registerPlugin(ScrollTrigger);
 
   let mmFooter = gsap.matchMedia();
 
   mmFooter.add("(min-width: 768px)", () => {
-    gsap.from('#footer-giant .footer-giant-text', {
+    gsap.from('.ft-giant', {
       scrollTrigger: { trigger: '#site-footer', start: 'top 85%', once: true },
-      y: 80, opacity: 0, duration: 1.4, ease: 'power4.out', immediateRender: false,
+      y: 100, opacity: 0, duration: 1.6, ease: 'power4.out', immediateRender: false,
     });
     gsap.from('#footer-grid [data-footer-col]', {
       scrollTrigger: { trigger: '#footer-grid', start: 'top 88%', once: true },
-      y: 48, opacity: 0, duration: 1.2, ease: 'power3.out', stagger: 0.18, immediateRender: false,
+      y: 60, opacity: 0, duration: 1.4, ease: 'power3.out', stagger: 0.12, immediateRender: false,
     });
   });
 
   mmFooter.add("(max-width: 767px)", () => {
-    gsap.from('#footer-giant .footer-giant-text', {
-      scrollTrigger: { trigger: '#site-footer', start: 'top 90%', once: true },
+    gsap.from('.ft-giant', {
+      scrollTrigger: { trigger: '#site-footer', start: 'top 92%', once: true },
       y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', immediateRender: false,
     });
     gsap.from('#footer-grid [data-footer-col]', {
-      scrollTrigger: { trigger: '#footer-grid', start: 'top 90%', once: true },
+      scrollTrigger: { trigger: '#footer-grid', start: 'top 92%', once: true },
       y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.05, immediateRender: false,
     });
   });
-
 </script>
 
 {% schema %}
@@ -379,6 +373,7 @@
   "name": "Footer",
   "tag": "section",
   "settings": [
+    { "type": "header", "content": "── Marquee ──" },
     {
       "type": "text",
       "id": "giant_text",
@@ -395,17 +390,16 @@
       "label": "Scroll Speed (seconds)",
       "info": "Lower = faster"
     },
-    {
-      "type": "header",
-      "content": "Newsletter"
-    },
+
+    { "type": "header", "content": "── Newsletter ──" },
     {
       "type": "textarea",
       "id": "newsletter_text",
       "label": "Newsletter Promo Text",
-      "default": "Receive an exclusive <span class='footer-promo-highlight'>20%</span> discount code when you signup."
+      "default": "Receive an exclusive <em>20%</em> discount code when you sign up."
     },
-    { "type": "header", "content": "── Company Column ──" },
+
+    { "type": "header", "content": "── Company ──" },
     { "type": "text", "id": "col2_title", "label": "Column Title", "default": "Company" },
     { "type": "text", "id": "c2_link1_label", "label": "Link 1 Label", "default": "About Us" },
     { "type": "url",  "id": "c2_link1_url",   "label": "Link 1 URL" },
@@ -416,7 +410,7 @@
     { "type": "text", "id": "c2_link4_label", "label": "Link 4 Label", "default": "Locations" },
     { "type": "url",  "id": "c2_link4_url",   "label": "Link 4 URL" },
 
-    { "type": "header", "content": "── Customer Care Column ──" },
+    { "type": "header", "content": "── Customer Care ──" },
     { "type": "text", "id": "col3_title", "label": "Column Title", "default": "Customer Care" },
     { "type": "text", "id": "c3_link1_label", "label": "Link 1 Label", "default": "Size Guide" },
     { "type": "url",  "id": "c3_link1_url",   "label": "Link 1 URL" },
@@ -427,7 +421,7 @@
     { "type": "text", "id": "c3_link4_label", "label": "Link 4 Label", "default": "Refer a Friend" },
     { "type": "url",  "id": "c3_link4_url",   "label": "Link 4 URL" },
 
-    { "type": "header", "content": "── Terms & Policies Column ──" },
+    { "type": "header", "content": "── Terms & Policies ──" },
     { "type": "text", "id": "col4_title", "label": "Column Title", "default": "Terms & Policies" },
     { "type": "text", "id": "c4_link1_label", "label": "Link 1 Label", "default": "Duties & Taxes" },
     { "type": "url",  "id": "c4_link1_url",   "label": "Link 1 URL" },
@@ -438,8 +432,8 @@
     { "type": "text", "id": "c4_link4_label", "label": "Link 4 Label", "default": "Terms Conditions" },
     { "type": "url",  "id": "c4_link4_url",   "label": "Link 4 URL" },
 
-    { "type": "header", "content": "── Follow Us Column ──" },
-    { "type": "text", "id": "col5_title", "label": "Column Title", "default": "Follow us" },
+    { "type": "header", "content": "── Follow Us ──" },
+    { "type": "text", "id": "col5_title", "label": "Column Title", "default": "Follow Us" },
     { "type": "text", "id": "c5_link1_label", "label": "Link 1 Label", "default": "Instagram" },
     { "type": "url",  "id": "c5_link1_url",   "label": "Link 1 URL" },
     { "type": "text", "id": "c5_link2_label", "label": "Link 2 Label", "default": "Facebook" },
@@ -451,4 +445,3 @@
   ]
 }
 {% endschema %}
-
