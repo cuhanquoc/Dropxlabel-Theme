@@ -215,6 +215,120 @@
       opacity: 1;
     }
   }
+
+  /* ─── Pinterest Masonry Grid (Left Column) ─── */
+  .ta-masonry {
+    columns: 2;
+    column-gap: 10px;
+    margin-top: 1.5rem;
+  }
+
+  .ta-masonry-item {
+    break-inside: avoid;
+    margin-bottom: 10px;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    background: #1a1a1a;
+  }
+
+  .ta-masonry-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .ta-masonry-item:hover img {
+    transform: scale(1.05);
+  }
+
+  /* Different sizes for masonry effect */
+  .ta-masonry-item--tall img { aspect-ratio: 2/3; }
+  .ta-masonry-item--medium img { aspect-ratio: 3/4; }
+  .ta-masonry-item--short img { aspect-ratio: 4/3; }
+  .ta-masonry-item--square img { aspect-ratio: 1/1; }
+
+  /* Masonry item label */
+  .ta-masonry-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 2rem 0.75rem 0.75rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #fff;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .ta-masonry-item:hover .ta-masonry-label {
+    opacity: 1;
+  }
+
+  /* ─── Dynamic Island ─── */
+  .ta-dynamic-island {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
+    background: #1c1c1e;
+    border-radius: 22px;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 4px 20px rgba(0,0,0,0.4);
+    animation: ta-island-pulse 3s ease-in-out infinite;
+    overflow: hidden;
+  }
+
+  .ta-island-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #34c759;
+    flex-shrink: 0;
+    animation: ta-dot-blink 2s ease-in-out infinite;
+  }
+
+  .ta-island-text {
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .ta-island-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.15rem 0.55rem;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 0.55rem;
+    font-weight: 700;
+    color: #34c759;
+    letter-spacing: 0.06em;
+  }
+
+  @keyframes ta-island-pulse {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 4px 20px rgba(0,0,0,0.4); }
+    50% { box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 4px 30px rgba(52,199,89,0.15); }
+  }
+
+  @keyframes ta-dot-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
   /* ── Gradient Reveal Transition ── */
   .ta-reveal-wrapper {
     position: relative;
@@ -226,7 +340,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 180px;
+    height: 120px;
     z-index: 2;
     pointer-events: none;
     background: linear-gradient(
@@ -259,6 +373,12 @@
     opacity: 0;
     filter: blur(2px);
   }
+
+  /* Ensure section content sits above gradient curtain */
+  .ta-section-content {
+    position: relative;
+    z-index: 5;
+  }
 </style>
 
 <div class="ta-reveal-wrapper" id="ta-reveal-wrapper">
@@ -266,16 +386,16 @@
   <div class="ta-glow" id="ta-glow"></div>
   <section
     id="trending-accordion"
-    class="py-6 md:py-10 px-6 md:px-10"
+    class="py-10 md:py-16 px-6 md:px-10"
     style="background-color: #0a0a0a;"
   >
-  <div class="max-w-screen-xl mx-auto">
-    <div class="grid md:grid-cols-2 gap-8 md:gap-16 relative">
+  <div class="max-w-screen-xl mx-auto ta-section-content">
+    <div class="grid md:grid-cols-2 gap-8 md:gap-12 relative">
 
       <!-- ══════════════════════════════════
-           STICKY LEFT COLUMN
+           STICKY LEFT COLUMN — Pinterest Masonry
       ══════════════════════════════════ -->
-      <div class="hidden md:block sticky top-24 self-start">
+      <div class="hidden md:block sticky top-16 self-start" style="max-height: 90vh; overflow-y: auto; scrollbar-width: none;">
 
         <!-- Eyebrow -->
         <p style="
@@ -284,33 +404,38 @@
           letter-spacing: 0.24em;
           text-transform: uppercase;
           color: var(--color-accent);
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
         ">{{ section.settings.eyebrow }}</p>
 
         <!-- Heading -->
         <h2 style="
           font-family: var(--font-heading);
-          font-size: clamp(3.2rem, 7vw, 5.5rem);
+          font-size: clamp(2.8rem, 5vw, 4.5rem);
           font-weight: 600;
           color: #ffffff;
           line-height: 1;
           letter-spacing: -0.03em;
-          margin-bottom: 1.75rem;
+          margin-bottom: 1rem;
         ">
           {{ section.settings.heading }}
         </h2>
 
-        <!-- Divider -->
-        <div style="width: 36px; height: 1.5px; background-color: var(--color-accent); margin-bottom: 1.75rem;"></div>
+        <!-- Dynamic Island -->
+        <div class="ta-dynamic-island">
+          <span class="ta-island-dot"></span>
+          <span class="ta-island-text">{{ section.settings.island_text | default: 'Trending Now' }}</span>
+          <span class="ta-island-badge">{{ section.settings.island_badge | default: 'LIVE' }}</span>
+        </div>
 
         <!-- Description -->
         <p style="
           font-family: var(--font-body);
-          font-size: 0.85rem;
-          line-height: 1.85;
+          font-size: 0.82rem;
+          line-height: 1.75;
           color: #6b7280;
           max-width: 320px;
-          margin-bottom: 2.5rem;
+          margin-bottom: 1.25rem;
+          margin-top: 1rem;
         ">
           {{ section.settings.description }}
         </p>
@@ -325,15 +450,82 @@
           {{ section.settings.cta_text }}
         </a>
 
-        <!-- Scroll hint -->
-        <p style="
-          font-family: var(--font-body);
-          font-size: 0.6rem;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: #374151;
-          margin-top: 4rem;
-        ">Hover to explore →</p>
+        <!-- Pinterest Masonry Grid -->
+        <div class="ta-masonry" id="ta-masonry">
+
+          <!-- Image 1: Tall -->
+          <div class="ta-masonry-item ta-masonry-item--tall">
+            {% if section.settings.pin_img1 != blank %}
+              <img src="{{ section.settings.pin_img1 | image_url: width: 400 }}" alt="{{ section.settings.pin_label1 | default: 'Style' }}" loading="lazy" width="400" height="600" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="600" />
+            {% endif %}
+            {% if section.settings.pin_label1 != blank %}
+              <div class="ta-masonry-label">{{ section.settings.pin_label1 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Image 2: Short -->
+          <div class="ta-masonry-item ta-masonry-item--short">
+            {% if section.settings.pin_img2 != blank %}
+              <img src="{{ section.settings.pin_img2 | image_url: width: 400 }}" alt="{{ section.settings.pin_label2 | default: 'Style' }}" loading="lazy" width="400" height="300" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="300" />
+            {% endif %}
+            {% if section.settings.pin_label2 != blank %}
+              <div class="ta-masonry-label">{{ section.settings.pin_label2 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Image 3: Medium -->
+          <div class="ta-masonry-item ta-masonry-item--medium">
+            {% if section.settings.pin_img3 != blank %}
+              <img src="{{ section.settings.pin_img3 | image_url: width: 400 }}" alt="{{ section.settings.pin_label3 | default: 'Style' }}" loading="lazy" width="400" height="530" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="530" />
+            {% endif %}
+            {% if section.settings.pin_label3 != blank %}
+              <div class="ta-masonry-label">{{ section.settings.pin_label3 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Image 4: Square -->
+          <div class="ta-masonry-item ta-masonry-item--square">
+            {% if section.settings.pin_img4 != blank %}
+              <img src="{{ section.settings.pin_img4 | image_url: width: 400 }}" alt="{{ section.settings.pin_label4 | default: 'Style' }}" loading="lazy" width="400" height="400" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="400" />
+            {% endif %}
+            {% if section.settings.pin_label4 != blank %}
+              <div class="ta-masonry-label">{{ section.settings.pin_label4 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Image 5: Tall -->
+          <div class="ta-masonry-item ta-masonry-item--tall">
+            {% if section.settings.pin_img5 != blank %}
+              <img src="{{ section.settings.pin_img5 | image_url: width: 400 }}" alt="{{ section.settings.pin_label5 | default: 'Style' }}" loading="lazy" width="400" height="600" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="600" />
+            {% endif %}
+            {% if section.settings.pin_label5 != blank %}
+              <div class="ta-masonry-label">{{ section.settings.pin_label5 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Image 6: Medium -->
+          <div class="ta-masonry-item ta-masonry-item--medium">
+            {% if section.settings.pin_img6 != blank %}
+              <img src="{{ section.settings.pin_img6 | image_url: width: 400 }}" alt="{{ section.settings.pin_label6 | default: 'Style' }}" loading="lazy" width="400" height="530" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="530" />
+            {% endif %}
+            {% if section.settings.pin_label6 != blank %}
+              <div class="ta-masonry-label">{{ section.settings.pin_label6 }}</div>
+            {% endif %}
+          </div>
+
+        </div>
 
       </div>
       <!-- / Left Column -->
@@ -426,7 +618,6 @@
     var wrapper = document.getElementById('ta-reveal-wrapper');
     if (!curtain || !wrapper) return;
 
-    /* Gradient curtain wipes down into view */
     var revealTL = gsap.timeline({
       scrollTrigger: {
         trigger: wrapper,
@@ -455,23 +646,56 @@
       }, 0.5);
   }());
 
+  /* ── Masonry Entry Animation ── */
+  (function initMasonryAnim() {
+    var items = document.querySelectorAll('.ta-masonry-item');
+    if (items.length === 0) return;
+
+    gsap.fromTo(items,
+      { y: 40, opacity: 0, scale: 0.92 },
+      {
+        y: 0, opacity: 1, scale: 1,
+        duration: 0.7,
+        ease: 'power3.out',
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: '#ta-masonry',
+          start: 'top 85%',
+          once: true
+        }
+      }
+    );
+  }());
+
+  /* ── Dynamic Island Entry ── */
+  (function initIslandAnim() {
+    var island = document.querySelector('.ta-dynamic-island');
+    if (!island) return;
+
+    gsap.fromTo(island,
+      { width: 40, opacity: 0, borderRadius: '50%' },
+      {
+        width: 'auto', opacity: 1, borderRadius: '22px',
+        duration: 0.8,
+        ease: 'elastic.out(1, 0.75)',
+        scrollTrigger: {
+          trigger: island,
+          start: 'top 90%',
+          once: true
+        }
+      }
+    );
+  }());
+
   /* ── Accordion Content Animations ── */
   let mmAcc = gsap.matchMedia();
 
   mmAcc.add("(min-width: 768px)", () => {
     gsap.fromTo(
-      '#trending-accordion .hidden.md\\:block > *',
-      { y: 40, opacity: 0, immediateRender: false },
-      {
-        scrollTrigger: { trigger: '#trending-accordion', start: 'top 85%', once: true },
-        y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', stagger: 0.15,
-      }
-    );
-    gsap.fromTo(
       '#trending-accordion .accordion-item',
       { y: 50, opacity: 0, immediateRender: false },
       {
-        scrollTrigger: { trigger: '#trending-accordion', start: 'top 85%', once: true },
+        scrollTrigger: { trigger: '#trending-accordion .flex.flex-col', start: 'top 85%', once: true },
         y: 0, opacity: 1, duration: 1.3, ease: 'power3.out', stagger: 0.15,
       }
     );
@@ -558,6 +782,98 @@
       "label": "Mobile Heading",
       "default": "Trending Styles",
       "info": "Shorter heading for mobile view"
+    },
+    {
+      "type": "header",
+      "content": "Dynamic Island"
+    },
+    {
+      "type": "text",
+      "id": "island_text",
+      "label": "Island Text",
+      "default": "Trending Now"
+    },
+    {
+      "type": "text",
+      "id": "island_badge",
+      "label": "Island Badge",
+      "default": "LIVE"
+    },
+    {
+      "type": "header",
+      "content": "── Pinterest Grid ──"
+    },
+    {
+      "type": "image_picker",
+      "id": "pin_img1",
+      "label": "Pin Image 1 (Tall)",
+      "info": "Recommended: 400 × 600px"
+    },
+    {
+      "type": "text",
+      "id": "pin_label1",
+      "label": "Pin 1 Label",
+      "default": "Fall Capsule"
+    },
+    {
+      "type": "image_picker",
+      "id": "pin_img2",
+      "label": "Pin Image 2 (Short)",
+      "info": "Recommended: 400 × 300px"
+    },
+    {
+      "type": "text",
+      "id": "pin_label2",
+      "label": "Pin 2 Label",
+      "default": "Editorial"
+    },
+    {
+      "type": "image_picker",
+      "id": "pin_img3",
+      "label": "Pin Image 3 (Medium)",
+      "info": "Recommended: 400 × 530px"
+    },
+    {
+      "type": "text",
+      "id": "pin_label3",
+      "label": "Pin 3 Label",
+      "default": "Street Style"
+    },
+    {
+      "type": "image_picker",
+      "id": "pin_img4",
+      "label": "Pin Image 4 (Square)",
+      "info": "Recommended: 400 × 400px"
+    },
+    {
+      "type": "text",
+      "id": "pin_label4",
+      "label": "Pin 4 Label",
+      "default": "Minimalist"
+    },
+    {
+      "type": "image_picker",
+      "id": "pin_img5",
+      "label": "Pin Image 5 (Tall)",
+      "info": "Recommended: 400 × 600px"
+    },
+    {
+      "type": "text",
+      "id": "pin_label5",
+      "label": "Pin 5 Label",
+      "default": "Runway"
+    },
+    {
+      "type": "image_picker",
+      "id": "pin_img6",
+      "label": "Pin Image 6 (Medium)",
+      "info": "Recommended: 400 × 530px"
+    },
+    {
+      "type": "text",
+      "id": "pin_label6",
+      "label": "Pin 6 Label",
+      "default": "New Season"
     }
   ],
   "blocks": [
