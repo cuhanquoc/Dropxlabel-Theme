@@ -466,6 +466,22 @@
       margin-bottom: 1rem;
       padding-bottom: 1rem;
       border-bottom: 1px solid #e5e5e5;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .qv-price-sale {
+      color: #e53935 !important;
+      font-size: 1.7rem;
+      font-weight: 700;
+    }
+
+    .qv-price-compare {
+      color: #999 !important;
+      font-size: 1rem;
+      font-weight: 400;
+      text-decoration: line-through;
     }
 
     /* Stock — text with green check */
@@ -777,6 +793,22 @@
     font-family: var(--font-heading);
     font-size: 1.5rem;
     font-weight: 600;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .qv-price-sale {
+    color: #e53935;
+    font-size: 1.6rem;
+    font-weight: 700;
+  }
+
+  .qv-price-compare {
+    color: rgba(255,255,255,0.4);
+    font-size: 1rem;
+    font-weight: 400;
+    text-decoration: line-through;
   }
 
   .qv-stock {
@@ -1106,6 +1138,7 @@
                 data-product-handle="{{ product.handle }}"
                 data-product-title="{{ product.title | escape }}"
                 data-product-price="{{ product.price | money }}"
+                data-product-compare-price="{% if product.compare_at_price > product.price %}{{ product.compare_at_price | money }}{% endif %}"
                 data-product-sku="{{ product.selected_or_first_available_variant.sku }}"
                 data-product-available="{{ product.available }}"
                 data-product-url="{{ product.url }}"
@@ -1302,13 +1335,24 @@
     function open(btn) {
       var title = btn.getAttribute('data-product-title');
       var price = btn.getAttribute('data-product-price');
+      var comparePrice = btn.getAttribute('data-product-compare-price');
       var sku = btn.getAttribute('data-product-sku');
       var available = btn.getAttribute('data-product-available') === 'true';
       var url = btn.getAttribute('data-product-url');
 
       document.getElementById('qv-title').textContent = title;
       document.getElementById('qv-sku').textContent = sku || '';
-      document.getElementById('qv-price').textContent = price;
+
+      /* Price with compare */
+      var priceEl = document.getElementById('qv-price');
+      if (comparePrice && comparePrice.trim() !== '') {
+        priceEl.innerHTML = '<span class="qv-price-sale">' + price + '</span> <span class="qv-price-compare">' + comparePrice + '</span>';
+        priceEl.classList.add('has-sale');
+      } else {
+        priceEl.textContent = price;
+        priceEl.classList.remove('has-sale');
+      }
+
       document.getElementById('qv-stock-text').textContent = available ? '{{ section.settings.stock_text | default: "30 in stock" }}' : 'Out of stock';
 
       /* Images */
