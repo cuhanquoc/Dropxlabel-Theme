@@ -14,10 +14,27 @@
     color: transparent;
     -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
     white-space: nowrap;
-    display: block;
+    display: inline-block;
     transition: -webkit-text-stroke 500ms ease, color 500ms ease;
     cursor: default;
     user-select: none;
+    padding-right: 2vw;
+  }
+
+  /* Marquee track */
+  .footer-marquee {
+    display: flex;
+    width: max-content;
+    animation: footer-scroll var(--ft-speed, 20s) linear infinite;
+  }
+
+  #footer-giant:hover .footer-marquee {
+    animation-play-state: paused;
+  }
+
+  @keyframes footer-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 
   @media (hover: hover) {
@@ -159,11 +176,14 @@
   <!-- ── Giant Typography ── -->
   <div
     id="footer-giant"
-    class="w-full overflow-hidden px-6 md:px-10 mb-4"
+    class="w-full overflow-hidden mb-4"
   >
-    <span class="footer-giant-text">
-      {{ section.settings.giant_text }}
-    </span>
+    <div class="footer-marquee" style="--ft-speed: {{ section.settings.giant_speed | default: 20 }}s;">
+      <span class="footer-giant-text">{{ section.settings.giant_text }}</span>
+      <span class="footer-giant-text">{{ section.settings.giant_text }}</span>
+      <span class="footer-giant-text">{{ section.settings.giant_text }}</span>
+      <span class="footer-giant-text">{{ section.settings.giant_text }}</span>
+    </div>
   </div>
 
   <!-- Thin accent divider -->
@@ -340,6 +360,16 @@
       "id": "giant_text",
       "label": "Giant Text",
       "default": "Elevate Your Wardrobe at\u00a0Dropxlabel"
+    },
+    {
+      "type": "range",
+      "id": "giant_speed",
+      "min": 5,
+      "max": 60,
+      "step": 5,
+      "default": 20,
+      "label": "Scroll Speed (seconds)",
+      "info": "Lower = faster"
     },
     {
       "type": "header",
