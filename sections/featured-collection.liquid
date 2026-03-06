@@ -1288,7 +1288,7 @@
         img.src = src;
         img.className = 'qv-main-img' + (i === 0 ? ' is-active' : '');
         img.loading = 'lazy';
-        gallery.insertBefore(img, gallery.firstChild);
+        gallery.insertBefore(img, thumbsWrap);
 
         var thumb = document.createElement('span');
         thumb.className = 'qv-thumb' + (i === 0 ? ' is-active' : '');
