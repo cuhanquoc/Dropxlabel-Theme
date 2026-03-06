@@ -661,11 +661,20 @@
   .qv-gallery-thumbs {
     position: absolute;
     bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 1rem;
+    right: 1rem;
     display: flex;
     gap: 8px;
-    z-index: 2;
+    z-index: 3;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    scroll-behavior: smooth;
+  }
+
+  .qv-gallery-thumbs::-webkit-scrollbar {
+    display: none;
   }
 
   .qv-thumb {
@@ -677,6 +686,7 @@
     cursor: pointer;
     transition: border-color 0.25s ease;
     background-color: #2a2a2a;
+    flex-shrink: 0;
   }
 
   .qv-thumb.is-active {
@@ -1454,7 +1464,10 @@
           allImgs[idx].classList.add('is-active');
         }
       }
-      if (allThumbs[idx]) allThumbs[idx].classList.add('is-active');
+      if (allThumbs[idx]) {
+        allThumbs[idx].classList.add('is-active');
+        allThumbs[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
       currentIdx = idx;
     }
 
