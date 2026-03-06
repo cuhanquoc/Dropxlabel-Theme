@@ -5,7 +5,6 @@
 
   .bsb-section {
     position: relative;
-    padding: 5rem 0 3rem;
     overflow: hidden;
     background-color: {{ section.settings.bg_color | default: '#f2f0ec' }};
     background-image:
@@ -24,22 +23,25 @@
   }
   {% endif %}
 
-  /* ── Top Layout: text left + gallery right ── */
-  .bsb-top {
-    display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 3rem;
-    align-items: start;
-    padding: 0 3rem;
-    max-width: 1400px;
-    margin: 0 auto;
+  /* ── Horizontal Track: text + cards all in a row ── */
+  .bsb-track-wrapper {
+    overflow: hidden;
+    padding: 5rem 0 3rem;
   }
 
-  /* ── Left Text Panel ── */
+  .bsb-track {
+    display: flex;
+    align-items: flex-start;
+    gap: 3rem;
+    padding: 0 3rem;
+    will-change: transform;
+  }
+
+  /* ── Text Panel (inline in the track) ── */
   .bsb-text {
+    flex: 0 0 380px;
+    max-width: 380px;
     padding-top: 2rem;
-    position: sticky;
-    top: 8rem;
   }
 
   .bsb-heading {
@@ -107,17 +109,6 @@
   .bsb-cta-btn:hover {
     background-color: #0a0a0a;
     color: #fff;
-  }
-
-  /* ── Right: Scrolling Gallery ── */
-  .bsb-gallery-overflow {
-    overflow: hidden;
-  }
-
-  .bsb-gallery-track {
-    display: flex;
-    gap: 2rem;
-    will-change: transform;
   }
 
   /* ── Single Card ── */
@@ -212,19 +203,19 @@
 
   /* ── Mobile ── */
   @media (max-width: 767px) {
-    .bsb-section {
+    .bsb-track-wrapper {
       padding: 3rem 0 2rem;
     }
 
-    .bsb-top {
-      display: flex;
+    .bsb-track {
       flex-direction: column;
       gap: 2rem;
       padding: 0 1.25rem;
     }
 
     .bsb-text {
-      position: static;
+      flex: 0 0 auto;
+      max-width: 100%;
       padding-top: 0;
     }
 
@@ -238,7 +229,9 @@
       margin-bottom: 1.5rem;
     }
 
-    .bsb-gallery-track {
+    /* On mobile: cards become a horizontal swipe row */
+    .bsb-mobile-cards {
+      display: flex;
       gap: 1.25rem;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -247,7 +240,7 @@
       padding-right: 1.25rem;
     }
 
-    .bsb-gallery-track::-webkit-scrollbar {
+    .bsb-mobile-cards::-webkit-scrollbar {
       display: none;
     }
 
@@ -269,10 +262,14 @@
 
   /* ── Tablet ── */
   @media (min-width: 768px) and (max-width: 1024px) {
-    .bsb-top {
-      grid-template-columns: 280px 1fr;
+    .bsb-track {
       gap: 2rem;
       padding: 0 2rem;
+    }
+
+    .bsb-text {
+      flex: 0 0 280px;
+      max-width: 280px;
     }
 
     .bsb-card {
@@ -284,164 +281,162 @@
 
 <section class="bsb-section" id="brand-story-bento">
 
-  <!-- ── Top: Text + Gallery ── -->
-  <div class="bsb-top">
+  <div class="bsb-track-wrapper">
+    <div class="bsb-track" id="bsb-track">
 
-    <!-- Left: Text Panel -->
-    <div class="bsb-text">
-      <h2 class="bsb-heading">
-        {{ section.settings.heading }}
-      </h2>
-      <p class="bsb-desc">
-        {{ section.settings.description }}
-      </p>
-      <div class="bsb-cta-wrap">
-        <a href="{{ section.settings.button_url | default: '#' }}" class="bsb-cta-icon" aria-label="Explore">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10"/><path d="M17 7v10H7"/></svg>
-        </a>
-        <a href="{{ section.settings.button_url | default: '#' }}" class="bsb-cta-btn">
-          {{ section.settings.button_text | default: 'Explore More' }}
-        </a>
+      <!-- Text Panel (scrolls away to the left) -->
+      <div class="bsb-text" id="bsb-text">
+        <h2 class="bsb-heading">
+          {{ section.settings.heading }}
+        </h2>
+        <p class="bsb-desc">
+          {{ section.settings.description }}
+        </p>
+        <div class="bsb-cta-wrap">
+          <a href="{{ section.settings.button_url | default: '#' }}" class="bsb-cta-icon" aria-label="Explore">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10"/><path d="M17 7v10H7"/></svg>
+          </a>
+          <a href="{{ section.settings.button_url | default: '#' }}" class="bsb-cta-btn">
+            {{ section.settings.button_text | default: 'Explore More' }}
+          </a>
+        </div>
       </div>
-    </div>
 
-    <!-- Right: Gallery Track -->
-    <div class="bsb-gallery-overflow">
-      <div class="bsb-gallery-track" id="bsb-gallery-track">
-
-        <!-- Card 1 -->
-        <div class="bsb-card">
-          <div class="bsb-card-img-wrap">
-            {% if section.settings.card1_image != blank %}
-              <img
-                src="{{ section.settings.card1_image | image_url: width: 800 }}"
-                alt="{{ section.settings.card1_image.alt | default: section.settings.card1_title }}"
-                class="bsb-card-img"
-                loading="lazy"
-                width="800"
-                height="600"
-              />
-            {% else %}
-              <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=85&auto=format&fit=crop"
-                alt="Fashion Model"
-                class="bsb-card-img"
-                loading="lazy"
-                width="800"
-                height="600"
-              />
-            {% endif %}
-            {% if section.settings.card1_tag != blank %}
-              <div class="bsb-card-tag">{{ section.settings.card1_tag }}</div>
-            {% endif %}
-          </div>
-          <div class="bsb-card-bottom">
-            <h3 class="bsb-card-title">{{ section.settings.card1_title | default: 'Elegant Evening Wear' }}</h3>
-            <a href="{{ section.settings.card1_url | default: '#' }}" class="bsb-card-link">
-              {{ section.settings.card1_button | default: 'SHOP NOW' }}
-            </a>
-          </div>
-          <div class="bsb-card-sep"></div>
+      <!-- Card 1 -->
+      <div class="bsb-card">
+        <div class="bsb-card-img-wrap">
+          {% if section.settings.card1_image != blank %}
+            <img
+              src="{{ section.settings.card1_image | image_url: width: 800 }}"
+              alt="{{ section.settings.card1_image.alt | default: section.settings.card1_title }}"
+              class="bsb-card-img"
+              loading="lazy"
+              width="800"
+              height="600"
+            />
+          {% else %}
+            <img
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=85&auto=format&fit=crop"
+              alt="Fashion Model"
+              class="bsb-card-img"
+              loading="lazy"
+              width="800"
+              height="600"
+            />
+          {% endif %}
+          {% if section.settings.card1_tag != blank %}
+            <div class="bsb-card-tag">{{ section.settings.card1_tag }}</div>
+          {% endif %}
         </div>
-
-        <!-- Card 2 -->
-        <div class="bsb-card">
-          <div class="bsb-card-img-wrap">
-            {% if section.settings.card2_image != blank %}
-              <img
-                src="{{ section.settings.card2_image | image_url: width: 800 }}"
-                alt="{{ section.settings.card2_image.alt | default: section.settings.card2_title }}"
-                class="bsb-card-img"
-                loading="lazy"
-                width="800"
-                height="600"
-              />
-            {% else %}
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=85&auto=format&fit=crop"
-                alt="Fashion Model"
-                class="bsb-card-img"
-                loading="lazy"
-                width="800"
-                height="600"
-              />
-            {% endif %}
-            {% if section.settings.card2_tag != blank %}
-              <div class="bsb-card-tag">{{ section.settings.card2_tag }}</div>
-            {% endif %}
-          </div>
-          <div class="bsb-card-bottom">
-            <h3 class="bsb-card-title">{{ section.settings.card2_title | default: 'Luxury Winter Collection' }}</h3>
-            <a href="{{ section.settings.card2_url | default: '#' }}" class="bsb-card-link">
-              {{ section.settings.card2_button | default: 'Shop Now' }}
-            </a>
-          </div>
-          <div class="bsb-card-sep"></div>
+        <div class="bsb-card-bottom">
+          <h3 class="bsb-card-title">{{ section.settings.card1_title | default: 'Elegant Evening Wear' }}</h3>
+          <a href="{{ section.settings.card1_url | default: '#' }}" class="bsb-card-link">
+            {{ section.settings.card1_button | default: 'SHOP NOW' }}
+          </a>
         </div>
-
-        <!-- Card 3 -->
-        <div class="bsb-card">
-          <div class="bsb-card-img-wrap">
-            {% if section.settings.card3_image != blank %}
-              <img
-                src="{{ section.settings.card3_image | image_url: width: 800 }}"
-                alt="{{ section.settings.card3_image.alt | default: section.settings.card3_title }}"
-                class="bsb-card-img"
-                loading="lazy"
-                width="800"
-                height="600"
-              />
-            {% else %}
-              <img
-                src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=85&auto=format&fit=crop"
-                alt="Fashion Model"
-                class="bsb-card-img"
-                loading="lazy"
-                width="800"
-                height="600"
-              />
-            {% endif %}
-            {% if section.settings.card3_tag != blank %}
-              <div class="bsb-card-tag">{{ section.settings.card3_tag }}</div>
-            {% endif %}
-          </div>
-          <div class="bsb-card-bottom">
-            <h3 class="bsb-card-title">{{ section.settings.card3_title | default: 'Urban Street Style' }}</h3>
-            <a href="{{ section.settings.card3_url | default: '#' }}" class="bsb-card-link">
-              {{ section.settings.card3_button | default: 'SHOP NOW' }}
-            </a>
-          </div>
-          <div class="bsb-card-sep"></div>
-        </div>
-
+        <div class="bsb-card-sep"></div>
       </div>
-    </div>
 
+      <!-- Card 2 -->
+      <div class="bsb-card">
+        <div class="bsb-card-img-wrap">
+          {% if section.settings.card2_image != blank %}
+            <img
+              src="{{ section.settings.card2_image | image_url: width: 800 }}"
+              alt="{{ section.settings.card2_image.alt | default: section.settings.card2_title }}"
+              class="bsb-card-img"
+              loading="lazy"
+              width="800"
+              height="600"
+            />
+          {% else %}
+            <img
+              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=85&auto=format&fit=crop"
+              alt="Fashion Model"
+              class="bsb-card-img"
+              loading="lazy"
+              width="800"
+              height="600"
+            />
+          {% endif %}
+          {% if section.settings.card2_tag != blank %}
+            <div class="bsb-card-tag">{{ section.settings.card2_tag }}</div>
+          {% endif %}
+        </div>
+        <div class="bsb-card-bottom">
+          <h3 class="bsb-card-title">{{ section.settings.card2_title | default: 'Luxury Winter Collection' }}</h3>
+          <a href="{{ section.settings.card2_url | default: '#' }}" class="bsb-card-link">
+            {{ section.settings.card2_button | default: 'Shop Now' }}
+          </a>
+        </div>
+        <div class="bsb-card-sep"></div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bsb-card">
+        <div class="bsb-card-img-wrap">
+          {% if section.settings.card3_image != blank %}
+            <img
+              src="{{ section.settings.card3_image | image_url: width: 800 }}"
+              alt="{{ section.settings.card3_image.alt | default: section.settings.card3_title }}"
+              class="bsb-card-img"
+              loading="lazy"
+              width="800"
+              height="600"
+            />
+          {% else %}
+            <img
+              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=85&auto=format&fit=crop"
+              alt="Fashion Model"
+              class="bsb-card-img"
+              loading="lazy"
+              width="800"
+              height="600"
+            />
+          {% endif %}
+          {% if section.settings.card3_tag != blank %}
+            <div class="bsb-card-tag">{{ section.settings.card3_tag }}</div>
+          {% endif %}
+        </div>
+        <div class="bsb-card-bottom">
+          <h3 class="bsb-card-title">{{ section.settings.card3_title | default: 'Urban Street Style' }}</h3>
+          <a href="{{ section.settings.card3_url | default: '#' }}" class="bsb-card-link">
+            {{ section.settings.card3_button | default: 'SHOP NOW' }}
+          </a>
+        </div>
+        <div class="bsb-card-sep"></div>
+      </div>
+
+    </div>
   </div>
 
 </section>
 
 <script>
   /* ═══════════════════════════════════════════════════
-     BRAND STORY BENTO — Scroll-Driven Gallery
+     BRAND STORY BENTO — Full Horizontal Scroll
+     Text + Cards all slide left together on scroll.
+     The text slides off-screen, revealing 3 cards.
   ═══════════════════════════════════════════════════ */
 
   gsap.registerPlugin(ScrollTrigger);
 
   (function initBentoGallery() {
-    var track = document.getElementById('bsb-gallery-track');
+    var track = document.getElementById('bsb-track');
     var section = document.getElementById('brand-story-bento');
     if (!track || !section) return;
 
     var isMobile = window.innerWidth < 768;
 
     if (!isMobile) {
-      /* Desktop: scroll-driven horizontal slide (right to left) */
-      var cards = track.querySelectorAll('.bsb-card');
-      if (cards.length === 0) return;
+      /* Desktop: scroll-driven horizontal slide
+         The entire track (text + cards) slides left.
+         End position: text is off-screen, all 3 cards visible. */
 
       function getScrollAmount() {
-        return -(track.scrollWidth - track.parentElement.offsetWidth);
+        var trackW = track.scrollWidth;
+        var viewW = track.parentElement.offsetWidth;
+        return -(trackW - viewW);
       }
 
       gsap.to(track, {
@@ -449,46 +444,40 @@
         ease: 'none',
         scrollTrigger: {
           trigger: section,
-          start: 'top 20%',
+          start: 'top top',
           end: function () { return '+=' + Math.abs(getScrollAmount()); },
           scrub: 1,
           pin: true,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
         }
       });
 
       /* Entry animation */
-      gsap.fromTo(cards,
-        { y: 60, opacity: 0 },
+      gsap.fromTo('#bsb-text',
+        { x: -40, opacity: 0 },
+        {
+          x: 0, opacity: 1,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 80%', once: true }
+        }
+      );
+
+      gsap.fromTo('.bsb-card',
+        { y: 50, opacity: 0 },
         {
           y: 0, opacity: 1,
           duration: 0.8,
           ease: 'power3.out',
-          stagger: 0.12,
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 75%',
-            once: true
-          }
+          stagger: 0.15,
+          scrollTrigger: { trigger: section, start: 'top 75%', once: true }
         }
       );
 
-      gsap.fromTo('.bsb-text',
-        { y: 40, opacity: 0 },
-        {
-          y: 0, opacity: 1,
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 80%',
-            once: true
-          }
-        }
-      );
     } else {
-      /* Mobile: simple entry animation */
-      gsap.fromTo('.bsb-text',
+      /* Mobile: stacked layout with simple entry animation */
+      gsap.fromTo('#bsb-text',
         { y: 20, opacity: 0 },
         {
           y: 0, opacity: 1,
@@ -505,7 +494,7 @@
           duration: 0.5,
           ease: 'power3.out',
           stagger: 0.08,
-          scrollTrigger: { trigger: track, start: 'top 90%', once: true }
+          scrollTrigger: { trigger: section, start: 'top 85%', once: true }
         }
       );
     }
