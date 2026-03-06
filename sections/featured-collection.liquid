@@ -314,14 +314,13 @@
 
 @media (max-width: 767px) {
     .qv-modal {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto;
+      display: block;
       width: 100vw;
       max-width: 100vw;
       height: 92vh;
-      max-height: 92vh;
       border-radius: 20px 20px 0 0;
-      overflow-y: scroll;
+      overflow-y: scroll !important;
+      overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
       background-color: #f8f8f6;
@@ -1314,22 +1313,16 @@
       qtyVal = 1;
       document.getElementById('qv-qty').textContent = '1';
       overlay.classList.add('is-open');
-      /* iOS-safe scroll lock */
-      var scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = '-' + scrollY + 'px';
-      document.body.style.width = '100%';
-      document.body.dataset.scrollY = scrollY;
+      /* Lock background scroll */
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
     }
 
     function close() {
       overlay.classList.remove('is-open');
-      /* Restore scroll position */
-      var savedY = parseInt(document.body.dataset.scrollY || '0');
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      window.scrollTo(0, savedY);
+      /* Unlock background scroll */
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
     }
 
     function goTo(idx, direction) {
