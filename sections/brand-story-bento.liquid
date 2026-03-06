@@ -8,7 +8,6 @@
     padding: 5rem 0 3rem;
     overflow: hidden;
     background-color: {{ section.settings.bg_color | default: '#f2f0ec' }};
-    /* Subtle cross-hatch texture */
     background-image:
       linear-gradient(45deg, rgba(0,0,0,0.018) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.018) 75%),
       linear-gradient(45deg, rgba(0,0,0,0.018) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.018) 75%);
@@ -111,6 +110,10 @@
   }
 
   /* ── Right: Scrolling Gallery ── */
+  .bsb-gallery-overflow {
+    overflow: hidden;
+  }
+
   .bsb-gallery-track {
     display: flex;
     gap: 2rem;
@@ -119,18 +122,18 @@
 
   /* ── Single Card ── */
   .bsb-card {
-    flex: 0 0 420px;
-    max-width: 420px;
+    flex: 0 0 480px;
+    max-width: 480px;
   }
 
   .bsb-card-img-wrap {
     position: relative;
     width: 100%;
-    aspect-ratio: 3/4;
+    aspect-ratio: 4/3;
     border-radius: 16px;
     overflow: hidden;
-    border: 4px solid rgba(255,255,255,0.8);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    border: 5px solid rgba(255,255,255,0.85);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.06);
     background-color: #e8e5e0;
   }
 
@@ -152,41 +155,38 @@
     left: 1rem;
     background-color: rgba(255,255,255,0.92);
     backdrop-filter: blur(8px);
-    padding: 0.5rem 0.85rem;
+    padding: 0.6rem 1rem;
     border-radius: 10px;
     font-family: var(--font-body);
-    font-size: 0.75rem;
-    font-weight: 500;
+    font-size: 0.82rem;
+    font-weight: 600;
     color: #0a0a0a;
     line-height: 1.4;
-    max-width: 160px;
+    max-width: 200px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
 
-  /* Card bottom: title + button */
+  /* Card bottom: title + button stacked */
   .bsb-card-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 0.25rem 1.25rem;
-    border-bottom: 1.5px solid #c0bdb8;
+    padding: 1.25rem 0.25rem 1.5rem;
   }
 
   .bsb-card-title {
     font-family: var(--font-heading);
-    font-size: 1.15rem;
-    font-weight: 600;
+    font-size: 1.6rem;
+    font-weight: 700;
     color: #0a0a0a;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.85rem;
   }
 
   .bsb-card-link {
     display: inline-block;
-    padding: 0.5rem 1.2rem;
-    border: 1.5px solid #0a0a0a;
+    padding: 0.65rem 1.8rem;
+    border: 2px solid #0a0a0a;
     border-radius: 9999px;
     font-family: var(--font-body);
-    font-size: 0.68rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -201,28 +201,13 @@
     color: #fff;
   }
 
-  /* ── Scroll progress line ── */
-  .bsb-progress-wrap {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 3rem;
-  }
-
-  .bsb-progress {
+  /* Separator */
+  .bsb-card-sep {
     width: 100%;
     height: 2px;
-    background-color: #d6d3ce;
-    margin-top: 0.5rem;
+    background: linear-gradient(to right, #b0ada8, #d6d3ce);
+    margin-top: 0.25rem;
     border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .bsb-progress-bar {
-    height: 100%;
-    width: 0%;
-    background-color: #0a0a0a;
-    border-radius: 2px;
-    transition: width 0.1s linear;
   }
 
   /* ── Mobile ── */
@@ -267,40 +252,32 @@
     }
 
     .bsb-card {
-      flex: 0 0 75vw;
-      max-width: 75vw;
+      flex: 0 0 80vw;
+      max-width: 80vw;
       scroll-snap-align: start;
     }
 
     .bsb-card-title {
-      font-size: 0.95rem;
+      font-size: 1.15rem;
     }
 
     .bsb-card-link {
-      font-size: 0.6rem;
-      padding: 0.4rem 0.9rem;
-    }
-
-    .bsb-progress-wrap {
-      padding: 0 1.25rem;
+      font-size: 0.65rem;
+      padding: 0.45rem 1.2rem;
     }
   }
 
   /* ── Tablet ── */
   @media (min-width: 768px) and (max-width: 1024px) {
     .bsb-top {
-      grid-template-columns: 300px 1fr;
+      grid-template-columns: 280px 1fr;
       gap: 2rem;
       padding: 0 2rem;
     }
 
     .bsb-card {
-      flex: 0 0 340px;
-      max-width: 340px;
-    }
-
-    .bsb-progress-wrap {
-      padding: 0 2rem;
+      flex: 0 0 380px;
+      max-width: 380px;
     }
   }
 </style>
@@ -329,53 +306,117 @@
     </div>
 
     <!-- Right: Gallery Track -->
-    <div style="overflow: hidden;">
+    <div class="bsb-gallery-overflow">
       <div class="bsb-gallery-track" id="bsb-gallery-track">
-        {% for block in section.blocks %}
-          {% if block.type == 'image_card' %}
-            <div class="bsb-card" {{ block.shopify_attributes }}>
-              <!-- Image -->
-              <div class="bsb-card-img-wrap">
-                {% if block.settings.image != blank %}
-                  <img
-                    src="{{ block.settings.image | image_url: width: 800 }}"
-                    alt="{{ block.settings.image.alt | default: block.settings.title }}"
-                    class="bsb-card-img"
-                    loading="lazy"
-                    width="800"
-                    height="1067"
-                  />
-                {% else %}
-                  <div style="width:100%;height:100%;background:#ddd;display:flex;align-items:center;justify-content:center;color:#999;font-size:0.8rem;">
-                    Upload Image
-                  </div>
-                {% endif %}
 
-                {% if block.settings.tag_text != blank %}
-                  <div class="bsb-card-tag">{{ block.settings.tag_text }}</div>
-                {% endif %}
-              </div>
+        <!-- Card 1 -->
+        <div class="bsb-card">
+          <div class="bsb-card-img-wrap">
+            {% if section.settings.card1_image != blank %}
+              <img
+                src="{{ section.settings.card1_image | image_url: width: 800 }}"
+                alt="{{ section.settings.card1_image.alt | default: section.settings.card1_title }}"
+                class="bsb-card-img"
+                loading="lazy"
+                width="800"
+                height="600"
+              />
+            {% else %}
+              <img
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=85&auto=format&fit=crop"
+                alt="Fashion Model"
+                class="bsb-card-img"
+                loading="lazy"
+                width="800"
+                height="600"
+              />
+            {% endif %}
+            {% if section.settings.card1_tag != blank %}
+              <div class="bsb-card-tag">{{ section.settings.card1_tag }}</div>
+            {% endif %}
+          </div>
+          <div class="bsb-card-bottom">
+            <h3 class="bsb-card-title">{{ section.settings.card1_title | default: 'Elegant Evening Wear' }}</h3>
+            <a href="{{ section.settings.card1_url | default: '#' }}" class="bsb-card-link">
+              {{ section.settings.card1_button | default: 'SHOP NOW' }}
+            </a>
+          </div>
+          <div class="bsb-card-sep"></div>
+        </div>
 
-              <!-- Title + Button -->
-              <div class="bsb-card-bottom">
-                <h3 class="bsb-card-title">{{ block.settings.title }}</h3>
-                <a href="{{ block.settings.button_url | default: '#' }}" class="bsb-card-link">
-                  {{ block.settings.button_text | default: 'Shop Now' }}
-                </a>
-              </div>
-            </div>
-          {% endif %}
-        {% endfor %}
+        <!-- Card 2 -->
+        <div class="bsb-card">
+          <div class="bsb-card-img-wrap">
+            {% if section.settings.card2_image != blank %}
+              <img
+                src="{{ section.settings.card2_image | image_url: width: 800 }}"
+                alt="{{ section.settings.card2_image.alt | default: section.settings.card2_title }}"
+                class="bsb-card-img"
+                loading="lazy"
+                width="800"
+                height="600"
+              />
+            {% else %}
+              <img
+                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=85&auto=format&fit=crop"
+                alt="Fashion Model"
+                class="bsb-card-img"
+                loading="lazy"
+                width="800"
+                height="600"
+              />
+            {% endif %}
+            {% if section.settings.card2_tag != blank %}
+              <div class="bsb-card-tag">{{ section.settings.card2_tag }}</div>
+            {% endif %}
+          </div>
+          <div class="bsb-card-bottom">
+            <h3 class="bsb-card-title">{{ section.settings.card2_title | default: 'Luxury Winter Collection' }}</h3>
+            <a href="{{ section.settings.card2_url | default: '#' }}" class="bsb-card-link">
+              {{ section.settings.card2_button | default: 'Shop Now' }}
+            </a>
+          </div>
+          <div class="bsb-card-sep"></div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bsb-card">
+          <div class="bsb-card-img-wrap">
+            {% if section.settings.card3_image != blank %}
+              <img
+                src="{{ section.settings.card3_image | image_url: width: 800 }}"
+                alt="{{ section.settings.card3_image.alt | default: section.settings.card3_title }}"
+                class="bsb-card-img"
+                loading="lazy"
+                width="800"
+                height="600"
+              />
+            {% else %}
+              <img
+                src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=85&auto=format&fit=crop"
+                alt="Fashion Model"
+                class="bsb-card-img"
+                loading="lazy"
+                width="800"
+                height="600"
+              />
+            {% endif %}
+            {% if section.settings.card3_tag != blank %}
+              <div class="bsb-card-tag">{{ section.settings.card3_tag }}</div>
+            {% endif %}
+          </div>
+          <div class="bsb-card-bottom">
+            <h3 class="bsb-card-title">{{ section.settings.card3_title | default: 'Urban Street Style' }}</h3>
+            <a href="{{ section.settings.card3_url | default: '#' }}" class="bsb-card-link">
+              {{ section.settings.card3_button | default: 'SHOP NOW' }}
+            </a>
+          </div>
+          <div class="bsb-card-sep"></div>
+        </div>
+
       </div>
     </div>
 
-  </div>
-
-  <!-- Progress Bar -->
-  <div class="bsb-progress-wrap">
-    <div class="bsb-progress">
-      <div class="bsb-progress-bar" id="bsb-progress-bar"></div>
-    </div>
   </div>
 
 </section>
@@ -389,23 +430,21 @@
 
   (function initBentoGallery() {
     var track = document.getElementById('bsb-gallery-track');
-    var progressBar = document.getElementById('bsb-progress-bar');
     var section = document.getElementById('brand-story-bento');
     if (!track || !section) return;
 
     var isMobile = window.innerWidth < 768;
 
     if (!isMobile) {
-      /* Desktop: scroll-driven horizontal slide */
+      /* Desktop: scroll-driven horizontal slide (right to left) */
       var cards = track.querySelectorAll('.bsb-card');
       if (cards.length === 0) return;
 
-      /* Calculate how far to scroll */
       function getScrollAmount() {
         return -(track.scrollWidth - track.parentElement.offsetWidth);
       }
 
-      var tween = gsap.to(track, {
+      gsap.to(track, {
         x: getScrollAmount,
         ease: 'none',
         scrollTrigger: {
@@ -415,15 +454,10 @@
           scrub: 1,
           pin: true,
           invalidateOnRefresh: true,
-          onUpdate: function (self) {
-            if (progressBar) {
-              progressBar.style.width = (self.progress * 100) + '%';
-            }
-          }
         }
       });
 
-      /* Entry animation for cards */
+      /* Entry animation */
       gsap.fromTo(cards,
         { y: 60, opacity: 0 },
         {
@@ -439,7 +473,6 @@
         }
       );
 
-      /* Entry animation for text */
       gsap.fromTo('.bsb-text',
         { y: 40, opacity: 0 },
         {
@@ -454,18 +487,14 @@
         }
       );
     } else {
-      /* Mobile: simple entry animation only */
+      /* Mobile: simple entry animation */
       gsap.fromTo('.bsb-text',
         { y: 20, opacity: 0 },
         {
           y: 0, opacity: 1,
           duration: 0.6,
           ease: 'power3.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 90%',
-            once: true
-          }
+          scrollTrigger: { trigger: section, start: 'top 90%', once: true }
         }
       );
 
@@ -476,11 +505,7 @@
           duration: 0.5,
           ease: 'power3.out',
           stagger: 0.08,
-          scrollTrigger: {
-            trigger: track,
-            start: 'top 90%',
-            once: true
-          }
+          scrollTrigger: { trigger: track, start: 'top 90%', once: true }
         }
       );
     }
@@ -535,74 +560,110 @@
       "label": "Background Color (fallback)",
       "default": "#f2f0ec",
       "info": "Used when no background image is set."
-    }
-  ],
-  "blocks": [
+    },
     {
-      "type": "image_card",
-      "name": "Image Card",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image",
-          "info": "Recommended: 800 × 1067px (3:4 ratio)"
-        },
-        {
-          "type": "text",
-          "id": "tag_text",
-          "label": "Overlay Tag Text",
-          "default": "Grace, Glamour, Style, Confidence"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Card Title",
-          "default": "Elegant Evening Wear"
-        },
-        {
-          "type": "text",
-          "id": "button_text",
-          "label": "Button Text",
-          "default": "SHOP NOW"
-        },
-        {
-          "type": "url",
-          "id": "button_url",
-          "label": "Button Link"
-        }
-      ]
+      "type": "header",
+      "content": "── Card 1 ──"
+    },
+    {
+      "type": "image_picker",
+      "id": "card1_image",
+      "label": "Card 1 Image",
+      "info": "Recommended: 800 × 600px (4:3 ratio)"
+    },
+    {
+      "type": "text",
+      "id": "card1_tag",
+      "label": "Card 1 Overlay Tag",
+      "default": "Grace, Glamour, Style, Confidence"
+    },
+    {
+      "type": "text",
+      "id": "card1_title",
+      "label": "Card 1 Title",
+      "default": "Elegant Evening Wear"
+    },
+    {
+      "type": "text",
+      "id": "card1_button",
+      "label": "Card 1 Button Text",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "card1_url",
+      "label": "Card 1 Button Link"
+    },
+    {
+      "type": "header",
+      "content": "── Card 2 ──"
+    },
+    {
+      "type": "image_picker",
+      "id": "card2_image",
+      "label": "Card 2 Image",
+      "info": "Recommended: 800 × 600px (4:3 ratio)"
+    },
+    {
+      "type": "text",
+      "id": "card2_tag",
+      "label": "Card 2 Overlay Tag",
+      "default": "Warm, Cozy, Elegant, Premium"
+    },
+    {
+      "type": "text",
+      "id": "card2_title",
+      "label": "Card 2 Title",
+      "default": "Luxury Winter Collection"
+    },
+    {
+      "type": "text",
+      "id": "card2_button",
+      "label": "Card 2 Button Text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "card2_url",
+      "label": "Card 2 Button Link"
+    },
+    {
+      "type": "header",
+      "content": "── Card 3 ──"
+    },
+    {
+      "type": "image_picker",
+      "id": "card3_image",
+      "label": "Card 3 Image",
+      "info": "Recommended: 800 × 600px (4:3 ratio)"
+    },
+    {
+      "type": "text",
+      "id": "card3_tag",
+      "label": "Card 3 Overlay Tag",
+      "default": "Bold, Modern, Timeless"
+    },
+    {
+      "type": "text",
+      "id": "card3_title",
+      "label": "Card 3 Title",
+      "default": "Urban Street Style"
+    },
+    {
+      "type": "text",
+      "id": "card3_button",
+      "label": "Card 3 Button Text",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "card3_url",
+      "label": "Card 3 Button Link"
     }
   ],
   "presets": [
     {
-      "name": "Brand Story Bento",
-      "blocks": [
-        {
-          "type": "image_card",
-          "settings": {
-            "tag_text": "Grace, Glamour, Style, Confidence",
-            "title": "Elegant Evening Wear",
-            "button_text": "SHOP NOW"
-          }
-        },
-        {
-          "type": "image_card",
-          "settings": {
-            "tag_text": "Warm, Cozy, Elegant, Premium",
-            "title": "Luxury Winter Collection",
-            "button_text": "Shop Now"
-          }
-        },
-        {
-          "type": "image_card",
-          "settings": {
-            "tag_text": "Bold, Modern, Timeless",
-            "title": "Urban Street Style",
-            "button_text": "SHOP NOW"
-          }
-        }
-      ]
+      "name": "Brand Story Bento"
     }
   ]
 }
