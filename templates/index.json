@@ -95,6 +95,7 @@
     "brand-story-bento": {
       "type": "brand-story-bento",
       "settings": {
+        "block1_image": "shopify://shop_images/Gemini_Generated_Image_in3l5vin3l5vin3l.jpg",
         "block1_tag": "Since 2021",
         "block1_heading": "Journey<br>of Style",
         "block1_description": "Born from a quiet obsession with fabric, form, and feeling — every piece carries the weight of intention.",
@@ -104,8 +105,9 @@
         "stat2_label": "customers",
         "block2_heading": "Timeless Pieces",
         "block2_description": "Crafted for the woman who understands that true luxury whispers — in the press of pure linen, the weight of Italian crepe, the silence of a perfect silhouette.",
-        "block3_tag": "Material",
-        "block3_heading": "Italian Wool & Pure Linen.<br><span style=\"font-weight: 400; font-style: italic; color: rgba(255,255,255,0.7);\">Feel the difference.</span>"
+        "block3_image": "shopify://shop_images/Print-Providers.jpg",
+        "block3_tag": "printing",
+        "block3_heading": "DTF printing.<br><span style=\"font-weight: 400; font-style: italic; color: rgba(255,255,255,0.7);\">Feel the difference.</span>"
       }
     },
     "trending-accordion": {
