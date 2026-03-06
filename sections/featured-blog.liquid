@@ -99,86 +99,6 @@
       border-radius: 16px !important;
     }
   }
-
-  /* ─── Decorative Collage Blocks ─── */
-  .fb-deco-wrapper {
-    position: relative;
-  }
-
-  .fb-deco-block {
-    position: absolute;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-    z-index: 10;
-    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
-    display: none;
-  }
-
-  @media (min-width: 768px) {
-    .fb-deco-block { display: block; }
-  }
-
-  .fb-deco-block img {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
-  }
-
-  .fb-deco-block:hover {
-    z-index: 30 !important;
-    transform: scale(1.08) rotate(0deg) !important;
-    box-shadow: 0 16px 50px rgba(0,0,0,0.5);
-    animation-play-state: paused;
-  }
-
-  /* Left block 1: upper-left, tilted */
-  .fb-deco--l1 {
-    width: 120px; height: 160px;
-    top: 5%; left: -80px;
-    transform: rotate(-4deg);
-    animation: fb-float-a 7s ease-in-out infinite;
-  }
-
-  /* Left block 2: lower-left */
-  .fb-deco--l2 {
-    width: 100px; height: 130px;
-    bottom: 15%; left: -50px;
-    transform: rotate(2.5deg);
-    animation: fb-float-b 6s ease-in-out 0.6s infinite;
-  }
-
-  /* Right block 1: upper-right, spills out */
-  .fb-deco--r1 {
-    width: 130px; height: 180px;
-    top: 8%; right: -70px;
-    transform: rotate(3deg);
-    animation: fb-float-c 6.5s ease-in-out 0.3s infinite;
-  }
-
-  /* Right block 2: lower-right, spills more */
-  .fb-deco--r2 {
-    width: 110px; height: 140px;
-    bottom: 10%; right: -90px;
-    transform: rotate(-2deg);
-    animation: fb-float-a 8s ease-in-out 1s infinite;
-  }
-
-  @keyframes fb-float-a {
-    0%, 100% { transform: rotate(-4deg) translateY(0); }
-    50% { transform: rotate(-3deg) translateY(-8px); }
-  }
-  @keyframes fb-float-b {
-    0%, 100% { transform: rotate(2.5deg) translateY(0); }
-    50% { transform: rotate(3deg) translateY(-6px); }
-  }
-  @keyframes fb-float-c {
-    0%, 100% { transform: rotate(3deg) translateX(0); }
-    50% { transform: rotate(2deg) translateX(5px); }
-  }
-
-  /* Allow right blocks to overflow the container */
-  .fb-deco-wrapper { overflow: visible; }
-  #featured-blog { overflow: visible; }
 </style>
 
 {%- assign blog = section.settings.blog -%}
@@ -206,45 +126,6 @@
         {{ section.settings.heading }}
       </h2>
     </div>
-
-    <!-- Blog Grid with Deco Blocks -->
-    <div class="fb-deco-wrapper">
-
-      <!-- Deco Left 1 -->
-      <a href="{{ section.settings.deco_url1 | default: '#' }}" class="fb-deco-block fb-deco--l1">
-        {% if section.settings.deco_img1 != blank %}
-          <img src="{{ section.settings.deco_img1 | image_url: width: 300 }}" alt="Inspiration" loading="lazy" />
-        {% else %}
-          <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
-        {% endif %}
-      </a>
-
-      <!-- Deco Left 2 -->
-      <a href="{{ section.settings.deco_url2 | default: '#' }}" class="fb-deco-block fb-deco--l2">
-        {% if section.settings.deco_img2 != blank %}
-          <img src="{{ section.settings.deco_img2 | image_url: width: 300 }}" alt="Inspiration" loading="lazy" />
-        {% else %}
-          <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=300&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
-        {% endif %}
-      </a>
-
-      <!-- Deco Right 1 -->
-      <a href="{{ section.settings.deco_url3 | default: '#' }}" class="fb-deco-block fb-deco--r1">
-        {% if section.settings.deco_img3 != blank %}
-          <img src="{{ section.settings.deco_img3 | image_url: width: 300 }}" alt="Inspiration" loading="lazy" />
-        {% else %}
-          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
-        {% endif %}
-      </a>
-
-      <!-- Deco Right 2 -->
-      <a href="{{ section.settings.deco_url4 | default: '#' }}" class="fb-deco-block fb-deco--r2">
-        {% if section.settings.deco_img4 != blank %}
-          <img src="{{ section.settings.deco_img4 | image_url: width: 300 }}" alt="Inspiration" loading="lazy" />
-        {% else %}
-          <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=300&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
-        {% endif %}
-      </a>
 
     <!-- Blog Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -361,9 +242,6 @@
     </div>
     <!-- / Blog Grid -->
 
-    </div>
-    <!-- / Deco Wrapper -->
-
     <!-- View All Articles CTA -->
     {% if blog != blank %}
       <div class="text-center mt-16">
@@ -465,54 +343,6 @@
       "id": "cta_text",
       "label": "Button Text",
       "default": "View All Stories"
-    },
-    {
-      "type": "header",
-      "content": "── Decorative Blocks ──"
-    },
-    {
-      "type": "image_picker",
-      "id": "deco_img1",
-      "label": "Left Block 1 Image",
-      "info": "Recommended: 240 × 320px"
-    },
-    {
-      "type": "url",
-      "id": "deco_url1",
-      "label": "Left Block 1 Link"
-    },
-    {
-      "type": "image_picker",
-      "id": "deco_img2",
-      "label": "Left Block 2 Image",
-      "info": "Recommended: 200 × 260px"
-    },
-    {
-      "type": "url",
-      "id": "deco_url2",
-      "label": "Left Block 2 Link"
-    },
-    {
-      "type": "image_picker",
-      "id": "deco_img3",
-      "label": "Right Block 1 Image",
-      "info": "Recommended: 260 × 360px"
-    },
-    {
-      "type": "url",
-      "id": "deco_url3",
-      "label": "Right Block 1 Link"
-    },
-    {
-      "type": "image_picker",
-      "id": "deco_img4",
-      "label": "Right Block 2 Image",
-      "info": "Recommended: 220 × 280px"
-    },
-    {
-      "type": "url",
-      "id": "deco_url4",
-      "label": "Right Block 2 Link"
     }
   ],
   "presets": [
