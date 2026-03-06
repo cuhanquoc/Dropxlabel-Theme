@@ -26,7 +26,6 @@
     background-color: #ffffff;
     color: #0a0a0a;
     border-color: #ffffff;
-    opacity: 1;
   }
 
   .ta-cta-arrow {
@@ -45,14 +44,13 @@
     background: rgba(0, 0, 0, 0.12);
   }
 
+  /* ─── Accordion Items ─── */
   .accordion-item {
     height: 5.5rem;
     border-radius: 40px;
     overflow: hidden;
     cursor: pointer;
-    transition:
-      height 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-      box-shadow 0.4s ease;
+    transition: height 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
     position: relative;
     will-change: height;
   }
@@ -64,212 +62,80 @@
     }
   }
 
-  /* Mobile: smaller collapsed, no hover expand */
   @media (max-width: 767px) {
-    .accordion-item {
-      height: 4.5rem;
-      border-radius: 24px;
-    }
+    .accordion-item { height: 4.5rem; border-radius: 24px; }
   }
 
   .accordion-img {
-    width: 100px;
-    height: 130px;
-    object-fit: cover;
-    border-radius: 20px;
+    width: 100px; height: 130px;
+    object-fit: cover; border-radius: 20px;
     opacity: 0;
     transform: scale(0.88) translateX(-8px);
-    transition:
-      opacity 0.6s ease 0.1s,
-      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
+    transition: opacity 0.6s ease 0.1s, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
     flex-shrink: 0;
   }
 
   @media (hover: hover) {
-    .accordion-item:hover .accordion-img {
-      opacity: 1;
-      transform: scale(1) translateX(0);
-    }
+    .accordion-item:hover .accordion-img { opacity: 1; transform: scale(1) translateX(0); }
   }
 
-  /* Product name — shifts on expand */
   .accordion-name {
     font-family: var(--font-heading);
     font-size: clamp(2rem, 4vw, 3.5rem);
-    font-weight: 600;
-    color: #0a0a0a;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
+    font-weight: 600; color: #0a0a0a;
+    letter-spacing: -0.01em; line-height: 1.1;
     transition: transform 0.7s cubic-bezier(0.87, 0, 0.13, 1);
-    text-align: center;
-    flex: 1;
+    text-align: center; flex: 1;
   }
 
   @media (hover: hover) {
-    .accordion-item:hover .accordion-name {
-      text-align: left;
-      transform: translateX(1rem);
-    }
+    .accordion-item:hover .accordion-name { text-align: left; transform: translateX(1rem); }
   }
 
-  /* Arrow circle button — slides in from right */
   .accordion-arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: #0a0a0a;
-    color: #ffffff;
-    flex-shrink: 0;
-    opacity: 0;
-    transform: translateX(16px) scale(0.8);
-    transition:
-      opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 100ms,
-      transform 450ms cubic-bezier(0.16, 1, 0.3, 1) 100ms;
+    display: flex; align-items: center; justify-content: center;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: #0a0a0a; color: #ffffff; flex-shrink: 0;
+    opacity: 0; transform: translateX(16px) scale(0.8);
+    transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1) 100ms, transform 450ms cubic-bezier(0.16, 1, 0.3, 1) 100ms;
   }
 
   @media (hover: hover) {
-    .accordion-item:hover .accordion-arrow {
-      opacity: 1;
-      transform: translateX(0) scale(1);
-    }
+    .accordion-item:hover .accordion-arrow { opacity: 1; transform: translateX(0) scale(1); }
   }
 
-  /* Accordion inner layout */
   .accordion-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    padding: 0 1.75rem;
-    gap: 1.25rem;
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 100%; padding: 0 1.75rem; gap: 1.25rem;
     transition: justify-content 400ms ease;
   }
 
-  .accordion-item:hover .accordion-inner {
-    justify-content: space-between;
-  }
+  .accordion-item:hover .accordion-inner { justify-content: space-between; }
 
-  /* Category tag in collapsed state */
   .accordion-tag {
-    font-family: var(--font-body);
-    font-size: 0.58rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    font-family: var(--font-body); font-size: 0.58rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
     color: rgba(10, 10, 10, 0.5);
-    position: absolute;
-    top: 1.2rem;
-    right: 1.75rem;
-    opacity: 0;
-    transition: opacity 300ms ease;
+    position: absolute; top: 1.2rem; right: 1.75rem;
+    opacity: 0; transition: opacity 300ms ease;
   }
 
-  .accordion-item:hover .accordion-tag {
-    opacity: 1;
-  }
+  .accordion-item:hover .accordion-tag { opacity: 1; }
 
-  /* Number label at top-left */
   .accordion-num {
-    position: absolute;
-    top: 1.1rem;
-    left: 1.75rem;
-    font-family: var(--font-body);
-    font-size: 0.6rem;
-    letter-spacing: 0.14em;
-    color: rgba(10, 10, 10, 0.4);
+    position: absolute; top: 1.1rem; left: 1.75rem;
+    font-family: var(--font-body); font-size: 0.6rem;
+    letter-spacing: 0.14em; color: rgba(10, 10, 10, 0.4);
   }
 
-  /* ─── Mobile: Tap-to-Expand State ─── */
   @media (max-width: 767px) {
-    .accordion-name {
-      font-size: clamp(1.4rem, 5vw, 2rem);
-    }
-    .accordion-inner {
-      padding: 0 1.25rem;
-    }
-    .accordion-item.expanded {
-      height: 11rem;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-    }
-    .accordion-item.expanded .accordion-img {
-      opacity: 1;
-      transform: scale(1) translateX(0);
-      width: 70px;
-      height: 90px;
-      border-radius: 14px;
-    }
-    .accordion-item.expanded .accordion-name {
-      text-align: left;
-      transform: translateX(0.5rem);
-    }
-    .accordion-item.expanded .accordion-arrow {
-      opacity: 1;
-      transform: translateX(0) scale(1);
-      width: 36px;
-      height: 36px;
-    }
-    .accordion-item.expanded .accordion-tag {
-      opacity: 1;
-    }
-  }
-
-  /* ─── Pinterest Masonry Grid (Left Column) ─── */
-  .ta-masonry {
-    columns: 2;
-    column-gap: 10px;
-    margin-top: 1.5rem;
-  }
-
-  .ta-masonry-item {
-    break-inside: avoid;
-    margin-bottom: 10px;
-    border-radius: 14px;
-    overflow: hidden;
-    position: relative;
-    background: #1a1a1a;
-  }
-
-  .ta-masonry-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-  }
-
-  .ta-masonry-item:hover img {
-    transform: scale(1.05);
-  }
-
-  /* Different sizes for masonry effect */
-  .ta-masonry-item--tall img { aspect-ratio: 2/3; }
-  .ta-masonry-item--medium img { aspect-ratio: 3/4; }
-  .ta-masonry-item--short img { aspect-ratio: 4/3; }
-  .ta-masonry-item--square img { aspect-ratio: 1/1; }
-
-  /* Masonry item label */
-  .ta-masonry-label {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 2rem 0.75rem 0.75rem;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    color: #fff;
-    text-transform: uppercase;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .ta-masonry-item:hover .ta-masonry-label {
-    opacity: 1;
+    .accordion-name { font-size: clamp(1.4rem, 5vw, 2rem); }
+    .accordion-inner { padding: 0 1.25rem; }
+    .accordion-item.expanded { height: 11rem; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2); }
+    .accordion-item.expanded .accordion-img { opacity: 1; transform: scale(1) translateX(0); width: 70px; height: 90px; border-radius: 14px; }
+    .accordion-item.expanded .accordion-name { text-align: left; transform: translateX(0.5rem); }
+    .accordion-item.expanded .accordion-arrow { opacity: 1; transform: translateX(0) scale(1); width: 36px; height: 36px; }
+    .accordion-item.expanded .accordion-tag { opacity: 1; }
   }
 
   /* ─── Dynamic Island ─── */
@@ -284,39 +150,26 @@
     margin-bottom: 0.5rem;
     box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 4px 20px rgba(0,0,0,0.4);
     animation: ta-island-pulse 3s ease-in-out infinite;
-    overflow: hidden;
   }
 
   .ta-island-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #34c759;
-    flex-shrink: 0;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #34c759; flex-shrink: 0;
     animation: ta-dot-blink 2s ease-in-out infinite;
   }
 
   .ta-island-text {
-    font-family: var(--font-body);
-    font-size: 0.68rem;
-    font-weight: 600;
-    color: #ffffff;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
+    font-family: var(--font-body); font-size: 0.68rem;
+    font-weight: 600; color: #ffffff;
+    letter-spacing: 0.02em; white-space: nowrap;
   }
 
   .ta-island-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     padding: 0.15rem 0.55rem;
     background: rgba(255,255,255,0.12);
     border-radius: 10px;
-    font-family: var(--font-body);
-    font-size: 0.55rem;
-    font-weight: 700;
-    color: #34c759;
-    letter-spacing: 0.06em;
+    font-family: var(--font-body); font-size: 0.55rem;
+    font-weight: 700; color: #34c759; letter-spacing: 0.06em;
   }
 
   @keyframes ta-island-pulse {
@@ -329,55 +182,110 @@
     50% { opacity: 0.4; }
   }
 
-  /* ── Gradient Reveal Transition ── */
-  .ta-reveal-wrapper {
+  /* ─── Scattered Collage (Right Column) ─── */
+  .ta-collage {
     position: relative;
-    overflow: hidden;
+    width: 100%;
+    min-height: 700px;
+    margin-bottom: 2rem;
   }
 
-  .ta-gradient-curtain {
+  .ta-collage-item {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 120px;
-    z-index: 2;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+    cursor: pointer;
+  }
+
+  .ta-collage-item:hover {
+    z-index: 20 !important;
+    transform: scale(1.06) rotate(0deg) !important;
+    box-shadow: 0 16px 50px rgba(0,0,0,0.5);
+  }
+
+  .ta-collage-item img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+  }
+
+  /* Each item: unique position, size, rotation */
+  .ta-collage-item--1 {
+    width: 52%; top: 0; left: 0;
+    aspect-ratio: 3/4;
+    transform: rotate(-2.5deg);
+    z-index: 3;
+  }
+  .ta-collage-item--2 {
+    width: 48%; top: 2%; right: 0;
+    aspect-ratio: 4/5;
+    transform: rotate(1.8deg);
+    z-index: 5;
+  }
+  .ta-collage-item--3 {
+    width: 38%; top: 42%; left: 8%;
+    aspect-ratio: 1/1;
+    transform: rotate(3deg);
+    z-index: 7;
+  }
+  .ta-collage-item--4 {
+    width: 44%; top: 48%; right: 5%;
+    aspect-ratio: 3/4;
+    transform: rotate(-1.5deg);
+    z-index: 4;
+  }
+  .ta-collage-item--5 {
+    width: 35%; bottom: 2%; left: 0;
+    aspect-ratio: 4/3;
+    transform: rotate(2deg);
+    z-index: 6;
+  }
+  .ta-collage-item--6 {
+    width: 40%; bottom: 0; right: 10%;
+    aspect-ratio: 3/2;
+    transform: rotate(-3deg);
+    z-index: 8;
+  }
+
+  /* Collage label */
+  .ta-collage-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 2rem 0.75rem 0.65rem;
+    background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%);
+    font-family: var(--font-body);
+    font-size: 0.6rem; font-weight: 700;
+    letter-spacing: 0.1em; color: #fff;
+    text-transform: uppercase;
+    opacity: 0; transition: opacity 0.3s ease;
+  }
+
+  .ta-collage-item:hover .ta-collage-label { opacity: 1; }
+
+  /* ── Gradient Reveal Transition ── */
+  .ta-reveal-wrapper { position: relative; overflow: hidden; }
+
+  .ta-gradient-curtain {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 120px; z-index: 2;
     pointer-events: none;
-    background: linear-gradient(
-      to bottom,
-      #3a3a3a 0%,
-      #2a2a2a 15%,
-      #1a1a1a 40%,
-      #0f0f0f 70%,
-      #0a0a0a 100%
-    );
-    opacity: 0;
-    transform: scaleY(0);
-    transform-origin: top center;
+    background: linear-gradient(to bottom, #3a3a3a 0%, #2a2a2a 15%, #1a1a1a 40%, #0f0f0f 70%, #0a0a0a 100%);
+    opacity: 0; transform: scaleY(0); transform-origin: top center;
   }
 
   .ta-glow {
-    position: absolute;
-    top: -2px;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg,
-      transparent 0%,
-      rgba(180, 160, 130, 0.5) 20%,
-      rgba(220, 200, 170, 0.8) 50%,
-      rgba(180, 160, 130, 0.5) 80%,
-      transparent 100%
-    );
-    z-index: 3;
-    opacity: 0;
-    filter: blur(2px);
+    position: absolute; top: -2px; left: 0;
+    width: 100%; height: 4px;
+    background: linear-gradient(90deg, transparent 0%, rgba(180,160,130,0.5) 20%, rgba(220,200,170,0.8) 50%, rgba(180,160,130,0.5) 80%, transparent 100%);
+    z-index: 3; opacity: 0; filter: blur(2px);
   }
 
-  /* Ensure section content sits above gradient curtain */
-  .ta-section-content {
-    position: relative;
-    z-index: 5;
+  .ta-section-content { position: relative; z-index: 5; }
+
+  /* ── Mobile: hide collage, show accordion only ── */
+  @media (max-width: 767px) {
+    .ta-collage { display: none; }
   }
 </style>
 
@@ -393,9 +301,9 @@
     <div class="grid md:grid-cols-2 gap-8 md:gap-12 relative">
 
       <!-- ══════════════════════════════════
-           STICKY LEFT COLUMN — Pinterest Masonry
+           STICKY LEFT COLUMN — Text + CTA
       ══════════════════════════════════ -->
-      <div class="hidden md:block sticky top-16 self-start" style="max-height: 90vh; overflow-y: auto; scrollbar-width: none;">
+      <div class="hidden md:block sticky top-16 self-start">
 
         <!-- Eyebrow -->
         <p style="
@@ -450,90 +358,100 @@
           {{ section.settings.cta_text }}
         </a>
 
-        <!-- Pinterest Masonry Grid -->
-        <div class="ta-masonry" id="ta-masonry">
-
-          <!-- Image 1: Tall -->
-          <div class="ta-masonry-item ta-masonry-item--tall">
-            {% if section.settings.pin_img1 != blank %}
-              <img src="{{ section.settings.pin_img1 | image_url: width: 400 }}" alt="{{ section.settings.pin_label1 | default: 'Style' }}" loading="lazy" width="400" height="600" />
-            {% else %}
-              <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="600" />
-            {% endif %}
-            {% if section.settings.pin_label1 != blank %}
-              <div class="ta-masonry-label">{{ section.settings.pin_label1 }}</div>
-            {% endif %}
-          </div>
-
-          <!-- Image 2: Short -->
-          <div class="ta-masonry-item ta-masonry-item--short">
-            {% if section.settings.pin_img2 != blank %}
-              <img src="{{ section.settings.pin_img2 | image_url: width: 400 }}" alt="{{ section.settings.pin_label2 | default: 'Style' }}" loading="lazy" width="400" height="300" />
-            {% else %}
-              <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="300" />
-            {% endif %}
-            {% if section.settings.pin_label2 != blank %}
-              <div class="ta-masonry-label">{{ section.settings.pin_label2 }}</div>
-            {% endif %}
-          </div>
-
-          <!-- Image 3: Medium -->
-          <div class="ta-masonry-item ta-masonry-item--medium">
-            {% if section.settings.pin_img3 != blank %}
-              <img src="{{ section.settings.pin_img3 | image_url: width: 400 }}" alt="{{ section.settings.pin_label3 | default: 'Style' }}" loading="lazy" width="400" height="530" />
-            {% else %}
-              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="530" />
-            {% endif %}
-            {% if section.settings.pin_label3 != blank %}
-              <div class="ta-masonry-label">{{ section.settings.pin_label3 }}</div>
-            {% endif %}
-          </div>
-
-          <!-- Image 4: Square -->
-          <div class="ta-masonry-item ta-masonry-item--square">
-            {% if section.settings.pin_img4 != blank %}
-              <img src="{{ section.settings.pin_img4 | image_url: width: 400 }}" alt="{{ section.settings.pin_label4 | default: 'Style' }}" loading="lazy" width="400" height="400" />
-            {% else %}
-              <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="400" />
-            {% endif %}
-            {% if section.settings.pin_label4 != blank %}
-              <div class="ta-masonry-label">{{ section.settings.pin_label4 }}</div>
-            {% endif %}
-          </div>
-
-          <!-- Image 5: Tall -->
-          <div class="ta-masonry-item ta-masonry-item--tall">
-            {% if section.settings.pin_img5 != blank %}
-              <img src="{{ section.settings.pin_img5 | image_url: width: 400 }}" alt="{{ section.settings.pin_label5 | default: 'Style' }}" loading="lazy" width="400" height="600" />
-            {% else %}
-              <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="600" />
-            {% endif %}
-            {% if section.settings.pin_label5 != blank %}
-              <div class="ta-masonry-label">{{ section.settings.pin_label5 }}</div>
-            {% endif %}
-          </div>
-
-          <!-- Image 6: Medium -->
-          <div class="ta-masonry-item ta-masonry-item--medium">
-            {% if section.settings.pin_img6 != blank %}
-              <img src="{{ section.settings.pin_img6 | image_url: width: 400 }}" alt="{{ section.settings.pin_label6 | default: 'Style' }}" loading="lazy" width="400" height="530" />
-            {% else %}
-              <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" width="400" height="530" />
-            {% endif %}
-            {% if section.settings.pin_label6 != blank %}
-              <div class="ta-masonry-label">{{ section.settings.pin_label6 }}</div>
-            {% endif %}
-          </div>
-
-        </div>
+        <!-- Scroll hint -->
+        <p style="
+          font-family: var(--font-body);
+          font-size: 0.6rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #374151;
+          margin-top: 4rem;
+        ">Hover to explore →</p>
 
       </div>
       <!-- / Left Column -->
 
       <!-- ══════════════════════════════════
-           RIGHT COLUMN — Accordion List
+           RIGHT COLUMN — Scattered Collage + Accordion
       ══════════════════════════════════ -->
-      <div class="flex flex-col gap-4">
+      <div>
+
+        <!-- Scattered Collage (Desktop only) -->
+        <div class="ta-collage" id="ta-collage">
+
+          <!-- Pin 1: Large, tilted left -->
+          <div class="ta-collage-item ta-collage-item--1">
+            {% if section.settings.pin_img1 != blank %}
+              <img src="{{ section.settings.pin_img1 | image_url: width: 500 }}" alt="{{ section.settings.pin_label1 | default: 'Style' }}" loading="lazy" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+            {% endif %}
+            {% if section.settings.pin_label1 != blank %}
+              <div class="ta-collage-label">{{ section.settings.pin_label1 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Pin 2: Right top, tilted right -->
+          <div class="ta-collage-item ta-collage-item--2">
+            {% if section.settings.pin_img2 != blank %}
+              <img src="{{ section.settings.pin_img2 | image_url: width: 500 }}" alt="{{ section.settings.pin_label2 | default: 'Style' }}" loading="lazy" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=500&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+            {% endif %}
+            {% if section.settings.pin_label2 != blank %}
+              <div class="ta-collage-label">{{ section.settings.pin_label2 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Pin 3: Center-left, square, overlapping -->
+          <div class="ta-collage-item ta-collage-item--3">
+            {% if section.settings.pin_img3 != blank %}
+              <img src="{{ section.settings.pin_img3 | image_url: width: 400 }}" alt="{{ section.settings.pin_label3 | default: 'Style' }}" loading="lazy" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+            {% endif %}
+            {% if section.settings.pin_label3 != blank %}
+              <div class="ta-collage-label">{{ section.settings.pin_label3 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Pin 4: Right middle, tall -->
+          <div class="ta-collage-item ta-collage-item--4">
+            {% if section.settings.pin_img4 != blank %}
+              <img src="{{ section.settings.pin_img4 | image_url: width: 500 }}" alt="{{ section.settings.pin_label4 | default: 'Style' }}" loading="lazy" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+            {% endif %}
+            {% if section.settings.pin_label4 != blank %}
+              <div class="ta-collage-label">{{ section.settings.pin_label4 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Pin 5: Bottom left, landscape -->
+          <div class="ta-collage-item ta-collage-item--5">
+            {% if section.settings.pin_img5 != blank %}
+              <img src="{{ section.settings.pin_img5 | image_url: width: 400 }}" alt="{{ section.settings.pin_label5 | default: 'Style' }}" loading="lazy" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+            {% endif %}
+            {% if section.settings.pin_label5 != blank %}
+              <div class="ta-collage-label">{{ section.settings.pin_label5 }}</div>
+            {% endif %}
+          </div>
+
+          <!-- Pin 6: Bottom right, tilted -->
+          <div class="ta-collage-item ta-collage-item--6">
+            {% if section.settings.pin_img6 != blank %}
+              <img src="{{ section.settings.pin_img6 | image_url: width: 400 }}" alt="{{ section.settings.pin_label6 | default: 'Style' }}" loading="lazy" />
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+            {% endif %}
+            {% if section.settings.pin_label6 != blank %}
+              <div class="ta-collage-label">{{ section.settings.pin_label6 }}</div>
+            {% endif %}
+          </div>
+
+        </div>
 
         <!-- Mobile-only heading -->
         <h2 class="block md:hidden mb-6" style="
@@ -544,61 +462,34 @@
           line-height: 1.1;
         ">{{ section.settings.mobile_heading | default: section.settings.heading }}</h2>
 
-        {% for block in section.blocks %}
-          {% if block.type == 'accordion_item' %}
-            <!-- Accordion Item {{ forloop.index }} -->
-            <a
-              href="{{ block.settings.link | default: routes.collections_url }}"
-              class="accordion-item block"
-              style="background-color: {{ block.settings.color }};"
-              aria-label="Browse {{ block.settings.name }}"
-              {{ block.shopify_attributes }}
-            >
-              <!-- Number -->
-              <span class="accordion-num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
-
-              <!-- Category tag (visible on hover) -->
-              <span class="accordion-tag">{{ block.settings.tag }}</span>
-
-              <!-- Inner layout -->
-              <div class="accordion-inner">
-
-                <!-- Product Thumbnail (appears on hover) -->
-                {% if block.settings.image != blank %}
-                  <img
-                    src="{{ block.settings.image | image_url: width: 300 }}"
-                    alt="{{ block.settings.name }}"
-                    class="accordion-img"
-                    loading="lazy"
-                    width="100"
-                    height="130"
-                  />
-                {% else %}
-                  <img
-                    src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80&auto=format&fit=crop"
-                    alt="{{ block.settings.name }}"
-                    class="accordion-img"
-                    loading="lazy"
-                    width="100"
-                    height="130"
-                  />
-                {% endif %}
-
-                <!-- Style Name (always visible) -->
-                <p class="accordion-name">{{ block.settings.name }}</p>
-
-                <!-- Arrow Button (appears on hover) -->
-                <span class="accordion-arrow" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </span>
-
-              </div>
-            </a>
-            <!-- / Accordion Item {{ forloop.index }} -->
-          {% endif %}
-        {% endfor %}
+        <!-- Accordion List -->
+        <div class="flex flex-col gap-4">
+          {% for block in section.blocks %}
+            {% if block.type == 'accordion_item' %}
+              <a
+                href="{{ block.settings.link | default: routes.collections_url }}"
+                class="accordion-item block"
+                style="background-color: {{ block.settings.color }};"
+                aria-label="Browse {{ block.settings.name }}"
+                {{ block.shopify_attributes }}
+              >
+                <span class="accordion-num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                <span class="accordion-tag">{{ block.settings.tag }}</span>
+                <div class="accordion-inner">
+                  {% if block.settings.image != blank %}
+                    <img src="{{ block.settings.image | image_url: width: 300 }}" alt="{{ block.settings.name }}" class="accordion-img" loading="lazy" width="100" height="130" />
+                  {% else %}
+                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80&auto=format&fit=crop" alt="{{ block.settings.name }}" class="accordion-img" loading="lazy" width="100" height="130" />
+                  {% endif %}
+                  <p class="accordion-name">{{ block.settings.name }}</p>
+                  <span class="accordion-arrow" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </span>
+                </div>
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
 
       </div>
       <!-- / Right Column -->
@@ -611,131 +502,86 @@
 <script>
   gsap.registerPlugin(ScrollTrigger);
 
-  /* ── Gradient Reveal Animation ── */
-  (function initGradientReveal() {
+  /* ── Gradient Reveal ── */
+  (function () {
     var curtain = document.getElementById('ta-gradient-curtain');
     var glow = document.getElementById('ta-glow');
     var wrapper = document.getElementById('ta-reveal-wrapper');
     if (!curtain || !wrapper) return;
-
-    var revealTL = gsap.timeline({
-      scrollTrigger: {
-        trigger: wrapper,
-        start: 'top 85%',
-        end: 'top 30%',
-        scrub: 0.8,
-      }
-    });
-
-    revealTL
-      .to(curtain, {
-        opacity: 1,
-        scaleY: 1,
-        duration: 0.6,
-        ease: 'power2.out'
-      }, 0)
-      .to(glow, {
-        opacity: 1,
-        duration: 0.3,
-        ease: 'power1.in'
-      }, 0)
-      .to(glow, {
-        opacity: 0,
-        duration: 0.4,
-        ease: 'power1.out'
-      }, 0.5);
+    var tl = gsap.timeline({ scrollTrigger: { trigger: wrapper, start: 'top 85%', end: 'top 30%', scrub: 0.8 } });
+    tl.to(curtain, { opacity: 1, scaleY: 1, duration: 0.6, ease: 'power2.out' }, 0)
+      .to(glow, { opacity: 1, duration: 0.3, ease: 'power1.in' }, 0)
+      .to(glow, { opacity: 0, duration: 0.4, ease: 'power1.out' }, 0.5);
   }());
 
-  /* ── Masonry Entry Animation ── */
-  (function initMasonryAnim() {
-    var items = document.querySelectorAll('.ta-masonry-item');
+  /* ── Scattered Collage Entry — each item flies in from random direction ── */
+  (function () {
+    var items = document.querySelectorAll('.ta-collage-item');
     if (items.length === 0) return;
 
-    gsap.fromTo(items,
-      { y: 40, opacity: 0, scale: 0.92 },
-      {
-        y: 0, opacity: 1, scale: 1,
-        duration: 0.7,
-        ease: 'power3.out',
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: '#ta-masonry',
-          start: 'top 85%',
-          once: true
+    items.forEach(function (item, i) {
+      var fromX = (i % 2 === 0) ? -60 : 60;
+      var fromY = 40 + (i * 15);
+      var fromRot = (i % 2 === 0) ? -8 : 8;
+
+      gsap.fromTo(item,
+        { x: fromX, y: fromY, rotation: fromRot, opacity: 0, scale: 0.85 },
+        {
+          x: 0, y: 0,
+          rotation: parseFloat(getComputedStyle(item).transform.split(',')[1] || 0),
+          opacity: 1, scale: 1,
+          duration: 0.9,
+          ease: 'power3.out',
+          delay: i * 0.12,
+          scrollTrigger: {
+            trigger: '#ta-collage',
+            start: 'top 80%',
+            once: true
+          }
         }
-      }
-    );
+      );
+    });
   }());
 
-  /* ── Dynamic Island Entry ── */
-  (function initIslandAnim() {
+  /* ── Dynamic Island ── */
+  (function () {
     var island = document.querySelector('.ta-dynamic-island');
     if (!island) return;
-
     gsap.fromTo(island,
       { width: 40, opacity: 0, borderRadius: '50%' },
-      {
-        width: 'auto', opacity: 1, borderRadius: '22px',
-        duration: 0.8,
-        ease: 'elastic.out(1, 0.75)',
-        scrollTrigger: {
-          trigger: island,
-          start: 'top 90%',
-          once: true
-        }
-      }
+      { width: 'auto', opacity: 1, borderRadius: '22px', duration: 0.8, ease: 'elastic.out(1, 0.75)', scrollTrigger: { trigger: island, start: 'top 90%', once: true } }
     );
   }());
 
-  /* ── Accordion Content Animations ── */
-  let mmAcc = gsap.matchMedia();
-
-  mmAcc.add("(min-width: 768px)", () => {
-    gsap.fromTo(
-      '#trending-accordion .accordion-item',
+  /* ── Accordion Content ── */
+  var mmAcc = gsap.matchMedia();
+  mmAcc.add("(min-width: 768px)", function () {
+    gsap.fromTo('#trending-accordion .accordion-item',
       { y: 50, opacity: 0, immediateRender: false },
-      {
-        scrollTrigger: { trigger: '#trending-accordion .flex.flex-col', start: 'top 85%', once: true },
-        y: 0, opacity: 1, duration: 1.3, ease: 'power3.out', stagger: 0.15,
-      }
+      { scrollTrigger: { trigger: '#trending-accordion .flex.flex-col', start: 'top 85%', once: true }, y: 0, opacity: 1, duration: 1.3, ease: 'power3.out', stagger: 0.15 }
     );
   });
-
-  mmAcc.add("(max-width: 767px)", () => {
-    gsap.fromTo(
-      '#trending-accordion .accordion-item',
+  mmAcc.add("(max-width: 767px)", function () {
+    gsap.fromTo('#trending-accordion .accordion-item',
       { y: 20, opacity: 0, immediateRender: false },
-      {
-        scrollTrigger: { trigger: '#trending-accordion', start: 'top 90%', once: true },
-        y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.05,
-      }
+      { scrollTrigger: { trigger: '#trending-accordion', start: 'top 90%', once: true }, y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.05 }
     );
   });
-
 </script>
 
 <script>
-  /* ─── Mobile: Tap-to-Expand Accordion ─── */
+  /* ─── Mobile: Tap-to-Expand ─── */
   (function () {
     if (window.matchMedia('(hover: hover)').matches) return;
-
-    document.querySelectorAll('#trending-accordion .accordion-item').forEach(item => {
+    document.querySelectorAll('#trending-accordion .accordion-item').forEach(function (item) {
       item.addEventListener('click', function (e) {
         e.preventDefault();
-        const isExpanded = this.classList.contains('expanded');
-
-        /* Close all others first */
-        document.querySelectorAll('#trending-accordion .accordion-item.expanded').forEach(other => {
-          if (other !== this) other.classList.remove('expanded');
+        var isExpanded = this.classList.contains('expanded');
+        document.querySelectorAll('#trending-accordion .accordion-item.expanded').forEach(function (other) {
+          if (other !== item) other.classList.remove('expanded');
         });
-
-        /* Toggle current */
         this.classList.toggle('expanded', !isExpanded);
-
-        /* If already expanded and tapped again, navigate */
-        if (isExpanded) {
-          window.location.href = this.getAttribute('href');
-        }
+        if (isExpanded) window.location.href = this.getAttribute('href');
       });
     });
   }());
@@ -801,78 +647,78 @@
     },
     {
       "type": "header",
-      "content": "── Pinterest Grid ──"
+      "content": "── Collage Images (Right Side) ──"
     },
     {
       "type": "image_picker",
       "id": "pin_img1",
-      "label": "Pin Image 1 (Tall)",
-      "info": "Recommended: 400 × 600px"
+      "label": "Image 1 (Large, left)",
+      "info": "Recommended: 500 × 660px"
     },
     {
       "type": "text",
       "id": "pin_label1",
-      "label": "Pin 1 Label",
+      "label": "Label 1",
       "default": "Fall Capsule"
     },
     {
       "type": "image_picker",
       "id": "pin_img2",
-      "label": "Pin Image 2 (Short)",
-      "info": "Recommended: 400 × 300px"
+      "label": "Image 2 (Right top)",
+      "info": "Recommended: 500 × 625px"
     },
     {
       "type": "text",
       "id": "pin_label2",
-      "label": "Pin 2 Label",
+      "label": "Label 2",
       "default": "Editorial"
     },
     {
       "type": "image_picker",
       "id": "pin_img3",
-      "label": "Pin Image 3 (Medium)",
-      "info": "Recommended: 400 × 530px"
+      "label": "Image 3 (Center, square)",
+      "info": "Recommended: 400 × 400px"
     },
     {
       "type": "text",
       "id": "pin_label3",
-      "label": "Pin 3 Label",
+      "label": "Label 3",
       "default": "Street Style"
     },
     {
       "type": "image_picker",
       "id": "pin_img4",
-      "label": "Pin Image 4 (Square)",
-      "info": "Recommended: 400 × 400px"
+      "label": "Image 4 (Right middle)",
+      "info": "Recommended: 500 × 660px"
     },
     {
       "type": "text",
       "id": "pin_label4",
-      "label": "Pin 4 Label",
+      "label": "Label 4",
       "default": "Minimalist"
     },
     {
       "type": "image_picker",
       "id": "pin_img5",
-      "label": "Pin Image 5 (Tall)",
-      "info": "Recommended: 400 × 600px"
+      "label": "Image 5 (Bottom left)",
+      "info": "Recommended: 400 × 300px"
     },
     {
       "type": "text",
       "id": "pin_label5",
-      "label": "Pin 5 Label",
+      "label": "Label 5",
       "default": "Runway"
     },
     {
       "type": "image_picker",
       "id": "pin_img6",
-      "label": "Pin Image 6 (Medium)",
-      "info": "Recommended: 400 × 530px"
+      "label": "Image 6 (Bottom right)",
+      "info": "Recommended: 400 × 260px"
     },
     {
       "type": "text",
       "id": "pin_label6",
-      "label": "Pin 6 Label",
+      "label": "Label 6",
       "default": "New Season"
     }
   ],
