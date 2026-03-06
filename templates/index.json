@@ -89,25 +89,44 @@
         "heading": "Trending Products",
         "bg_color": "#ffffff",
         "cta_text": "View All",
-        "cta_url": ""
+        "cta_url": "",
+        "qv_modal_bg": "#0e0e0e",
+        "qv_gallery_bg": "#ffffff",
+        "qv_title_color": "#ffffff",
+        "qv_price_color": "#ffffff",
+        "qv_label_color": "#ffffff",
+        "qv_text_color": "#999999",
+        "qv_btn_bg": "#333333",
+        "qv_btn_text": "#ffffff",
+        "qv_accent_color": "#ffffff",
+        "qv_animation_speed": 400,
+        "stock_text": "30 in stock",
+        "pickup_location": "Pickup available at California Warehouse",
+        "pickup_ready": "Usually ready in 24 hours",
+        "delivery_text": "Free delivery estimated",
+        "returns_text": "Free + easy returns"
       }
     },
     "brand-story-bento": {
       "type": "brand-story-bento",
       "settings": {
-        "block1_image": "shopify://shop_images/Gemini_Generated_Image_in3l5vin3l5vin3l.jpg",
-        "block1_tag": "Since 2021",
-        "block1_heading": "Journey<br>of Style",
-        "block1_description": "Born from a quiet obsession with fabric, form, and feeling — every piece carries the weight of intention.",
-        "stat1_number": "20.000",
-        "stat1_label": "Curated Pieces",
-        "stat2_number": "millions",
-        "stat2_label": "customers",
-        "block2_heading": "Timeless Pieces",
-        "block2_description": "Crafted for the woman who understands that true luxury whispers — in the press of pure linen, the weight of Italian crepe, the silence of a perfect silhouette.",
-        "block3_image": "shopify://shop_images/Print-Providers.jpg",
-        "block3_tag": "printing",
-        "block3_heading": "DTF Printing\n- different feel"
+        "heading": "<em>FASHION</em> THAT<br>FLOWS WITH<br>THE SEASONS",
+        "description": "Explore our latest collection of timeless fashion. From classic styles to modern trends, find the perfect look for every season. Shop now and elevate your wardrobe!",
+        "button_text": "Explore More",
+        "button_url": "",
+        "bg_color": "#f2f0ec",
+        "card1_tag": "Grace, Glamour, Style, Confidence",
+        "card1_title": "Elegant Evening Wear",
+        "card1_button": "SHOP NOW",
+        "card1_url": "",
+        "card2_tag": "Warm, Cozy, Elegant, Premium",
+        "card2_title": "Luxury Winter Collection",
+        "card2_button": "Shop Now",
+        "card2_url": "",
+        "card3_tag": "Bold, Modern, Timeless",
+        "card3_title": "Urban Street Style",
+        "card3_button": "SHOP NOW",
+        "card3_url": ""
       }
     },
     "trending-accordion": {
@@ -118,7 +137,25 @@
         "description": "Each style is a statement — restrained, intentional, and made to outlast every passing season.",
         "cta_text": "Shop Now",
         "cta_url": "shopify://collections/all",
-        "mobile_heading": "Trending Styles"
+        "mobile_heading": "Trending Styles",
+        "island_text": "Trending Now",
+        "island_badge": "LIVE",
+        "pin_label1": "Fall Capsule",
+        "pin_url1": "",
+        "pin_label2": "Editorial",
+        "pin_url2": "",
+        "pin_label3": "Street Style",
+        "pin_url3": "",
+        "pin_label4": "Minimalist",
+        "pin_url4": "",
+        "pin_label5": "Runway",
+        "pin_url5": "",
+        "pin_label6": "New Season",
+        "pin_url6": "",
+        "deco_url1": "",
+        "deco_url2": "",
+        "deco_url3": "",
+        "deco_url4": ""
       }
     },
     "featured_blog_XVXKia": {
@@ -130,6 +167,92 @@
         "articles_count": 3,
         "cta_text": "View All Stories"
       }
+    },
+    "marquee_ticker_6CKgye": {
+      "type": "marquee-ticker",
+      "blocks": {
+        "ticker_card_rxzn7i": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Elegant Layers",
+            "font": "assistant_n4",
+            "description": "Layered silhouettes that redefine sophistication.",
+            "link_text": "Explore more",
+            "link_url": "",
+            "link_external": true
+          }
+        },
+        "ticker_card_3W9iJY": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Urban Minimalism",
+            "font": "assistant_n4",
+            "description": "Clean lines, muted tones, effortless cool.",
+            "link_text": "View collection",
+            "link_url": "",
+            "link_external": true
+          }
+        },
+        "ticker_card_LzwnTV": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Raw Denim Edit",
+            "font": "assistant_n4",
+            "description": "Washed textures and vintage-inspired fits.",
+            "link_text": "Shop now",
+            "link_url": "",
+            "link_external": true
+          }
+        },
+        "ticker_card_trpWPL": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "The Silk Series",
+            "font": "assistant_n4",
+            "description": "Fluid fabrics for after-hours elegance.",
+            "link_text": "Discover",
+            "link_url": "",
+            "link_external": true
+          }
+        },
+        "ticker_card_4j6yin": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Street Luxe",
+            "font": "assistant_n4",
+            "description": "Where streetwear meets high fashion.",
+            "link_text": "See more",
+            "link_url": "",
+            "link_external": true
+          }
+        },
+        "ticker_card_mpbRx7": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Monochrome Mood",
+            "font": "assistant_n4",
+            "description": "Black, white, and everything in between.",
+            "link_text": "Browse",
+            "link_url": "",
+            "link_external": true
+          }
+        }
+      },
+      "block_order": [
+        "ticker_card_rxzn7i",
+        "ticker_card_3W9iJY",
+        "ticker_card_LzwnTV",
+        "ticker_card_trpWPL",
+        "ticker_card_4j6yin",
+        "ticker_card_mpbRx7"
+      ],
+      "name": "Marquee Ticker",
+      "settings": {
+        "bg_color": "#0a0a0a",
+        "speed": 30,
+        "gap": 24,
+        "card_width": 280
+      }
     }
   },
   "order": [
@@ -137,6 +260,7 @@
     "featured-collection",
     "brand-story-bento",
     "trending-accordion",
-    "featured_blog_XVXKia"
+    "featured_blog_XVXKia",
+    "marquee_ticker_6CKgye"
   ]
 }
