@@ -348,19 +348,41 @@
     }
 
     .qv-gallery {
-      aspect-ratio: 1/1;
-      background-color: #ede8e2;
+      position: relative;
+      width: 100%;
+      aspect-ratio: auto;
+      min-height: 380px;
+      background-color: var(--qv-gallery-bg, #ffffff);
       border-radius: 0;
+      overflow: hidden;
+    }
+
+    .qv-gallery > img.qv-main-img {
+      object-fit: contain !important;
+    }
+
+    .qv-gallery > img.qv-main-img.is-active {
+      z-index: 2;
     }
 
     .qv-gallery-thumbs {
       display: flex;
+      justify-content: center;
       position: absolute;
       bottom: 0.75rem;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 0.75rem;
+      right: 0.75rem;
       gap: 5px;
       z-index: 5;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      scroll-behavior: smooth;
+    }
+
+    .qv-gallery-thumbs::-webkit-scrollbar {
+      display: none;
     }
 
     .qv-thumb {
