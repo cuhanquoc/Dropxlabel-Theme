@@ -16,6 +16,15 @@
     background-position: 0 0, 10px 10px;
   }
 
+  {% if section.settings.bg_image != blank %}
+  .bsb-section {
+    background-image: url('{{ section.settings.bg_image | image_url: width: 1920 }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  {% endif %}
+
   /* ── Top Layout: text left + gallery right ── */
   .bsb-top {
     display: grid;
@@ -515,10 +524,17 @@
       "content": "Appearance"
     },
     {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image",
+      "info": "Recommended: 1920 × 1080px. If empty, uses textured color background."
+    },
+    {
       "type": "color",
       "id": "bg_color",
-      "label": "Background Color",
-      "default": "#f2f0ec"
+      "label": "Background Color (fallback)",
+      "default": "#f2f0ec",
+      "info": "Used when no background image is set."
     }
   ],
   "blocks": [
@@ -529,7 +545,8 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "Image",
+          "info": "Recommended: 800 × 1067px (3:4 ratio)"
         },
         {
           "type": "text",
