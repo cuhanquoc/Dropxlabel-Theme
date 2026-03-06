@@ -210,42 +210,66 @@
     object-fit: cover; display: block;
   }
 
-  /* Each item: unique position, size, rotation */
+  /* Each item: unique position, size, rotation + floating anim */
   .ta-collage-item--1 {
     width: 52%; top: 0; left: 0;
     aspect-ratio: 3/4;
     transform: rotate(-2.5deg);
     z-index: 3;
+    animation: ta-float-1 6s ease-in-out infinite;
   }
   .ta-collage-item--2 {
     width: 48%; top: 2%; right: 0;
     aspect-ratio: 4/5;
     transform: rotate(1.8deg);
     z-index: 5;
+    animation: ta-float-2 7s ease-in-out 0.5s infinite;
   }
   .ta-collage-item--3 {
     width: 38%; top: 42%; left: 8%;
     aspect-ratio: 1/1;
     transform: rotate(3deg);
     z-index: 7;
+    animation: ta-float-3 5.5s ease-in-out 1s infinite;
   }
   .ta-collage-item--4 {
     width: 44%; top: 48%; right: 5%;
     aspect-ratio: 3/4;
     transform: rotate(-1.5deg);
     z-index: 4;
+    animation: ta-float-1 8s ease-in-out 0.8s infinite;
   }
   .ta-collage-item--5 {
     width: 35%; bottom: 2%; left: 0;
     aspect-ratio: 4/3;
     transform: rotate(2deg);
     z-index: 6;
+    animation: ta-float-2 6.5s ease-in-out 1.3s infinite;
   }
   .ta-collage-item--6 {
     width: 40%; bottom: 0; right: 10%;
     aspect-ratio: 3/2;
     transform: rotate(-3deg);
     z-index: 8;
+    animation: ta-float-3 7.5s ease-in-out 0.3s infinite;
+  }
+
+  /* Subtle floating animations — each slightly different */
+  @keyframes ta-float-1 {
+    0%, 100% { transform: rotate(-2.5deg) translateY(0); }
+    50% { transform: rotate(-2deg) translateY(-8px); }
+  }
+  @keyframes ta-float-2 {
+    0%, 100% { transform: rotate(1.8deg) translateY(0); }
+    50% { transform: rotate(2.2deg) translateY(-10px); }
+  }
+  @keyframes ta-float-3 {
+    0%, 100% { transform: rotate(3deg) translateX(0); }
+    50% { transform: rotate(2.5deg) translateX(6px); }
+  }
+
+  .ta-collage-item:hover {
+    animation-play-state: paused;
   }
 
   /* Collage label */
@@ -379,8 +403,8 @@
         <!-- Scattered Collage (Desktop only) -->
         <div class="ta-collage" id="ta-collage">
 
-          <!-- Pin 1: Large, tilted left -->
-          <div class="ta-collage-item ta-collage-item--1">
+          <!-- Pin 1 -->
+          <a href="{{ section.settings.pin_url1 | default: '#' }}" class="ta-collage-item ta-collage-item--1">
             {% if section.settings.pin_img1 != blank %}
               <img src="{{ section.settings.pin_img1 | image_url: width: 500 }}" alt="{{ section.settings.pin_label1 | default: 'Style' }}" loading="lazy" />
             {% else %}
@@ -389,10 +413,10 @@
             {% if section.settings.pin_label1 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label1 }}</div>
             {% endif %}
-          </div>
+          </a>
 
-          <!-- Pin 2: Right top, tilted right -->
-          <div class="ta-collage-item ta-collage-item--2">
+          <!-- Pin 2 -->
+          <a href="{{ section.settings.pin_url2 | default: '#' }}" class="ta-collage-item ta-collage-item--2">
             {% if section.settings.pin_img2 != blank %}
               <img src="{{ section.settings.pin_img2 | image_url: width: 500 }}" alt="{{ section.settings.pin_label2 | default: 'Style' }}" loading="lazy" />
             {% else %}
@@ -401,10 +425,10 @@
             {% if section.settings.pin_label2 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label2 }}</div>
             {% endif %}
-          </div>
+          </a>
 
-          <!-- Pin 3: Center-left, square, overlapping -->
-          <div class="ta-collage-item ta-collage-item--3">
+          <!-- Pin 3 -->
+          <a href="{{ section.settings.pin_url3 | default: '#' }}" class="ta-collage-item ta-collage-item--3">
             {% if section.settings.pin_img3 != blank %}
               <img src="{{ section.settings.pin_img3 | image_url: width: 400 }}" alt="{{ section.settings.pin_label3 | default: 'Style' }}" loading="lazy" />
             {% else %}
@@ -413,10 +437,10 @@
             {% if section.settings.pin_label3 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label3 }}</div>
             {% endif %}
-          </div>
+          </a>
 
-          <!-- Pin 4: Right middle, tall -->
-          <div class="ta-collage-item ta-collage-item--4">
+          <!-- Pin 4 -->
+          <a href="{{ section.settings.pin_url4 | default: '#' }}" class="ta-collage-item ta-collage-item--4">
             {% if section.settings.pin_img4 != blank %}
               <img src="{{ section.settings.pin_img4 | image_url: width: 500 }}" alt="{{ section.settings.pin_label4 | default: 'Style' }}" loading="lazy" />
             {% else %}
@@ -425,10 +449,10 @@
             {% if section.settings.pin_label4 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label4 }}</div>
             {% endif %}
-          </div>
+          </a>
 
-          <!-- Pin 5: Bottom left, landscape -->
-          <div class="ta-collage-item ta-collage-item--5">
+          <!-- Pin 5 -->
+          <a href="{{ section.settings.pin_url5 | default: '#' }}" class="ta-collage-item ta-collage-item--5">
             {% if section.settings.pin_img5 != blank %}
               <img src="{{ section.settings.pin_img5 | image_url: width: 400 }}" alt="{{ section.settings.pin_label5 | default: 'Style' }}" loading="lazy" />
             {% else %}
@@ -437,10 +461,10 @@
             {% if section.settings.pin_label5 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label5 }}</div>
             {% endif %}
-          </div>
+          </a>
 
-          <!-- Pin 6: Bottom right, tilted -->
-          <div class="ta-collage-item ta-collage-item--6">
+          <!-- Pin 6 -->
+          <a href="{{ section.settings.pin_url6 | default: '#' }}" class="ta-collage-item ta-collage-item--6">
             {% if section.settings.pin_img6 != blank %}
               <img src="{{ section.settings.pin_img6 | image_url: width: 400 }}" alt="{{ section.settings.pin_label6 | default: 'Style' }}" loading="lazy" />
             {% else %}
@@ -449,7 +473,7 @@
             {% if section.settings.pin_label6 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label6 }}</div>
             {% endif %}
-          </div>
+          </a>
 
         </div>
 
@@ -662,6 +686,11 @@
       "default": "Fall Capsule"
     },
     {
+      "type": "url",
+      "id": "pin_url1",
+      "label": "Link 1"
+    },
+    {
       "type": "image_picker",
       "id": "pin_img2",
       "label": "Image 2 (Right top)",
@@ -672,6 +701,11 @@
       "id": "pin_label2",
       "label": "Label 2",
       "default": "Editorial"
+    },
+    {
+      "type": "url",
+      "id": "pin_url2",
+      "label": "Link 2"
     },
     {
       "type": "image_picker",
@@ -686,6 +720,11 @@
       "default": "Street Style"
     },
     {
+      "type": "url",
+      "id": "pin_url3",
+      "label": "Link 3"
+    },
+    {
       "type": "image_picker",
       "id": "pin_img4",
       "label": "Image 4 (Right middle)",
@@ -696,6 +735,11 @@
       "id": "pin_label4",
       "label": "Label 4",
       "default": "Minimalist"
+    },
+    {
+      "type": "url",
+      "id": "pin_url4",
+      "label": "Link 4"
     },
     {
       "type": "image_picker",
@@ -710,6 +754,11 @@
       "default": "Runway"
     },
     {
+      "type": "url",
+      "id": "pin_url5",
+      "label": "Link 5"
+    },
+    {
       "type": "image_picker",
       "id": "pin_img6",
       "label": "Image 6 (Bottom right)",
@@ -720,6 +769,11 @@
       "id": "pin_label6",
       "label": "Label 6",
       "default": "New Season"
+    },
+    {
+      "type": "url",
+      "id": "pin_url6",
+      "label": "Link 6"
     }
   ],
   "blocks": [
