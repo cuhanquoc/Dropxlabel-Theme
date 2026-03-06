@@ -1144,7 +1144,7 @@
       <p class="qv-price" id="qv-price"></p>
 
       <div class="qv-stock" id="qv-stock">
-        <span class="qv-stock-dot"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#22c55e" stroke="#fff" stroke-width="3"><circle cx="12" cy="12" r="11" stroke="none"/><path d="M8 12l3 3 5-5" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span id="qv-stock-text">{{ section.settings.stock_text | default: '30 in stock' }}</span>
       </div>
 
@@ -1183,7 +1183,7 @@
       <!-- Actions -->
       <div class="qv-actions">
         <button class="qv-btn qv-btn--cart" id="qv-add-cart" onclick="QuickView.addToCart();">Add to cart</button>
-        <a class="qv-btn qv-btn--buy" id="qv-buy-link" href="#">Buy it now</a>
+        <button class="qv-btn qv-btn--buy" onclick="QuickView.buyNow();">Buy it now</button>
       </div>
     </div>
 
@@ -1242,6 +1242,11 @@
       try {
         var options = JSON.parse(btn.getAttribute('data-product-options'));
         var variants = JSON.parse(btn.getAttribute('data-product-variants'));
+        allVariants = variants;
+        selectedOptions = {};
+
+        /* Pre-select first value of each option */
+        options.forEach(function(o) { if (o.values && o.values.length) selectedOptions[o.name] = o.values[0]; });
 
         options.forEach(function (opt) {
           var div = document.createElement('div');
@@ -1279,19 +1284,35 @@
                 swatch.style.backgroundPosition = 'center';
               } else {
                 var colorMap = {
-                  'green':'#2d6a2d','blue':'#2d4a8a','red':'#a52020','black':'#1a1a1a','white':'#f0f0f0',
-                  'grey':'#888','gray':'#888','purple':'#6a2d7a','pink':'#d4638f','brown':'#6b4226',
-                  'navy':'#1a2744','beige':'#d4c8a8','cream':'#fffdd0','orange':'#d4782d','yellow':'#d4c42d',
-                  'xanh':'#2d6a2d','đỏ':'#a52020','đen':'#1a1a1a','trắng':'#f0f0f0','tím':'#6a2d7a',
-                  'hồng':'#d4638f','nâu':'#6b4226','vàng':'#d4c42d','xám':'#888','kem':'#fffdd0'
+                  'black':'#1a1a1a','white':'#f5f5f5','red':'#c0392b','blue':'#2980b9','green':'#27ae60',
+                  'yellow':'#f1c40f','orange':'#e67e22','purple':'#8e44ad','pink':'#e91e90','brown':'#6b4226',
+                  'grey':'#888','gray':'#888','navy':'#1a2744','beige':'#d4c8a8','cream':'#fffdd0',
+                  'khaki':'#c3b091','dark khaki':'#bdb76b','olive':'#556b2f','teal':'#008080','cyan':'#00bcd4',
+                  'maroon':'#800000','burgundy':'#800020','coral':'#ff7f50','salmon':'#fa8072','gold':'#ffd700',
+                  'silver':'#c0c0c0','tan':'#d2b48c','ivory':'#fffff0','lavender':'#e6e6fa','mint':'#98ff98',
+                  'charcoal':'#333','ash':'#b2beb5','sand':'#c2b280','wine':'#722f37','sage':'#bcb88a',
+                  'dark':'#222','light blue':'#add8e6','light green':'#90ee90','light pink':'#ffb6c1',
+                  'dark blue':'#00008b','dark green':'#006400','dark red':'#8b0000','dark brown':'#3e2723',
+                  'xanh':'#2980b9','đỏ':'#c0392b','đen':'#1a1a1a','trắng':'#f5f5f5','tím':'#8e44ad',
+                  'hồng':'#e91e90','nâu':'#6b4226','vàng':'#f1c40f','xám':'#888','kem':'#fffdd0',
+                  'xanh lá':'#27ae60','xanh dương':'#2980b9'
                 };
-                swatch.style.backgroundColor = colorMap[val.toLowerCase()] || '#ccc';
+                /* Try exact match, then check each word */
+                var bg = colorMap[val.toLowerCase()];
+                if (!bg) {
+                  var words = val.toLowerCase().split(/[\s\/\-]+/);
+                  for (var wi = 0; wi < words.length; wi++) {
+                    if (colorMap[words[wi]]) { bg = colorMap[words[wi]]; break; }
+                  }
+                }
+                swatch.style.backgroundColor = bg || '#ccc';
               }
 
               swatch.title = val;
               swatch.onclick = function () {
                 swatchWrap.querySelectorAll('.qv-color-swatch').forEach(function (s) { s.classList.remove('is-active'); });
                 swatch.classList.add('is-active');
+                selectedOptions[opt.name] = val;
                 label.innerHTML = opt.name.toUpperCase() + ' : <span style="font-weight:400;letter-spacing:0;text-transform:none">' + val + '</span>';
                 /* Switch main gallery image to this variant */
                 if (variantImg) {
@@ -1312,6 +1333,7 @@
               btn2.onclick = function () {
                 swatchWrap.querySelectorAll('.qv-size-swatch').forEach(function (s) { s.classList.remove('is-active'); });
                 btn2.classList.add('is-active');
+                selectedOptions[opt.name] = val;
                 label.innerHTML = opt.name.toUpperCase() + ' : <span style="font-weight:400;letter-spacing:0;text-transform:none">' + val + '</span>';
               };
               swatchWrap.appendChild(btn2);
@@ -1380,12 +1402,58 @@
       document.getElementById('qv-qty').textContent = qtyVal;
     }
 
-    function addToCart() {
-      /* Placeholder: would integrate with Shopify Ajax Cart API */
-      alert('Added ' + qtyVal + ' item(s) to cart! (Connect to Cart API)');
+    /* Track selected variant */
+    var selectedOptions = {};
+    var allVariants = [];
+
+    function getSelectedVariantId() {
+      var opts = Object.values(selectedOptions);
+      for (var v = 0; v < allVariants.length; v++) {
+        var title = allVariants[v].title || '';
+        var match = true;
+        for (var o = 0; o < opts.length; o++) {
+          if (title.indexOf(opts[o]) === -1) { match = false; break; }
+        }
+        if (match) return allVariants[v].id;
+      }
+      return allVariants.length ? allVariants[0].id : null;
     }
 
-    return { open: open, close: close, prevImg: prevImg, nextImg: nextImg, qty: qty, addToCart: addToCart };
+    function addToCart() {
+      var variantId = getSelectedVariantId();
+      if (!variantId) { alert('Please select options'); return; }
+      var cartBtn = document.getElementById('qv-add-cart');
+      cartBtn.textContent = 'Adding...';
+      cartBtn.disabled = true;
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: [{ id: variantId, quantity: qtyVal }] })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function() {
+        cartBtn.textContent = '✓ Added!';
+        setTimeout(function() {
+          cartBtn.textContent = 'Add to cart';
+          cartBtn.disabled = false;
+        }, 1500);
+      })
+      .catch(function() {
+        cartBtn.textContent = 'Error';
+        setTimeout(function() {
+          cartBtn.textContent = 'Add to cart';
+          cartBtn.disabled = false;
+        }, 1500);
+      });
+    }
+
+    function buyNow() {
+      var variantId = getSelectedVariantId();
+      if (!variantId) { alert('Please select options'); return; }
+      window.location.href = '/cart/clear?return_to=/checkout?line_items[][variant_id]=' + variantId + '%26line_items[][quantity]=' + qtyVal;
+    }
+
+    return { open: open, close: close, prevImg: prevImg, nextImg: nextImg, qty: qty, addToCart: addToCart, buyNow: buyNow };
   }());
 
   /* ═══════════════════════════════════════════════════
