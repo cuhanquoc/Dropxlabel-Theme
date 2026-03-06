@@ -41,13 +41,12 @@
 
   /* Column headings */
   .footer-col-title {
-    font-family: var(--font-body);
-    font-size: 0.62rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
     color: #ffffff;
     font-weight: 500;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
+    letter-spacing: 0.01em;
   }
 
   /* Footer nav links */
@@ -55,7 +54,7 @@
     display: block;
     font-family: var(--font-body);
     font-size: 0.82rem;
-    color: #9ca3af; /* gray-400 */
+    color: #9ca3af;
     text-decoration: none;
     margin-bottom: 0.75rem;
     transition: color 250ms ease;
@@ -63,59 +62,70 @@
   }
 
   .footer-link:hover {
-    color: var(--color-accent);
-    opacity: 1;
+    color: #ffffff;
   }
 
-  /* Newsletter input */
+  /* Newsletter promo text */
+  .footer-promo {
+    font-family: var(--font-heading);
+    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+    font-weight: 500;
+    color: #ffffff;
+    line-height: 1.45;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-promo-highlight {
+    color: #e53e3e;
+    font-weight: 700;
+  }
+
+  /* Newsletter inline input */
+  .footer-newsletter-row {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid #4b5563;
+    max-width: 280px;
+  }
+
   .footer-input {
-    width: 100%;
+    flex: 1;
     background: transparent;
     border: none;
-    border-bottom: 1px solid #4b5563; /* gray-600 */
     color: #ffffff;
     font-family: var(--font-body);
     font-size: 0.82rem;
     padding: 0.6rem 0;
     outline: none;
-    transition: border-color 300ms ease;
     letter-spacing: 0.04em;
+    min-width: 0;
   }
 
   .footer-input::placeholder {
-    color: #6b7280; /* gray-500 */
+    color: #6b7280;
     letter-spacing: 0.04em;
   }
 
-  .footer-input:focus {
-    border-bottom-color: var(--color-accent);
-  }
-
-  /* Subscribe button */
+  /* Subscribe button — inline */
   .footer-subscribe-btn {
-    margin-top: 1.25rem;
-    display: inline-block;
-    font-family: var(--font-body);
-    font-size: 0.6rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--color-accent);
     background: transparent;
-    border: 1px solid rgba(197, 168, 128, 0.45);
-    border-radius: 9999px;
-    padding: 0.55rem 1.5rem;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: #9ca3af;
     cursor: pointer;
-    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease;
+    padding: 0.6rem 0 0.6rem 1rem;
+    transition: color 300ms ease;
+    white-space: nowrap;
   }
 
   .footer-subscribe-btn:hover {
-    background-color: var(--color-accent);
-    color: #181818;
-    border-color: var(--color-accent);
+    color: #ffffff;
   }
 
   /* Social icon buttons */
-  .footer-social {
+  /* .footer-social {
     display: flex;
     align-items: center;
     gap: 0.6rem;
@@ -134,7 +144,7 @@
 
   .footer-social svg {
     flex-shrink: 0;
-  }
+  } */
 
   /* Payment icons */
   .payment-icon {
@@ -158,6 +168,7 @@
     .footer-giant-text {
       font-size: 10vw;
     }
+    .footer-newsletter-row { max-width: 100%; }
   }
 </style>
 
@@ -183,20 +194,19 @@
 
   <!-- Thin accent divider -->
   <div
-    class="mx-6 md:mx-10 mb-10 md:mb-20"
-    style="height: 1px; background: linear-gradient(to right, var(--color-accent), transparent);"
+    class="mx-6 md:mx-10 mb-10 md:mb-16"
+    style="height: 1px; background: linear-gradient(to right, rgba(255,255,255,0.15), transparent);"
   ></div>
 
-  <!-- ── Footer 4-Column Grid ── -->
+  <!-- ── Footer 5-Column Grid ── -->
   <div
     id="footer-grid"
-    class="grid grid-cols-1 md:grid-cols-4 gap-12 px-6 md:px-10"
+    class="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-10 px-6 md:px-10"
   >
 
-    <!-- COL 1: Newsletter -->
+    <!-- COL 1: Newsletter Promo -->
     <div data-footer-col>
-      <p class="footer-col-title">{{ section.settings.newsletter_heading }}</p>
-      <p style="font-family: var(--font-body); font-size: 0.82rem; line-height: 1.75; color: #6b7280; margin-bottom: 1.75rem;">
+      <p class="footer-promo">
         {{ section.settings.newsletter_text }}
       </p>
 
@@ -210,77 +220,72 @@
         <input type="hidden" name="utf8"      value="✓" />
         <input type="hidden" name="contact[tags]" value="newsletter" />
 
-        <label for="footer-email" class="sr-only">Email address</label>
-        <input
-          id="footer-email"
-          name="contact[email]"
-          type="email"
-          class="footer-input"
-          placeholder="your@email.com"
-          required
-          autocomplete="email"
-        />
-        <button type="submit" class="footer-subscribe-btn">Subscribe</button>
+        <div class="footer-newsletter-row">
+          <label for="footer-email" class="sr-only">Email address</label>
+          <input
+            id="footer-email"
+            name="contact[email]"
+            type="email"
+            class="footer-input"
+            placeholder="Enter your email"
+            required
+            autocomplete="email"
+          />
+          <button type="submit" class="footer-subscribe-btn">Subscribe</button>
+        </div>
       </form>
     </div>
 
-    <!-- COL 2: Quick Links -->
+    <!-- COL 2: Company -->
     <div data-footer-col>
-      <p class="footer-col-title">Explore</p>
-      <nav aria-label="Footer quick links">
-        <a href="{{ routes.root_url }}"        class="footer-link">Home</a>
-        <a href="{{ routes.collections_url }}" class="footer-link">Catalog</a>
+      <p class="footer-col-title">{{ section.settings.col2_title | default: 'Company' }}</p>
+      <nav aria-label="Company links">
         <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="footer-link">About Us</a>
-        <a href="{{ blogs.news.url | default: '/blogs/journal' }}"      class="footer-link">Journal</a>
+        <a href="{{ blogs.news.url | default: '/blogs/journal' }}" class="footer-link">Blog</a>
+        <a href="{{ pages['careers'].url | default: '/pages/careers' }}" class="footer-link">Careers</a>
+        <a href="{{ pages['locations'].url | default: '/pages/locations' }}" class="footer-link">Locations</a>
       </nav>
     </div>
 
-    <!-- COL 3: Support -->
+    <!-- COL 3: Customer Care -->
     <div data-footer-col>
-      <p class="footer-col-title">Support</p>
-      <nav aria-label="Footer support links">
+      <p class="footer-col-title">{{ section.settings.col3_title | default: 'Customer Care' }}</p>
+      <nav aria-label="Customer care links">
+        <a href="{{ pages['size-guide'].url | default: '/pages/size-guide' }}" class="footer-link">Size Guide</a>
+        <a href="{{ pages['faq'].url | default: '/pages/faq' }}" class="footer-link">Help & FAQs</a>
+        <a href="{{ pages['return-my-order'].url | default: '/pages/returns' }}" class="footer-link">Return My Order</a>
+        <a href="{{ pages['refer-a-friend'].url | default: '/pages/refer' }}" class="footer-link">Refer a Friend</a>
+      </nav>
+    </div>
+
+    <!-- COL 4: Terms & Policies -->
+    <div data-footer-col>
+      <p class="footer-col-title">{{ section.settings.col4_title | default: 'Terms & Policies' }}</p>
+      <nav aria-label="Terms and policies links">
+        <a href="{{ pages['duties-and-taxes'].url | default: '/pages/duties-taxes' }}" class="footer-link">Duties & Taxes</a>
+        <a href="{{ pages['shipping-policy'].url | default: '/policies/shipping-policy' }}" class="footer-link">Shipping Info</a>
         <a href="{{ pages['privacy-policy'].url | default: '/policies/privacy-policy' }}" class="footer-link">Privacy Policy</a>
-        <a href="{{ pages['refund-policy'].url  | default: '/policies/refund-policy' }}"  class="footer-link">Refund Policy</a>
-        <a href="{{ pages['shipping-policy'].url | default: '/policies/shipping-policy' }}" class="footer-link">Shipping Policy</a>
-        <a href="{{ pages['faq'].url | default: '/pages/faq' }}" class="footer-link">FAQ</a>
+        <a href="{{ pages['terms-of-service'].url | default: '/policies/terms-of-service' }}" class="footer-link">Terms Conditions</a>
       </nav>
     </div>
 
-    <!-- COL 4: Social -->
+    <!-- COL 5: Follow Us -->
     <div data-footer-col>
-      <p class="footer-col-title">Follow Us</p>
-
-      <!-- Instagram -->
-      {% if section.settings.instagram_url != blank %}
-      <a href="{{ section.settings.instagram_url }}" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-        </svg>
-        Instagram
-      </a>
-      {% endif %}
-
-      <!-- TikTok -->
-      {% if section.settings.tiktok_url != blank %}
-      <a href="{{ section.settings.tiktok_url }}" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>
-        </svg>
-        TikTok
-      </a>
-      {% endif %}
-
-      <!-- Facebook -->
-      {% if section.settings.facebook_url != blank %}
-      <a href="{{ section.settings.facebook_url }}" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-        </svg>
-        Facebook
-      </a>
-      {% endif %}
+      <p class="footer-col-title">{{ section.settings.col5_title | default: 'Follow us' }}</p>
+      <nav aria-label="Social links">
+        {% if section.settings.instagram_url != blank %}
+          <a href="{{ section.settings.instagram_url }}" class="footer-link" target="_blank" rel="noopener">Instagram</a>
+        {% endif %}
+        {% if section.settings.facebook_url != blank %}
+          <a href="{{ section.settings.facebook_url }}" class="footer-link" target="_blank" rel="noopener">Facebook</a>
+        {% endif %}
+        {% if section.settings.pinterest_url != blank %}
+          <a href="{{ section.settings.pinterest_url }}" class="footer-link" target="_blank" rel="noopener">Pinterest</a>
+        {% endif %}
+        {% if section.settings.tiktok_url != blank %}
+          <a href="{{ section.settings.tiktok_url }}" class="footer-link" target="_blank" rel="noopener">Tiktok</a>
+        {% endif %}
+      </nav>
     </div>
 
   </div>
@@ -371,16 +376,38 @@
       "content": "Newsletter"
     },
     {
-      "type": "text",
-      "id": "newsletter_heading",
-      "label": "Newsletter Heading",
-      "default": "Join the Club"
-    },
-    {
       "type": "textarea",
       "id": "newsletter_text",
-      "label": "Newsletter Description",
-      "default": "Đăng ký để nhận những bộ sưu tập mới nhất và đặc quyền dành riêng cho hội viên nội bộ."
+      "label": "Newsletter Promo Text",
+      "default": "Receive an exclusive <span class='footer-promo-highlight'>20%</span> discount code when you signup."
+    },
+    {
+      "type": "header",
+      "content": "Column Titles"
+    },
+    {
+      "type": "text",
+      "id": "col2_title",
+      "label": "Column 2 Title",
+      "default": "Company"
+    },
+    {
+      "type": "text",
+      "id": "col3_title",
+      "label": "Column 3 Title",
+      "default": "Customer Care"
+    },
+    {
+      "type": "text",
+      "id": "col4_title",
+      "label": "Column 4 Title",
+      "default": "Terms & Policies"
+    },
+    {
+      "type": "text",
+      "id": "col5_title",
+      "label": "Column 5 Title",
+      "default": "Follow us"
     },
     {
       "type": "header",
@@ -393,14 +420,20 @@
     },
     {
       "type": "url",
-      "id": "tiktok_url",
-      "label": "TikTok URL"
+      "id": "facebook_url",
+      "label": "Facebook URL"
     },
     {
       "type": "url",
-      "id": "facebook_url",
-      "label": "Facebook URL"
+      "id": "pinterest_url",
+      "label": "Pinterest URL"
+    },
+    {
+      "type": "url",
+      "id": "tiktok_url",
+      "label": "TikTok URL"
     }
   ]
 }
 {% endschema %}
+
