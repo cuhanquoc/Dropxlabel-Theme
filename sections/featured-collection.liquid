@@ -351,34 +351,46 @@
       position: relative;
       width: 100%;
       aspect-ratio: auto;
-      min-height: 380px;
+      min-height: auto;
+      height: auto;
       background-color: var(--qv-gallery-bg, #ffffff);
       border-radius: 0;
-      overflow: hidden;
+      overflow: visible;
     }
 
     .qv-gallery > img.qv-main-img {
+      position: static !important;
+      inset: auto !important;
+      width: 100% !important;
+      height: auto !important;
+      max-height: 50vh;
       object-fit: contain !important;
+      display: none;
+      opacity: 1 !important;
+      padding: 0;
     }
 
     .qv-gallery > img.qv-main-img.is-active {
+      display: block;
       z-index: 2;
     }
 
     .qv-gallery-thumbs {
       display: flex;
       justify-content: center;
-      position: absolute;
-      bottom: 0.75rem;
-      left: 0.75rem;
-      right: 0.75rem;
-      gap: 5px;
+      position: relative;
+      bottom: auto;
+      left: auto;
+      right: auto;
+      gap: 6px;
       z-index: 5;
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       scroll-behavior: smooth;
+      padding: 0.5rem 0.75rem;
+      border-top: 1px solid #f0f0f0;
     }
 
     .qv-gallery-thumbs::-webkit-scrollbar {
@@ -386,9 +398,9 @@
     }
 
     .qv-thumb {
-      width: 52px;
-      height: 52px;
-      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
       background-color: #f0f0f0;
       border: 2px solid transparent;
       overflow: hidden;
@@ -430,20 +442,20 @@
 
     /* Details panel */
     .qv-details {
-      padding: 1.5rem 1.25rem 2rem;
+      padding: 1rem 1.25rem 1.25rem !important;
       color: #0a0a0a;
       background-color: #ffffff;
-      gap: 0;
+      gap: 0 !important;
       overflow-y: visible;
     }
 
     /* Title */
     .qv-title {
-      font-size: 1.35rem;
+      font-size: 1.2rem;
       font-weight: 700;
       color: #0a0a0a;
       line-height: 1.3;
-      margin-bottom: 0.25rem;
+      margin-bottom: 0.15rem;
     }
 
     /* SKU */
@@ -452,7 +464,7 @@
       color: rgba(0,0,0,0.45);
       letter-spacing: 0.04em;
       font-weight: 500;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
       display: block;
     }
 
@@ -460,11 +472,11 @@
 
     /* Price */
     .qv-price {
-      font-size: 1.6rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: #0a0a0a;
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
       border-bottom: 1px solid #e5e5e5;
       display: flex;
       align-items: baseline;
@@ -494,7 +506,7 @@
       padding: 0;
       font-size: 0.82rem;
       font-weight: 500;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
     }
 
     .qv-stock-dot {
@@ -512,8 +524,8 @@
       text-transform: uppercase;
       font-weight: 700;
       color: #0a0a0a !important;
-      margin-bottom: 0.5rem;
-      margin-top: 0.75rem;
+      margin-bottom: 0.35rem;
+      margin-top: 0.5rem;
     }
 
     /* Color swatches */
@@ -584,11 +596,11 @@
       background-color: #edfbf1;
       border: 1px solid #c6ebd4;
       border-radius: 10px;
-      padding: 0.9rem 1rem;
-      gap: 0.75rem;
-      margin-top: 0.75rem;
-      margin-bottom: 0.5rem;
-      font-size: 0.82rem;
+      padding: 0.7rem 0.85rem;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.35rem;
+      font-size: 0.78rem;
       color: #0a0a0a;
     }
 
@@ -599,14 +611,14 @@
     /* CTA buttons */
     .qv-actions {
       flex-direction: column;
-      gap: 0.65rem;
-      margin-top: 1.5rem;
-      padding-top: 1rem;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
       border-top: 1px solid #e5e5e5;
     }
 
     .qv-btn {
-      padding: 1.1rem;
+      padding: 0.9rem;
       font-size: 0.88rem;
       font-weight: 600;
       letter-spacing: 0.03em;
@@ -672,72 +684,73 @@
     font-size: 0.72rem;
   }
 
-  /* ── Modal: Left (Image Gallery) ── */
-  .qv-gallery {
-    position: relative;
-    height: 100%;
-    min-height: 480px;
-    overflow: hidden;
-    background-color: var(--qv-gallery-bg, #ffffff);
-  }
+  /* ── Modal: Left (Image Gallery) — Desktop only ── */
+  @media (min-width: 768px) {
+    .qv-gallery {
+      position: relative;
+      height: 100%;
+      min-height: 480px;
+      overflow: hidden;
+      background-color: var(--qv-gallery-bg, #ffffff);
+    }
 
-  .qv-gallery > img.qv-main-img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
+    .qv-gallery > img.qv-main-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
 
-  .qv-gallery > img.qv-main-img.is-active {
-    opacity: 1;
-    z-index: 2;
-  }
+    .qv-gallery > img.qv-main-img.is-active {
+      opacity: 1;
+      z-index: 2;
+    }
 
-  .qv-gallery-thumbs {
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    right: 1rem;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    z-index: 3;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-    scroll-behavior: smooth;
-  }
+    .qv-gallery-thumbs {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      z-index: 3;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; /* Firefox */
+      scroll-behavior: smooth;
+    }
 
-  .qv-gallery-thumbs::-webkit-scrollbar {
-    display: none;
-  }
+    .qv-gallery-thumbs::-webkit-scrollbar {
+      display: none;
+    }
 
-  .qv-thumb {
-    width: 56px;
-    height: 56px;
-    border-radius: 8px;
-    overflow: hidden;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: border-color 0.25s ease;
-    background-color: #2a2a2a;
-    flex-shrink: 0;
-  }
+    .qv-thumb {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.25s ease;
+      background-color: #2a2a2a;
+      flex-shrink: 0;
+    }
 
-  .qv-thumb.is-active {
-    border-color: #ffffff;
-  }
+    .qv-thumb.is-active {
+      border-color: #ffffff;
+    }
 
-  .qv-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
+    .qv-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  } /* end @media min-width:768px gallery */
   /* Gallery navigation arrows */
   .qv-arrow {
     position: absolute;
@@ -1390,7 +1403,7 @@
 
         options.forEach(function (opt) {
           var div = document.createElement('div');
-          div.style.marginBottom = '1.25rem';
+          div.style.marginBottom = '0.5rem';
 
           var label = document.createElement('p');
           label.className = 'qv-option-label';
