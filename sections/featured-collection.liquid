@@ -312,7 +312,7 @@
     transform: scale(1) translateY(0);
   }
 
-  @media (max-width: 767px) {
+@media (max-width: 767px) {
     .qv-modal {
       grid-template-columns: 1fr;
       grid-template-rows: auto 1fr;
@@ -322,12 +322,9 @@
       height: 92vh;
       border-radius: 20px 20px 0 0;
       overflow-y: auto;
-      background-color: #ffffff;
-      position: fixed;
-      bottom: 0;
-      top: auto;
-      transform: translateY(100%);
-      transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      background-color: #f8f8f6;
     }
 
     .qv-overlay {
@@ -339,8 +336,10 @@
     }
 
     .qv-gallery {
-      aspect-ratio: 4/5;
-      background-color: #e8e8e8;
+      aspect-ratio: 1/1;
+      background-color: #ede8e2;
+      border-radius: 0;
+      position: relative;
     }
 
     .qv-gallery-thumbs {
@@ -349,139 +348,232 @@
       bottom: 0.75rem;
       left: 50%;
       transform: translateX(-50%);
-      gap: 6px;
+      gap: 5px;
+      z-index: 5;
     }
 
     .qv-thumb {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 6px;
-      background-color: #1a1a1a;
+      background-color: rgba(0,0,0,0.5);
+      border: 2px solid transparent;
+    }
+
+    .qv-thumb.is-active {
+      border-color: #ffffff;
     }
 
     .qv-arrow {
-      width: 36px;
-      height: 36px;
-      background-color: rgba(0,0,0,0.65);
+      width: 38px;
+      height: 38px;
+      background-color: rgba(255,255,255,0.9);
+      color: #0a0a0a;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
     }
 
     .qv-close {
-      top: -3rem;
+      top: -3.25rem;
       left: 50%;
       transform: translateX(-50%);
       right: auto;
       width: 44px;
       height: 44px;
-      background-color: rgba(0,0,0,0.85);
+      background-color: rgba(10,10,10,0.9);
       border-radius: 50%;
       z-index: 10;
       position: absolute;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
     }
 
+    /* Details panel */
     .qv-details {
-      padding: 1.5rem 1.25rem 2rem;
+      padding: 1.75rem 1.25rem 6rem;
       color: #0a0a0a;
+      background-color: #f8f8f6;
+      gap: 0;
+    }
+
+    /* Title */
+    .qv-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0a0a0a;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.3rem;
+    }
+
+    /* SKU */
+    .qv-sku {
+      font-size: 0.72rem;
+      color: rgba(0,0,0,0.38);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 500;
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    /* Separator */
+    .qv-details::after {
+      content: none;
+    }
+
+    /* Price */
+    .qv-price {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #0a0a0a;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    /* Stock badge */
+    .qv-stock {
+      color: #1a7f3c;
+      background-color: #e6f4ec;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    .qv-stock-dot {
+      width: 7px;
+      height: 7px;
+      background-color: #22c55e;
+      border-radius: 50%;
+    }
+
+    /* Option labels */
+    .qv-option-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #0a0a0a;
+      margin-bottom: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    /* Color swatches */
+    .qv-color-swatch {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
+
+    .qv-color-swatch.is-active {
+      outline-color: #0a0a0a;
+      border-color: #ffffff;
+    }
+
+    /* Size swatches */
+    .qv-size-swatch {
+      color: #0a0a0a;
+      border: 1.5px solid rgba(0,0,0,0.2);
+      padding: 0.55rem 1.25rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-radius: 999px;
       background-color: #ffffff;
     }
 
-    .qv-title {
-      font-size: 1.35rem;
-      color: #0a0a0a;
-    }
-
-    .qv-sku {
-      color: rgba(0,0,0,0.4);
-    }
-
-    .qv-price {
-      font-size: 1.5rem;
-      color: #0a0a0a;
-    }
-
-    .qv-stock {
-      color: rgba(0,0,0,0.7);
-      padding-top: 0.75rem;
-      margin-top: 0.25rem;
-      border-top: 1px solid rgba(0,0,0,0.08);
-    }
-
-    .qv-option-label {
-      color: #0a0a0a;
-      font-size: 0.75rem;
-    }
-
-    .qv-color-swatch {
-      width: 36px;
-      height: 36px;
-    }
-
-    .qv-color-swatch.is-active,
-    .qv-color-swatch:hover {
-      border-color: #0a0a0a;
-    }
-
-    .qv-size-swatch {
-      color: #0a0a0a;
-      border-color: rgba(0,0,0,0.25);
-      padding: 0.5rem 1.1rem;
-      font-size: 0.78rem;
-      border-radius: 9999px;
-    }
-
-    .qv-size-swatch.is-active,
-    .qv-size-swatch:hover {
+    .qv-size-swatch.is-active {
       background-color: #0a0a0a;
       color: #ffffff;
       border-color: #0a0a0a;
     }
 
+    /* Quantity */
     .qv-qty {
-      border-color: rgba(0,0,0,0.15);
+      border: 1.5px solid rgba(0,0,0,0.15);
       border-radius: 14px;
+      background-color: #ffffff;
     }
 
     .qv-qty button {
       color: #0a0a0a;
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
+      font-size: 1.3rem;
     }
 
     .qv-qty-value {
       color: #0a0a0a;
       font-size: 1rem;
+      font-weight: 700;
     }
 
+    /* Info rows */
     .qv-info-row {
-      color: rgba(0,0,0,0.7);
-      border-color: rgba(0,0,0,0.06);
-      font-size: 0.8rem;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #3a3a3a;
+      padding: 0.8rem 0;
+      border-top: 1px solid rgba(0,0,0,0.07);
+      border-color: rgba(0,0,0,0.07);
     }
 
     .qv-pickup-row {
-      background-color: #f0faf0;
-      border-radius: 10px;
-      padding: 0.85rem 1rem;
-      display: flex;
-      align-items: flex-start;
+      background-color: #edfbf1;
+      border: 1px solid #b7f0ca;
+      border-radius: 12px;
+      padding: 1rem 1rem;
       gap: 0.75rem;
-      margin-top: 0.5rem;
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.78rem;
+      color: #0a5c24;
     }
 
+    .qv-pickup-row strong {
+      color: #0a5c24;
+      font-size: 0.8rem;
+    }
+
+    .qv-pickup-row small {
+      color: rgba(10,92,36,0.7);
+    }
+
+    .qv-pickup-row a {
+      color: #0a5c24;
+      text-decoration: underline;
+      font-weight: 600;
+      text-underline-offset: 2px;
+    }
+
+    /* CTA buttons */
     .qv-actions {
       flex-direction: column;
-      gap: 0.6rem;
-      margin-top: 1.25rem;
+      gap: 0.65rem;
+      margin-top: 1.5rem;
       position: sticky;
       bottom: 0;
-      background-color: #ffffff;
-      padding: 1rem 0 0.75rem;
-      border-top: 1px solid rgba(0,0,0,0.06);
+      background-color: #f8f8f6;
+      padding: 1rem 0 1rem;
+      border-top: 1px solid rgba(0,0,0,0.07);
     }
 
     .qv-btn {
-      padding: 1.15rem;
-      font-size: 0.85rem;
-      letter-spacing: 0.05em;
+      padding: 1.1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      border-radius: 14px;
     }
 
     .qv-btn--cart {
@@ -490,9 +582,9 @@
     }
 
     .qv-btn--buy {
-      background-color: #0a0a0a;
-      color: #ffffff;
-      border-color: #0a0a0a;
+      background-color: transparent;
+      color: #0a0a0a;
+      border: 1.5px solid rgba(0,0,0,0.25);
     }
   }
 
@@ -1222,12 +1314,22 @@
       qtyVal = 1;
       document.getElementById('qv-qty').textContent = '1';
       overlay.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
+      /* iOS-safe scroll lock */
+      var scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = '-' + scrollY + 'px';
+      document.body.style.width = '100%';
+      document.body.dataset.scrollY = scrollY;
     }
 
     function close() {
       overlay.classList.remove('is-open');
-      document.body.style.overflow = '';
+      /* Restore scroll position */
+      var savedY = parseInt(document.body.dataset.scrollY || '0');
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      window.scrollTo(0, savedY);
     }
 
     function goTo(idx, direction) {
