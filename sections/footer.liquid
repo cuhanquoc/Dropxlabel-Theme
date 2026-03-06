@@ -169,6 +169,23 @@
       font-size: 10vw;
     }
     .footer-newsletter-row { max-width: 100%; }
+    .footer-main {
+      flex-direction: column !important;
+      gap: 2rem !important;
+    }
+    .footer-main > div:first-child {
+      max-width: 100% !important;
+      padding-right: 0 !important;
+    }
+    .footer-vdivider { display: none !important; }
+    .footer-links-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      padding-left: 0 !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .footer-vdivider { display: block !important; }
   }
 </style>
 
@@ -198,98 +215,107 @@
     style="height: 1px; background: linear-gradient(to right, rgba(255,255,255,0.15), transparent);"
   ></div>
 
-  <!-- ── Footer 5-Column Grid ── -->
-  <div
-    id="footer-grid"
-    class="grid grid-cols-1 md:grid-cols-5 gap-8 md:gap-10 px-6 md:px-10"
-  >
+  <!-- ── Footer Layout ── -->
+  <div id="footer-grid" class="px-6 md:px-10" style="display: flex; flex-direction: column; gap: 2.5rem;">
 
-    <!-- COL 1: Newsletter Promo -->
-    <div data-footer-col>
-      <p class="footer-promo">
-        {{ section.settings.newsletter_text }}
-      </p>
+    <!-- Desktop: 2-part layout -->
+    <div class="footer-main" style="display: flex; gap: 0; align-items: stretch;">
 
-      <form
-        action="/contact#contact_form"
-        method="post"
-        onsubmit="event.preventDefault();"
-        novalidate
-      >
-        <input type="hidden" name="form_type" value="customer" />
-        <input type="hidden" name="utf8"      value="✓" />
-        <input type="hidden" name="contact[tags]" value="newsletter" />
+      <!-- LEFT: Newsletter Promo -->
+      <div data-footer-col style="flex: 0 0 28%; max-width: 320px; padding-right: 2.5rem;">
+        <p class="footer-promo">
+          {{ section.settings.newsletter_text }}
+        </p>
 
-        <div class="footer-newsletter-row">
-          <label for="footer-email" class="sr-only">Email address</label>
-          <input
-            id="footer-email"
-            name="contact[email]"
-            type="email"
-            class="footer-input"
-            placeholder="Enter your email"
-            required
-            autocomplete="email"
-          />
-          <button type="submit" class="footer-subscribe-btn">Subscribe</button>
+        <form
+          action="/contact#contact_form"
+          method="post"
+          onsubmit="event.preventDefault();"
+          novalidate
+        >
+          <input type="hidden" name="form_type" value="customer" />
+          <input type="hidden" name="utf8"      value="✓" />
+          <input type="hidden" name="contact[tags]" value="newsletter" />
+
+          <div class="footer-newsletter-row">
+            <label for="footer-email" class="sr-only">Email address</label>
+            <input
+              id="footer-email"
+              name="contact[email]"
+              type="email"
+              class="footer-input"
+              placeholder="Enter your email"
+              required
+              autocomplete="email"
+            />
+            <button type="submit" class="footer-subscribe-btn">Subscribe</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- VERTICAL DIVIDER -->
+      <div style="width: 1px; background: rgba(255,255,255,0.1); flex-shrink: 0; display: none;" class="footer-vdivider"></div>
+
+      <!-- RIGHT: 4 link columns -->
+      <div style="flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; padding-left: 2.5rem;" class="footer-links-grid">
+
+        <!-- Company -->
+        <div data-footer-col>
+          <p class="footer-col-title">{{ section.settings.col2_title | default: 'Company' }}</p>
+          <nav aria-label="Company links">
+            <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="footer-link">About Us</a>
+            <a href="{{ blogs.news.url | default: '/blogs/journal' }}" class="footer-link">Blog</a>
+            <a href="{{ pages['careers'].url | default: '/pages/careers' }}" class="footer-link">Careers</a>
+            <a href="{{ pages['locations'].url | default: '/pages/locations' }}" class="footer-link">Locations</a>
+          </nav>
         </div>
-      </form>
-    </div>
 
-    <!-- COL 2: Company -->
-    <div data-footer-col>
-      <p class="footer-col-title">{{ section.settings.col2_title | default: 'Company' }}</p>
-      <nav aria-label="Company links">
-        <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="footer-link">About Us</a>
-        <a href="{{ blogs.news.url | default: '/blogs/journal' }}" class="footer-link">Blog</a>
-        <a href="{{ pages['careers'].url | default: '/pages/careers' }}" class="footer-link">Careers</a>
-        <a href="{{ pages['locations'].url | default: '/pages/locations' }}" class="footer-link">Locations</a>
-      </nav>
-    </div>
+        <!-- Customer Care -->
+        <div data-footer-col>
+          <p class="footer-col-title">{{ section.settings.col3_title | default: 'Customer Care' }}</p>
+          <nav aria-label="Customer care links">
+            <a href="{{ pages['size-guide'].url | default: '/pages/size-guide' }}" class="footer-link">Size Guide</a>
+            <a href="{{ pages['faq'].url | default: '/pages/faq' }}" class="footer-link">Help & FAQs</a>
+            <a href="{{ pages['return-my-order'].url | default: '/pages/returns' }}" class="footer-link">Return My Order</a>
+            <a href="{{ pages['refer-a-friend'].url | default: '/pages/refer' }}" class="footer-link">Refer a Friend</a>
+          </nav>
+        </div>
 
-    <!-- COL 3: Customer Care -->
-    <div data-footer-col>
-      <p class="footer-col-title">{{ section.settings.col3_title | default: 'Customer Care' }}</p>
-      <nav aria-label="Customer care links">
-        <a href="{{ pages['size-guide'].url | default: '/pages/size-guide' }}" class="footer-link">Size Guide</a>
-        <a href="{{ pages['faq'].url | default: '/pages/faq' }}" class="footer-link">Help & FAQs</a>
-        <a href="{{ pages['return-my-order'].url | default: '/pages/returns' }}" class="footer-link">Return My Order</a>
-        <a href="{{ pages['refer-a-friend'].url | default: '/pages/refer' }}" class="footer-link">Refer a Friend</a>
-      </nav>
-    </div>
+        <!-- Terms & Policies -->
+        <div data-footer-col>
+          <p class="footer-col-title">{{ section.settings.col4_title | default: 'Terms & Policies' }}</p>
+          <nav aria-label="Terms and policies links">
+            <a href="{{ pages['duties-and-taxes'].url | default: '/pages/duties-taxes' }}" class="footer-link">Duties & Taxes</a>
+            <a href="{{ pages['shipping-policy'].url | default: '/policies/shipping-policy' }}" class="footer-link">Shipping Info</a>
+            <a href="{{ pages['privacy-policy'].url | default: '/policies/privacy-policy' }}" class="footer-link">Privacy Policy</a>
+            <a href="{{ pages['terms-of-service'].url | default: '/policies/terms-of-service' }}" class="footer-link">Terms Conditions</a>
+          </nav>
+        </div>
 
-    <!-- COL 4: Terms & Policies -->
-    <div data-footer-col>
-      <p class="footer-col-title">{{ section.settings.col4_title | default: 'Terms & Policies' }}</p>
-      <nav aria-label="Terms and policies links">
-        <a href="{{ pages['duties-and-taxes'].url | default: '/pages/duties-taxes' }}" class="footer-link">Duties & Taxes</a>
-        <a href="{{ pages['shipping-policy'].url | default: '/policies/shipping-policy' }}" class="footer-link">Shipping Info</a>
-        <a href="{{ pages['privacy-policy'].url | default: '/policies/privacy-policy' }}" class="footer-link">Privacy Policy</a>
-        <a href="{{ pages['terms-of-service'].url | default: '/policies/terms-of-service' }}" class="footer-link">Terms Conditions</a>
-      </nav>
-    </div>
+        <!-- Follow Us -->
+        <div data-footer-col>
+          <p class="footer-col-title">{{ section.settings.col5_title | default: 'Follow us' }}</p>
+          <nav aria-label="Social links">
+            {% if section.settings.instagram_url != blank %}
+              <a href="{{ section.settings.instagram_url }}" class="footer-link" target="_blank" rel="noopener">Instagram</a>
+            {% endif %}
+            {% if section.settings.facebook_url != blank %}
+              <a href="{{ section.settings.facebook_url }}" class="footer-link" target="_blank" rel="noopener">Facebook</a>
+            {% endif %}
+            {% if section.settings.pinterest_url != blank %}
+              <a href="{{ section.settings.pinterest_url }}" class="footer-link" target="_blank" rel="noopener">Pinterest</a>
+            {% endif %}
+            {% if section.settings.tiktok_url != blank %}
+              <a href="{{ section.settings.tiktok_url }}" class="footer-link" target="_blank" rel="noopener">Tiktok</a>
+            {% endif %}
+          </nav>
+        </div>
 
-    <!-- COL 5: Follow Us -->
-    <div data-footer-col>
-      <p class="footer-col-title">{{ section.settings.col5_title | default: 'Follow us' }}</p>
-      <nav aria-label="Social links">
-        {% if section.settings.instagram_url != blank %}
-          <a href="{{ section.settings.instagram_url }}" class="footer-link" target="_blank" rel="noopener">Instagram</a>
-        {% endif %}
-        {% if section.settings.facebook_url != blank %}
-          <a href="{{ section.settings.facebook_url }}" class="footer-link" target="_blank" rel="noopener">Facebook</a>
-        {% endif %}
-        {% if section.settings.pinterest_url != blank %}
-          <a href="{{ section.settings.pinterest_url }}" class="footer-link" target="_blank" rel="noopener">Pinterest</a>
-        {% endif %}
-        {% if section.settings.tiktok_url != blank %}
-          <a href="{{ section.settings.tiktok_url }}" class="footer-link" target="_blank" rel="noopener">Tiktok</a>
-        {% endif %}
-      </nav>
+      </div>
     </div>
 
   </div>
-  <!-- / Footer Grid -->
+  <!-- / Footer Layout -->
 
   <!-- ── Bottom Bar ── -->
   <div
