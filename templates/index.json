@@ -158,19 +158,20 @@
         "deco_url4": ""
       }
     },
-    "featured_blog_XVXKia": {
-      "type": "featured-blog",
-      "name": "Featured Blog",
-      "settings": {
-        "heading": "Stories to Inspire You",
-        "blog": "",
-        "articles_count": 3,
-        "cta_text": "View All Stories"
-      }
-    },
     "marquee_ticker_6CKgye": {
       "type": "marquee-ticker",
       "blocks": {
+        "ticker_card_fFdKwT": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Style Title",
+            "font": "assistant_n4",
+            "description": "A short caption for this card.",
+            "link_text": "Explore more",
+            "link_url": "",
+            "link_external": true
+          }
+        },
         "ticker_card_mjNFrg": {
           "type": "ticker_card",
           "settings": {
@@ -305,6 +306,7 @@
         }
       },
       "block_order": [
+        "ticker_card_fFdKwT",
         "ticker_card_mjNFrg",
         "ticker_card_QKtJHW",
         "ticker_card_PpiJGe",
@@ -321,9 +323,9 @@
       "name": "Marquee Ticker",
       "settings": {
         "bg_color": "#0a0a0a",
-        "speed": 30,
-        "gap": 24,
-        "card_width": 280
+        "speed": 45,
+        "gap": 48,
+        "card_width": 260
       }
     }
   },
@@ -332,7 +334,6 @@
     "featured-collection",
     "brand-story-bento",
     "trending-accordion",
-    "featured_blog_XVXKia",
     "marquee_ticker_6CKgye"
   ]
 }
