@@ -1273,7 +1273,8 @@
               var variantImg = null;
               for (var vi = 0; vi < variants.length; vi++) {
                 if (variants[vi].title && variants[vi].title.indexOf(val) > -1 && variants[vi].featured_image) {
-                  variantImg = variants[vi].featured_image;
+                  var fi = variants[vi].featured_image;
+                  variantImg = (typeof fi === 'string') ? fi : (fi.src || null);
                   break;
                 }
               }
