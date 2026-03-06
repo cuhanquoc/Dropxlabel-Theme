@@ -1,394 +1,480 @@
 <style>
-  /* ─────────────────────────────────────────
-     BRAND STORY BENTO — Styles
-  ───────────────────────────────────────── */
+  /* ═══════════════════════════════════════
+     BRAND STORY BENTO — Fashion Showcase
+  ═══════════════════════════════════════ */
 
-  /* Titanium Silver Gradient for Block 2 */
-  .bento-gradient {
-    background: linear-gradient(
-      145deg,
-      #e8e4de 0%,    /* Warm pearl      */
-      #d6d0c8 35%,   /* Silver sand     */
-      #c9c3bb 60%,   /* Titanium mid    */
-      #bfb9b0 100%   /* Deep warm grey  */
-    );
+  .bsb-section {
+    position: relative;
+    padding: 5rem 0 3rem;
+    overflow: hidden;
+    background-color: {{ section.settings.bg_color | default: '#f2f0ec' }};
+    /* Subtle cross-hatch texture */
+    background-image:
+      linear-gradient(45deg, rgba(0,0,0,0.018) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.018) 75%),
+      linear-gradient(45deg, rgba(0,0,0,0.018) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.018) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
   }
 
-  /* Accent pill tag */
-  .bento-tag {
+  /* ── Top Layout: text left + gallery right ── */
+  .bsb-top {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 3rem;
+    align-items: start;
+    padding: 0 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ── Left Text Panel ── */
+  .bsb-text {
+    padding-top: 2rem;
+    position: sticky;
+    top: 8rem;
+  }
+
+  .bsb-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: #0a0a0a;
+    margin-bottom: 1.5rem;
+  }
+
+  .bsb-heading em {
+    font-style: italic;
+    font-weight: 800;
+  }
+
+  .bsb-desc {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #555;
+    max-width: 320px;
+    margin-bottom: 2rem;
+  }
+
+  .bsb-cta-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .bsb-cta-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #0a0a0a;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .bsb-cta-icon:hover {
+    background-color: #0a0a0a;
+    color: #fff;
+  }
+
+  .bsb-cta-btn {
     display: inline-block;
-    padding: 0.35rem 1.1rem;
-    border: 1px solid rgba(197, 168, 128, 0.6);
+    padding: 0.7rem 1.6rem;
+    border: 1.5px solid #0a0a0a;
     border-radius: 9999px;
     font-family: var(--font-body);
-    font-size: 0.6rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-    margin-bottom: 1.25rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #0a0a0a;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Block 1 — image overlay gradient */
-  .bento-img-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(20, 18, 16, 0.78) 0%,
-      rgba(20, 18, 16, 0.15) 55%,
-      transparent 100%
-    );
-    border-radius: inherit;
+  .bsb-cta-btn:hover {
+    background-color: #0a0a0a;
+    color: #fff;
   }
 
-  /* Block 1 — floating text at bottom */
-  .bento-caption {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 2.25rem;
-  }
-
-  .bento-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: inherit;
-    transform: scale(1.15);
-    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  /* ── Right: Scrolling Gallery ── */
+  .bsb-gallery-track {
+    display: flex;
+    gap: 2rem;
     will-change: transform;
   }
 
-  .bento-block:hover .bento-img {
-    transform: scale(1.22);
+  /* ── Single Card ── */
+  .bsb-card {
+    flex: 0 0 420px;
+    max-width: 420px;
   }
 
-  /* Number counter style */
-  .bento-stat-number {
-    font-family: var(--font-heading);
-    font-size: clamp(2.5rem, 4vw, 3.5rem);
-    font-weight: 600;
-    color: var(--color-text);
-    line-height: 1;
-    letter-spacing: -0.02em;
+  .bsb-card-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3/4;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 4px solid rgba(255,255,255,0.8);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    background-color: #e8e5e0;
   }
 
-  .bento-stat-label {
+  .bsb-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .bsb-card:hover .bsb-card-img {
+    transform: scale(1.05);
+  }
+
+  /* Floating tag on image */
+  .bsb-card-tag {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    background-color: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    padding: 0.5rem 0.85rem;
+    border-radius: 10px;
     font-family: var(--font-body);
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-    margin-top: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #0a0a0a;
+    line-height: 1.4;
+    max-width: 160px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
 
-  /* Divider line */
-  .bento-divider {
-    width: 32px;
-    height: 1.5px;
-    background-color: var(--color-accent);
-    margin: 1.25rem 0;
+  /* Card bottom: title + button */
+  .bsb-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0.25rem 1.25rem;
+    border-bottom: 1.5px solid #c0bdb8;
+  }
+
+  .bsb-card-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #0a0a0a;
+    letter-spacing: -0.01em;
+  }
+
+  .bsb-card-link {
+    display: inline-block;
+    padding: 0.5rem 1.2rem;
+    border: 1.5px solid #0a0a0a;
+    border-radius: 9999px;
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .bsb-card-link:hover {
+    background-color: #0a0a0a;
+    color: #fff;
+  }
+
+  /* ── Scroll progress line ── */
+  .bsb-progress-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 3rem;
+  }
+
+  .bsb-progress {
+    width: 100%;
+    height: 2px;
+    background-color: #d6d3ce;
+    margin-top: 0.5rem;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .bsb-progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #0a0a0a;
+    border-radius: 2px;
+    transition: width 0.1s linear;
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 767px) {
+    .bsb-section {
+      padding: 3rem 0 2rem;
+    }
+
+    .bsb-top {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 0 1.25rem;
+    }
+
+    .bsb-text {
+      position: static;
+      padding-top: 0;
+    }
+
+    .bsb-heading {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .bsb-desc {
+      font-size: 0.8rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .bsb-gallery-track {
+      gap: 1.25rem;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      padding-right: 1.25rem;
+    }
+
+    .bsb-gallery-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    .bsb-card {
+      flex: 0 0 75vw;
+      max-width: 75vw;
+      scroll-snap-align: start;
+    }
+
+    .bsb-card-title {
+      font-size: 0.95rem;
+    }
+
+    .bsb-card-link {
+      font-size: 0.6rem;
+      padding: 0.4rem 0.9rem;
+    }
+
+    .bsb-progress-wrap {
+      padding: 0 1.25rem;
+    }
+  }
+
+  /* ── Tablet ── */
+  @media (min-width: 768px) and (max-width: 1024px) {
+    .bsb-top {
+      grid-template-columns: 300px 1fr;
+      gap: 2rem;
+      padding: 0 2rem;
+    }
+
+    .bsb-card {
+      flex: 0 0 340px;
+      max-width: 340px;
+    }
+
+    .bsb-progress-wrap {
+      padding: 0 2rem;
+    }
   }
 </style>
 
-<section
-  id="brand-story"
-  class="py-12 md:py-24 px-6 md:px-10"
-  style="background-color: var(--color-bg);"
->
-  <div class="max-w-screen-xl mx-auto">
+<section class="bsb-section" id="brand-story-bento">
 
-    <!-- ── Bento Grid: 3 blocks ── -->
-    <div
-      class="grid gap-6 md:gap-8"
-      style="grid-template-columns: 1fr; grid-template-rows: auto;"
-    >
-    <style>
-      @media (min-width: 768px) {
-        #brand-story .grid { grid-template-columns: 1fr 1fr !important; grid-template-rows: auto auto !important; }
-      }
-      /* Mobile: force all blocks into single column */
-      @media (max-width: 767px) {
-        #brand-story .bento-block {
-          grid-column: 1 !important;
-          grid-row: auto !important;
-          aspect-ratio: 1/1 !important;
-        }
-        #brand-story .bento-gradient {
-          min-height: 280px !important;
-          padding: 1.75rem !important;
-        }
-        #brand-story .bento-block[style*="16/9"] {
-          aspect-ratio: 16/9 !important;
-        }
-        .bento-caption {
-          padding: 1.5rem;
-        }
-        .bento-block {
-          border-radius: 20px !important;
-        }
-      }
-    </style>
+  <!-- ── Top: Text + Gallery ── -->
+  <div class="bsb-top">
 
-      <!-- ════════════════════════════════
-           BLOCK 1 — Left, Large (2 rows)
-      ════════════════════════════════ -->
-      <div
-        class="bento-block relative overflow-hidden rounded-[20px] md:rounded-[60px]"
-        style="grid-column: 1; grid-row: 1 / span 2; aspect-ratio: 1/1;"
-        data-bento="block"
-      >
-      <style>
-        @media (min-width: 768px) {
-          #brand-story .bento-block[style*="span 2"] { aspect-ratio: 3/4 !important; }
-        }
-      </style>
-        <!-- Background Image -->
-        {% if section.settings.block1_image != blank %}
-          <img
-            src="{{ section.settings.block1_image | image_url: width: 900 }}"
-            alt="{{ section.settings.block1_image.alt | default: section.settings.block1_heading }}"
-            class="bento-img absolute inset-0"
-            loading="lazy"
-            width="900"
-            height="1200"
-          />
-        {% else %}
-          <img
-            src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=900&q=85&auto=format&fit=crop"
-            alt="Journey of Style — editorial fashion"
-            class="bento-img absolute inset-0"
-            loading="lazy"
-            width="900"
-            height="1200"
-          />
-        {% endif %}
-
-        <!-- Overlay -->
-        <div class="bento-img-overlay"></div>
-
-        <!-- Text content at bottom -->
-        <div class="bento-caption">
-          <span class="bento-tag">{{ section.settings.block1_tag }}</span>
-
-          <h2
-            style="
-              font-family: var(--font-heading);
-              font-size: clamp(1.8rem, 3vw, 2.8rem);
-              font-weight: 600;
-              color: #ffffff;
-              line-height: 1.1;
-              letter-spacing: -0.01em;
-              margin-bottom: 0.9rem;
-            "
-          >
-            {{ section.settings.block1_heading }}
-          </h2>
-
-          <p
-            style="
-              font-family: var(--font-body);
-              font-size: 0.82rem;
-              line-height: 1.8;
-              color: rgba(255,255,255,0.68);
-              max-width: 340px;
-            "
-          >
-            {{ section.settings.block1_description }}
-          </p>
-        </div>
-
+    <!-- Left: Text Panel -->
+    <div class="bsb-text">
+      <h2 class="bsb-heading">
+        {{ section.settings.heading }}
+      </h2>
+      <p class="bsb-desc">
+        {{ section.settings.description }}
+      </p>
+      <div class="bsb-cta-wrap">
+        <a href="{{ section.settings.button_url | default: '#' }}" class="bsb-cta-icon" aria-label="Explore">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10"/><path d="M17 7v10H7"/></svg>
+        </a>
+        <a href="{{ section.settings.button_url | default: '#' }}" class="bsb-cta-btn">
+          {{ section.settings.button_text | default: 'Explore More' }}
+        </a>
       </div>
-      <!-- /BLOCK 1 -->
-
-
-      <!-- ════════════════════════════════
-           BLOCK 2 — Right, Top
-           Titanium Gradient — Timeless Pieces
-      ════════════════════════════════ -->
-      <div
-        class="bento-block bento-gradient rounded-[40px] md:rounded-[60px] flex flex-col justify-between"
-        style="grid-column: 2; grid-row: 1; padding: 2.5rem; min-height: 320px;"
-        data-bento="block"
-      >
-
-        <!-- Top row: stats -->
-        <div class="flex items-start gap-10">
-          <div>
-            <p class="bento-stat-number">{{ section.settings.stat1_number }}<span style="color: var(--color-accent);">+</span></p>
-            <p class="bento-stat-label">{{ section.settings.stat1_label }}</p>
-          </div>
-          <div>
-            <p class="bento-stat-number">{{ section.settings.stat2_number }}</p>
-            <p class="bento-stat-label">{{ section.settings.stat2_label }}</p>
-          </div>
-        </div>
-
-        <!-- Bottom: heading + copy -->
-        <div>
-          <div class="bento-divider"></div>
-
-          <h3
-            style="
-              font-family: var(--font-heading);
-              font-size: clamp(1.5rem, 2.5vw, 2rem);
-              font-weight: 600;
-              color: var(--color-text);
-              letter-spacing: -0.01em;
-              line-height: 1.15;
-              margin-bottom: 0.85rem;
-            "
-          >
-            {{ section.settings.block2_heading }}
-          </h3>
-
-          <p
-            style="
-              font-family: var(--font-body);
-              font-size: 0.82rem;
-              line-height: 1.85;
-              color: var(--color-muted);
-              max-width: 320px;
-            "
-          >
-            {{ section.settings.block2_description }}
-          </p>
-        </div>
-
-      </div>
-      <!-- /BLOCK 2 -->
-
-
-      <!-- ════════════════════════════════
-           BLOCK 3 — Right, Bottom
-      ════════════════════════════════ -->
-      <div
-        class="bento-block relative overflow-hidden rounded-[40px] md:rounded-[60px]"
-        style="grid-column: 2; grid-row: 2; aspect-ratio: 16/9;"
-        data-bento="block"
-      >
-        <!-- Background Image -->
-        {% if section.settings.block3_image != blank %}
-          <img
-            src="{{ section.settings.block3_image | image_url: width: 900 }}"
-            alt="{{ section.settings.block3_image.alt | default: section.settings.block3_heading }}"
-            class="bento-img absolute inset-0"
-            loading="lazy"
-            width="900"
-            height="506"
-          />
-        {% else %}
-          <img
-            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=85&auto=format&fit=crop"
-            alt="Fabric texture — material detail"
-            class="bento-img absolute inset-0"
-            loading="lazy"
-            width="900"
-            height="506"
-          />
-        {% endif %}
-
-        <!-- Subtle overlay -->
-        <div
-          class="absolute inset-0"
-          style="
-            background: linear-gradient(
-              to right,
-              rgba(10,9,8,0.55) 0%,
-              transparent 55%
-            );
-            border-radius: inherit;
-          "
-        ></div>
-
-        <!-- Text overlay -->
-        <div
-          style="
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            padding: 2rem;
-          "
-        >
-          <span class="bento-tag" style="border-color: rgba(255,255,255,0.35); color: rgba(255,255,255,0.85);">
-            {{ section.settings.block3_tag }}
-          </span>
-          <p
-            style="
-              font-family: var(--font-heading);
-              font-size: clamp(1rem, 1.8vw, 1.4rem);
-              font-weight: 500;
-              color: #ffffff;
-              letter-spacing: 0.02em;
-              line-height: 1.3;
-            "
-          >
-            {{ section.settings.block3_heading }}
-          </p>
-        </div>
-
-      </div>
-      <!-- /BLOCK 3 -->
-
     </div>
-    <!-- / Bento Grid -->
+
+    <!-- Right: Gallery Track -->
+    <div style="overflow: hidden;">
+      <div class="bsb-gallery-track" id="bsb-gallery-track">
+        {% for block in section.blocks %}
+          {% if block.type == 'image_card' %}
+            <div class="bsb-card" {{ block.shopify_attributes }}>
+              <!-- Image -->
+              <div class="bsb-card-img-wrap">
+                {% if block.settings.image != blank %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 800 }}"
+                    alt="{{ block.settings.image.alt | default: block.settings.title }}"
+                    class="bsb-card-img"
+                    loading="lazy"
+                    width="800"
+                    height="1067"
+                  />
+                {% else %}
+                  <div style="width:100%;height:100%;background:#ddd;display:flex;align-items:center;justify-content:center;color:#999;font-size:0.8rem;">
+                    Upload Image
+                  </div>
+                {% endif %}
+
+                {% if block.settings.tag_text != blank %}
+                  <div class="bsb-card-tag">{{ block.settings.tag_text }}</div>
+                {% endif %}
+              </div>
+
+              <!-- Title + Button -->
+              <div class="bsb-card-bottom">
+                <h3 class="bsb-card-title">{{ block.settings.title }}</h3>
+                <a href="{{ block.settings.button_url | default: '#' }}" class="bsb-card-link">
+                  {{ block.settings.button_text | default: 'Shop Now' }}
+                </a>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
 
   </div>
+
+  <!-- Progress Bar -->
+  <div class="bsb-progress-wrap">
+    <div class="bsb-progress">
+      <div class="bsb-progress-bar" id="bsb-progress-bar"></div>
+    </div>
+  </div>
+
 </section>
 
-
 <script>
-  /* ─────────────────────────────────────────────────────
-     BRAND STORY BENTO — Quiet Luxury Scroll Animation
-  ───────────────────────────────────────────────────── */
+  /* ═══════════════════════════════════════════════════
+     BRAND STORY BENTO — Scroll-Driven Gallery
+  ═══════════════════════════════════════════════════ */
 
   gsap.registerPlugin(ScrollTrigger);
 
-  let mmBento = gsap.matchMedia();
+  (function initBentoGallery() {
+    var track = document.getElementById('bsb-gallery-track');
+    var progressBar = document.getElementById('bsb-progress-bar');
+    var section = document.getElementById('brand-story-bento');
+    if (!track || !section) return;
 
-  mmBento.add("(min-width: 768px)", () => {
-    gsap.fromTo('#brand-story [data-bento="block"]',
-      { y: 50, opacity: 0, immediateRender: false },
-      {
-        scrollTrigger: { trigger: '#brand-story', start: 'top 85%', once: true },
-        y: 0, opacity: 1, duration: 1.5, ease: 'power4.out', stagger: 0.2,
+    var isMobile = window.innerWidth < 768;
+
+    if (!isMobile) {
+      /* Desktop: scroll-driven horizontal slide */
+      var cards = track.querySelectorAll('.bsb-card');
+      if (cards.length === 0) return;
+
+      /* Calculate how far to scroll */
+      function getScrollAmount() {
+        return -(track.scrollWidth - track.parentElement.offsetWidth);
       }
-    );
-  });
 
-  mmBento.add("(max-width: 767px)", () => {
-    gsap.fromTo('#brand-story [data-bento="block"]',
-      { y: 20, opacity: 0, immediateRender: false },
-      {
-        scrollTrigger: { trigger: '#brand-story', start: 'top 90%', once: true },
-        y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.08,
-      }
-    );
-  });
-
-  /* ═══════════════════════════════════════════════════
-     IMAGE PARALLAX SCROLL — GSAP ScrollTrigger
-     .bento-img scale(1.15) → yPercent: 15, scrub: 1
-  ═══════════════════════════════════════════════════ */
-  (function initBentoParallax() {
-    var blocks = document.querySelectorAll('.bento-block');
-    blocks.forEach(function (block) {
-      var img = block.querySelector('.bento-img');
-      if (!img) return;
-
-      gsap.to(img, {
-        yPercent: 15,
+      var tween = gsap.to(track, {
+        x: getScrollAmount,
         ease: 'none',
         scrollTrigger: {
-          trigger: block,
-          start: 'top bottom',
-          end: 'bottom top',
+          trigger: section,
+          start: 'top 20%',
+          end: function () { return '+=' + Math.abs(getScrollAmount()); },
           scrub: 1,
-        },
+          pin: true,
+          invalidateOnRefresh: true,
+          onUpdate: function (self) {
+            if (progressBar) {
+              progressBar.style.width = (self.progress * 100) + '%';
+            }
+          }
+        }
       });
-    });
+
+      /* Entry animation for cards */
+      gsap.fromTo(cards,
+        { y: 60, opacity: 0 },
+        {
+          y: 0, opacity: 1,
+          duration: 0.8,
+          ease: 'power3.out',
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 75%',
+            once: true
+          }
+        }
+      );
+
+      /* Entry animation for text */
+      gsap.fromTo('.bsb-text',
+        { y: 40, opacity: 0 },
+        {
+          y: 0, opacity: 1,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 80%',
+            once: true
+          }
+        }
+      );
+    } else {
+      /* Mobile: simple entry animation only */
+      gsap.fromTo('.bsb-text',
+        { y: 20, opacity: 0 },
+        {
+          y: 0, opacity: 1,
+          duration: 0.6,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 90%',
+            once: true
+          }
+        }
+      );
+
+      gsap.fromTo('.bsb-card',
+        { y: 20, opacity: 0 },
+        {
+          y: 0, opacity: 1,
+          duration: 0.5,
+          ease: 'power3.out',
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: track,
+            start: 'top 90%',
+            once: true
+          }
+        }
+      );
+    }
   }());
 </script>
 
@@ -399,96 +485,107 @@
   "settings": [
     {
       "type": "header",
-      "content": "Block 1 — Large Image"
+      "content": "Text Content"
     },
     {
-      "type": "image_picker",
-      "id": "block1_image",
-      "label": "Image"
+      "type": "html",
+      "id": "heading",
+      "label": "Heading (HTML supported)",
+      "default": "<em>FASHION</em> THAT<br>FLOWS WITH<br>THE SEASONS"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Explore our latest collection of timeless fashion. From classic styles to modern trends, find the perfect look for every season. Shop now and elevate your wardrobe!"
     },
     {
       "type": "text",
-      "id": "block1_tag",
-      "label": "Tag Text",
-      "default": "Since 2021"
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Explore More"
     },
     {
-      "type": "textarea",
-      "id": "block1_heading",
-      "label": "Heading",
-      "default": "Journey<br>of Style"
-    },
-    {
-      "type": "textarea",
-      "id": "block1_description",
-      "label": "Description",
-      "default": "Born from a quiet obsession with fabric, form, and feeling — every piece carries the weight of intention."
+      "type": "url",
+      "id": "button_url",
+      "label": "Button Link"
     },
     {
       "type": "header",
-      "content": "Block 2 — Stats & Info"
+      "content": "Appearance"
     },
     {
-      "type": "text",
-      "id": "stat1_number",
-      "label": "Stat 1 Number",
-      "default": "200"
-    },
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f2f0ec"
+    }
+  ],
+  "blocks": [
     {
-      "type": "text",
-      "id": "stat1_label",
-      "label": "Stat 1 Label",
-      "default": "Curated Pieces"
-    },
-    {
-      "type": "text",
-      "id": "stat2_number",
-      "label": "Stat 2 Number",
-      "default": "12"
-    },
-    {
-      "type": "text",
-      "id": "stat2_label",
-      "label": "Stat 2 Label",
-      "default": "Collections"
-    },
-    {
-      "type": "text",
-      "id": "block2_heading",
-      "label": "Heading",
-      "default": "Timeless Pieces"
-    },
-    {
-      "type": "textarea",
-      "id": "block2_description",
-      "label": "Description",
-      "default": "Crafted for the woman who understands that true luxury whispers — in the press of pure linen, the weight of Italian crepe, the silence of a perfect silhouette."
-    },
-    {
-      "type": "header",
-      "content": "Block 3 — Bottom Image"
-    },
-    {
-      "type": "image_picker",
-      "id": "block3_image",
-      "label": "Image"
-    },
-    {
-      "type": "text",
-      "id": "block3_tag",
-      "label": "Tag Text",
-      "default": "Material"
-    },
-    {
-      "type": "textarea",
-      "id": "block3_heading",
-      "label": "Heading",
-      "default": "Italian Wool & Pure Linen.<br><span style=\"font-weight: 400; font-style: italic; color: rgba(255,255,255,0.7);\">Feel the difference.</span>"
+      "type": "image_card",
+      "name": "Image Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "tag_text",
+          "label": "Overlay Tag Text",
+          "default": "Grace, Glamour, Style, Confidence"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card Title",
+          "default": "Elegant Evening Wear"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "url",
+          "id": "button_url",
+          "label": "Button Link"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Brand Story Bento"
+      "name": "Brand Story Bento",
+      "blocks": [
+        {
+          "type": "image_card",
+          "settings": {
+            "tag_text": "Grace, Glamour, Style, Confidence",
+            "title": "Elegant Evening Wear",
+            "button_text": "SHOP NOW"
+          }
+        },
+        {
+          "type": "image_card",
+          "settings": {
+            "tag_text": "Warm, Cozy, Elegant, Premium",
+            "title": "Luxury Winter Collection",
+            "button_text": "Shop Now"
+          }
+        },
+        {
+          "type": "image_card",
+          "settings": {
+            "tag_text": "Bold, Modern, Timeless",
+            "title": "Urban Street Style",
+            "button_text": "SHOP NOW"
+          }
+        }
+      ]
     }
   ]
 }
