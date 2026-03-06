@@ -42,23 +42,29 @@
   /* Column headings */
   .footer-col-title {
     font-family: var(--font-heading);
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     color: #ffffff;
-    font-weight: 500;
-    margin-bottom: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
     letter-spacing: 0.01em;
+  }
+
+  /* Footer nav container */
+  #site-footer nav {
+    display: flex !important;
+    flex-direction: column !important;
   }
 
   /* Footer nav links */
   .footer-link {
-    display: block;
+    display: block !important;
     font-family: var(--font-body);
-    font-size: 0.82rem;
+    font-size: 0.92rem;
     color: #9ca3af;
     text-decoration: none;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.85rem;
     transition: color 250ms ease;
-    line-height: 1;
+    line-height: 1.2;
   }
 
   .footer-link:hover {
@@ -68,7 +74,7 @@
   /* Newsletter promo text */
   .footer-promo {
     font-family: var(--font-heading);
-    font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
     font-weight: 500;
     color: #ffffff;
     line-height: 1.45;
@@ -263,10 +269,10 @@
         <div data-footer-col>
           <p class="footer-col-title">{{ section.settings.col2_title | default: 'Company' }}</p>
           <nav aria-label="Company links">
-            <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="footer-link">About Us</a>
-            <a href="{{ blogs.news.url | default: '/blogs/journal' }}" class="footer-link">Blog</a>
-            <a href="{{ pages['careers'].url | default: '/pages/careers' }}" class="footer-link">Careers</a>
-            <a href="{{ pages['locations'].url | default: '/pages/locations' }}" class="footer-link">Locations</a>
+            {% if section.settings.c2_link1_label != blank %}<a href="{{ section.settings.c2_link1_url | default: '#' }}" class="footer-link">{{ section.settings.c2_link1_label }}</a>{% endif %}
+            {% if section.settings.c2_link2_label != blank %}<a href="{{ section.settings.c2_link2_url | default: '#' }}" class="footer-link">{{ section.settings.c2_link2_label }}</a>{% endif %}
+            {% if section.settings.c2_link3_label != blank %}<a href="{{ section.settings.c2_link3_url | default: '#' }}" class="footer-link">{{ section.settings.c2_link3_label }}</a>{% endif %}
+            {% if section.settings.c2_link4_label != blank %}<a href="{{ section.settings.c2_link4_url | default: '#' }}" class="footer-link">{{ section.settings.c2_link4_label }}</a>{% endif %}
           </nav>
         </div>
 
@@ -274,10 +280,10 @@
         <div data-footer-col>
           <p class="footer-col-title">{{ section.settings.col3_title | default: 'Customer Care' }}</p>
           <nav aria-label="Customer care links">
-            <a href="{{ pages['size-guide'].url | default: '/pages/size-guide' }}" class="footer-link">Size Guide</a>
-            <a href="{{ pages['faq'].url | default: '/pages/faq' }}" class="footer-link">Help & FAQs</a>
-            <a href="{{ pages['return-my-order'].url | default: '/pages/returns' }}" class="footer-link">Return My Order</a>
-            <a href="{{ pages['refer-a-friend'].url | default: '/pages/refer' }}" class="footer-link">Refer a Friend</a>
+            {% if section.settings.c3_link1_label != blank %}<a href="{{ section.settings.c3_link1_url | default: '#' }}" class="footer-link">{{ section.settings.c3_link1_label }}</a>{% endif %}
+            {% if section.settings.c3_link2_label != blank %}<a href="{{ section.settings.c3_link2_url | default: '#' }}" class="footer-link">{{ section.settings.c3_link2_label }}</a>{% endif %}
+            {% if section.settings.c3_link3_label != blank %}<a href="{{ section.settings.c3_link3_url | default: '#' }}" class="footer-link">{{ section.settings.c3_link3_label }}</a>{% endif %}
+            {% if section.settings.c3_link4_label != blank %}<a href="{{ section.settings.c3_link4_url | default: '#' }}" class="footer-link">{{ section.settings.c3_link4_label }}</a>{% endif %}
           </nav>
         </div>
 
@@ -285,10 +291,10 @@
         <div data-footer-col>
           <p class="footer-col-title">{{ section.settings.col4_title | default: 'Terms & Policies' }}</p>
           <nav aria-label="Terms and policies links">
-            <a href="{{ pages['duties-and-taxes'].url | default: '/pages/duties-taxes' }}" class="footer-link">Duties & Taxes</a>
-            <a href="{{ pages['shipping-policy'].url | default: '/policies/shipping-policy' }}" class="footer-link">Shipping Info</a>
-            <a href="{{ pages['privacy-policy'].url | default: '/policies/privacy-policy' }}" class="footer-link">Privacy Policy</a>
-            <a href="{{ pages['terms-of-service'].url | default: '/policies/terms-of-service' }}" class="footer-link">Terms Conditions</a>
+            {% if section.settings.c4_link1_label != blank %}<a href="{{ section.settings.c4_link1_url | default: '#' }}" class="footer-link">{{ section.settings.c4_link1_label }}</a>{% endif %}
+            {% if section.settings.c4_link2_label != blank %}<a href="{{ section.settings.c4_link2_url | default: '#' }}" class="footer-link">{{ section.settings.c4_link2_label }}</a>{% endif %}
+            {% if section.settings.c4_link3_label != blank %}<a href="{{ section.settings.c4_link3_url | default: '#' }}" class="footer-link">{{ section.settings.c4_link3_label }}</a>{% endif %}
+            {% if section.settings.c4_link4_label != blank %}<a href="{{ section.settings.c4_link4_url | default: '#' }}" class="footer-link">{{ section.settings.c4_link4_label }}</a>{% endif %}
           </nav>
         </div>
 
@@ -296,18 +302,10 @@
         <div data-footer-col>
           <p class="footer-col-title">{{ section.settings.col5_title | default: 'Follow us' }}</p>
           <nav aria-label="Social links">
-            {% if section.settings.instagram_url != blank %}
-              <a href="{{ section.settings.instagram_url }}" class="footer-link" target="_blank" rel="noopener">Instagram</a>
-            {% endif %}
-            {% if section.settings.facebook_url != blank %}
-              <a href="{{ section.settings.facebook_url }}" class="footer-link" target="_blank" rel="noopener">Facebook</a>
-            {% endif %}
-            {% if section.settings.pinterest_url != blank %}
-              <a href="{{ section.settings.pinterest_url }}" class="footer-link" target="_blank" rel="noopener">Pinterest</a>
-            {% endif %}
-            {% if section.settings.tiktok_url != blank %}
-              <a href="{{ section.settings.tiktok_url }}" class="footer-link" target="_blank" rel="noopener">Tiktok</a>
-            {% endif %}
+            {% if section.settings.c5_link1_label != blank %}<a href="{{ section.settings.c5_link1_url | default: '#' }}" class="footer-link" target="_blank" rel="noopener">{{ section.settings.c5_link1_label }}</a>{% endif %}
+            {% if section.settings.c5_link2_label != blank %}<a href="{{ section.settings.c5_link2_url | default: '#' }}" class="footer-link" target="_blank" rel="noopener">{{ section.settings.c5_link2_label }}</a>{% endif %}
+            {% if section.settings.c5_link3_label != blank %}<a href="{{ section.settings.c5_link3_url | default: '#' }}" class="footer-link" target="_blank" rel="noopener">{{ section.settings.c5_link3_label }}</a>{% endif %}
+            {% if section.settings.c5_link4_label != blank %}<a href="{{ section.settings.c5_link4_url | default: '#' }}" class="footer-link" target="_blank" rel="noopener">{{ section.settings.c5_link4_label }}</a>{% endif %}
           </nav>
         </div>
 
@@ -407,58 +405,49 @@
       "label": "Newsletter Promo Text",
       "default": "Receive an exclusive <span class='footer-promo-highlight'>20%</span> discount code when you signup."
     },
-    {
-      "type": "header",
-      "content": "Column Titles"
-    },
-    {
-      "type": "text",
-      "id": "col2_title",
-      "label": "Column 2 Title",
-      "default": "Company"
-    },
-    {
-      "type": "text",
-      "id": "col3_title",
-      "label": "Column 3 Title",
-      "default": "Customer Care"
-    },
-    {
-      "type": "text",
-      "id": "col4_title",
-      "label": "Column 4 Title",
-      "default": "Terms & Policies"
-    },
-    {
-      "type": "text",
-      "id": "col5_title",
-      "label": "Column 5 Title",
-      "default": "Follow us"
-    },
-    {
-      "type": "header",
-      "content": "Social Links"
-    },
-    {
-      "type": "url",
-      "id": "instagram_url",
-      "label": "Instagram URL"
-    },
-    {
-      "type": "url",
-      "id": "facebook_url",
-      "label": "Facebook URL"
-    },
-    {
-      "type": "url",
-      "id": "pinterest_url",
-      "label": "Pinterest URL"
-    },
-    {
-      "type": "url",
-      "id": "tiktok_url",
-      "label": "TikTok URL"
-    }
+    { "type": "header", "content": "── Company Column ──" },
+    { "type": "text", "id": "col2_title", "label": "Column Title", "default": "Company" },
+    { "type": "text", "id": "c2_link1_label", "label": "Link 1 Label", "default": "About Us" },
+    { "type": "url",  "id": "c2_link1_url",   "label": "Link 1 URL" },
+    { "type": "text", "id": "c2_link2_label", "label": "Link 2 Label", "default": "Blog" },
+    { "type": "url",  "id": "c2_link2_url",   "label": "Link 2 URL" },
+    { "type": "text", "id": "c2_link3_label", "label": "Link 3 Label", "default": "Careers" },
+    { "type": "url",  "id": "c2_link3_url",   "label": "Link 3 URL" },
+    { "type": "text", "id": "c2_link4_label", "label": "Link 4 Label", "default": "Locations" },
+    { "type": "url",  "id": "c2_link4_url",   "label": "Link 4 URL" },
+
+    { "type": "header", "content": "── Customer Care Column ──" },
+    { "type": "text", "id": "col3_title", "label": "Column Title", "default": "Customer Care" },
+    { "type": "text", "id": "c3_link1_label", "label": "Link 1 Label", "default": "Size Guide" },
+    { "type": "url",  "id": "c3_link1_url",   "label": "Link 1 URL" },
+    { "type": "text", "id": "c3_link2_label", "label": "Link 2 Label", "default": "Help & FAQs" },
+    { "type": "url",  "id": "c3_link2_url",   "label": "Link 2 URL" },
+    { "type": "text", "id": "c3_link3_label", "label": "Link 3 Label", "default": "Return My Order" },
+    { "type": "url",  "id": "c3_link3_url",   "label": "Link 3 URL" },
+    { "type": "text", "id": "c3_link4_label", "label": "Link 4 Label", "default": "Refer a Friend" },
+    { "type": "url",  "id": "c3_link4_url",   "label": "Link 4 URL" },
+
+    { "type": "header", "content": "── Terms & Policies Column ──" },
+    { "type": "text", "id": "col4_title", "label": "Column Title", "default": "Terms & Policies" },
+    { "type": "text", "id": "c4_link1_label", "label": "Link 1 Label", "default": "Duties & Taxes" },
+    { "type": "url",  "id": "c4_link1_url",   "label": "Link 1 URL" },
+    { "type": "text", "id": "c4_link2_label", "label": "Link 2 Label", "default": "Shipping Info" },
+    { "type": "url",  "id": "c4_link2_url",   "label": "Link 2 URL" },
+    { "type": "text", "id": "c4_link3_label", "label": "Link 3 Label", "default": "Privacy Policy" },
+    { "type": "url",  "id": "c4_link3_url",   "label": "Link 3 URL" },
+    { "type": "text", "id": "c4_link4_label", "label": "Link 4 Label", "default": "Terms Conditions" },
+    { "type": "url",  "id": "c4_link4_url",   "label": "Link 4 URL" },
+
+    { "type": "header", "content": "── Follow Us Column ──" },
+    { "type": "text", "id": "col5_title", "label": "Column Title", "default": "Follow us" },
+    { "type": "text", "id": "c5_link1_label", "label": "Link 1 Label", "default": "Instagram" },
+    { "type": "url",  "id": "c5_link1_url",   "label": "Link 1 URL" },
+    { "type": "text", "id": "c5_link2_label", "label": "Link 2 Label", "default": "Facebook" },
+    { "type": "url",  "id": "c5_link2_url",   "label": "Link 2 URL" },
+    { "type": "text", "id": "c5_link3_label", "label": "Link 3 Label", "default": "Pinterest" },
+    { "type": "url",  "id": "c5_link3_url",   "label": "Link 3 URL" },
+    { "type": "text", "id": "c5_link4_label", "label": "Link 4 Label", "default": "Tiktok" },
+    { "type": "url",  "id": "c5_link4_url",   "label": "Link 4 URL" }
   ]
 }
 {% endschema %}
