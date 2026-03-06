@@ -98,10 +98,10 @@
         "block1_tag": "Since 2021",
         "block1_heading": "Journey<br>of Style",
         "block1_description": "Born from a quiet obsession with fabric, form, and feeling — every piece carries the weight of intention.",
-        "stat1_number": "200",
+        "stat1_number": "20.000",
         "stat1_label": "Curated Pieces",
-        "stat2_number": "12",
-        "stat2_label": "Collections",
+        "stat2_number": "millions",
+        "stat2_label": "customers",
         "block2_heading": "Timeless Pieces",
         "block2_description": "Crafted for the woman who understands that true luxury whispers — in the press of pure linen, the weight of Italian crepe, the silence of a perfect silhouette.",
         "block3_tag": "Material",
@@ -119,8 +119,9 @@
         "mobile_heading": "Trending Styles"
       }
     },
-    "featured-blog": {
+    "featured_blog_XVXKia": {
       "type": "featured-blog",
+      "name": "Featured Blog",
       "settings": {
         "heading": "Stories to Inspire You",
         "blog": "",
@@ -134,6 +135,6 @@
     "featured-collection",
     "brand-story-bento",
     "trending-accordion",
-    "featured-blog"
+    "featured_blog_XVXKia"
   ]
 }
