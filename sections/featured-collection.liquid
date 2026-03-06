@@ -763,7 +763,7 @@
                       class="pc-variant-thumb{% if forloop.first %} is-active{% endif %}"
                       data-variant-img="{{ variant.featured_image | image_url: width: 500 }}"
                       data-target-id="pc-main-{{ product.id }}"
-                      onclick="VariantSwap.change(this)"
+                      onclick="event.stopPropagation(); VariantSwap.change(this)"
                     >
                       <img src="{{ variant.featured_image | image_url: width: 80 }}" alt="{{ variant.title | escape }}" loading="lazy" />
                     </span>
@@ -1032,7 +1032,26 @@
       var newSrc = el.getAttribute('data-variant-img');
       var targetId = el.getAttribute('data-target-id');
       var mainImg = document.getElementById(targetId);
-      if (mainImg && newSrc) mainImg.src = newSrc;
+      if (!mainImg || !newSrc) return;
+
+      /* Swap the primary image immediately */
+      mainImg.src = newSrc;
+
+      /* Also update secondary (hover) image to next variant image if available */
+      var card = mainImg.closest('.product-card');
+      if (card) {
+        var secondary = card.querySelector('.pc-img-secondary');
+        /* Find the next variant in the list for hover image */
+        var thumbs = el.parentElement.querySelectorAll('.pc-variant-thumb');
+        var idx = Array.prototype.indexOf.call(thumbs, el);
+        var nextThumb = thumbs[idx + 1] || thumbs[0];
+        if (secondary && nextThumb && nextThumb !== el) {
+          secondary.src = nextThumb.getAttribute('data-variant-img');
+        } else if (secondary) {
+          /* If only 1 variant, hide secondary */
+          secondary.style.opacity = '0';
+        }
+      }
 
       /* Toggle active state */
       var siblings = el.parentElement.querySelectorAll('.pc-variant-thumb');
