@@ -851,10 +851,9 @@
     padding: 1rem;
     border-radius: 9999px;
     font-family: var(--font-body);
-    font-size: 0.75rem;
+    font-size: 0.82rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    letter-spacing: 0.02em;
     text-align: center;
     cursor: pointer;
     transition: opacity 0.25s ease, transform 0.2s ease;
@@ -869,14 +868,14 @@
   }
 
   .qv-btn--cart {
-    background-color: #ffffff;
-    color: #0a0a0a;
+    background-color: #333;
+    color: #ffffff;
   }
 
   .qv-btn--buy {
-    background-color: transparent;
+    background-color: #333;
     color: #ffffff;
-    border: 1px solid rgba(255,255,255,0.5);
+    border: none;
   }
 
   /* Close button */
@@ -904,17 +903,54 @@
 
   /* ── Info rows ── */
   .qv-info-row {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     font-size: 0.72rem;
-    padding: 0.6rem 0;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 0;
+    border: none;
     color: rgba(255,255,255,0.7);
   }
 
   .qv-info-row svg {
     flex-shrink: 0;
+  }
+
+  .qv-info-rows-wrap {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.7rem 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .qv-pickup-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background-color: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 0.4rem;
+  }
+
+  .qv-pickup-row strong {
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .qv-pickup-row small {
+    color: rgba(255,255,255,0.5);
+  }
+
+  .qv-pickup-row a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: underline;
+    margin-left: auto;
+    white-space: nowrap;
   }
 
   /* Placeholder card */
@@ -1176,17 +1212,19 @@
         <div>
           <strong>{{ section.settings.pickup_location | default: 'Pickup available at California Warehouse' }}</strong>
           <small>{{ section.settings.pickup_ready | default: 'Usually ready in 24 hours' }}</small>
-          <br><a href="/policies/shipping-policy">Check availability at other stores</a>
         </div>
+        <a href="/policies/shipping-policy">Check availability at other stores</a>
       </div>
 
-      <div class="qv-info-row">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.93a2 2 0 0 0 1.66-.9l.82-1.2a2 2 0 0 1 1.66-.9H18a2 2 0 0 1 2 2v2"/><circle cx="7" cy="18" r="2"/><path d="M15 18H9"/><circle cx="17" cy="18" r="2"/><path d="M22 12v4a2 2 0 0 1-2 2h-1"/><path d="M14 12h4l3 3"/></svg>
-        {{ section.settings.delivery_text | default: 'Free delivery estimated' }}
-      </div>
-      <div class="qv-info-row">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
-        {{ section.settings.returns_text | default: 'Free + easy returns' }}
+      <div class="qv-info-rows-wrap">
+        <div class="qv-info-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.93a2 2 0 0 0 1.66-.9l.82-1.2a2 2 0 0 1 1.66-.9H18a2 2 0 0 1 2 2v2"/><circle cx="7" cy="18" r="2"/><path d="M15 18H9"/><circle cx="17" cy="18" r="2"/><path d="M22 12v4a2 2 0 0 1-2 2h-1"/><path d="M14 12h4l3 3"/></svg>
+          {{ section.settings.delivery_text | default: 'Free delivery estimated' }}
+        </div>
+        <div class="qv-info-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+          {{ section.settings.returns_text | default: 'Free + easy returns' }}
+        </div>
       </div>
 
       <!-- Actions -->
