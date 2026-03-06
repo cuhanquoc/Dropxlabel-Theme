@@ -171,6 +171,72 @@
     "marquee_ticker_6CKgye": {
       "type": "marquee-ticker",
       "blocks": {
+        "ticker_card_mjNFrg": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Style Title",
+            "font": "assistant_n4",
+            "description": "A short caption for this card.",
+            "link_text": "Explore more",
+            "link_url": "",
+            "link_external": true
+          }
+        },
+        "ticker_card_QKtJHW": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Style Title",
+            "font": "assistant_n4",
+            "description": "A short caption for this card.",
+            "link_text": "Explore more",
+            "link_url": "",
+            "link_external": true
+          }
+        },
+        "ticker_card_PpiJGe": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Style Title",
+            "font": "assistant_n4",
+            "description": "A short caption for this card.",
+            "link_text": "Explore more",
+            "link_url": "",
+            "link_external": true
+          }
+        },
+        "ticker_card_Q8wTzw": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Style Title",
+            "font": "assistant_n4",
+            "description": "A short caption for this card.",
+            "link_text": "Explore more",
+            "link_url": "",
+            "link_external": true
+          }
+        },
+        "ticker_card_WxQc3x": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Style Title",
+            "font": "assistant_n4",
+            "description": "A short caption for this card.",
+            "link_text": "Explore more",
+            "link_url": "",
+            "link_external": true
+          }
+        },
+        "ticker_card_6YBiKn": {
+          "type": "ticker_card",
+          "settings": {
+            "title": "Style Title",
+            "font": "assistant_n4",
+            "description": "A short caption for this card.",
+            "link_text": "Explore more",
+            "link_url": "",
+            "link_external": true
+          }
+        },
         "ticker_card_rxzn7i": {
           "type": "ticker_card",
           "settings": {
@@ -239,6 +305,12 @@
         }
       },
       "block_order": [
+        "ticker_card_mjNFrg",
+        "ticker_card_QKtJHW",
+        "ticker_card_PpiJGe",
+        "ticker_card_Q8wTzw",
+        "ticker_card_WxQc3x",
+        "ticker_card_6YBiKn",
         "ticker_card_rxzn7i",
         "ticker_card_3W9iJY",
         "ticker_card_LzwnTV",
