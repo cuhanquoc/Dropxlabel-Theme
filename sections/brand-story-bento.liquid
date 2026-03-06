@@ -438,9 +438,15 @@
       var holdDuration = 400; /* extra px to hold at end */
 
       function getScrollAmount() {
-        var trackW = track.scrollWidth;
+        var cards = track.querySelectorAll('.bsb-card');
+        var firstCard = cards[0];
+        var lastCard = cards[cards.length - 1];
+        var cardsStart = firstCard.offsetLeft;
+        var cardsEnd = lastCard.offsetLeft + lastCard.offsetWidth;
+        var cardsWidth = cardsEnd - cardsStart;
+        var cardsCenter = cardsStart + cardsWidth / 2;
         var viewW = track.parentElement.offsetWidth;
-        return -(trackW - viewW);
+        return -(cardsCenter - viewW / 2);
       }
 
       function getTotalEnd() {
