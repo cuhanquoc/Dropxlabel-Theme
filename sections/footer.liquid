@@ -548,15 +548,15 @@
     </div>
 
     <!-- COMPANY (Desktop: visible column, Mobile: accordion) -->
-    <div class="ft-accordion" data-footer-col>
+    <div class="ft-accordion" data-footer-col x-data="{ open: false }">
       <!-- Desktop title -->
       <p class="ft-eyebrow ft-link-col-title-desktop">{{ section.settings.col2_title | default: 'Company' }}</p>
       <!-- Mobile accordion toggle -->
-      <button class="ft-accordion-header" aria-expanded="false" onclick="toggleFooterAccordion(this)">
+      <button class="ft-accordion-header" :aria-expanded="open" @click="open = !open">
         <span class="ft-link-col-title">{{ section.settings.col2_title | default: 'Company' }}</span>
         <span class="ft-accordion-icon" aria-hidden="true"></span>
       </button>
-      <div class="ft-accordion-body">
+      <div class="ft-accordion-body" x-show="open" x-transition>
         <nav class="ft-nav" aria-label="{{ section.settings.col2_title | default: 'Company' }}">
           {% if section.settings.c2_link1_label != blank %}<a href="{{ section.settings.c2_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link1_label }}</a>{% endif %}
           {% if section.settings.c2_link2_label != blank %}<a href="{{ section.settings.c2_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link2_label }}</a>{% endif %}
@@ -569,13 +569,13 @@
     </div>
 
     <!-- PAGES -->
-    <div class="ft-accordion" data-footer-col>
+    <div class="ft-accordion" data-footer-col x-data="{ open: false }">
       <p class="ft-eyebrow ft-link-col-title-desktop">{{ section.settings.col3_title | default: 'Pages' }}</p>
-      <button class="ft-accordion-header" aria-expanded="false" onclick="toggleFooterAccordion(this)">
+      <button class="ft-accordion-header" :aria-expanded="open" @click="open = !open">
         <span class="ft-link-col-title">{{ section.settings.col3_title | default: 'Pages' }}</span>
         <span class="ft-accordion-icon" aria-hidden="true"></span>
       </button>
-      <div class="ft-accordion-body">
+      <div class="ft-accordion-body" x-show="open" x-transition>
         <nav class="ft-nav" aria-label="{{ section.settings.col3_title | default: 'Pages' }}">
           {% if section.settings.c3_link1_label != blank %}<a href="{{ section.settings.c3_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link1_label }}</a>{% endif %}
           {% if section.settings.c3_link2_label != blank %}<a href="{{ section.settings.c3_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link2_label }}</a>{% endif %}
@@ -588,13 +588,13 @@
     </div>
 
     <!-- SHOP -->
-    <div class="ft-accordion" data-footer-col>
+    <div class="ft-accordion" data-footer-col x-data="{ open: false }">
       <p class="ft-eyebrow ft-link-col-title-desktop">{{ section.settings.col4_title | default: 'Shop' }}</p>
-      <button class="ft-accordion-header" aria-expanded="false" onclick="toggleFooterAccordion(this)">
+      <button class="ft-accordion-header" :aria-expanded="open" @click="open = !open">
         <span class="ft-link-col-title">{{ section.settings.col4_title | default: 'Shop' }}</span>
         <span class="ft-accordion-icon" aria-hidden="true"></span>
       </button>
-      <div class="ft-accordion-body">
+      <div class="ft-accordion-body" x-show="open" x-transition>
         <nav class="ft-nav" aria-label="{{ section.settings.col4_title | default: 'Shop' }}">
           {% if section.settings.c4_link1_label != blank %}<a href="{{ section.settings.c4_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link1_label }}</a>{% endif %}
           {% if section.settings.c4_link2_label != blank %}<a href="{{ section.settings.c4_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link2_label }}</a>{% endif %}
@@ -688,50 +688,8 @@
 </footer>
 
 
-<script>
-  /* ─── Footer Accordion Toggle (Mobile) ─── */
-  function toggleFooterAccordion(btn) {
-    var body = btn.nextElementSibling;
-    var isOpen = btn.getAttribute('aria-expanded') === 'true';
 
-    /* Close all other accordions */
-    document.querySelectorAll('#site-footer .ft-accordion-header').forEach(function(otherBtn) {
-      if (otherBtn !== btn) {
-        otherBtn.setAttribute('aria-expanded', 'false');
-        otherBtn.nextElementSibling.classList.remove('open');
-      }
-    });
 
-    /* Toggle this one */
-    btn.setAttribute('aria-expanded', !isOpen);
-    body.classList.toggle('open', !isOpen);
-  }
-
-  /* ─── GSAP Entrance Animations ─── */
-  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-    gsap.registerPlugin(ScrollTrigger);
-
-    var mmFooter = gsap.matchMedia();
-
-    mmFooter.add("(min-width: 768px)", function() {
-      gsap.from('#site-footer [data-footer-col]', {
-        scrollTrigger: { trigger: '#site-footer', start: 'top 88%', once: true },
-        y: 40, opacity: 0, duration: 1, ease: 'power3.out', stagger: 0.1, immediateRender: false,
-      });
-      gsap.from('.ft-brand-name', {
-        scrollTrigger: { trigger: '.ft-brand-section', start: 'top 90%', once: true },
-        y: 30, opacity: 0, duration: 1.2, ease: 'power3.out', immediateRender: false,
-      });
-    });
-
-    mmFooter.add("(max-width: 767px)", function() {
-      gsap.from('#site-footer [data-footer-col]', {
-        scrollTrigger: { trigger: '#site-footer', start: 'top 92%', once: true },
-        y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.05, immediateRender: false,
-      });
-    });
-  }
-</script>
 
 {% schema %}
 {

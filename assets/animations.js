@@ -55,8 +55,10 @@ document.addEventListener('DOMContentLoaded', function () {
       var fromX = (i % 2 === 0) ? -60 : 60;
       gsap.fromTo(item,
         { x: fromX, y: 40 + i * 15, rotation: (i % 2 === 0) ? -8 : 8, opacity: 0, scale: 0.85 },
-        { x: 0, y: 0, rotation: 0, opacity: 1, scale: 1, duration: 0.9, ease: 'power3.out', delay: i * 0.12,
-          scrollTrigger: { trigger: '#ta-collage', start: 'top 80%', once: true } }
+        {
+          x: 0, y: 0, rotation: 0, opacity: 1, scale: 1, duration: 0.9, ease: 'power3.out', delay: i * 0.12,
+          scrollTrigger: { trigger: '#ta-collage', start: 'top 80%', once: true }
+        }
       );
     });
 
@@ -83,6 +85,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
     gsap.utils.toArray('.about-fade-in').forEach(function (el) {
       gsap.fromTo(el, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+    });
+  }());
+
+  /* ── Footer Entrance ── */
+  (function () {
+    var footer = document.getElementById('site-footer');
+    if (!footer) return;
+    var mm = gsap.matchMedia();
+
+    mm.add('(min-width: 768px)', function () {
+      gsap.from('#site-footer [data-footer-col]', {
+        scrollTrigger: { trigger: footer, start: 'top 88%', once: true },
+        y: 40, opacity: 0, duration: 1, ease: 'power3.out', stagger: 0.1, immediateRender: false
+      });
+      gsap.from('.ft-brand-name', {
+        scrollTrigger: { trigger: '.ft-brand-section', start: 'top 90%', once: true },
+        y: 30, opacity: 0, duration: 1.2, ease: 'power3.out', immediateRender: false
+      });
+    });
+
+    mm.add('(max-width: 767px)', function () {
+      gsap.from('#site-footer [data-footer-col]', {
+        scrollTrigger: { trigger: footer, start: 'top 92%', once: true },
+        y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.05, immediateRender: false
+      });
     });
   }());
 
