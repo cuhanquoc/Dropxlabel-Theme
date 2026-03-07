@@ -1,0 +1,89 @@
+/* ═════════════════════════════════════════════════════
+   ANIMATIONS.JS — All GSAP ScrollTrigger animations
+   Extracted from inline scripts, wrapped in DOMContentLoaded
+   ═════════════════════════════════════════════════════ */
+
+document.addEventListener('DOMContentLoaded', function () {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* ── Hero Banner Text Reveal ── */
+  (function () {
+    var heading = document.getElementById('hero-heading');
+    if (!heading) return;
+    var raw = heading.innerHTML.trim();
+    heading.innerHTML = raw.split(/\s+/).map(function (w) {
+      return '<span class="hero-word" style="display:inline-block;overflow:hidden;"><span style="display:inline-block;transform:translateY(110%)">' + w + '</span></span>';
+    }).join(' ');
+    var lines = heading.querySelectorAll('.hero-word > span');
+    gsap.to(lines, { y: '0%', duration: 0.8, ease: 'expo.out', stagger: 0.15, delay: 0.55 });
+  }());
+
+  /* ── Brand Story Bento ── */
+  (function () {
+    var section = document.getElementById('brand-story-bento');
+    if (!section) return;
+    var mm = gsap.matchMedia();
+
+    mm.add('(min-width: 768px)', function () {
+      gsap.fromTo('#bsb-text', { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 80%', once: true } });
+      gsap.fromTo('.bsb-card', { y: 50, opacity: 0, willChange: 'transform, opacity' }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.15, scrollTrigger: { trigger: section, start: 'top 75%', once: true }, onComplete: function () { gsap.set('.bsb-card', { clearProps: 'willChange' }); } });
+    });
+
+    mm.add('(max-width: 767px)', function () {
+      gsap.fromTo('#bsb-text', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: section, start: 'top 90%', once: true } });
+      gsap.fromTo('.bsb-card', { y: 20, opacity: 0, willChange: 'transform, opacity' }, { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out', stagger: 0.08, scrollTrigger: { trigger: section, start: 'top 85%', once: true }, onComplete: function () { gsap.set('.bsb-card', { clearProps: 'willChange' }); } });
+    });
+  }());
+
+  /* ── Trending Accordion — Gradient, Collage, Dynamic Island, Items ── */
+  (function () {
+    /* Gradient Reveal */
+    var curtain = document.getElementById('ta-gradient-curtain');
+    var glow = document.getElementById('ta-glow');
+    var wrapper = document.getElementById('ta-reveal-wrapper');
+    if (curtain && wrapper) {
+      var tl = gsap.timeline({ scrollTrigger: { trigger: wrapper, start: 'top 85%', end: 'top 30%', scrub: 0.8 } });
+      tl.to(curtain, { opacity: 1, scaleY: 1, duration: 0.6, ease: 'power2.out' }, 0)
+        .to(glow, { opacity: 1, duration: 0.3, ease: 'power1.in' }, 0)
+        .to(glow, { opacity: 0, duration: 0.4, ease: 'power1.out' }, 0.5);
+    }
+
+    /* Scattered Collage */
+    var items = document.querySelectorAll('.ta-collage-item');
+    items.forEach(function (item, i) {
+      var fromX = (i % 2 === 0) ? -60 : 60;
+      gsap.fromTo(item,
+        { x: fromX, y: 40 + i * 15, rotation: (i % 2 === 0) ? -8 : 8, opacity: 0, scale: 0.85 },
+        { x: 0, y: 0, rotation: 0, opacity: 1, scale: 1, duration: 0.9, ease: 'power3.out', delay: i * 0.12,
+          scrollTrigger: { trigger: '#ta-collage', start: 'top 80%', once: true } }
+      );
+    });
+
+    /* Dynamic Island */
+    var island = document.querySelector('.ta-dynamic-island');
+    if (island) {
+      gsap.fromTo(island, { width: 40, opacity: 0, borderRadius: '50%' }, { width: 'auto', opacity: 1, borderRadius: '22px', duration: 0.8, ease: 'elastic.out(1, 0.75)', scrollTrigger: { trigger: island, start: 'top 90%', once: true } });
+    }
+
+    /* Accordion Items */
+    var mm = gsap.matchMedia();
+    mm.add('(min-width: 768px)', function () {
+      var accItems = document.querySelectorAll('#trending-accordion .accordion-item');
+      if (accItems.length) {
+        gsap.fromTo(accItems, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1.3, ease: 'power3.out', stagger: 0.15, scrollTrigger: { trigger: '#trending-accordion .flex.flex-col', start: 'top 85%', once: true } });
+      }
+    });
+  }());
+
+  /* ── About Template Animations ── */
+  (function () {
+    var aboutSection = document.getElementById('about-template');
+    if (!aboutSection) return;
+
+    gsap.utils.toArray('.about-fade-in').forEach(function (el) {
+      gsap.fromTo(el, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+    });
+  }());
+
+});

@@ -748,43 +748,6 @@
   </div>
 </div>
 
-<script>
-  /* ─── Mobile Menu Toggle ─── */
-  window.MobileMenu = (function () {
-    const menu = document.getElementById('mobile-menu');
-    const btn  = document.getElementById('hamburger-btn');
-    let isOpen = false;
-
-    function open() {
-      if (isOpen) return;
-      isOpen = true;
-      menu.classList.add('open');
-      btn.setAttribute('aria-expanded', 'true');
-      btn.setAttribute('aria-label', 'Close menu');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function close() {
-      if (!isOpen) return;
-      isOpen = false;
-      menu.classList.remove('open');
-      btn.setAttribute('aria-expanded', 'false');
-      btn.setAttribute('aria-label', 'Open menu');
-      document.body.style.overflow = '';
-    }
-
-    function toggle() {
-      isOpen ? close() : open();
-    }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && isOpen) close();
-    });
-
-    return { open, close, toggle };
-  }());
-</script>
-
 {% schema %}
 {
   "name": "Header",

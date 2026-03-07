@@ -139,19 +139,6 @@
   </div>
 {% endif %}
 
-<script>
-  /* Set CSS variable for header offset */
-  (function() {
-    var bar = document.querySelector('.announcement-bar');
-    if (bar) {
-      var h = bar.offsetHeight;
-      document.documentElement.style.setProperty('--ab-height', h + 'px');
-    } else {
-      document.documentElement.style.setProperty('--ab-height', '0px');
-    }
-  }());
-</script>
-
 {% schema %}
 {
   "name": "Announcement Bar",

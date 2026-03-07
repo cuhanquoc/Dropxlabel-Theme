@@ -298,50 +298,6 @@
 
 </section>
 
-<script>
-  /* ═══════════════════════════════════════════════════════════
-     STAGGERED TEXT REVEAL — GSAP expo.out
-     Splits h1 by <br> → overflow-hidden masks → y: 100% → 0%
-  ═══════════════════════════════════════════════════════════ */
-  (function initHeroTextReveal() {
-    var heading = document.getElementById('hero-heading');
-    if (!heading || typeof gsap === 'undefined') return;
-
-    /* ── Step 1: Split content by <br> into masked lines ── */
-    var raw = heading.innerHTML;
-    var parts = raw.split(/<br\s*\/?>/gi);
-
-    heading.innerHTML = '';
-
-    parts.forEach(function (text) {
-      var trimmed = text.trim();
-      if (!trimmed) return;
-
-      var mask = document.createElement('span');
-      mask.className = 'hero-line-mask';
-
-      var line = document.createElement('span');
-      line.className = 'hero-line';
-      line.innerHTML = trimmed;
-
-      mask.appendChild(line);
-      heading.appendChild(mask);
-    });
-
-    /* ── Step 2: GSAP stagger animation ── */
-    var lines = heading.querySelectorAll('.hero-line');
-    if (lines.length === 0) return;
-
-    gsap.to(lines, {
-      y: '0%',
-      duration: 0.8,
-      ease: 'expo.out',
-      stagger: 0.15,
-      delay: 0.55,
-    });
-  }());
-</script>
-
 {% schema %}
 {
   "name": "Hero Banner",
