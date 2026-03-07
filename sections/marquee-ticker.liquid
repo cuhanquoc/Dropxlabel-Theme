@@ -122,7 +122,21 @@
     text-decoration-color: rgba(255,255,255,0.6);
   }
 
-  /* ─── Mobile ─── */
+  /* ── Desktop (≥ 768px) ── */
+  @media (min-width: 768px) {
+    .mt-section { padding: 2.5rem 0; }
+    .mt-card { width: 280px; }
+    .mt-card-title { font-size: 0.95rem; }
+    .mt-card-body { padding: 1rem 1.15rem 1.25rem; }
+  }
+
+  /* ── Large Desktop (≥ 1024px) ── */
+  @media (min-width: 1024px) {
+    .mt-section { padding: 3rem 0; }
+    .mt-card { width: 320px; }
+  }
+
+  /* ── Mobile (< 768px) ── */
   @media (max-width: 767px) {
     .mt-section { padding: 1.5rem 0; }
     .mt-card { width: 220px; }

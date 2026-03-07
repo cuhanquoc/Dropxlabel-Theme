@@ -182,7 +182,33 @@
     color: var(--color-muted);
   }
 
-  /* ─── Mobile Responsive ─── */
+  /* ── Desktop (≥ 768px) ── */
+  @media (min-width: 768px) {
+    #main-collection .pt-40 {
+      padding-top: 10rem;
+    }
+    .mc-quick-view {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    .mc-grid-btn {
+      width: 32px;
+      height: 32px;
+    }
+    .mc-filter-tag {
+      padding: 0.4rem 1rem;
+      font-size: 0.65rem;
+    }
+  }
+
+  /* ── Large Desktop (≥ 1024px) ── */
+  @media (min-width: 1024px) {
+    #main-collection .pt-40 {
+      padding-top: 10rem;
+    }
+  }
+
+  /* ── Mobile (< 768px) ── */
   @media (max-width: 767px) {
     #main-collection .pt-40 {
       padding-top: 7rem;

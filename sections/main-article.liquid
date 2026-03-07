@@ -314,7 +314,43 @@
     text-align: center;
   }
 
-  /* ─── Mobile Responsive ─── */
+  /* ── Desktop (≥ 768px) ── */
+  @media (min-width: 768px) {
+    #main-article header {
+      padding-top: 10rem;
+      padding-bottom: 3rem;
+    }
+    .ma-title {
+      font-size: clamp(2.2rem, 5.5vw, 4rem);
+      max-width: 820px;
+    }
+    .ma-cover {
+      padding: 0 1.5rem;
+      max-width: 1024px;
+    }
+    .ma-share-bar {
+      gap: 1rem;
+    }
+    .ma-author-card {
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 2rem;
+    }
+    .article-content p {
+      font-size: 1.1rem;
+      line-height: 2.0;
+    }
+  }
+
+  /* ── Large Desktop (≥ 1024px) ── */
+  @media (min-width: 1024px) {
+    #main-article header {
+      padding-top: 12rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  /* ── Mobile (< 768px) ── */
   @media (max-width: 767px) {
     #main-article header {
       padding-top: 7rem;

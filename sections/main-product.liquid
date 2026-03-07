@@ -287,7 +287,41 @@
     color: var(--color-bg);
   }
 
-  /* ─── Mobile Responsive ─── */
+  /* ── Desktop (≥ 768px) ── */
+  @media (min-width: 768px) {
+    #main-product {
+      padding-top: 3rem;
+      padding-bottom: 4rem;
+    }
+    #main-product .sticky {
+      position: sticky;
+      top: 2.5rem;
+    }
+    .product-title {
+      font-size: clamp(1.7rem, 2.8vw, 2.5rem);
+    }
+    .size-btn {
+      min-width: 48px;
+      height: 48px;
+    }
+    .btn-add-to-cart {
+      height: 60px;
+    }
+    .btn-wishlist {
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  /* ── Large Desktop (≥ 1024px) ── */
+  @media (min-width: 1024px) {
+    #main-product {
+      padding-top: 4rem;
+      padding-bottom: 5rem;
+    }
+  }
+
+  /* ── Mobile (< 768px) ── */
   @media (max-width: 767px) {
     #main-product {
       padding-top: 1.5rem;

@@ -102,6 +102,41 @@
   .sr-accent-line--dark {
     background-color: rgba(255, 255, 255, 0.2);
   }
+
+  /* ── Desktop (≥ 768px) ── */
+  @media (min-width: 768px) {
+    .sr-light,
+    .sr-dark-overlay {
+      padding: 3rem;
+    }
+    .sr-accent-line {
+      width: 60px;
+      margin-bottom: 2.5rem;
+    }
+  }
+
+  /* ── Mobile (< 768px) ── */
+  @media (max-width: 767px) {
+    .sr-text-light,
+    .sr-text-dark {
+      font-size: clamp(1.8rem, 8vw, 3rem);
+      max-width: 100%;
+    }
+    .sr-sub-light,
+    .sr-sub-dark {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      margin-top: 1rem;
+    }
+    .sr-light,
+    .sr-dark-overlay {
+      padding: 1.5rem;
+    }
+    .sr-accent-line {
+      width: 32px;
+      margin-bottom: 1.5rem;
+    }
+  }
 </style>
 
 <section class="sr-section" id="scroll-reveal">

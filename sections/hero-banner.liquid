@@ -98,7 +98,32 @@
     user-select: none;
   }
 
-  /* ─── Mobile Responsive ─── */
+  /* ─── Desktop (≥ 768px) ─── */
+  @media (min-width: 768px) {
+    .hero-content-wrap {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
+    .maya-merge-text {
+      padding: 1.35rem 3rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+    }
+    .maya-merge-circle {
+      width: 52px;
+      height: 52px;
+    }
+  }
+
+  /* ─── Large Desktop (≥ 1024px) ─── */
+  @media (min-width: 1024px) {
+    .hero-content-wrap {
+      padding-left: 3.5rem;
+      padding-right: 3.5rem;
+    }
+  }
+
+  /* ─── Mobile (< 768px) ─── */
   @media (max-width: 767px) {
     .marquee-text {
       font-size: clamp(1.8rem, 8vw, 3rem);
