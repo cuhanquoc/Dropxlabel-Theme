@@ -17,8 +17,8 @@
     rel="stylesheet"
   />
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind CSS (compiled + minified) -->
+  <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}" />
 
   <!-- GSAP (GreenSock Animation Platform) v3.12.5 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -169,27 +169,7 @@
     }
   </style>
 
-  <!-- Tailwind Config override to match design tokens -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            bg:      '#F9F8F6',
-            text:    '#222222',
-            accent:  '#C5A880',
-            muted:   '#8A8A8A',
-            surface: '#FFFFFF',
-            border:  '#E8E5DF',
-          },
-          fontFamily: {
-            heading: ['"Playfair Display"', 'serif'],
-            body:    ['Inter', 'sans-serif'],
-          },
-        }
-      }
-    }
-  </script>
+
 </head>
 
 <body>
