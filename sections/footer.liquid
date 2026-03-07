@@ -173,20 +173,30 @@
     align-self: stretch;
   }
 
-  /* ── Payment Badge ── */
-  .ft-pay {
+  /* ── Payment Icons ── */
+  .ft-payment-icons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .ft-pay-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     height: 24px;
-    padding: 0 10px;
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.1);
-    font-family: var(--font-body);
-    font-size: 9px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.35);
+    opacity: 0.35;
+    transition: opacity 350ms ease;
+  }
+
+  .ft-pay-icon:hover {
+    opacity: 0.7;
+  }
+
+  .ft-pay-icon svg {
+    height: 100%;
+    width: auto;
   }
 
   /* ── Copyright ── */
@@ -390,12 +400,10 @@
       &copy; {{ 'now' | date: '%Y' }} Dropxlabel. All Rights Reserved.
     </p>
 
-    <div class="flex items-center gap-3" aria-label="Accepted payment methods">
-      <span class="ft-pay">Visa</span>
-      <span class="ft-pay">MC</span>
-      <span class="ft-pay">PayPal</span>
-      <span class="ft-pay">Momo</span>
-      <span class="ft-pay">VNPay</span>
+    <div class="ft-payment-icons" aria-label="Accepted payment methods">
+      {%- for type in shop.enabled_payment_types -%}
+        <span class="ft-pay-icon">{{ type | payment_type_svg_tag }}</span>
+      {%- endfor -%}
     </div>
   </div>
 
