@@ -202,7 +202,7 @@
   }
 </style>
 
-<section class="relative w-full h-screen overflow-hidden bg-black">
+<section class="relative w-full h-[100dvh] overflow-hidden bg-black">
 
   <!-- Nền: Video hoặc Ảnh (video ưu tiên nếu có) -->
   <div class="absolute inset-0 overflow-hidden">
@@ -261,7 +261,7 @@
     </p>
 
     <!-- Headline (GSAP Staggered Text Reveal) -->
-    <h1 id="hero-heading" class="hero-headline" style="font-family: var(--font-heading); font-size: clamp(2.2rem, 10vw, 9rem); font-weight: 600; line-height: 0.9; color: #ffffff; max-width: 780px; letter-spacing: -0.03em; margin-bottom: 28px;">
+    <h1 id="hero-heading" class="hero-headline" style="font-family: var(--font-heading); font-size: clamp(2.2rem, 10vw, 9rem); font-weight: 600; line-height: 0.9; color: #ffffff; max-width: 780px; letter-spacing: 0.02em; margin-bottom: 28px;">
       {{ section.settings.headline }}
     </h1>
 
@@ -334,7 +334,7 @@
 
     gsap.to(lines, {
       y: '0%',
-      duration: 1.2,
+      duration: 0.8,
       ease: 'expo.out',
       stagger: 0.15,
       delay: 0.55,

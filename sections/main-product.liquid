@@ -287,6 +287,224 @@
     color: var(--color-bg);
   }
 
+  /* ── Trust Badges ── */
+  .trust-badges {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1.25rem 0 0;
+    margin-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .trust-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-muted);
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .trust-badge svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--color-text);
+    fill: none;
+  }
+
+  /* ── Sticky ATC Bar ── */
+  .sticky-atc-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: var(--color-bg);
+    border-top: 1px solid var(--color-border);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  .sticky-atc-bar.is-visible {
+    transform: translateY(0);
+  }
+
+  .sticky-atc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .sticky-atc-title {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+
+  .sticky-atc-price {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    color: var(--color-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .sticky-atc-btn {
+    height: 44px;
+    padding: 0 2rem;
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    border: none;
+    border-radius: 9999px;
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 300ms ease;
+  }
+
+  .sticky-atc-btn:hover {
+    background-color: #333;
+  }
+
+  @media (min-width: 768px) {
+    .sticky-atc-bar {
+      padding: 0.75rem 3rem;
+      gap: 2rem;
+    }
+    .sticky-atc-title {
+      max-width: 320px;
+    }
+  }
+
+  /* ── Size Guide Drawer ── */
+  .sg-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    z-index: 200;
+    pointer-events: none;
+    transition: background 400ms ease;
+  }
+
+  .sg-overlay.open {
+    background: rgba(0,0,0,0.5);
+    pointer-events: all;
+  }
+
+  .sg-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(420px, 100vw);
+    height: 100dvh;
+    background-color: var(--color-bg);
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    will-change: transform;
+    box-shadow: -8px 0 40px rgba(0,0,0,0.08);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .sg-overlay.open .sg-drawer {
+    transform: translateX(0);
+  }
+
+  .sg-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.75rem 2rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .sg-title {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .sg-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: background-color 200ms ease;
+  }
+
+  .sg-close:hover {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .sg-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+
+  .sg-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    font-size: 0.78rem;
+  }
+
+  .sg-table th, .sg-table td {
+    padding: 0.65rem 0.85rem;
+    text-align: center;
+    border: 1px solid var(--color-border);
+  }
+
+  .sg-table th {
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+  }
+
+  .sg-table td {
+    font-weight: 400;
+  }
+
   /* ── Desktop (≥ 768px) ── */
   @media (min-width: 768px) {
     #main-product {
@@ -608,6 +826,22 @@
             </style>
           </div>
 
+          <!-- ── Trust Badges ── -->
+          <div class="trust-badges">
+            <div class="trust-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Secure Checkout
+            </div>
+            <div class="trust-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              Worldwide Shipping
+            </div>
+            <div class="trust-badge">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              Easy Returns
+            </div>
+          </div>
+
           <!-- ── Product Accordion (Description + Material) ── -->
           <div class="product-accordion mt-8">
 
@@ -659,6 +893,21 @@
               </div>
             </div>
 
+            <!-- Size Guide -->
+            <div class="product-accordion-item">
+              <button
+                type="button"
+                class="product-accordion-trigger"
+                aria-expanded="false"
+                onclick="SizeGuide.open()"
+              >
+                <span>Size Guide</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+
           </div>
           <!-- / Product Accordion -->
 
@@ -668,6 +917,55 @@
     </div>
     <!-- / Right Column -->
 
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     STICKY ATC BAR (appears on scroll)
+══════════════════════════════════════ -->
+<div class="sticky-atc-bar" id="sticky-atc">
+  <div class="sticky-atc-info">
+    <span class="sticky-atc-title">{{ product.title }}</span>
+    <span class="sticky-atc-price" id="sticky-atc-price">{{ product.selected_or_first_available_variant.price | money }}</span>
+  </div>
+  <button
+    type="button"
+    class="sticky-atc-btn"
+    id="sticky-atc-btn"
+    onclick="document.getElementById('product-form').requestSubmit();"
+  >
+    {% if product.selected_or_first_available_variant.available %}
+      Add to Cart
+    {% else %}
+      Sold Out
+    {% endif %}
+  </button>
+</div>
+
+<!-- ══════════════════════════════════════
+     SIZE GUIDE DRAWER
+══════════════════════════════════════ -->
+<div class="sg-overlay" id="sg-overlay" onclick="SizeGuide.close()">
+  <div class="sg-drawer" onclick="event.stopPropagation()">
+    <div class="sg-header">
+      <p class="sg-title">Size Guide</p>
+      <button class="sg-close" onclick="SizeGuide.close()" aria-label="Close size guide">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="sg-body">
+      <p style="margin-bottom: 1rem; color: var(--color-muted); font-size: 0.78rem;">All measurements are in centimeters. If between sizes, we recommend sizing up.</p>
+      <table class="sg-table">
+        <thead><tr><th>Size</th><th>Chest</th><th>Waist</th><th>Hips</th><th>Length</th></tr></thead>
+        <tbody>
+          <tr><td>XS</td><td>82</td><td>64</td><td>88</td><td>62</td></tr>
+          <tr><td>S</td><td>86</td><td>68</td><td>92</td><td>64</td></tr>
+          <tr><td>M</td><td>90</td><td>72</td><td>96</td><td>66</td></tr>
+          <tr><td>L</td><td>94</td><td>76</td><td>100</td><td>68</td></tr>
+          <tr><td>XL</td><td>98</td><td>80</td><td>104</td><td>70</td></tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -841,6 +1139,48 @@
         setBtnError(err.message);
       });
     });
+  }());
+
+  /* ─────────────────────────────────────────────────
+     STICKY ATC BAR — IntersectionObserver
+     Shows when main ATC button scrolls out of view
+  ───────────────────────────────────────────────── */
+  (function () {
+    var atcBtn      = document.getElementById('add-to-cart-btn');
+    var stickyBar   = document.getElementById('sticky-atc');
+    if (!atcBtn || !stickyBar) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        stickyBar.classList.toggle('is-visible', !entry.isIntersecting);
+      });
+    }, { threshold: 0 });
+
+    observer.observe(atcBtn);
+  }());
+
+  /* ─────────────────────────────────────────────────
+     SIZE GUIDE DRAWER
+  ───────────────────────────────────────────────── */
+  window.SizeGuide = (function () {
+    var overlay = document.getElementById('sg-overlay');
+    if (!overlay) return { open: function(){}, close: function(){} };
+
+    function open() {
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.classList.contains('open')) close();
+    });
+
+    return { open: open, close: close };
   }());
 
 </script>

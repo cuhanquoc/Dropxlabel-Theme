@@ -53,8 +53,8 @@
   (function initCustomCursor() {
     if (typeof gsap === 'undefined') return;
 
-    /* Only on pointer devices */
-    if (window.matchMedia('(hover: none)').matches) return;
+    /* Only on devices with fine pointer (mouse) */
+    if (!window.matchMedia('(pointer: fine)').matches) return;
 
     var cursor = document.getElementById('custom-cursor');
     if (!cursor) return;
