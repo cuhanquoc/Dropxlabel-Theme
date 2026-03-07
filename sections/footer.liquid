@@ -1,183 +1,315 @@
 <style>
   /* ─────────────────────────────────────────────────
-     FOOTER — Quiet Luxury / Art Director Edition
-     Principles: Editorial Whitespace · Serif Hierarchy
-     Muted Palette · Sharp Geometry
+     FOOTER — Release-Style Design
+     Desktop: 4-col top row, brand middle, copyright bottom
+     Mobile: accordion collapsible sections with +/- toggle
   ───────────────────────────────────────────────── */
 
-  /* ── Marquee Giant Text ── */
-  .ft-giant {
-    font-family: var(--font-heading);
-    font-size: clamp(4rem, 8vw, 9rem);
-    font-weight: 300;
-    font-style: italic;
-    text-transform: uppercase;
-    letter-spacing: -0.04em;
-    line-height: 0.9;
-    color: rgba(255,255,255,0.92);
-    white-space: nowrap;
-    display: inline-block;
-    cursor: default;
-    user-select: none;
-    padding-right: 3vw;
+  .ft-section {
+    background-color: #0a0a0a;
+    color: #ffffff;
+    font-family: var(--font-body);
   }
 
-  .ft-marquee-track {
-    display: flex;
-    width: max-content;
-    animation: ft-drift var(--ft-speed, 20s) linear infinite;
+  /* ── TOP ROW: Newsletter + 3 Link Columns ── */
+  .ft-top-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: 3.5rem 1.5rem 0;
   }
 
-  .ft-marquee-wrap:hover .ft-marquee-track {
-    animation-play-state: paused;
-  }
-
-  @keyframes ft-drift {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-
-  /* ── Eyebrow Labels (Column Titles) ── */
+  /* ── Eyebrow Labels ── */
   .ft-eyebrow {
     font-family: var(--font-body);
-    font-size: 10px;
+    font-size: 0.65rem;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.25em;
-    color: rgba(255,255,255,0.4);
-    margin-bottom: 2rem;
+    letter-spacing: 0.22em;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 1rem;
     line-height: 1;
   }
 
-  /* ── Nav Stacking ── */
-  .ft-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
+  /* ── Newsletter ── */
+  .ft-newsletter {
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
   }
 
-  /* ── Layout Containers ── */
-  .ft-desktop-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-    align-items: flex-start;
-  }
-
-  .ft-newsletter-col {
-    width: 100%;
-  }
-
-  .ft-links-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2.5rem;
-    width: 100%;
-  }
-
-  /* ── Link Style ── */
-  .ft-link {
-    display: block;
+  .ft-newsletter-desc {
     font-family: var(--font-body);
-    font-size: 0.85rem;
+    font-size: 0.92rem;
     font-weight: 400;
-    letter-spacing: 0.02em;
-    color: rgba(255,255,255,0.55);
-    text-decoration: none;
-    padding: 0.5rem 0;
-    transition: color 350ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    line-height: 1;
-    border: none;
-    background: none;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+    margin-bottom: 1.75rem;
+    max-width: 340px;
   }
 
-  .ft-link:hover {
-    color: rgba(255,255,255,0.95);
-  }
-
-  /* ── Newsletter Promo ── */
-  .ft-promo-heading {
-    font-family: var(--font-heading);
-    font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
-    color: rgba(255,255,255,0.9);
-    margin-bottom: 2.5rem;
-  }
-
-  .ft-promo-heading em {
-    font-style: italic;
-    color: #c9a96e;
-    font-weight: 400;
-  }
-
-  /* ── Email Input ── */
-  .ft-email-row {
+  .ft-email-form {
     display: flex;
     align-items: center;
-    gap: 0;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
-    max-width: 320px;
-    padding-bottom: 2px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 9999px;
+    overflow: hidden;
+    max-width: 400px;
+    transition: border-color 300ms ease;
+  }
+
+  .ft-email-form:focus-within {
+    border-color: rgba(255,255,255,0.5);
   }
 
   .ft-email-input {
     flex: 1;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.85);
+    color: #ffffff;
     font-family: var(--font-body);
     font-size: 0.82rem;
-    letter-spacing: 0.04em;
-    padding: 0.75rem 0;
+    letter-spacing: 0.03em;
+    padding: 0.9rem 1.4rem;
     outline: none;
     min-width: 0;
   }
 
   .ft-email-input::placeholder {
-    color: rgba(255,255,255,0.25);
-    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.82rem;
   }
 
-  /* Subscribe — Pill Button */
-  .ft-subscribe {
+  .ft-subscribe-btn {
     font-family: var(--font-body);
-    font-size: 10px;
-    font-weight: 500;
+    font-size: 0.62rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.25em;
-    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.2em;
+    color: #ffffff;
     background: transparent;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 9999px;
-    padding: 0.55rem 1.6rem;
+    border: none;
+    border-left: 1px solid rgba(255,255,255,0.15);
+    padding: 0.9rem 1.6rem;
     cursor: pointer;
-    transition: color 350ms ease, border-color 350ms ease, background 350ms ease;
     white-space: nowrap;
-    margin-left: 1.5rem;
+    transition: background-color 300ms ease, color 300ms ease;
+  }
+
+  .ft-subscribe-btn:hover {
+    background-color: #ffffff;
+    color: #0a0a0a;
+  }
+
+  /* ── Link Columns (Desktop: inline, Mobile: accordion) ── */
+  .ft-links-area {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ft-link-col-title {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;
+    letter-spacing: 0.01em;
+  }
+
+  .ft-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .ft-link {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    padding: 0.4rem 0;
+    transition: color 300ms ease;
+    line-height: 1.4;
+  }
+
+  .ft-link:hover {
+    color: #ffffff;
+  }
+
+  /* ── Mobile Accordion ── */
+  .ft-accordion {
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 0;
+  }
+
+  .ft-accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1.5rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #ffffff;
+  }
+
+  .ft-accordion-icon {
+    position: relative;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
   }
 
-  .ft-subscribe:hover {
-    color: #181818;
-    background: rgba(255,255,255,0.9);
-    border-color: rgba(255,255,255,0.9);
+  .ft-accordion-icon::before,
+  .ft-accordion-icon::after {
+    content: '';
+    position: absolute;
+    background-color: rgba(255,255,255,0.6);
+    transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 300ms ease;
   }
 
-  /* ── Vertical Divider ── */
-  .ft-vdivider {
-    width: 1px;
-    background: rgba(255,255,255,0.08);
-    flex-shrink: 0;
-    align-self: stretch;
+  /* horizontal bar (minus) */
+  .ft-accordion-icon::before {
+    top: 50%;
+    left: 2px;
+    right: 2px;
+    height: 1.5px;
+    transform: translateY(-50%);
+  }
+
+  /* vertical bar (plus part) */
+  .ft-accordion-icon::after {
+    left: 50%;
+    top: 2px;
+    bottom: 2px;
+    width: 1.5px;
+    transform: translateX(-50%);
+  }
+
+  /* When open: rotate vertical into horizontal = just minus */
+  .ft-accordion-header[aria-expanded="true"] .ft-accordion-icon::after {
+    transform: translateX(-50%) rotate(90deg);
+    opacity: 0;
+  }
+
+  .ft-accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 400ms cubic-bezier(0.16, 1, 0.3, 1),
+                padding 300ms ease;
+    padding-bottom: 0;
+  }
+
+  .ft-accordion-body.open {
+    max-height: 400px;
+    padding-bottom: 1.5rem;
+  }
+
+  /* ── BRAND SECTION ── */
+  .ft-brand-section {
+    padding: 3rem 1.5rem 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .ft-brand-name {
+    font-family: var(--font-heading);
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 400;
+    font-style: italic;
+    color: #ffffff;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+  }
+
+  .ft-brand-desc {
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    max-width: 420px;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Social Icons ── */
+  .ft-social-icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .ft-social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: #ffffff;
+    text-decoration: none;
+    transition: opacity 300ms ease, transform 300ms ease;
+  }
+
+  .ft-social-link:hover {
+    opacity: 0.7;
+    transform: translateY(-2px);
+  }
+
+  .ft-social-link svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  /* ── Scroll to Top Button ── */
+  .ft-scroll-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    background: transparent;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 300ms ease, border-color 300ms ease;
+  }
+
+  .ft-scroll-top:hover {
+    background-color: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  /* ── BOTTOM BAR ── */
+  .ft-bottom-bar {
+    padding: 2rem 1.5rem 2.5rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .ft-copyright {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.5;
+  }
+
+  .ft-copyright a {
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .ft-copyright a:hover {
+    color: rgba(255,255,255,0.6);
   }
 
   /* ── Payment Icons ── */
   .ft-payment-icons {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
     flex-wrap: wrap;
   }
 
@@ -186,12 +318,12 @@
     align-items: center;
     justify-content: center;
     height: 24px;
-    opacity: 0.35;
-    transition: opacity 350ms ease;
+    opacity: 0.5;
+    transition: opacity 300ms ease;
   }
 
   .ft-pay-icon:hover {
-    opacity: 0.7;
+    opacity: 0.85;
   }
 
   .ft-pay-icon svg {
@@ -199,207 +331,334 @@
     width: auto;
   }
 
-  /* ── Copyright ── */
-  .ft-copyright {
-    font-family: var(--font-body);
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.2);
-  }
-
-  /* ── Responsive ── */
-
-  /* ── Desktop & Tablet (≥ 768px) ── */
+  /* ═══════════════════════════════════════
+     DESKTOP (≥ 768px)
+  ═══════════════════════════════════════ */
   @media (min-width: 768px) {
-    .ft-desktop-layout {
-      flex-direction: row !important;
-      gap: 0 !important;
-      align-items: flex-start !important;
+    .ft-top-row {
+      grid-template-columns: minmax(280px, 1.2fr) 1fr 1fr 1fr;
+      gap: 3rem;
+      padding: 4rem 3.5rem;
     }
-    .ft-newsletter-col {
-      flex: 0 0 30% !important;
-      max-width: 380px !important;
-      padding-right: 3rem !important;
+
+    .ft-newsletter {
+      border-bottom: none;
+      padding-bottom: 0;
     }
-    .ft-vdivider {
-      display: block !important;
+
+    .ft-email-form {
+      max-width: 100%;
     }
-    .ft-links-grid {
-      flex: 1 !important;
-      display: grid !important;
-      grid-template-columns: repeat(4, 1fr) !important;
-      gap: 2rem !important;
-      padding-left: 3rem !important;
+
+    /* On desktop, accordion wrapper is not accordion — just open columns */
+    .ft-accordion {
+      border-bottom: none;
+      padding: 0;
     }
+
+    .ft-accordion-header {
+      display: none; /* hide accordion toggle on desktop */
+    }
+
+    .ft-accordion-body {
+      max-height: none !important;
+      overflow: visible;
+      padding-bottom: 0;
+    }
+
+    .ft-link-col-title-desktop {
+      display: block;
+    }
+
+    .ft-brand-section {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 3rem 3.5rem;
+      gap: 2rem;
+    }
+
+    .ft-brand-left {
+      flex: 1;
+    }
+
+    .ft-brand-center {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+
+    .ft-brand-right {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      flex: 0 0 auto;
+    }
+
     .ft-bottom-bar {
-      flex-direction: row !important;
-      justify-content: space-between !important;
-      align-items: center !important;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3.5rem 2rem;
+    }
+
+    .ft-social-icons {
+      margin-bottom: 0;
+    }
+
+    .ft-brand-desc {
+      margin-bottom: 0;
     }
   }
 
-  /* ── Large Desktop (≥ 1024px) ── */
+  /* ═══════════════════════════════════════
+     LARGE DESKTOP (≥ 1024px)
+  ═══════════════════════════════════════ */
   @media (min-width: 1024px) {
-    .ft-newsletter-col {
-      padding-right: 4rem !important;
+    .ft-top-row {
+      padding: 4.5rem 5rem;
+      gap: 3.5rem;
     }
-    .ft-links-grid {
-      gap: 2.5rem !important;
-      padding-left: 4rem !important;
+
+    .ft-brand-section {
+      padding: 3.5rem 5rem;
+    }
+
+    .ft-bottom-bar {
+      padding: 1.5rem 5rem 2.5rem;
     }
   }
 
-  /* ── Mobile (< 768px) ── */
+  /* ═══════════════════════════════════════
+     MOBILE (< 768px)
+  ═══════════════════════════════════════ */
   @media (max-width: 767px) {
-    .ft-giant { font-size: 12vw; }
-    .ft-desktop-layout {
-      flex-direction: column !important;
-      gap: 3rem !important;
+    .ft-top-row {
+      padding: 3rem 1.5rem 0;
     }
-    .ft-newsletter-col {
-      flex: unset !important;
-      max-width: 100% !important;
-      padding-right: 0 !important;
-      padding-bottom: 3rem !important;
-      border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+
+    .ft-newsletter {
+      text-align: center;
+      padding-bottom: 2rem;
     }
-    .ft-vdivider { display: none !important; }
-    .ft-links-grid {
-      grid-template-columns: repeat(2, 1fr) !important;
-      padding-left: 0 !important;
-      gap: 2.5rem !important;
+
+    .ft-newsletter .ft-eyebrow {
+      text-align: center;
     }
-    .ft-email-row { max-width: 100%; }
-    .ft-promo-heading { font-size: 1.4rem; }
+
+    .ft-newsletter-desc {
+      margin-left: auto;
+      margin-right: auto;
+      max-width: 100%;
+      text-align: center;
+    }
+
+    .ft-email-form {
+      max-width: 100%;
+    }
+
+    .ft-links-area {
+      padding: 0 1.5rem;
+    }
+
+    /* Desktop column titles hidden on mobile */
+    .ft-link-col-title-desktop {
+      display: none;
+    }
+
+    .ft-brand-section {
+      padding: 3rem 1.5rem 0;
+      flex-direction: column;
+    }
+
+    .ft-brand-name {
+      font-size: clamp(3rem, 12vw, 5rem);
+    }
+
+    .ft-brand-center {
+      margin-top: 2rem;
+    }
+
+    .ft-brand-right {
+      position: absolute;
+      right: 1.5rem;
+      bottom: 0;
+    }
+
     .ft-bottom-bar {
-      flex-direction: column !important;
-      gap: 1.5rem !important;
+      flex-direction: column;
+      gap: 1.5rem;
+      text-align: center;
+      padding: 2rem 1.5rem 2.5rem;
+    }
+
+    .ft-social-icons {
+      justify-content: flex-start;
+    }
+
+    .ft-payment-icons {
+      justify-content: center;
     }
   }
 </style>
 
 <!-- ══════════════════════════════════════════════
-     FOOTER — Quiet Luxury
-     ══════════════════════════════════════════════ -->
-<footer
-  id="site-footer"
-  role="contentinfo"
-  style="background: #141414;"
-  class="pt-24 md:pt-40 pb-12 md:pb-16 overflow-hidden"
->
+     FOOTER — Release-Style
+══════════════════════════════════════════════ -->
+<footer id="site-footer" class="ft-section" role="contentinfo">
 
-  <!-- ── Giant Marquee ── -->
-  <div id="footer-giant" class="ft-marquee-wrap w-full overflow-hidden mb-16 md:mb-24">
-    <div class="ft-marquee-track" style="--ft-speed: {{ section.settings.giant_speed | default: 20 }}s;">
-      <span class="ft-giant">{{ section.settings.giant_text }}</span>
-      <span class="ft-giant">{{ section.settings.giant_text }}</span>
-      <span class="ft-giant">{{ section.settings.giant_text }}</span>
-      <span class="ft-giant">{{ section.settings.giant_text }}</span>
+  <!-- ── TOP ROW: Newsletter + 3 Link Columns ── -->
+  <div class="ft-top-row">
+
+    <!-- NEWSLETTER -->
+    <div class="ft-newsletter" data-footer-col>
+      <p class="ft-eyebrow">Newsletter</p>
+      <p class="ft-newsletter-desc">
+        {{ section.settings.newsletter_text | default: 'Sign up to receive 10% off your first order' }}
+      </p>
+      <form action="/contact#contact_form" method="post" onsubmit="event.preventDefault();" novalidate>
+        <input type="hidden" name="form_type" value="customer" />
+        <input type="hidden" name="utf8" value="✓" />
+        <input type="hidden" name="contact[tags]" value="newsletter" />
+        <div class="ft-email-form">
+          <label for="footer-email" class="sr-only">Email address</label>
+          <input
+            id="footer-email"
+            name="contact[email]"
+            type="email"
+            class="ft-email-input"
+            placeholder="Email address"
+            required
+            autocomplete="email"
+          />
+          <button type="submit" class="ft-subscribe-btn">Subscribe</button>
+        </div>
+      </form>
     </div>
-  </div>
 
-  <!-- ── Hairline Divider ── -->
-  <div class="mx-8 md:mx-16 lg:mx-24 mb-16 md:mb-28" style="height: 1px; background: rgba(255,255,255,0.06);"></div>
-
-  <!-- ── Main Content: Newsletter + 4 Columns ── -->
-  <div id="footer-grid" class="px-8 md:px-16 lg:px-24">
-    <div class="ft-desktop-layout" style="display: flex;">
-
-      <!-- LEFT: Newsletter -->
-      <div data-footer-col class="ft-newsletter-col">
-        <p class="ft-eyebrow">Newsletter</p>
-
-        <p class="ft-promo-heading">
-          {{ section.settings.newsletter_text }}
-        </p>
-
-        <form action="/contact#contact_form" method="post" onsubmit="event.preventDefault();" novalidate>
-          <input type="hidden" name="form_type" value="customer" />
-          <input type="hidden" name="utf8" value="✓" />
-          <input type="hidden" name="contact[tags]" value="newsletter" />
-
-          <div class="ft-email-row">
-            <label for="footer-email" class="sr-only">Email address</label>
-            <input
-              id="footer-email"
-              name="contact[email]"
-              type="email"
-              class="ft-email-input"
-              placeholder="Your email address"
-              required
-              autocomplete="email"
-            />
-          </div>
-          <div style="margin-top: 1.5rem;">
-            <button type="submit" class="ft-subscribe">Subscribe</button>
-          </div>
-        </form>
-      </div>
-
-      <!-- DIVIDER -->
-      <div class="ft-vdivider hidden md:block"></div>
-
-      <!-- RIGHT: 4 Link Columns -->
-      <div class="ft-links-grid">
-
-        <!-- Company -->
-        <div data-footer-col>
-          <p class="ft-eyebrow">{{ section.settings.col2_title | default: 'Company' }}</p>
-          <nav class="ft-nav" aria-label="Company">
-            {% if section.settings.c2_link1_label != blank %}<a href="{{ section.settings.c2_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link1_label }}</a>{% endif %}
-            {% if section.settings.c2_link2_label != blank %}<a href="{{ section.settings.c2_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link2_label }}</a>{% endif %}
-            {% if section.settings.c2_link3_label != blank %}<a href="{{ section.settings.c2_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link3_label }}</a>{% endif %}
-            {% if section.settings.c2_link4_label != blank %}<a href="{{ section.settings.c2_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link4_label }}</a>{% endif %}
-          </nav>
-        </div>
-
-        <!-- Customer Care -->
-        <div data-footer-col>
-          <p class="ft-eyebrow">{{ section.settings.col3_title | default: 'Customer Care' }}</p>
-          <nav class="ft-nav" aria-label="Customer Care">
-            {% if section.settings.c3_link1_label != blank %}<a href="{{ section.settings.c3_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link1_label }}</a>{% endif %}
-            {% if section.settings.c3_link2_label != blank %}<a href="{{ section.settings.c3_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link2_label }}</a>{% endif %}
-            {% if section.settings.c3_link3_label != blank %}<a href="{{ section.settings.c3_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link3_label }}</a>{% endif %}
-            {% if section.settings.c3_link4_label != blank %}<a href="{{ section.settings.c3_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link4_label }}</a>{% endif %}
-          </nav>
-        </div>
-
-        <!-- Terms & Policies -->
-        <div data-footer-col>
-          <p class="ft-eyebrow">{{ section.settings.col4_title | default: 'Terms & Policies' }}</p>
-          <nav class="ft-nav" aria-label="Terms and Policies">
-            {% if section.settings.c4_link1_label != blank %}<a href="{{ section.settings.c4_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link1_label }}</a>{% endif %}
-            {% if section.settings.c4_link2_label != blank %}<a href="{{ section.settings.c4_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link2_label }}</a>{% endif %}
-            {% if section.settings.c4_link3_label != blank %}<a href="{{ section.settings.c4_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link3_label }}</a>{% endif %}
-            {% if section.settings.c4_link4_label != blank %}<a href="{{ section.settings.c4_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link4_label }}</a>{% endif %}
-          </nav>
-        </div>
-
-        <!-- Follow Us -->
-        <div data-footer-col>
-          <p class="ft-eyebrow">{{ section.settings.col5_title | default: 'Follow Us' }}</p>
-          <nav class="ft-nav" aria-label="Social">
-            {% if section.settings.c5_link1_label != blank %}<a href="{{ section.settings.c5_link1_url | default: '#' }}" class="ft-link" target="_blank" rel="noopener">{{ section.settings.c5_link1_label }}</a>{% endif %}
-            {% if section.settings.c5_link2_label != blank %}<a href="{{ section.settings.c5_link2_url | default: '#' }}" class="ft-link" target="_blank" rel="noopener">{{ section.settings.c5_link2_label }}</a>{% endif %}
-            {% if section.settings.c5_link3_label != blank %}<a href="{{ section.settings.c5_link3_url | default: '#' }}" class="ft-link" target="_blank" rel="noopener">{{ section.settings.c5_link3_label }}</a>{% endif %}
-            {% if section.settings.c5_link4_label != blank %}<a href="{{ section.settings.c5_link4_url | default: '#' }}" class="ft-link" target="_blank" rel="noopener">{{ section.settings.c5_link4_label }}</a>{% endif %}
-          </nav>
-        </div>
-
+    <!-- COMPANY (Desktop: visible column, Mobile: accordion) -->
+    <div class="ft-accordion" data-footer-col>
+      <!-- Desktop title -->
+      <p class="ft-eyebrow ft-link-col-title-desktop">{{ section.settings.col2_title | default: 'Company' }}</p>
+      <!-- Mobile accordion toggle -->
+      <button class="ft-accordion-header" aria-expanded="false" onclick="toggleFooterAccordion(this)">
+        <span class="ft-link-col-title">{{ section.settings.col2_title | default: 'Company' }}</span>
+        <span class="ft-accordion-icon" aria-hidden="true"></span>
+      </button>
+      <div class="ft-accordion-body">
+        <nav class="ft-nav" aria-label="{{ section.settings.col2_title | default: 'Company' }}">
+          {% if section.settings.c2_link1_label != blank %}<a href="{{ section.settings.c2_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link1_label }}</a>{% endif %}
+          {% if section.settings.c2_link2_label != blank %}<a href="{{ section.settings.c2_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link2_label }}</a>{% endif %}
+          {% if section.settings.c2_link3_label != blank %}<a href="{{ section.settings.c2_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link3_label }}</a>{% endif %}
+          {% if section.settings.c2_link4_label != blank %}<a href="{{ section.settings.c2_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link4_label }}</a>{% endif %}
+          {% if section.settings.c2_link5_label != blank %}<a href="{{ section.settings.c2_link5_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link5_label }}</a>{% endif %}
+          {% if section.settings.c2_link6_label != blank %}<a href="{{ section.settings.c2_link6_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link6_label }}</a>{% endif %}
+        </nav>
       </div>
     </div>
-  </div>
 
-  <!-- ── Bottom Bar ── -->
-  <div
-    class="ft-bottom-bar mt-24 md:mt-36 pt-10 mx-8 md:mx-16 lg:mx-24 flex flex-row justify-between items-center"
-    style="border-top: 1px solid rgba(255,255,255,0.06);"
-  >
+    <!-- PAGES -->
+    <div class="ft-accordion" data-footer-col>
+      <p class="ft-eyebrow ft-link-col-title-desktop">{{ section.settings.col3_title | default: 'Pages' }}</p>
+      <button class="ft-accordion-header" aria-expanded="false" onclick="toggleFooterAccordion(this)">
+        <span class="ft-link-col-title">{{ section.settings.col3_title | default: 'Pages' }}</span>
+        <span class="ft-accordion-icon" aria-hidden="true"></span>
+      </button>
+      <div class="ft-accordion-body">
+        <nav class="ft-nav" aria-label="{{ section.settings.col3_title | default: 'Pages' }}">
+          {% if section.settings.c3_link1_label != blank %}<a href="{{ section.settings.c3_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link1_label }}</a>{% endif %}
+          {% if section.settings.c3_link2_label != blank %}<a href="{{ section.settings.c3_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link2_label }}</a>{% endif %}
+          {% if section.settings.c3_link3_label != blank %}<a href="{{ section.settings.c3_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link3_label }}</a>{% endif %}
+          {% if section.settings.c3_link4_label != blank %}<a href="{{ section.settings.c3_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link4_label }}</a>{% endif %}
+          {% if section.settings.c3_link5_label != blank %}<a href="{{ section.settings.c3_link5_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link5_label }}</a>{% endif %}
+          {% if section.settings.c3_link6_label != blank %}<a href="{{ section.settings.c3_link6_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link6_label }}</a>{% endif %}
+        </nav>
+      </div>
+    </div>
+
+    <!-- SHOP -->
+    <div class="ft-accordion" data-footer-col>
+      <p class="ft-eyebrow ft-link-col-title-desktop">{{ section.settings.col4_title | default: 'Shop' }}</p>
+      <button class="ft-accordion-header" aria-expanded="false" onclick="toggleFooterAccordion(this)">
+        <span class="ft-link-col-title">{{ section.settings.col4_title | default: 'Shop' }}</span>
+        <span class="ft-accordion-icon" aria-hidden="true"></span>
+      </button>
+      <div class="ft-accordion-body">
+        <nav class="ft-nav" aria-label="{{ section.settings.col4_title | default: 'Shop' }}">
+          {% if section.settings.c4_link1_label != blank %}<a href="{{ section.settings.c4_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link1_label }}</a>{% endif %}
+          {% if section.settings.c4_link2_label != blank %}<a href="{{ section.settings.c4_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link2_label }}</a>{% endif %}
+          {% if section.settings.c4_link3_label != blank %}<a href="{{ section.settings.c4_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link3_label }}</a>{% endif %}
+          {% if section.settings.c4_link4_label != blank %}<a href="{{ section.settings.c4_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link4_label }}</a>{% endif %}
+          {% if section.settings.c4_link5_label != blank %}<a href="{{ section.settings.c4_link5_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link5_label }}</a>{% endif %}
+          {% if section.settings.c4_link6_label != blank %}<a href="{{ section.settings.c4_link6_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link6_label }}</a>{% endif %}
+          {% if section.settings.c4_link7_label != blank %}<a href="{{ section.settings.c4_link7_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link7_label }}</a>{% endif %}
+        </nav>
+      </div>
+    </div>
+
+  </div>
+  <!-- / Top Row -->
+
+  <!-- ── BRAND SECTION ── -->
+  <div class="ft-brand-section" style="position: relative;">
+
+    <!-- Left: Brand name + description -->
+    <div class="ft-brand-left">
+      <p class="ft-brand-name">{{ section.settings.brand_name | default: shop.name }}</p>
+      <p class="ft-brand-desc">
+        {{ section.settings.brand_desc | default: 'A premium Shopify theme designed by Dropxlabel.' }}
+      </p>
+    </div>
+
+    <!-- Center: Social Icons -->
+    <div class="ft-brand-center">
+      <div class="ft-social-icons">
+        {% if section.settings.social_instagram != blank %}
+          <a href="{{ section.settings.social_instagram }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+        {% endif %}
+        {% if section.settings.social_youtube != blank %}
+          <a href="{{ section.settings.social_youtube }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.55A3.02 3.02 0 0 0 .5 6.19 31.7 31.7 0 0 0 0 12a31.7 31.7 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.87.55 9.38.55 9.38.55s7.5 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14A31.7 31.7 0 0 0 24 12a31.7 31.7 0 0 0-.5-5.81zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+          </a>
+        {% endif %}
+        {% if section.settings.social_tiktok != blank %}
+          <a href="{{ section.settings.social_tiktok }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.8.1V9.01a6.33 6.33 0 0 0-.8-.05 6.34 6.34 0 0 0-6.34 6.34A6.34 6.34 0 0 0 9.49 21.64a6.34 6.34 0 0 0 6.34-6.34V9.19a8.16 8.16 0 0 0 4.77 1.52V7.32a4.85 4.85 0 0 1-1.01-.63z"/></svg>
+          </a>
+        {% endif %}
+        {% if section.settings.social_twitter != blank %}
+          <a href="{{ section.settings.social_twitter }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="X">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        {% endif %}
+        {% if section.settings.social_vimeo != blank %}
+          <a href="{{ section.settings.social_vimeo }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="Vimeo">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609C15.9 20.465 12.999 22.5 10.525 22.5c-1.532 0-2.83-1.415-3.887-4.248C5.764 15.08 4.888 10.47 3.81 7.692 2.83 4.927 1.79 3.545.592 3.545c-.193 0-.868.407-2.025 1.22L0 3.64C1.15 2.72 2.137 1.818 2.96.931 4.397-.513 5.49-1.242 6.233-1.315c1.96-.19 3.166 1.15 3.62 4.02.482 3.1.82 5.032 1.005 5.793.558 2.535 1.17 3.8 1.834 3.8.518 0 1.296-.82 2.333-2.46 1.035-1.642 1.59-2.893 1.665-3.754.14-1.424-.41-2.14-1.65-2.14-.59 0-1.197.135-1.823.404 1.212-3.968 3.525-5.894 6.942-5.776 2.533.084 3.727 1.715 3.584 4.894z"/></svg>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Right: Scroll to Top -->
+    <div class="ft-brand-right">
+      <button class="ft-scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Scroll to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m18 15-6-6-6 6"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+  <!-- / Brand Section -->
+
+  <!-- ── BOTTOM BAR ── -->
+  <div class="ft-bottom-bar">
     <p class="ft-copyright">
-      &copy; {{ 'now' | date: '%Y' }} Dropxlabel. All Rights Reserved.
+      Copyright &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+      <a href="https://www.shopify.com" target="_blank" rel="noopener">Powered by Shopify.</a>
     </p>
-
     <div class="ft-payment-icons" aria-label="Accepted payment methods">
       {%- for type in shop.enabled_payment_types -%}
         <span class="ft-pay-icon">{{ type | payment_type_svg_tag }}</span>
@@ -411,31 +670,48 @@
 
 
 <script>
-  gsap.registerPlugin(ScrollTrigger);
+  /* ─── Footer Accordion Toggle (Mobile) ─── */
+  function toggleFooterAccordion(btn) {
+    var body = btn.nextElementSibling;
+    var isOpen = btn.getAttribute('aria-expanded') === 'true';
 
-  let mmFooter = gsap.matchMedia();
+    /* Close all other accordions */
+    document.querySelectorAll('#site-footer .ft-accordion-header').forEach(function(otherBtn) {
+      if (otherBtn !== btn) {
+        otherBtn.setAttribute('aria-expanded', 'false');
+        otherBtn.nextElementSibling.classList.remove('open');
+      }
+    });
 
-  mmFooter.add("(min-width: 768px)", () => {
-    gsap.from('.ft-giant', {
-      scrollTrigger: { trigger: '#site-footer', start: 'top 85%', once: true },
-      y: 100, opacity: 0, duration: 1.6, ease: 'power4.out', immediateRender: false,
-    });
-    gsap.from('#footer-grid [data-footer-col]', {
-      scrollTrigger: { trigger: '#footer-grid', start: 'top 88%', once: true },
-      y: 60, opacity: 0, duration: 1.4, ease: 'power3.out', stagger: 0.12, immediateRender: false,
-    });
-  });
+    /* Toggle this one */
+    btn.setAttribute('aria-expanded', !isOpen);
+    body.classList.toggle('open', !isOpen);
+  }
 
-  mmFooter.add("(max-width: 767px)", () => {
-    gsap.from('.ft-giant', {
-      scrollTrigger: { trigger: '#site-footer', start: 'top 92%', once: true },
-      y: 30, opacity: 0, duration: 0.8, ease: 'power3.out', immediateRender: false,
+  /* ─── GSAP Entrance Animations ─── */
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+
+    var mmFooter = gsap.matchMedia();
+
+    mmFooter.add("(min-width: 768px)", function() {
+      gsap.from('#site-footer [data-footer-col]', {
+        scrollTrigger: { trigger: '#site-footer', start: 'top 88%', once: true },
+        y: 40, opacity: 0, duration: 1, ease: 'power3.out', stagger: 0.1, immediateRender: false,
+      });
+      gsap.from('.ft-brand-name', {
+        scrollTrigger: { trigger: '.ft-brand-section', start: 'top 90%', once: true },
+        y: 30, opacity: 0, duration: 1.2, ease: 'power3.out', immediateRender: false,
+      });
     });
-    gsap.from('#footer-grid [data-footer-col]', {
-      scrollTrigger: { trigger: '#footer-grid', start: 'top 92%', once: true },
-      y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.05, immediateRender: false,
+
+    mmFooter.add("(max-width: 767px)", function() {
+      gsap.from('#site-footer [data-footer-col]', {
+        scrollTrigger: { trigger: '#site-footer', start: 'top 92%', once: true },
+        y: 20, opacity: 0, duration: 0.8, ease: 'power3.out', stagger: 0.05, immediateRender: false,
+      });
     });
-  });
+  }
 </script>
 
 {% schema %}
@@ -443,75 +719,82 @@
   "name": "Footer",
   "tag": "section",
   "settings": [
-    { "type": "header", "content": "── Marquee ──" },
-    {
-      "type": "text",
-      "id": "giant_text",
-      "label": "Giant Text",
-      "default": "Elevate Your Wardrobe at\u00a0Dropxlabel"
-    },
-    {
-      "type": "range",
-      "id": "giant_speed",
-      "min": 5,
-      "max": 60,
-      "step": 5,
-      "default": 20,
-      "label": "Scroll Speed (seconds)",
-      "info": "Lower = faster"
-    },
-
     { "type": "header", "content": "── Newsletter ──" },
     {
       "type": "textarea",
       "id": "newsletter_text",
-      "label": "Newsletter Promo Text",
-      "default": "Receive an exclusive <em>20%</em> discount code when you sign up."
+      "label": "Newsletter Description",
+      "default": "Sign up to receive 10% off your first order"
     },
 
     { "type": "header", "content": "── Company ──" },
     { "type": "text", "id": "col2_title", "label": "Column Title", "default": "Company" },
-    { "type": "text", "id": "c2_link1_label", "label": "Link 1 Label", "default": "About Us" },
+    { "type": "text", "id": "c2_link1_label", "label": "Link 1 Label", "default": "Search" },
     { "type": "url",  "id": "c2_link1_url",   "label": "Link 1 URL" },
-    { "type": "text", "id": "c2_link2_label", "label": "Link 2 Label", "default": "Blog" },
+    { "type": "text", "id": "c2_link2_label", "label": "Link 2 Label", "default": "Contact" },
     { "type": "url",  "id": "c2_link2_url",   "label": "Link 2 URL" },
-    { "type": "text", "id": "c2_link3_label", "label": "Link 3 Label", "default": "Careers" },
+    { "type": "text", "id": "c2_link3_label", "label": "Link 3 Label", "default": "Terms" },
     { "type": "url",  "id": "c2_link3_url",   "label": "Link 3 URL" },
-    { "type": "text", "id": "c2_link4_label", "label": "Link 4 Label", "default": "Locations" },
+    { "type": "text", "id": "c2_link4_label", "label": "Link 4 Label", "default": "Privacy Policy" },
     { "type": "url",  "id": "c2_link4_url",   "label": "Link 4 URL" },
+    { "type": "text", "id": "c2_link5_label", "label": "Link 5 Label" },
+    { "type": "url",  "id": "c2_link5_url",   "label": "Link 5 URL" },
+    { "type": "text", "id": "c2_link6_label", "label": "Link 6 Label" },
+    { "type": "url",  "id": "c2_link6_url",   "label": "Link 6 URL" },
 
-    { "type": "header", "content": "── Customer Care ──" },
-    { "type": "text", "id": "col3_title", "label": "Column Title", "default": "Customer Care" },
-    { "type": "text", "id": "c3_link1_label", "label": "Link 1 Label", "default": "Size Guide" },
+    { "type": "header", "content": "── Pages ──" },
+    { "type": "text", "id": "col3_title", "label": "Column Title", "default": "Pages" },
+    { "type": "text", "id": "c3_link1_label", "label": "Link 1 Label", "default": "FAQ" },
     { "type": "url",  "id": "c3_link1_url",   "label": "Link 1 URL" },
-    { "type": "text", "id": "c3_link2_label", "label": "Link 2 Label", "default": "Help & FAQs" },
+    { "type": "text", "id": "c3_link2_label", "label": "Link 2 Label", "default": "Blog" },
     { "type": "url",  "id": "c3_link2_url",   "label": "Link 2 URL" },
-    { "type": "text", "id": "c3_link3_label", "label": "Link 3 Label", "default": "Return My Order" },
+    { "type": "text", "id": "c3_link3_label", "label": "Link 3 Label", "default": "Lookbook" },
     { "type": "url",  "id": "c3_link3_url",   "label": "Link 3 URL" },
-    { "type": "text", "id": "c3_link4_label", "label": "Link 4 Label", "default": "Refer a Friend" },
+    { "type": "text", "id": "c3_link4_label", "label": "Link 4 Label", "default": "Collections" },
     { "type": "url",  "id": "c3_link4_url",   "label": "Link 4 URL" },
+    { "type": "text", "id": "c3_link5_label", "label": "Link 5 Label" },
+    { "type": "url",  "id": "c3_link5_url",   "label": "Link 5 URL" },
+    { "type": "text", "id": "c3_link6_label", "label": "Link 6 Label" },
+    { "type": "url",  "id": "c3_link6_url",   "label": "Link 6 URL" },
 
-    { "type": "header", "content": "── Terms & Policies ──" },
-    { "type": "text", "id": "col4_title", "label": "Column Title", "default": "Terms & Policies" },
-    { "type": "text", "id": "c4_link1_label", "label": "Link 1 Label", "default": "Duties & Taxes" },
+    { "type": "header", "content": "── Shop ──" },
+    { "type": "text", "id": "col4_title", "label": "Column Title", "default": "Shop" },
+    { "type": "text", "id": "c4_link1_label", "label": "Link 1 Label", "default": "Tops" },
     { "type": "url",  "id": "c4_link1_url",   "label": "Link 1 URL" },
-    { "type": "text", "id": "c4_link2_label", "label": "Link 2 Label", "default": "Shipping Info" },
+    { "type": "text", "id": "c4_link2_label", "label": "Link 2 Label", "default": "T-shirts" },
     { "type": "url",  "id": "c4_link2_url",   "label": "Link 2 URL" },
-    { "type": "text", "id": "c4_link3_label", "label": "Link 3 Label", "default": "Privacy Policy" },
+    { "type": "text", "id": "c4_link3_label", "label": "Link 3 Label", "default": "Knitwear" },
     { "type": "url",  "id": "c4_link3_url",   "label": "Link 3 URL" },
-    { "type": "text", "id": "c4_link4_label", "label": "Link 4 Label", "default": "Terms Conditions" },
+    { "type": "text", "id": "c4_link4_label", "label": "Link 4 Label", "default": "Dresses" },
     { "type": "url",  "id": "c4_link4_url",   "label": "Link 4 URL" },
+    { "type": "text", "id": "c4_link5_label", "label": "Link 5 Label", "default": "Bottoms" },
+    { "type": "url",  "id": "c4_link5_url",   "label": "Link 5 URL" },
+    { "type": "text", "id": "c4_link6_label", "label": "Link 6 Label", "default": "Jackets & Coats" },
+    { "type": "url",  "id": "c4_link6_url",   "label": "Link 6 URL" },
+    { "type": "text", "id": "c4_link7_label", "label": "Link 7 Label" },
+    { "type": "url",  "id": "c4_link7_url",   "label": "Link 7 URL" },
 
-    { "type": "header", "content": "── Follow Us ──" },
-    { "type": "text", "id": "col5_title", "label": "Column Title", "default": "Follow Us" },
-    { "type": "text", "id": "c5_link1_label", "label": "Link 1 Label", "default": "Instagram" },
-    { "type": "url",  "id": "c5_link1_url",   "label": "Link 1 URL" },
-    { "type": "text", "id": "c5_link2_label", "label": "Link 2 Label", "default": "Facebook" },
-    { "type": "url",  "id": "c5_link2_url",   "label": "Link 2 URL" },
-    { "type": "text", "id": "c5_link3_label", "label": "Link 3 Label", "default": "Pinterest" },
-    { "type": "url",  "id": "c5_link3_url",   "label": "Link 3 URL" },
-    { "type": "text", "id": "c5_link4_label", "label": "Link 4 Label", "default": "Tiktok" },
-    { "type": "url",  "id": "c5_link4_url",   "label": "Link 4 URL" }
+    { "type": "header", "content": "── Brand ──" },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand Name",
+      "default": "dropxlabel",
+      "info": "Large italic text displayed in brand section"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_desc",
+      "label": "Brand Description",
+      "default": "Dropxlabel is a premium official Shopify theme designed by DigiFist."
+    },
+
+    { "type": "header", "content": "── Social Links ──" },
+    { "type": "url", "id": "social_instagram", "label": "Instagram URL" },
+    { "type": "url", "id": "social_youtube", "label": "YouTube URL" },
+    { "type": "url", "id": "social_tiktok", "label": "TikTok URL" },
+    { "type": "url", "id": "social_twitter", "label": "X (Twitter) URL" },
+    { "type": "url", "id": "social_vimeo", "label": "Vimeo URL" }
   ]
 }
 {% endschema %}
