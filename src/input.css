@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════
+   HERO BANNER — Keyframes & Component Styles
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── Ken Burns Effect ─── */
+@keyframes kenBurns {
+    0% {
+        transform: scale(1) translateX(0) translateY(0);
+        filter: blur(10px);
+    }
+
+    15% {
+        filter: blur(0px);
+    }
+
+    33% {
+        transform: scale(1.05) translateX(-1%) translateY(-0.5%);
+        filter: blur(0px);
+    }
+
+    66% {
+        transform: scale(1.10) translateX(1%) translateY(-1%);
+        filter: blur(0px);
+    }
+
+    100% {
+        transform: scale(1.15) translateX(-0.5%) translateY(-1.5%);
+        filter: blur(0px);
+    }
+}
+
+/* ─── Hero Text Entrance ─── */
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ─── Marquee ─── */
+@keyframes marquee {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes marquee-reverse {
+    from {
+        transform: translateX(-50%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* ─── Hero Media ─── */
+.hero-image,
+.hero-video {
+    @apply w-full h-full object-cover;
+    object-position: center top;
+    animation: kenBurns 30s ease-in-out infinite alternate;
+    transform-origin: center center;
+    will-change: transform;
+}
+
+.hero-video {
+    animation: none;
+}
+
+/* ─── Hero Text Entrance Animations ─── */
+.hero-eyebrow {
+    animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.hero-copy {
+    animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both;
+}
+
+.hero-cta {
+    animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
+}
+
+/* ─── GSAP Staggered Text Reveal Masks ─── */
+.hero-line-mask {
+    @apply block overflow-hidden;
+}
+
+.hero-line {
+    @apply block;
+    transform: translateY(100%);
+    will-change: transform;
+}
+
+/* ─── Marquee ─── */
+.marquee-track {
+    @apply flex;
+    width: max-content;
+    animation: var(--marquee-animation, marquee) var(--marquee-speed, 22s) linear infinite;
+    will-change: transform;
+}
+
+.marquee-track:hover {
+    animation-play-state: paused;
+}
+
+.marquee-text {
+    @apply font-heading font-semibold uppercase whitespace-nowrap pr-16 leading-none select-none;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+@media (max-width: 767px) {
+    .marquee-text {
+        font-size: clamp(1.8rem, 8vw, 3rem);
+        @apply pr-8;
+    }
+}
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER — Accordion + Payment Icons
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── Mobile Accordion +/- Icon ─── */
+.ft-accordion-icon::before,
+.ft-accordion-icon::after {
+    content: '';
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.6);
+    transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 300ms ease;
+}
+
+.ft-accordion-icon::before {
+    top: 50%;
+    left: 2px;
+    right: 2px;
+    height: 1.5px;
+    transform: translateY(-50%);
+}
+
+.ft-accordion-icon::after {
+    left: 50%;
+    top: 2px;
+    bottom: 2px;
+    width: 1.5px;
+    transform: translateX(-50%);
+}
+
+.ft-accordion-header[aria-expanded="true"] .ft-accordion-icon::after {
+    transform: translateX(-50%) rotate(90deg);
+    opacity: 0;
+}
+
+/* ─── Accordion Body Transition ─── */
+.ft-accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 400ms cubic-bezier(0.16, 1, 0.3, 1),
+        padding 300ms ease;
+    padding-bottom: 0;
+}
+
+.ft-accordion-body.open {
+    max-height: 400px;
+    padding-bottom: 1.5rem;
+}
+
+/* ─── Payment Icon SVGs ─── */
+.ft-pay-icon svg,
+[aria-label="Accepted payment methods"] span svg {
+    height: 100%;
+    width: auto;
+}
