@@ -4,8 +4,7 @@
     <div class="ft-marquee-track flex w-max select-none"
          style="animation: ft-drift {{ section.settings.marquee_speed | default: 20 }}s linear infinite;">
       {% for i in (1..6) %}
-        <span class="ft-marquee-word whitespace-nowrap pr-4 font-heading font-bold uppercase text-[clamp(2.8rem,8vw,5.5rem)] leading-none tracking-[-0.02em]"
-              style="color: {{ section.settings.heading_color | default: '#ffffff' }};">
+        <span class="ft-marquee-word whitespace-nowrap pr-4 font-heading font-bold uppercase text-[clamp(2.8rem,8vw,5.5rem)] leading-none tracking-[-0.02em]">
           {{ section.settings.marquee_heading | default: 'Your Favorite Styles at Unmissable Prices' }}
         </span>
       {% endfor %}
@@ -14,20 +13,22 @@
 
   <!-- ═══ Main Content ═══ -->
   <div class="max-w-[1280px] mx-auto px-5 md:px-10 pb-10 md:pb-16">
-    <!-- Desktop: 4-column grid | Mobile: stacked -->
     <div class="flex flex-col md:flex-row md:gap-12 lg:gap-16">
 
       <!-- ── Col 1: Description + Email ── -->
       <div class="md:w-[38%] lg:w-[35%] mb-10 md:mb-0">
         <p class="font-body text-[0.85rem] md:text-[0.82rem] leading-[1.7] text-white/60 mb-6 max-w-[400px]">
-          {{ section.settings.description | default: "Whether you're looking for chic essentials, statement outfits, or casual staples, we've got something to suit every style. Browse our fresh arrivals and update your wardrobe with the season's hottest looks today!" }}
+          {{ section.settings.newsletter_text }}
         </p>
 
         <!-- Email Subscribe -->
         <form class="ft-subscribe-form flex items-center rounded-full border border-white/[0.12] bg-white/[0.05] overflow-hidden max-w-[400px]"
-              action="{{ section.settings.form_action | default: '#' }}" method="post">
+              action="/contact#contact_form" method="post">
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter">
           <input type="email"
-                 name="email"
+                 name="contact[email]"
                  placeholder="Email"
                  required
                  class="flex-1 bg-transparent px-5 py-3 text-[0.85rem] text-white placeholder-white/30 outline-none font-body">
@@ -41,116 +42,140 @@
       <!-- ── Col 2-4: Navigation Columns ── -->
       <div class="flex-1 flex flex-col md:flex-row md:justify-between md:gap-8 lg:gap-12">
 
-        {%- for block in section.blocks -%}
-          {%- case block.type -%}
+        <!-- ── Quick Links (Col 2) ── -->
+        <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
+          <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
+                  aria-expanded="false">
+            <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
+              {{ section.settings.col2_title | default: 'Quick links' }}
+            </span>
+            <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
+              <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
+              <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
+            </span>
+          </button>
+          <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
+               style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
+            <ul class="pb-5 md:pb-0 flex flex-col gap-3">
+              {%- for i in (1..6) -%}
+                {%- assign label_key = 'c2_link' | append: i | append: '_label' -%}
+                {%- assign url_key = 'c2_link' | append: i | append: '_url' -%}
+                {%- assign label = section.settings[label_key] -%}
+                {%- assign url = section.settings[url_key] -%}
+                {%- if label != blank and url != blank -%}
+                  <li>
+                    <a href="{{ url }}"
+                       class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
+                      {{ label }}
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        </div>
 
-            {%- when 'link_list' -%}
-              <!-- Link List Column -->
-              <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0" {{ block.shopify_attributes }}>
-                <!-- Header -->
-                <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
-                        aria-expanded="false">
-                  <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
-                    {{ block.settings.heading | default: 'Quick links' }}
-                  </span>
-                  <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
-                    <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
-                    <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
-                  </span>
-                </button>
+        <!-- ── Support (Col 3) ── -->
+        <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
+          <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
+                  aria-expanded="false">
+            <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
+              {{ section.settings.col3_title | default: 'Support' }}
+            </span>
+            <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
+              <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
+              <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
+            </span>
+          </button>
+          <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
+               style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
+            <ul class="pb-5 md:pb-0 flex flex-col gap-3">
+              {%- for i in (1..6) -%}
+                {%- assign label_key = 'c3_link' | append: i | append: '_label' -%}
+                {%- assign url_key = 'c3_link' | append: i | append: '_url' -%}
+                {%- assign label = section.settings[label_key] -%}
+                {%- assign url = section.settings[url_key] -%}
+                {%- if label != blank and url != blank -%}
+                  <li>
+                    <a href="{{ url }}"
+                       class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
+                      {{ label }}
+                    </a>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </div>
+        </div>
 
-                <!-- Links Panel -->
-                <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
-                     style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
-                  <ul class="pb-5 md:pb-0 flex flex-col gap-3">
-                    {%- assign menu = linklists[block.settings.menu] -%}
-                    {%- for link in menu.links -%}
-                      <li>
-                        <a href="{{ link.url }}"
-                           class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
-                          {{ link.title }}
-                        </a>
-                      </li>
-                    {%- endfor -%}
-                  </ul>
-                </div>
-              </div>
-
-            {%- when 'social_links' -%}
-              <!-- Social Links Column -->
-              <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0" {{ block.shopify_attributes }}>
-                <!-- Header -->
-                <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
-                        aria-expanded="false">
-                  <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
-                    {{ block.settings.heading | default: 'Follow us on' }}
-                  </span>
-                  <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
-                    <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
-                    <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
-                  </span>
-                </button>
-
-                <!-- Social Panel -->
-                <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
-                     style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
-                  <ul class="pb-5 md:pb-0 flex flex-col gap-3">
-                    {%- if block.settings.facebook_url != blank -%}
-                      <li>
-                        <a href="{{ block.settings.facebook_url }}" target="_blank" rel="noopener"
-                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                          Facebook
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                        </a>
-                      </li>
-                    {%- endif -%}
-                    {%- if block.settings.twitter_url != blank -%}
-                      <li>
-                        <a href="{{ block.settings.twitter_url }}" target="_blank" rel="noopener"
-                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                          X (Twitter)
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                        </a>
-                      </li>
-                    {%- endif -%}
-                    {%- if block.settings.instagram_url != blank -%}
-                      <li>
-                        <a href="{{ block.settings.instagram_url }}" target="_blank" rel="noopener"
-                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                          Instagram
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                        </a>
-                      </li>
-                    {%- endif -%}
-                    {%- if block.settings.youtube_url != blank -%}
-                      <li>
-                        <a href="{{ block.settings.youtube_url }}" target="_blank" rel="noopener"
-                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                          YouTube
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                        </a>
-                      </li>
-                    {%- endif -%}
-                    {%- if block.settings.pinterest_url != blank -%}
-                      <li>
-                        <a href="{{ block.settings.pinterest_url }}" target="_blank" rel="noopener"
-                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                          Pinterest
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                        </a>
-                      </li>
-                    {%- endif -%}
-                  </ul>
-                </div>
-              </div>
-
-          {%- endcase -%}
-        {%- endfor -%}
+        <!-- ── Follow us on (Col 4 / Social) ── -->
+        <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
+          <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
+                  aria-expanded="false">
+            <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
+              {{ section.settings.col4_title | default: 'Follow us on' }}
+            </span>
+            <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
+              <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
+              <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
+            </span>
+          </button>
+          <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
+               style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
+            <ul class="pb-5 md:pb-0 flex flex-col gap-3">
+              {%- if section.settings.social_instagram != blank -%}
+                <li>
+                  <a href="{{ section.settings.social_instagram }}" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                    Instagram
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if section.settings.social_twitter != blank -%}
+                <li>
+                  <a href="{{ section.settings.social_twitter }}" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                    X (Twitter)
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if section.settings.social_youtube != blank -%}
+                <li>
+                  <a href="{{ section.settings.social_youtube }}" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                    YouTube
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if section.settings.social_tiktok != blank -%}
+                <li>
+                  <a href="{{ section.settings.social_tiktok }}" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                    Pinterest
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if section.settings.social_facebook != blank -%}
+                <li>
+                  <a href="{{ section.settings.social_facebook }}" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                    Facebook
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+            </ul>
+          </div>
+        </div>
 
       </div>
     </div>
 
-    <!-- ── Bottom bar (optional) ── -->
+    <!-- ── Bottom bar ── -->
     <div class="mt-10 pt-6 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4">
       <p class="font-body text-[0.65rem] tracking-[0.1em] uppercase text-white/30">
         © {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
@@ -170,7 +195,6 @@
     class FooterSection extends HTMLElement {
       constructor() {
         super();
-        this._boundToggle = null;
         this._buttons = [];
       }
 
@@ -195,7 +219,6 @@
       }
 
       toggle(btn) {
-        /* Only toggle on mobile */
         if (window.innerWidth >= 768) return;
 
         const group = btn.closest('.ft-accordion-group');
@@ -204,14 +227,13 @@
         const isOpen = btn.getAttribute('aria-expanded') === 'true';
 
         if (isOpen) {
-          /* ── Close ── */
           panel.style.maxHeight = '0';
           panel.style.opacity = '0';
           panel.style.marginTop = '0';
           btn.setAttribute('aria-expanded', 'false');
           if (iconVertical) iconVertical.style.transform = 'rotate(90deg)';
         } else {
-          /* ── Close all others first ── */
+          /* Close all others first */
           this._buttons.forEach(otherBtn => {
             if (otherBtn !== btn && otherBtn.getAttribute('aria-expanded') === 'true') {
               const otherGroup = otherBtn.closest('.ft-accordion-group');
@@ -225,7 +247,6 @@
             }
           });
 
-          /* ── Open ── */
           panel.style.maxHeight = panel.scrollHeight + 'px';
           panel.style.opacity = '1';
           panel.style.marginTop = '0.5rem';
@@ -246,16 +267,14 @@
   "class": "footer-section",
   "settings": [
     {
+      "type": "header",
+      "content": "Marquee"
+    },
+    {
       "type": "text",
       "id": "marquee_heading",
       "label": "Marquee Heading",
       "default": "Your Favorite Styles at Unmissable Prices"
-    },
-    {
-      "type": "color",
-      "id": "heading_color",
-      "label": "Heading Color",
-      "default": "#ffffff"
     },
     {
       "type": "range",
@@ -267,100 +286,209 @@
       "default": 20
     },
     {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
       "type": "textarea",
-      "id": "description",
-      "label": "Description",
+      "id": "newsletter_text",
+      "label": "Newsletter Description",
       "default": "Whether you're looking for chic essentials, statement outfits, or casual staples, we've got something to suit every style. Browse our fresh arrivals and update your wardrobe with the season's hottest looks today!"
     },
     {
-      "type": "url",
-      "id": "form_action",
-      "label": "Subscribe Form Action URL"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "link_list",
-      "name": "Link List",
-      "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Heading",
-          "default": "Quick links"
-        },
-        {
-          "type": "link_list",
-          "id": "menu",
-          "label": "Menu",
-          "default": "footer"
-        }
-      ]
+      "type": "header",
+      "content": "Column 2 — Quick Links"
     },
     {
-      "type": "social_links",
-      "name": "Social Links",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "heading",
-          "label": "Heading",
-          "default": "Follow us on"
-        },
-        {
-          "type": "url",
-          "id": "facebook_url",
-          "label": "Facebook URL"
-        },
-        {
-          "type": "url",
-          "id": "twitter_url",
-          "label": "X (Twitter) URL"
-        },
-        {
-          "type": "url",
-          "id": "instagram_url",
-          "label": "Instagram URL"
-        },
-        {
-          "type": "url",
-          "id": "youtube_url",
-          "label": "YouTube URL"
-        },
-        {
-          "type": "url",
-          "id": "pinterest_url",
-          "label": "Pinterest URL"
-        }
-      ]
-    }
-  ],
-  "presets": [
+      "type": "text",
+      "id": "col2_title",
+      "label": "Column 2 Title",
+      "default": "Quick links"
+    },
     {
-      "name": "Footer",
-      "blocks": [
-        {
-          "type": "link_list",
-          "settings": {
-            "heading": "Quick links",
-            "menu": "footer"
-          }
-        },
-        {
-          "type": "link_list",
-          "settings": {
-            "heading": "Support",
-            "menu": "footer"
-          }
-        },
-        {
-          "type": "social_links",
-          "settings": {
-            "heading": "Follow us on"
-          }
-        }
-      ]
+      "type": "text",
+      "id": "c2_link1_label",
+      "label": "Link 1 Label"
+    },
+    {
+      "type": "url",
+      "id": "c2_link1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "c2_link2_label",
+      "label": "Link 2 Label"
+    },
+    {
+      "type": "url",
+      "id": "c2_link2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "c2_link3_label",
+      "label": "Link 3 Label"
+    },
+    {
+      "type": "url",
+      "id": "c2_link3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "c2_link4_label",
+      "label": "Link 4 Label"
+    },
+    {
+      "type": "url",
+      "id": "c2_link4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "text",
+      "id": "c2_link5_label",
+      "label": "Link 5 Label"
+    },
+    {
+      "type": "url",
+      "id": "c2_link5_url",
+      "label": "Link 5 URL"
+    },
+    {
+      "type": "text",
+      "id": "c2_link6_label",
+      "label": "Link 6 Label"
+    },
+    {
+      "type": "url",
+      "id": "c2_link6_url",
+      "label": "Link 6 URL"
+    },
+    {
+      "type": "header",
+      "content": "Column 3 — Support"
+    },
+    {
+      "type": "text",
+      "id": "col3_title",
+      "label": "Column 3 Title",
+      "default": "Support"
+    },
+    {
+      "type": "text",
+      "id": "c3_link1_label",
+      "label": "Link 1 Label"
+    },
+    {
+      "type": "url",
+      "id": "c3_link1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "c3_link2_label",
+      "label": "Link 2 Label"
+    },
+    {
+      "type": "url",
+      "id": "c3_link2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "c3_link3_label",
+      "label": "Link 3 Label"
+    },
+    {
+      "type": "url",
+      "id": "c3_link3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "c3_link4_label",
+      "label": "Link 4 Label"
+    },
+    {
+      "type": "url",
+      "id": "c3_link4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "text",
+      "id": "c3_link5_label",
+      "label": "Link 5 Label"
+    },
+    {
+      "type": "url",
+      "id": "c3_link5_url",
+      "label": "Link 5 URL"
+    },
+    {
+      "type": "text",
+      "id": "c3_link6_label",
+      "label": "Link 6 Label"
+    },
+    {
+      "type": "url",
+      "id": "c3_link6_url",
+      "label": "Link 6 URL"
+    },
+    {
+      "type": "header",
+      "content": "Column 4 — Follow Us"
+    },
+    {
+      "type": "text",
+      "id": "col4_title",
+      "label": "Column 4 Title",
+      "default": "Follow us on"
+    },
+    {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "social_twitter",
+      "label": "X (Twitter) URL"
+    },
+    {
+      "type": "url",
+      "id": "social_instagram",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "social_youtube",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "url",
+      "id": "social_tiktok",
+      "label": "Pinterest / TikTok URL"
+    },
+    {
+      "type": "header",
+      "content": "Brand Info (legacy)"
+    },
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand Name",
+      "default": "dropxlabel"
+    },
+    {
+      "type": "textarea",
+      "id": "brand_desc",
+      "label": "Brand Description"
+    },
+    {
+      "type": "url",
+      "id": "social_vimeo",
+      "label": "Vimeo URL"
     }
   ]
 }
