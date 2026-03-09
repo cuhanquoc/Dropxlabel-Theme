@@ -3,21 +3,44 @@
    Extracted from inline scripts, wrapped in DOMContentLoaded
    ═════════════════════════════════════════════════════ */
 
+/* ═══ Web Component: <hero-banner> ═══ */
+class HeroBanner extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.initAnimations();
+  }
+
+  initAnimations() {
+    if (typeof gsap === 'undefined') return;
+
+    const heading = this.querySelector('.hero-headline');
+    if (!heading) return;
+
+    const raw = heading.innerHTML.trim();
+    heading.innerHTML = raw.split(/\s+/).map(function (w) {
+      return '<span class="hero-word" style="display:inline-block;overflow:hidden;">'
+        + '<span style="display:inline-block;transform:translateY(110%)">' + w + '</span></span>';
+    }).join(' ');
+
+    const words = heading.querySelectorAll('.hero-word > span');
+    gsap.to(words, {
+      y: '0%',
+      duration: 0.8,
+      ease: 'expo.out',
+      stagger: 0.15,
+      delay: 0.55
+    });
+  }
+}
+customElements.define('hero-banner', HeroBanner);
+
 document.addEventListener('DOMContentLoaded', function () {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   gsap.registerPlugin(ScrollTrigger);
 
-  /* ── Hero Banner Text Reveal ── */
-  (function () {
-    var heading = document.getElementById('hero-heading');
-    if (!heading) return;
-    var raw = heading.innerHTML.trim();
-    heading.innerHTML = raw.split(/\s+/).map(function (w) {
-      return '<span class="hero-word" style="display:inline-block;overflow:hidden;"><span style="display:inline-block;transform:translateY(110%)">' + w + '</span></span>';
-    }).join(' ');
-    var lines = heading.querySelectorAll('.hero-word > span');
-    gsap.to(lines, { y: '0%', duration: 0.8, ease: 'expo.out', stagger: 0.15, delay: 0.55 });
-  }());
 
   /* ── Brand Story Bento ── */
   (function () {

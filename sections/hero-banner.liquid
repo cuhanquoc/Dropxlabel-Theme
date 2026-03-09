@@ -1,208 +1,4 @@
-<style>
-  /* ─── Ken Burns Effect ─── */
-  @keyframes kenBurns {
-    0%   { transform: scale(1)    translateX(0)     translateY(0);      filter: blur(10px); }
-    15%  { filter: blur(0px); }
-    33%  { transform: scale(1.05) translateX(-1%)   translateY(-0.5%);  filter: blur(0px); }
-    66%  { transform: scale(1.10) translateX(1%)    translateY(-1%);    filter: blur(0px); }
-    100% { transform: scale(1.15) translateX(-0.5%) translateY(-1.5%);  filter: blur(0px); }
-  }
-
-  .hero-image,
-  .hero-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    animation: kenBurns 30s ease-in-out infinite alternate;
-    transform-origin: center center;
-    will-change: transform;
-  }
-
-  .hero-video {
-    animation: none; /* video tự có motion, không cần Ken Burns */
-  }
-
-  /* ─── Hero Text Entrance ─── */
-  @keyframes fadeSlideUp {
-    from {
-      opacity: 0;
-      transform: translateY(40px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .hero-eyebrow {
-    animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
-  }
-
-  .hero-headline {
-    /* Animation handled by GSAP stagger — no CSS animation */
-  }
-
-  /* Staggered Text Reveal masks */
-  .hero-line-mask {
-    display: block;
-    overflow: hidden;
-  }
-
-  .hero-line {
-    display: block;
-    transform: translateY(100%);
-    will-change: transform;
-  }
-
-  .hero-copy {
-    animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.75s both;
-  }
-
-  .hero-cta {
-    animation: fadeSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.95s both;
-  }
-
-  /* ─── Marquee ─── */
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-
-  @keyframes marquee-reverse {
-    from { transform: translateX(-50%); }
-    to   { transform: translateX(0); }
-  }
-
-  .marquee-track {
-    display: flex;
-    width: max-content;
-    animation: var(--marquee-animation, marquee) var(--marquee-speed, 22s) linear infinite;
-    will-change: transform;
-  }
-
-  .marquee-track:hover {
-    animation-play-state: paused;
-  }
-
-  .marquee-text {
-    font-family: var(--font-heading);
-    font-size: clamp(3rem, 6vw, 5.5rem);
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.6);
-    white-space: nowrap;
-    padding-right: 4rem;
-    line-height: 1;
-    user-select: none;
-  }
-
-  /* ─── Desktop (≥ 768px) ─── */
-  @media (min-width: 768px) {
-    .hero-content-wrap {
-      padding-left: 2.5rem;
-      padding-right: 2.5rem;
-    }
-    .maya-merge-text {
-      padding: 1.35rem 3rem;
-      font-size: 0.78rem;
-      letter-spacing: 0.2em;
-    }
-    .maya-merge-circle {
-      width: 52px;
-      height: 52px;
-    }
-  }
-
-  /* ─── Large Desktop (≥ 1024px) ─── */
-  @media (min-width: 1024px) {
-    .hero-content-wrap {
-      padding-left: 3.5rem;
-      padding-right: 3.5rem;
-    }
-  }
-
-  /* ─── Mobile (< 768px) ─── */
-  @media (max-width: 767px) {
-    .marquee-text {
-      font-size: clamp(1.8rem, 8vw, 3rem);
-      padding-right: 2rem;
-    }
-    .maya-merge-btn {
-      align-self: flex-start;
-      margin-left: 4px;
-    }
-    .maya-merge-text {
-      padding: 0.8rem 1.5rem 0.8rem 2.2rem;
-      font-size: 0.65rem;
-      letter-spacing: 0.15em;
-    }
-    .maya-merge-circle {
-      width: 40px;
-      height: 40px;
-    }
-  }
-  /* ─── CTA: Magnetic Merge Button ─── */
-  .maya-merge-btn {
-    display: inline-flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: center;
-    align-self: flex-start;
-    gap: 0;
-    text-decoration: none;
-    cursor: pointer;
-    max-width: fit-content;
-  }
-
-  .maya-merge-text {
-    position: relative;
-    z-index: 2;
-    background-color: #ffffff;
-    color: #0a0a0a;
-    padding: 1.35rem 3rem;
-    border-radius: 9999px;
-    font-family: var(--font-body);
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    transition: padding 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .maya-merge-circle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 52px;
-    height: 52px;
-    background-color: #0a0a0a;
-    color: #ffffff;
-    border-radius: 50%;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 3;
-    transition:
-      background-color 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-      color            0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  /* ─── HOVER: circle bg becomes lighter, text pill merges ─── */
-  @media (hover: hover) {
-    .maya-merge-btn:hover .maya-merge-text {
-      padding-left: 4rem;
-      margin-left: -26px;
-    }
-    .maya-merge-btn:hover .maya-merge-circle {
-      background-color: #333333;
-      color: #ffffff;
-    }
-  }
-</style>
-
-<section class="relative w-full h-[100dvh] overflow-hidden bg-black">
+<hero-banner class="block relative w-full h-[100dvh] overflow-hidden bg-black">
 
   <!-- Nền: Video hoặc Ảnh (video ưu tiên nếu có) -->
   <div class="absolute inset-0 overflow-hidden">
@@ -244,29 +40,24 @@
 
   <!-- Gradient Overlay -->
   <div class="absolute inset-0 bg-black/30"></div>
-  <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);"></div>
-  <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 45%);"></div>
+  <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.1)_60%,transparent_100%)]"></div>
+  <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.55)_0%,transparent_45%)]"></div>
 
   <!-- Nội dung Hero -->
-  <div class="absolute inset-0 flex flex-col justify-center items-start px-10" style="padding-bottom: 14vh;">
-    <style>
-      @media (max-width: 767px) {
-        .hero-content-wrap { padding-bottom: 8vh !important; }
-      }
-    </style>
+  <div class="hero-content-wrap absolute inset-0 flex flex-col justify-center items-start px-6 md:px-10 lg:px-14 pb-[8vh] md:pb-[14vh]">
 
     <!-- Eyebrow label -->
-    <p class="hero-eyebrow" style="font-family: var(--font-body); font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--color-accent); margin-bottom: 32px;">
+    <p class="hero-eyebrow font-body text-[9px] tracking-[0.3em] uppercase text-accent mb-8">
       {{ section.settings.eyebrow_text }}
     </p>
 
     <!-- Headline (GSAP Staggered Text Reveal) -->
-    <h1 id="hero-heading" class="hero-headline" style="font-family: var(--font-heading); font-size: clamp(2.2rem, 10vw, 9rem); font-weight: 600; line-height: 0.9; color: #ffffff; max-width: 780px; letter-spacing: 0.02em; margin-bottom: 28px;">
+    <h1 class="hero-headline font-heading text-[clamp(2.2rem,10vw,9rem)] font-semibold leading-[0.9] text-white max-w-[780px] tracking-[0.02em] mb-7">
       {{ section.settings.headline }}
     </h1>
 
     <!-- Sub-copy -->
-    <p class="hero-copy" style="font-family: var(--font-body); font-size: 0.9rem; line-height: 1.8; color: rgba(255,255,255,0.72); max-width: 380px; letter-spacing: 0.02em; margin-bottom: 40px;">
+    <p class="hero-copy font-body text-[0.9rem] leading-[1.8] text-white/[0.72] max-w-[380px] tracking-[0.02em] mb-10">
       {{ section.settings.subheadline }}
     </p>
 
@@ -277,7 +68,7 @@
           <path d="M7 17 17 7M7 7h10v10"/>
         </svg>
       </span>
-      <span class="maya-merge-text" style="margin-left: -26px; padding-left: 44px;">{{ section.settings.cta_text }}</span>
+      <span class="maya-merge-text ml-[-26px] pl-[44px]">{{ section.settings.cta_text }}</span>
     </a>
 
   </div>
@@ -285,7 +76,7 @@
   <!-- Marquee -->
   {%- assign marquee_speed_val = section.settings.marquee_speed | default: 22 -%}
   {%- assign marquee_dir = section.settings.marquee_direction | default: 'left' -%}
-  <div class="absolute w-full overflow-hidden" style="bottom: 2.5rem; pointer-events: none;">
+  <div class="absolute w-full overflow-hidden bottom-10 pointer-events-none">
     <div class="marquee-track" style="
       --marquee-speed: {{ marquee_speed_val }}s;
       --marquee-animation: {% if marquee_dir == 'right' %}marquee-reverse{% else %}marquee{% endif %};
@@ -296,7 +87,7 @@
     </div>
   </div>
 
-</section>
+</hero-banner>
 
 {% schema %}
 {
