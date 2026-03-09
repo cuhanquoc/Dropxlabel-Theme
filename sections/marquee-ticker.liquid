@@ -171,7 +171,7 @@
   }
 </style>
 
-<section class="mt-section" style="background-color: {{ section.settings.bg_color | default: '#0a0a0a' }};">
+<marquee-ticker class="mt-section" style="background-color: {{ section.settings.bg_color | default: '#0a0a0a' }};" data-speed="{{ section.settings.speed | default: 30 }}">
   <div
     class="mt-track"
     style="
@@ -275,78 +275,94 @@
       {% endif %}
     {% endfor %}
   </div>
-</section>
+</marquee-ticker>
 
 <script>
-  (function() {
-    var track = document.getElementById('mt-track');
-    if (!track) return;
+  customElements.define('marquee-ticker', class extends HTMLElement {
+    connectedCallback() {
+      this._track = this.querySelector('.mt-track');
+      if (!this._track) return;
 
-    /* Only run on mobile */
-    var mq = window.matchMedia('(max-width: 767px)');
-    if (!mq.matches) return;
+      /* Only run mobile transform logic on mobile */
+      this._mq = window.matchMedia('(max-width: 767px)');
+      if (!this._mq.matches) return;
 
-    var posX = 0;           /* current translateX position (negative) */
-    var speed = 0.5;        /* px per frame for auto-scroll */
-    var touching = false;
-    var startTouchX = 0;
-    var startPosX = 0;
-    var resumeTimer = null;
-    var halfWidth = 0;
+      this._posX = 0;
+      this._speed = 0.5;
+      this._touching = false;
+      this._startTouchX = 0;
+      this._startPosX = 0;
+      this._resumeTimer = null;
+      this._halfWidth = 0;
 
-    function measureHalf() {
-      /* half = total width of first copy of blocks */
-      halfWidth = track.scrollWidth / 2;
+      this._measureHalf();
+
+      /* Bind methods */
+      this._tick = this._tick.bind(this);
+      this._onTouchStart = this._onTouchStart.bind(this);
+      this._onTouchMove = this._onTouchMove.bind(this);
+      this._onTouchEnd = this._onTouchEnd.bind(this);
+      this._measureHalf = this._measureHalf.bind(this);
+
+      /* Start auto-scroll */
+      this._raf = requestAnimationFrame(this._tick);
+
+      /* Touch listeners */
+      this._track.addEventListener('touchstart', this._onTouchStart, { passive: true });
+      this._track.addEventListener('touchmove', this._onTouchMove, { passive: true });
+      this._track.addEventListener('touchend', this._onTouchEnd, { passive: true });
+      window.addEventListener('resize', this._measureHalf);
     }
-    measureHalf();
 
-    function setTransform(x) {
-      track.style.transform = 'translateX(' + x + 'px)';
-    }
-
-    /* ── Auto-scroll loop ── */
-    function tick() {
-      if (!touching) {
-        posX -= speed;
-        /* Seamless loop: jump back when past halfway */
-        if (Math.abs(posX) >= halfWidth) {
-          posX += halfWidth;
-        }
-        setTransform(posX);
+    disconnectedCallback() {
+      if (this._raf) cancelAnimationFrame(this._raf);
+      if (this._resumeTimer) clearTimeout(this._resumeTimer);
+      if (this._track) {
+        this._track.removeEventListener('touchstart', this._onTouchStart);
+        this._track.removeEventListener('touchmove', this._onTouchMove);
+        this._track.removeEventListener('touchend', this._onTouchEnd);
       }
-      requestAnimationFrame(tick);
+      window.removeEventListener('resize', this._measureHalf);
     }
-    requestAnimationFrame(tick);
 
-    /* ── Touch: pause auto, let user drag ── */
-    track.addEventListener('touchstart', function(e) {
-      touching = true;
-      if (resumeTimer) clearTimeout(resumeTimer);
-      startTouchX = e.touches[0].clientX;
-      startPosX = posX;
-    }, { passive: true });
+    _measureHalf() {
+      this._halfWidth = this._track.scrollWidth / 2;
+    }
 
-    track.addEventListener('touchmove', function(e) {
-      if (!touching) return;
-      var dx = e.touches[0].clientX - startTouchX;
-      posX = startPosX + dx;
+    _tick() {
+      if (!this._touching) {
+        this._posX -= this._speed;
+        if (Math.abs(this._posX) >= this._halfWidth) {
+          this._posX += this._halfWidth;
+        }
+        this._track.style.transform = 'translateX(' + this._posX + 'px)';
+      }
+      this._raf = requestAnimationFrame(this._tick);
+    }
 
-      /* Wrap around for seamless feel */
-      if (posX > 0) posX -= halfWidth;
-      if (Math.abs(posX) >= halfWidth) posX += halfWidth;
+    _onTouchStart(e) {
+      this._touching = true;
+      if (this._resumeTimer) clearTimeout(this._resumeTimer);
+      this._startTouchX = e.touches[0].clientX;
+      this._startPosX = this._posX;
+    }
 
-      setTransform(posX);
-    }, { passive: true });
+    _onTouchMove(e) {
+      if (!this._touching) return;
+      var dx = e.touches[0].clientX - this._startTouchX;
+      this._posX = this._startPosX + dx;
+      if (this._posX > 0) this._posX -= this._halfWidth;
+      if (Math.abs(this._posX) >= this._halfWidth) this._posX += this._halfWidth;
+      this._track.style.transform = 'translateX(' + this._posX + 'px)';
+    }
 
-    track.addEventListener('touchend', function() {
-      /* Resume auto-scroll after 1.5s */
-      resumeTimer = setTimeout(function() {
-        touching = false;
+    _onTouchEnd() {
+      var self = this;
+      this._resumeTimer = setTimeout(function() {
+        self._touching = false;
       }, 1500);
-    }, { passive: true });
-
-    window.addEventListener('resize', measureHalf);
-  })();
+    }
+  });
 </script>
 
 {% schema %}

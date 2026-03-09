@@ -97,7 +97,7 @@
   }
 </style>
 
-<nav class="mob-nav" id="mob-bottom-nav" aria-label="Mobile navigation">
+<mobile-bottom-nav class="mob-nav" id="mob-bottom-nav" aria-label="Mobile navigation" role="navigation">
   <div class="mob-nav-track">
 
     {%- comment -%} ── HOME ── {%- endcomment -%}
@@ -165,46 +165,48 @@
     </a>
 
   </div>
-</nav>
+</mobile-bottom-nav>
 
 <script>
-  /* ── Show on scroll-down, hide on scroll-up ── */
-  (function() {
-    var nav = document.getElementById('mob-bottom-nav');
-    if (!nav) return;
+  customElements.define('mobile-bottom-nav', class extends HTMLElement {
+    connectedCallback() {
+      this._lastY = window.scrollY;
+      this._threshold = 10;
+      this._ticking = false;
+      this._onScroll = this._onScroll.bind(this);
+      this._handleScroll = this._handleScroll.bind(this);
 
-    var lastY = window.scrollY;
-    var threshold = 10;
-    var ticking = false;
+      window.addEventListener('scroll', this._handleScroll, { passive: true });
 
-    function onScroll() {
-      var currentY = window.scrollY;
-      var delta = currentY - lastY;
-
-      if (delta > threshold) {
-        /* Scrolling DOWN → show nav */
-        nav.classList.add('mob-nav--visible');
-      } else if (delta < -threshold) {
-        /* Scrolling UP → hide nav */
-        nav.classList.remove('mob-nav--visible');
-      }
-
-      lastY = currentY;
-      ticking = false;
+      /* Show if already scrolled down on page load */
+      if (window.scrollY > 100) this.classList.add('mob-nav--visible');
     }
 
-    window.addEventListener('scroll', function() {
-      if (!ticking) {
-        requestAnimationFrame(onScroll);
-        ticking = true;
-      }
-    }, { passive: true });
-
-    /* Show if already scrolled down on page load */
-    if (window.scrollY > 100) {
-      nav.classList.add('mob-nav--visible');
+    disconnectedCallback() {
+      window.removeEventListener('scroll', this._handleScroll);
     }
-  })();
+
+    _handleScroll() {
+      if (!this._ticking) {
+        requestAnimationFrame(this._onScroll);
+        this._ticking = true;
+      }
+    }
+
+    _onScroll() {
+      var y = window.scrollY;
+      var delta = y - this._lastY;
+
+      if (delta > this._threshold) {
+        this.classList.add('mob-nav--visible');
+      } else if (delta < -this._threshold) {
+        this.classList.remove('mob-nav--visible');
+      }
+
+      this._lastY = y;
+      this._ticking = false;
+    }
+  });
 </script>
 
 {% schema %}
