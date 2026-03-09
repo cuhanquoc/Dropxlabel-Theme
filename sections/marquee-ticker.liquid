@@ -136,19 +136,18 @@
     .mt-card { width: 320px; }
   }
 
-  /* ── Mobile (< 768px): manual swipe instead of auto-scroll ── */
+  /* ── Mobile (< 768px): JS hybrid auto-scroll + manual swipe ── */
   @media (max-width: 767px) {
     .mt-section {
       padding: 1.5rem 0;
     }
 
-    /* Hide fade edges on mobile for cleaner swipe */
     .mt-section::before,
     .mt-section::after {
       width: 32px;
     }
 
-    /* Stop auto-animation, enable manual scroll */
+    /* Disable CSS animation; JS handles auto-scroll */
     .mt-track {
       animation: none !important;
       overflow-x: auto;
@@ -156,15 +155,9 @@
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
       padding: 0 1.5rem;
-      scroll-behavior: auto;
     }
 
     .mt-track::-webkit-scrollbar {
-      display: none;
-    }
-
-    /* Duplicate cards not needed for manual scroll */
-    .mt-card[aria-hidden="true"] {
       display: none;
     }
 
@@ -196,7 +189,7 @@
     }
   }
 
-  /* Desktop: hide scroll bar + ensure duplicates show */
+  /* Desktop: hide scroll bar */
   @media (min-width: 768px) {
     .mt-scroll-bar {
       display: none;
@@ -321,18 +314,54 @@
     var thumb = document.getElementById('mt-scroll-thumb');
     if (!track || !thumb) return;
 
+    /* ── Scroll bar thumb sync ── */
     function updateThumb() {
       var sw = track.scrollWidth - track.clientWidth;
       if (sw <= 0) return;
       var progress = track.scrollLeft / sw;
-      var trackW = thumb.parentElement.clientWidth;
-      var thumbW = thumb.clientWidth;
-      thumb.style.transform = 'translateX(' + (progress * (trackW - thumbW)) + 'px)';
+      var barW = thumb.parentElement.clientWidth;
+      var tW = thumb.clientWidth;
+      thumb.style.transform = 'translateX(' + (progress * (barW - tW)) + 'px)';
     }
 
     track.addEventListener('scroll', updateThumb, { passive: true });
-    window.addEventListener('resize', updateThumb);
-    updateThumb();
+
+    /* ── Mobile: JS-driven auto-scroll + touch takeover ── */
+    var isMobile = window.matchMedia('(max-width: 767px)');
+    if (!isMobile.matches) return;
+
+    var speed = 0.5; /* px per frame */
+    var raf = null;
+    var touching = false;
+    var resumeTimer = null;
+
+    function autoScroll() {
+      if (!touching) {
+        track.scrollLeft += speed;
+        /* Loop: when past halfway (duplicate), jump back */
+        var half = track.scrollWidth / 2;
+        if (track.scrollLeft >= half) {
+          track.scrollLeft -= half;
+        }
+      }
+      raf = requestAnimationFrame(autoScroll);
+    }
+
+    /* Start auto-scroll */
+    raf = requestAnimationFrame(autoScroll);
+
+    /* Touch: pause auto, let user drag freely */
+    track.addEventListener('touchstart', function() {
+      touching = true;
+      if (resumeTimer) clearTimeout(resumeTimer);
+    }, { passive: true });
+
+    /* Touch end: resume auto-scroll after 1.5s */
+    track.addEventListener('touchend', function() {
+      resumeTimer = setTimeout(function() {
+        touching = false;
+      }, 1500);
+    }, { passive: true });
   })();
 </script>
 
