@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "sections": {
@@ -115,15 +124,15 @@
           "c2_link1_label": "HOME",
           "c2_link1_url": "shopify://blogs/news/more-than-just-a-t-shirt",
           "c2_link2_label": "SEARCH",
-          "c2_link2_url": "/search",
+          "c2_link2_url": "shopify://blogs/news/more-than-just-a-t-shirt",
           "c2_link3_label": "COLLECTIONS",
-          "c2_link3_url": "/collections",
+          "c2_link3_url": "shopify://policies/shipping-policy",
           "c2_link4_label": "ABOUT US",
-          "c2_link4_url": "/pages/about",
+          "c2_link4_url": "shopify://policies/privacy-policy",
           "c2_link5_label": "NEWS",
           "c2_link5_url": "/blogs/news",
-          "c2_link6_label": "",
-          "c2_link6_url": "",
+          "c2_link6_label": "KHONG CO",
+          "c2_link6_url": "shopify://blogs/news/more-than-just-a-t-shirt",
           "col3_title": "Support",
           "c3_link1_label": "PRIVACY POLICY",
           "c3_link1_url": "/policies/privacy-policy",
@@ -135,30 +144,30 @@
           "c3_link4_url": "/pages/contact",
           "c3_link5_label": "FAQ",
           "c3_link5_url": "/pages/faq",
-          "c3_link6_label": "",
-          "c3_link6_url": "",
+          "c3_link6_label": "Chua co",
+          "c3_link6_url": "shopify://policies/shipping-policy",
           "col4_title": "Shop",
           "c4_link1_label": "Tops",
-          "c4_link1_url": "",
+          "c4_link1_url": "shopify://policies/terms-of-service",
           "c4_link2_label": "T-shirts",
-          "c4_link2_url": "",
+          "c4_link2_url": "shopify://blogs/news/more-than-just-a-t-shirt",
           "c4_link3_label": "Knitwear",
-          "c4_link3_url": "",
+          "c4_link3_url": "shopify://blogs/news/more-than-just-a-t-shirt",
           "c4_link4_label": "Dresses",
-          "c4_link4_url": "",
+          "c4_link4_url": "shopify://blogs/news",
           "c4_link5_label": "Bottoms",
-          "c4_link5_url": "",
+          "c4_link5_url": "shopify://policies/shipping-policy",
           "c4_link6_label": "Jackets & Coats",
-          "c4_link6_url": "",
-          "c4_link7_label": "",
-          "c4_link7_url": "",
+          "c4_link6_url": "shopify://policies/terms-of-service",
+          "c4_link7_label": "CHua co",
+          "c4_link7_url": "shopify://blogs/news/more-than-just-a-t-shirt",
           "brand_name": "dropxlabel",
           "brand_desc": "Dropxlabel is a premium official Shopify theme designed by DigiFist.",
           "social_instagram": "https://instagram.com",
           "social_youtube": "https://youtube.com",
           "social_tiktok": "https://pinterest.com",
           "social_twitter": "https://x.com",
-          "social_vimeo": ""
+          "social_vimeo": "shopify://policies/terms-of-service"
         }
       },
       "mobile-bottom-nav": {
