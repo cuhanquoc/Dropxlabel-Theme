@@ -185,3 +185,101 @@
     height: 100%;
     width: auto;
 }
+
+/* ═══════════════════════════════════════════════════════
+   JOLY UI — Global Button Animations
+   Spring scale + magnetic spotlight + smooth transitions
+   ═══════════════════════════════════════════════════════ */
+
+/* ─── Base: spring scale + spotlight-ready ─── */
+.joly-btn,
+.bsb-cta-btn,
+.bsb-cta-icon,
+.bsb-card-link,
+.hero-cta,
+.ta-dynamic-island,
+.accordion-item a[class],
+[data-joly-btn] {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+        box-shadow 0.4s ease;
+    will-change: transform;
+}
+
+/* ─── Hover: scale up ─── */
+.joly-btn:hover,
+.bsb-cta-btn:hover,
+.bsb-cta-icon:hover,
+.bsb-card-link:hover,
+.hero-cta:hover,
+[data-joly-btn]:hover {
+    transform: scale(1.02);
+}
+
+/* ─── Active/Tap: scale down ─── */
+.joly-btn:active,
+.bsb-cta-btn:active,
+.bsb-cta-icon:active,
+.bsb-card-link:active,
+.hero-cta:active,
+[data-joly-btn]:active {
+    transform: scale(0.98);
+}
+
+/* ─── Spotlight overlay (follows mouse via JS vars) ─── */
+.joly-btn::after,
+.bsb-cta-btn::after,
+.bsb-cta-icon::after,
+.bsb-card-link::after,
+[data-joly-btn]::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at var(--joly-mx, 50%) var(--joly-my, 50%),
+            rgba(255, 255, 255, 0.15),
+            transparent 80%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.joly-btn:hover::after,
+.bsb-cta-btn:hover::after,
+.bsb-cta-icon:hover::after,
+.bsb-card-link:hover::after,
+[data-joly-btn]:hover::after {
+    opacity: 1;
+}
+
+/* ─── Ensure text stays above spotlight ─── */
+.joly-btn>*,
+.bsb-cta-btn>*,
+[data-joly-btn]>* {
+    position: relative;
+    z-index: 2;
+}
+
+/* ─── Disable scale on mobile (touch has no hover) ─── */
+@media (hover: none) {
+
+    .joly-btn:hover,
+    .bsb-cta-btn:hover,
+    .bsb-cta-icon:hover,
+    .bsb-card-link:hover,
+    .hero-cta:hover,
+    [data-joly-btn]:hover {
+        transform: none;
+    }
+
+    .joly-btn:active,
+    .bsb-cta-btn:active,
+    .bsb-cta-icon:active,
+    .bsb-card-link:active,
+    .hero-cta:active,
+    [data-joly-btn]:active {
+        transform: scale(0.96);
+    }
+}
