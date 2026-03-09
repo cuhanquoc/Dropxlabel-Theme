@@ -87,7 +87,7 @@
       ],
       "settings": {
         "heading": "Trending Products",
-        "bg_color": "#ffffff",
+        "bg_color": "#dbd6d6",
         "cta_text": "View All",
         "cta_url": "",
         "qv_modal_bg": "#937878",
