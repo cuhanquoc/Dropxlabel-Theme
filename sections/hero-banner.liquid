@@ -61,14 +61,19 @@
       {{ section.settings.subheadline }}
     </p>
 
-    <!-- CTA Button (circle LEFT, text RIGHT — merged inline) -->
-    <a href="{{ section.settings.cta_url }}" class="maya-merge-btn hero-cta">
-      <span class="maya-merge-circle">
+    <!-- CTA Button — pixel-perfect circle + pill, unified h-[52px] -->
+    <a href="{{ section.settings.cta_url }}" class="maya-merge-btn hero-cta group relative inline-flex h-[52px] w-max cursor-pointer items-center no-underline max-md:h-10">
+
+      <span class="relative z-10 flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full bg-[#0a0a0a] text-white transition-colors duration-500 group-hover:bg-[#333333] max-md:h-10 max-md:w-10">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M7 17 17 7M7 7h10v10"/>
         </svg>
       </span>
-      <span class="maya-merge-text ml-[-26px] pl-[44px]">{{ section.settings.cta_text }}</span>
+
+      <span class="relative z-0 flex h-full -ml-[26px] items-center rounded-full bg-white pl-[44px] pr-8 font-body text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-[#0a0a0a] transition-all duration-500 group-hover:pl-[56px] max-md:pl-[36px] max-md:pr-6 max-md:text-[0.65rem] max-md:tracking-[0.15em]">
+        {{ section.settings.cta_text }}
+      </span>
+
     </a>
 
   </div>
