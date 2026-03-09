@@ -81,7 +81,7 @@
       </div>
 
       <!-- COL 2: Quick Links -->
-      <div class="md:pt-0" x-data="{ open: (window.innerWidth >= 768) }">
+      <div class="md:pt-0" data-ft-accordion>
         <!-- Desktop title -->
         <p class="hidden md:block font-body text-[0.72rem] font-medium uppercase tracking-[0.2em] text-white/40 mb-5">
           {{ section.settings.col2_title | default: 'Quick links' }}
@@ -89,15 +89,16 @@
         <!-- Mobile accordion toggle -->
         <button
           class="flex md:hidden items-center justify-between w-full py-5 bg-transparent border-none border-b border-white/[0.08] cursor-pointer text-white"
-          :aria-expanded="open.toString()"
-          @click="open = !open"
+          aria-expanded="false"
+          data-ft-toggle
         >
           <span class="font-body text-base font-semibold">{{ section.settings.col2_title | default: 'Quick links' }}</span>
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
           class="flex flex-col gap-0"
-          :style="open ? '' : 'display:none'"
+          data-ft-panel
+          style="display:none"
           aria-label="{{ section.settings.col2_title | default: 'Quick links' }}"
         >
         
@@ -113,21 +114,22 @@
       </div>
 
       <!-- COL 3: Support -->
-      <div class="md:pt-0" x-data="{ open: (window.innerWidth >= 768) }">
+      <div class="md:pt-0" data-ft-accordion>
         <p class="hidden md:block font-body text-[0.72rem] font-medium uppercase tracking-[0.2em] text-white/40 mb-5">
           {{ section.settings.col3_title | default: 'Support' }}
         </p>
         <button
           class="flex md:hidden items-center justify-between w-full py-5 bg-transparent border-none border-b border-white/[0.08] cursor-pointer text-white"
-          :aria-expanded="open.toString()"
-          @click="open = !open"
+          aria-expanded="false"
+          data-ft-toggle
         >
           <span class="font-body text-base font-semibold">{{ section.settings.col3_title | default: 'Support' }}</span>
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
           class="flex flex-col gap-0"
-          :style="open ? '' : 'display:none'"
+          data-ft-panel
+          style="display:none"
           aria-label="{{ section.settings.col3_title | default: 'Support' }}"
         >
           <div class="py-3 md:py-0 flex flex-col gap-0">
@@ -142,21 +144,22 @@
       </div>
 
       <!-- COL 4: Follow Us (text links with arrow icons) -->
-      <div class="md:pt-0" x-data="{ open: (window.innerWidth >= 768) }">
+      <div class="md:pt-0" data-ft-accordion>
         <p class="hidden md:block font-body text-[0.72rem] font-medium uppercase tracking-[0.2em] text-white/40 mb-5">
           Follow us on
         </p>
         <button
           class="flex md:hidden items-center justify-between w-full py-5 bg-transparent border-none border-b border-white/[0.08] cursor-pointer text-white"
-          :aria-expanded="open.toString()"
-          @click="open = !open"
+          aria-expanded="false"
+          data-ft-toggle
         >
           <span class="font-body text-base font-semibold">Follow us on</span>
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
           class="flex flex-col gap-0"
-          :style="open ? '' : 'display:none'"
+          data-ft-panel
+          style="display:none"
           aria-label="Social media links"
         >
           <div class="py-3 md:py-0 flex flex-col gap-0">
@@ -239,6 +242,45 @@
   </div>
 
 </footer>
+
+<script>
+  /* ── Footer Accordion — Vanilla JS ── */
+  (function () {
+    var footer = document.getElementById('site-footer');
+    if (!footer) return;
+    var toggles = footer.querySelectorAll('[data-ft-toggle]');
+
+    function isDesktop() { return window.innerWidth >= 768; }
+
+    /* Auto-open all panels on desktop */
+    function syncDesktop() {
+      var panels = footer.querySelectorAll('[data-ft-panel]');
+      panels.forEach(function (p) {
+        if (isDesktop()) {
+          p.style.display = '';
+        }
+      });
+      toggles.forEach(function (t) {
+        if (isDesktop()) t.setAttribute('aria-expanded', 'true');
+      });
+    }
+    syncDesktop();
+    window.addEventListener('resize', syncDesktop);
+
+    /* Click toggle for mobile */
+    toggles.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (isDesktop()) return;
+        var parent = btn.closest('[data-ft-accordion]');
+        var panel = parent ? parent.querySelector('[data-ft-panel]') : null;
+        if (!panel) return;
+        var isOpen = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        panel.style.display = isOpen ? 'none' : '';
+      });
+    });
+  }());
+</script>
 
 {% schema %}
 {
