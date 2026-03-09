@@ -37,13 +37,6 @@
     transform: translate(-50%, -50%) rotate(90deg);
     opacity: 0;
   }
-
-  /* ── CSS-Driven Accordion State ── */
-  [data-ft-panel] { display: none; }
-  [data-ft-toggle][aria-expanded="true"] + [data-ft-panel] { display: flex !important; }
-  @media (min-width: 768px) {
-    [data-ft-panel] { display: flex !important; }
-  }
 </style>
 
 <footer id="site-footer" class="block bg-[#0a0a0a] text-white font-body" role="contentinfo">
@@ -100,7 +93,7 @@
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
-          class="flex flex-col gap-0"
+          class="hidden md:flex flex-col gap-0"
           data-ft-panel
           aria-label="{{ section.settings.col2_title | default: 'Quick links' }}"
         >
@@ -130,7 +123,7 @@
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
-          class="flex flex-col gap-0"
+          class="hidden md:flex flex-col gap-0"
           data-ft-panel
           aria-label="{{ section.settings.col3_title | default: 'Support' }}"
         >
@@ -159,7 +152,7 @@
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
-          class="flex flex-col gap-0"
+          class="hidden md:flex flex-col gap-0"
           data-ft-panel
           aria-label="Social media links"
         >
@@ -245,15 +238,28 @@
 </footer>
 
 <script>
-  /* ── Footer Accordion — CSS-Driven State ── */
   (function () {
     var footer = document.getElementById('site-footer');
     if (!footer) return;
+    var toggles = footer.querySelectorAll('[data-ft-toggle]');
 
-    footer.querySelectorAll('[data-ft-toggle]').forEach(function (btn) {
+    toggles.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var isOpen = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        if (window.innerWidth >= 768) return;
+        var parent = btn.closest('[data-ft-accordion]');
+        var panel = parent ? parent.querySelector('[data-ft-panel]') : null;
+        if (!panel) return;
+        var isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+        btn.setAttribute('aria-expanded', !isExpanded);
+
+        if (isExpanded) {
+          panel.classList.remove('flex');
+          panel.classList.add('hidden');
+        } else {
+          panel.classList.remove('hidden');
+          panel.classList.add('flex');
+        }
       });
     });
   }());
