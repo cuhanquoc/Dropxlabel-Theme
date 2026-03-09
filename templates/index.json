@@ -315,7 +315,7 @@
       "name": "Marquee Ticker",
       "settings": {
         "bg_color": "#0a0a0a",
-        "speed": 45,
+        "speed": 80,
         "gap": 48,
         "card_width": 260
       }
