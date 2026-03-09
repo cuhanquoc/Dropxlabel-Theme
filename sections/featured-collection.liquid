@@ -237,9 +237,9 @@
 
   .product-title {
     font-family: var(--font-heading);
-    font-size: 0.82rem;
+    font-size: var(--fc-title-size, 0.82rem);
     font-weight: 500;
-    color: var(--color-text, #222222);
+    color: var(--fc-title-color, var(--color-text, #222222));
     line-height: 1.35;
     letter-spacing: 0.01em;
     transition: color 350ms cubic-bezier(0.25, 1, 0.5, 1);
@@ -256,10 +256,10 @@
 
   .product-price {
     font-family: var(--font-body);
-    font-size: 1.6rem;
-    font-weight: 700;
+    font-size: var(--fc-price-size, 1.6rem);
+    font-weight: var(--fc-price-weight, 700);
     letter-spacing: 0.02em;
-    color: #0a0a0a;
+    color: var(--fc-price-color, #0a0a0a);
     margin-top: 0.5rem;
     display: flex;
     align-items: center;
@@ -269,15 +269,15 @@
 
   .product-price-compare {
     text-decoration: line-through;
-    color: #999;
-    font-weight: 400;
-    font-size: 1.4rem;
+    color: var(--fc-compare-color, #999);
+    font-weight: var(--fc-compare-weight, 400);
+    font-size: var(--fc-compare-size, 1.4rem);
     opacity: 1;
   }
 
   .product-price-sale {
-    color: #0a0a0a;
-    font-weight: 700;
+    color: var(--fc-sale-color, #0a0a0a);
+    font-weight: var(--fc-price-weight, 700);
   }
 
   /* ── Variant Thumbnails (below price) ── */
@@ -1092,15 +1092,26 @@
     .fc-scroll-track { gap: 1rem; padding: 0 8px 1rem; }
     .product-card { width: 136px; }
     .fc-placeholder { width: 136px; }
-    .product-price { font-size: 1.5rem; }
-    .product-price-compare { font-size: 1.2rem; }
+    .product-price { font-size: calc(var(--fc-price-size, 1.6rem) * 0.9); }
+    .product-price-compare { font-size: calc(var(--fc-compare-size, 1.4rem) * 0.85); }
     .pc-variant-thumb { width: 72px; height: 72px; }
     .pc-img-wrap { border-radius: 12px; }
     .qv-hover-panel { opacity: 1; transform: translateY(0); }
   }
 </style>
 
-<section id="featured-collection" class="fc-section" style="--fc-bg: {{ section.settings.bg_color | default: '#ffffff' }};">
+<section id="featured-collection" class="fc-section" style="
+  --fc-bg: {{ section.settings.bg_color | default: '#ffffff' }};
+  --fc-price-size: {{ section.settings.price_font_size | default: 16 }}px;
+  --fc-price-weight: {{ section.settings.price_font_weight | default: '700' }};
+  --fc-price-color: {{ section.settings.price_color | default: '#0a0a0a' }};
+  --fc-compare-size: {{ section.settings.compare_price_font_size | default: 14 }}px;
+  --fc-compare-weight: {{ section.settings.compare_price_font_weight | default: '400' }};
+  --fc-compare-color: {{ section.settings.compare_price_color | default: '#999999' }};
+  --fc-sale-color: {{ section.settings.sale_price_color | default: '#0a0a0a' }};
+  --fc-title-size: {{ section.settings.title_font_size | default: 13 }}px;
+  --fc-title-color: {{ section.settings.title_color | default: '#222222' }};
+">
 
   <!-- Section Heading -->
   <div class="fc-heading-wrap">
@@ -1470,6 +1481,89 @@
       "label": "Background Color",
       "default": "#ffffff",
       "info": "Section background color"
+    },
+    {
+      "type": "header",
+      "content": "Product Price — Typography"
+    },
+    {
+      "type": "range",
+      "id": "price_font_size",
+      "label": "Giá bán — Font size (px)",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "price_color",
+      "label": "Giá bán — Màu sắc",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "select",
+      "id": "price_font_weight",
+      "label": "Giá bán — Độ đậm",
+      "default": "700",
+      "options": [
+        { "value": "400", "label": "Regular (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semibold (600)" },
+        { "value": "700", "label": "Bold (700)" },
+        { "value": "800", "label": "Extra Bold (800)" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "compare_price_font_size",
+      "label": "Giá gạch — Font size (px)",
+      "min": 8,
+      "max": 36,
+      "step": 1,
+      "default": 14,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "compare_price_color",
+      "label": "Giá gạch — Màu sắc",
+      "default": "#999999"
+    },
+    {
+      "type": "select",
+      "id": "compare_price_font_weight",
+      "label": "Giá gạch — Độ đậm",
+      "default": "400",
+      "options": [
+        { "value": "400", "label": "Regular (400)" },
+        { "value": "500", "label": "Medium (500)" },
+        { "value": "600", "label": "Semibold (600)" },
+        { "value": "700", "label": "Bold (700)" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "sale_price_color",
+      "label": "Giá sale — Màu sắc",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Tên sản phẩm — Font size (px)",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "default": 13,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Tên sản phẩm — Màu sắc",
+      "default": "#222222"
     },
     {
       "type": "text",

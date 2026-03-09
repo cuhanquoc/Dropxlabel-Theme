@@ -482,45 +482,23 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════════
-   MARQUEE TICKER
+   MARQUEE TICKER — Cosmic Dissolve
    ═══════════════════════════════════════════════════════ */
 
 .mt-section {
     background-color: #0a0a0a;
-    padding: 2.5rem 0;
     overflow: hidden;
     position: relative;
-}
-
-.mt-section::before,
-.mt-section::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 80px;
-    z-index: 5;
-    pointer-events: none;
-}
-
-.mt-section::before {
-    left: 0;
-    background: linear-gradient(to right, #0a0a0a, transparent);
-}
-
-.mt-section::after {
-    right: 0;
-    background: linear-gradient(to left, #0a0a0a, transparent);
 }
 
 .mt-track {
     display: flex;
     width: max-content;
     animation: mt-scroll var(--mt-speed, 30s) linear infinite;
-    gap: var(--mt-gap, 1.5rem);
+    gap: var(--mt-gap, 2rem);
 }
 
-.mt-section:hover .mt-track {
+.mt-track-wrap:hover .mt-track {
     animation-play-state: paused;
 }
 
@@ -537,112 +515,34 @@ body {
 .mt-card {
     flex-shrink: 0;
     width: var(--mt-card-w, 280px);
-    border-radius: 16px;
-    overflow: hidden;
-    background: #141414;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .mt-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
-.mt-card-media {
-    width: 100%;
-    aspect-ratio: 4/3;
-    overflow: hidden;
-    position: relative;
-}
-
-.mt-card-media img,
-.mt-card-media video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.6s ease;
-}
-
-.mt-card:hover .mt-card-media img,
-.mt-card:hover .mt-card-media video {
-    transform: scale(1.05);
-}
-
-.mt-card-body {
-    padding: 1rem 1.15rem 1.25rem;
-}
-
-.mt-card-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #ffffff;
-    line-height: 1.3;
-    margin-bottom: 0.4rem;
-    letter-spacing: -0.01em;
-}
-
-.mt-card-desc {
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    line-height: 1.6;
-    color: #6b7280;
-    margin-bottom: 0.75rem;
-}
-
-.mt-card-link {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    letter-spacing: 0.08em;
-    color: rgba(255, 255, 255, 0.5);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    text-decoration-color: rgba(255, 255, 255, 0.2);
-    transition: color 0.3s ease, text-decoration-color 0.3s ease;
-}
-
-.mt-card-link:hover {
-    color: #ffffff;
-    text-decoration-color: rgba(255, 255, 255, 0.6);
-}
-
+/* ── Desktop ── */
 @media (min-width: 768px) {
-    .mt-section {
-        padding: 2.5rem 0;
-    }
-
     .mt-card {
         width: 280px;
-    }
-
-    .mt-card-title {
-        font-size: 0.95rem;
-    }
-
-    .mt-card-body {
-        padding: 1rem 1.15rem 1.25rem;
     }
 }
 
 @media (min-width: 1024px) {
-    .mt-section {
-        padding: 3rem 0;
-    }
-
     .mt-card {
         width: 320px;
     }
 }
 
+/* ── Mobile ── */
 @media (max-width: 767px) {
-    .mt-section {
-        padding: 1.5rem 0;
+    .mt-fade-left {
+        width: 40px !important;
     }
 
-    .mt-section::before,
-    .mt-section::after {
-        width: 24px;
+    .mt-fade-right {
+        width: 40px !important;
     }
 
     .mt-track {
@@ -651,17 +551,15 @@ body {
     }
 
     .mt-card {
-        width: 220px;
-    }
-
-    .mt-card-title {
-        font-size: 0.875rem;
+        width: 230px;
     }
 }
 
 @media (min-width: 768px) {
-    .mt-scroll-bar {
-        display: none;
+
+    .mt-scroll-bar,
+    .mt-scroll-indicator {
+        display: none !important;
     }
 }
 
@@ -2740,4 +2638,40 @@ textarea.ma-form-field {
     .ta-collage {
         display: none;
     }
+}
+
+/* ═══════════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════════ */
+
+@keyframes ft-drift {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.ft-marquee-track:hover {
+    animation-play-state: paused;
+}
+
+.ft-marquee-word {
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.15);
+    color: transparent;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.08) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.ft-subscribe-form:focus-within {
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Payment icon sizing */
+.footer-section .ft-pay-icon svg {
+    height: 100%;
+    width: auto;
 }
