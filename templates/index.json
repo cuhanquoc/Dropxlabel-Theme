@@ -109,16 +109,39 @@
     },
     "brand-story-bento": {
       "type": "brand-story-bento",
+      "blocks": {
+        "story_1": {
+          "type": "story_card",
+          "settings": {
+            "tag_text": "Grace, Glamour, Style, Confidence",
+            "title": "Elegant Evening Wear",
+            "button_text": "SHOP NOW"
+          }
+        },
+        "story_2": {
+          "type": "story_card",
+          "settings": {
+            "tag_text": "Bold, Modern, Effortless",
+            "title": "Urban Street Style",
+            "button_text": "SHOP NOW"
+          }
+        },
+        "story_3": {
+          "type": "story_card",
+          "settings": {
+            "tag_text": "Timeless, Refined, Classic",
+            "title": "Heritage Collection",
+            "button_text": "SHOP NOW"
+          }
+        }
+      },
+      "block_order": [
+        "story_1",
+        "story_2",
+        "story_3"
+      ],
       "settings": {
-        "heading": "<em>FASHION</em> THAT<br>FLOWS WITH<br>THE SEASONS",
-        "description": "Explore our latest collection. From classic styles to modern trends, find the perfect look for every season. Shop now and elevate your wardrobe!",
-        "button_text": "Explore More",
-        "button_url": "",
-        "bg_image": "{{ metaobjects[\"shopify--color-pattern\"].asphalt.image.value }}",
-        "bg_color": "#f2f0ec",
-        "card1_collection": "",
-        "card2_collection": "",
-        "card3_collection": ""
+        "bg_color": "#f2f0ec"
       }
     },
     "trending-accordion": {

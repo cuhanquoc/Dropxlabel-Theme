@@ -1,444 +1,89 @@
-<style>
-  /* ═══════════════════════════════════════
-     BRAND STORY BENTO — Fashion Showcase
-  ═══════════════════════════════════════ */
+{% comment %} BRAND STORY BENTO — Swipeable Card Carousel {% endcomment %}
 
-  .bsb-section {
-    position: relative;
-    overflow: hidden;
-    background-color: {{ section.settings.bg_color | default: '#f2f0ec' }};
-    background-image: url('{{ 'paper-texture-bg.png' | asset_url }}');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
+<section class="bsb-section" id="brand-story-bento" style="background-color: {{ section.settings.bg_color | default: '#f2f0ec' }}; {% if section.settings.bg_image != blank %}background-image: url('{{ section.settings.bg_image | image_url: width: 1920 }}'); background-size: cover; background-position: center;{% else %}background-image: url('{{ 'paper-texture-bg.png' | asset_url }}'); background-size: cover; background-position: center;{% endif %}">
 
-  {% if section.settings.bg_image != blank %}
-  .bsb-section {
-    background-image: url('{{ section.settings.bg_image | image_url: width: 1920 }}');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-  {% endif %}
+  <div class="bsb-carousel-wrap" style="overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 3rem 1.25rem 2rem; scroll-snap-type: x mandatory;" id="bsb-carousel">
+    <div class="flex gap-5 md:gap-8" style="width: max-content;">
 
-  /* ── Horizontal Track: text + cards all in a row ── */
-  .bsb-track-wrapper {
-    overflow: hidden;
-    padding: 5rem 0 0;
-  }
+      {% for block in section.blocks %}
+        {% if block.type == 'story_card' %}
+          <a href="{{ block.settings.link_url | default: '#' }}"
+             class="bsb-card block flex-shrink-0 group"
+             style="width: 78vw; max-width: 420px; scroll-snap-align: center;"
+             {{ block.shopify_attributes }}>
 
-  .bsb-track {
-    display: flex;
-    align-items: flex-start;
-    gap: 3rem;
-    padding: 0 3rem;
-    will-change: transform;
-  }
-
-  /* 4px grid: 0.25rem = 4px, 0.5rem = 8px, 0.75rem = 12px,
-     1rem = 16px, 1.25rem = 20px, 1.5rem = 24px, 2rem = 32px,
-     2.5rem = 40px, 3rem = 48px, 4rem = 64px, 5rem = 80px */
-
-  /* ── Text Panel (inline in the track) ── */
-  .bsb-text {
-    flex: 0 0 380px;
-    max-width: 380px;
-    padding-top: 2rem; /* 32px */
-  }
-
-  .bsb-heading {
-    font-family: var(--font-heading);
-    font-size: clamp(2.25rem, 4vw, 3.25rem);
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: 0.02em;
-    color: #0a0a0a;
-    margin-bottom: 1.5rem; /* 24px */
-  }
-
-  .bsb-heading em {
-    font-style: italic;
-    font-weight: 800;
-  }
-
-  .bsb-desc {
-    font-family: var(--font-body);
-    font-size: 0.875rem; /* 14px */
-    line-height: 1.75;
-    color: #555;
-    max-width: 320px;
-    margin-bottom: 2rem;
-  }
-
-  .bsb-cta-wrap {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem; /* 12px */
-  }
-
-  .bsb-cta-icon {
-    width: 48px; /* 48px = 12×4 */
-    height: 48px;
-    border-radius: 50%;
-    border: 2px solid #0a0a0a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    color: #0a0a0a;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  .bsb-cta-icon:hover {
-    background-color: #0a0a0a;
-    color: #fff;
-  }
-
-  .bsb-cta-btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem; /* 12px 24px */
-    border: 2px solid #0a0a0a;
-    border-radius: 9999px;
-    font-family: var(--font-body);
-    font-size: 0.75rem; /* 12px */
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    color: #0a0a0a;
-    text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  .bsb-cta-btn:hover {
-    background-color: #0a0a0a;
-    color: #fff;
-  }
-
-  /* ── Single Card ── */
-  .bsb-card {
-    flex: 0 0 480px;
-    max-width: 480px;
-  }
-
-  .bsb-card-img-wrap {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 4/3;
-    border-radius: 16px;
-    overflow: hidden;
-    border: 4px solid rgba(255,255,255,0.85); /* 4px */
-    box-shadow: 0 4px 32px rgba(0,0,0,0.06); /* 32px */
-    background-color: #e8e5e0;
-  }
-
-  .bsb-card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-  }
-
-  .bsb-card:hover .bsb-card-img {
-    transform: scale(1.05);
-  }
-
-  /* Floating tag on image */
-  .bsb-card-tag {
-    position: absolute;
-    bottom: 1rem; /* 16px */
-    left: 1rem; /* 16px */
-    background-color: rgba(255,255,255,0.92);
-    backdrop-filter: blur(8px);
-    padding: 0.5rem 1rem; /* 8px 16px */
-    border-radius: 8px; /* 8px = 2×4 */
-    font-family: var(--font-body);
-    font-size: 0.75rem; /* 12px */
-    font-weight: 600;
-    color: #0a0a0a;
-    line-height: 1.4;
-    max-width: 200px; /* 200px = 50×4 */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  }
-
-  /* Card bottom: title + button stacked */
-  .bsb-card-bottom {
-    padding: 1.25rem 0.25rem 1.5rem; /* 20px 4px 24px */
-  }
-
-  .bsb-card-title {
-    font-family: var(--font-heading);
-    font-size: 1.5rem; /* 24px */
-    font-weight: 700;
-    color: #0a0a0a;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.75rem; /* 12px */
-  }
-
-  .bsb-card-link {
-    display: inline-block;
-    padding: 0.75rem 1.75rem; /* 12px 28px */
-    border: 2px solid #0a0a0a;
-    border-radius: 9999px;
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #0a0a0a;
-    text-decoration: none;
-    white-space: nowrap;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-
-  .bsb-card-link:hover {
-    background-color: #0a0a0a;
-    color: #fff;
-  }
-
-  /* Separator */
-  .bsb-card-sep {
-    width: 100%;
-    height: 2px;
-    background: linear-gradient(to right, #b0ada8, #d6d3ce);
-    margin-top: 0.25rem; /* 4px */
-    border-radius: 4px; /* 4px */
-  }
-
-  /* ── Mobile ── */
-  @media (max-width: 767px) {
-    .bsb-track-wrapper {
-      padding: 3rem 0 2rem; /* 48px 0 32px */
-      overflow: visible;
-    }
-
-    .bsb-track {
-      flex-direction: column;
-      gap: 2rem;
-      padding: 0 1.5rem; /* 0 24px */
-      overflow: visible;
-    }
-
-    .bsb-text {
-      flex: 0 0 auto;
-      max-width: 100%;
-      padding-top: 0;
-    }
-
-    .bsb-heading {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .bsb-desc {
-      font-size: 0.75rem; /* 12px */
-      margin-bottom: 1.5rem; /* 24px */
-    }
-
-    /* On mobile: cards become a continuous horizontal scroll */
-    .bsb-mobile-cards {
-      display: flex;
-      gap: 1rem; /* 16px */
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding: 0.5rem 1.5rem; /* 8px 24px */
-      margin: 0 -1.5rem; /* match track padding */
-    }
-
-    .bsb-mobile-cards::-webkit-scrollbar {
-      display: none;
-    }
-
-    .bsb-card {
-      flex: 0 0 75vw;
-      min-width: 75vw;
-      max-width: 75vw;
-    }
-
-    .bsb-card-title {
-      font-size: 1.25rem; /* 20px */
-    }
-
-    .bsb-card-link {
-      font-size: 0.75rem; /* 12px */
-      padding: 0.5rem 1.25rem; /* 8px 20px */
-    }
-
-    /* ── Scroll Progress Bar ── */
-    .bsb-scroll-bar-track {
-      display: block;
-      margin: 1.5rem 1.5rem 0; /* 24px 24px 0 */
-      height: 4px;
-      background: rgba(0,0,0,0.08);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .bsb-scroll-bar-thumb {
-      display: block;
-      height: 100%;
-      background: #0a0a0a;
-      border-radius: 4px;
-      width: 33%;
-      transition: transform 150ms ease;
-    }
-  }
-
-  /* ── Tablet ── */
-  @media (min-width: 768px) and (max-width: 1024px) {
-    .bsb-track {
-      gap: 2rem;
-      padding: 0 2rem;
-    }
-
-    .bsb-text {
-      flex: 0 0 280px;
-      max-width: 280px;
-    }
-
-    .bsb-card {
-      flex: 0 0 380px;
-      max-width: 380px;
-    }
-  }
-
-  /* Desktop: show desktop cards, hide mobile cards */
-  @media (min-width: 768px) {
-    .bsb-mobile-cards {
-      display: none;
-    }
-    .bsb-scroll-bar-track {
-      display: none;
-    }
-    .bsb-desktop-card {
-      display: block;
-    }
-  }
-
-  /* Mobile: show mobile cards, hide desktop cards */
-  @media (max-width: 767px) {
-    .bsb-desktop-card {
-      display: none;
-    }
-  }
-</style>
-
-<section class="bsb-section" id="brand-story-bento">
-
-  <div class="bsb-track-wrapper">
-    <div class="bsb-track" id="bsb-track">
-
-      <!-- Text Panel -->
-      <div class="bsb-text" id="bsb-text">
-        <h2 class="bsb-heading">
-          {{ section.settings.heading }}
-        </h2>
-        <p class="bsb-desc">
-          {{ section.settings.description }}
-        </p>
-        <div class="bsb-cta-wrap">
-          <a href="{{ section.settings.button_url | default: '#' }}" class="bsb-cta-icon" aria-label="Explore">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 10 10"/><path d="M17 7v10H7"/></svg>
-          </a>
-          <a href="{{ section.settings.button_url | default: '#' }}" class="bsb-cta-btn">
-            {{ section.settings.button_text | default: 'Explore More' }}
-          </a>
-        </div>
-      </div>
-
-      <!-- Desktop Cards (inside track for horizontal GSAP scroll) -->
-      {%- assign collection_handles = 'card1_collection,card2_collection,card3_collection' | split: ',' -%}
-      {%- for handle_key in collection_handles -%}
-        {%- assign col = section.settings[handle_key] -%}
-        {%- if col != blank -%}
-          {%- assign card_image = col.image | default: col.products.first.featured_image -%}
-          <div class="bsb-card bsb-desktop-card">
-            <div class="bsb-card-img-wrap">
-              {% if card_image != blank %}
-                <img
-                  src="{{ card_image | image_url: width: 800 }}"
-                  alt="{{ card_image.alt | default: col.title }}"
-                  class="bsb-card-img"
-                  loading="lazy"
-                  width="800"
-                  height="600"
-                />
+            <!-- Image with floating tag -->
+            <div style="position: relative; width: 100%; aspect-ratio: 4/3; border-radius: 16px; overflow: hidden; border: 4px solid rgba(255,255,255,0.85); box-shadow: 0 4px 24px rgba(0,0,0,0.06); background: #e8e5e0;">
+              {% if block.settings.image != blank %}
+                <img src="{{ block.settings.image | image_url: width: 800 }}"
+                     alt="{{ block.settings.title | escape }}"
+                     class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                     loading="lazy" width="800" height="600">
               {% else %}
-                {{ 'collection-1' | placeholder_svg_tag: 'bsb-card-img' }}
+                {{ 'collection-' | append: forloop.index | placeholder_svg_tag: 'w-full h-full object-cover' }}
               {% endif %}
-              <div class="bsb-card-tag">{{ col.title }}</div>
+
+              <!-- Floating tag -->
+              {% if block.settings.tag_text != blank %}
+                <div style="position: absolute; bottom: 0.75rem; left: 0.75rem; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 0.5rem 1rem; border-radius: 8px; font-family: var(--font-body); font-size: 0.78rem; font-weight: 600; color: #0a0a0a; line-height: 1.4; max-width: 220px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                  {{ block.settings.tag_text }}
+                </div>
+              {% endif %}
             </div>
-            <div class="bsb-card-bottom">
-              <h3 class="bsb-card-title">{{ col.title }}</h3>
-              <a href="{{ col.url }}" class="bsb-card-link">SHOP NOW</a>
+
+            <!-- Title + Button -->
+            <div style="padding: 1.25rem 0.25rem 0.5rem;">
+              {% if block.settings.title != blank %}
+                <p style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: #0a0a0a; letter-spacing: -0.02em; margin-bottom: 0.75rem; line-height: 1.25;">
+                  {{ block.settings.title }}
+                </p>
+              {% endif %}
+              {% if block.settings.button_text != blank %}
+                <span style="display: inline-block; padding: 0.65rem 1.5rem; border: 2px solid #0a0a0a; border-radius: 9999px; font-family: var(--font-body); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #0a0a0a; transition: background-color 0.3s ease, color 0.3s ease;"
+                      onmouseover="this.style.backgroundColor='#0a0a0a';this.style.color='#fff'"
+                      onmouseout="this.style.backgroundColor='transparent';this.style.color='#0a0a0a'">
+                  {{ block.settings.button_text }}
+                </span>
+              {% endif %}
             </div>
-            <div class="bsb-card-sep"></div>
-          </div>
-        {%- endif -%}
-      {%- endfor -%}
+          </a>
+        {% endif %}
+      {% endfor %}
 
     </div>
   </div>
 
-  <!-- Mobile Cards (OUTSIDE overflow-hidden wrapper for swipe to work) -->
-  <div class="bsb-mobile-cards">
-    {%- for handle_key in collection_handles -%}
-      {%- assign col = section.settings[handle_key] -%}
-      {%- if col != blank -%}
-        {%- assign card_image = col.image | default: col.products.first.featured_image -%}
-        <div class="bsb-card">
-          <div class="bsb-card-img-wrap">
-            {% if card_image != blank %}
-              <img
-                src="{{ card_image | image_url: width: 800 }}"
-                alt="{{ card_image.alt | default: col.title }}"
-                class="bsb-card-img"
-                loading="lazy"
-                width="800"
-                height="600"
-              />
-            {% else %}
-              {{ 'collection-1' | placeholder_svg_tag: 'bsb-card-img' }}
-            {% endif %}
-            <div class="bsb-card-tag">{{ col.title }}</div>
-          </div>
-          <div class="bsb-card-bottom">
-            <h3 class="bsb-card-title">{{ col.title }}</h3>
-            <a href="{{ col.url }}" class="bsb-card-link">SHOP NOW</a>
-          </div>
-          <div class="bsb-card-sep"></div>
-        </div>
-      {%- endif -%}
-    {%- endfor -%}
-  </div>
-
-  <!-- Scroll Progress Bar (mobile only) -->
-  <div class="bsb-scroll-bar-track" id="bsb-scroll-bar">
-    <div class="bsb-scroll-bar-thumb" id="bsb-scroll-thumb"></div>
+  <!-- Scroll Progress Bar -->
+  <div id="bsb-scroll-bar" style="margin: 0 1.25rem 2rem; height: 3px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
+    <div id="bsb-scroll-thumb" style="height: 100%; background: #0a0a0a; border-radius: 4px; width: 33%; transition: transform 120ms ease;"></div>
   </div>
 
 </section>
 
+<!-- Hide scrollbar -->
+<style>
+  #bsb-carousel::-webkit-scrollbar { display: none; }
+  #bsb-carousel { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
 <script>
   (function() {
-    var container = document.querySelector('.bsb-mobile-cards');
+    var carousel = document.getElementById('bsb-carousel');
     var thumb = document.getElementById('bsb-scroll-thumb');
-    if (!container || !thumb) return;
+    if (!carousel || !thumb) return;
 
-    function updateThumb() {
-      var scrollWidth = container.scrollWidth - container.clientWidth;
-      if (scrollWidth <= 0) return;
-      var progress = container.scrollLeft / scrollWidth;
-      var trackWidth = thumb.parentElement.clientWidth;
-      var thumbWidth = thumb.clientWidth;
-      var maxTranslate = trackWidth - thumbWidth;
-      thumb.style.transform = 'translateX(' + (progress * maxTranslate) + 'px)';
+    function update() {
+      var max = carousel.scrollWidth - carousel.clientWidth;
+      if (max <= 0) return;
+      var pct = carousel.scrollLeft / max;
+      var track = thumb.parentElement.clientWidth;
+      var tw = thumb.clientWidth;
+      thumb.style.transform = 'translateX(' + (pct * (track - tw)) + 'px)';
     }
 
-    container.addEventListener('scroll', updateThumb, { passive: true });
-    window.addEventListener('resize', updateThumb);
-    updateThumb();
+    carousel.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
   })();
 </script>
 
@@ -449,71 +94,66 @@
   "settings": [
     {
       "type": "header",
-      "content": "Text Content"
-    },
-    {
-      "type": "html",
-      "id": "heading",
-      "label": "Heading (HTML supported)",
-      "default": "<em>FASHION</em> THAT<br>FLOWS WITH<br>THE SEASONS"
-    },
-    {
-      "type": "textarea",
-      "id": "description",
-      "label": "Description",
-      "default": "Explore our latest collection of timeless fashion. From classic styles to modern trends, find the perfect look for every season. Shop now and elevate your wardrobe!"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Button Text",
-      "default": "Explore More"
-    },
-    {
-      "type": "url",
-      "id": "button_url",
-      "label": "Button Link"
-    },
-    {
-      "type": "header",
       "content": "Appearance"
     },
     {
       "type": "image_picker",
       "id": "bg_image",
       "label": "Background Image",
-      "info": "Recommended: 1920 × 1080px. If empty, uses textured color background."
+      "info": "Recommended: 1920 × 1080px. If empty, uses textured color."
     },
     {
       "type": "color",
       "id": "bg_color",
       "label": "Background Color (fallback)",
-      "default": "#f2f0ec",
-      "info": "Used when no background image is set."
-    },
+      "default": "#f2f0ec"
+    }
+  ],
+  "blocks": [
     {
-      "type": "header",
-      "content": "── Collection Cards ──"
-    },
-    {
-      "type": "collection",
-      "id": "card1_collection",
-      "label": "Card 1 — Collection"
-    },
-    {
-      "type": "collection",
-      "id": "card2_collection",
-      "label": "Card 2 — Collection"
-    },
-    {
-      "type": "collection",
-      "id": "card3_collection",
-      "label": "Card 3 — Collection"
+      "type": "story_card",
+      "name": "Story Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card Image",
+          "info": "Recommended: 800 × 600px (4:3)"
+        },
+        {
+          "type": "text",
+          "id": "tag_text",
+          "label": "Floating Tag Text",
+          "default": "Grace, Glamour, Style, Confidence"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Elegant Evening Wear"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Brand Story Bento"
+      "name": "Brand Story Bento",
+      "blocks": [
+        { "type": "story_card", "settings": { "tag_text": "Grace, Glamour, Style, Confidence", "title": "Elegant Evening Wear", "button_text": "SHOP NOW" } },
+        { "type": "story_card", "settings": { "tag_text": "Bold, Modern, Effortless", "title": "Urban Street Style", "button_text": "SHOP NOW" } },
+        { "type": "story_card", "settings": { "tag_text": "Timeless, Refined, Classic", "title": "Heritage Collection", "button_text": "SHOP NOW" } }
+      ]
     }
   ]
 }
