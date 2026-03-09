@@ -151,6 +151,7 @@
     /* Disable CSS animation on mobile; JS drives transform */
     .mt-track {
       animation: none !important;
+      touch-action: pan-y;  /* browser handles vertical only, JS handles horizontal */
     }
 
     .mt-card {
