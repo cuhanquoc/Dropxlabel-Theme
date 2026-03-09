@@ -1,198 +1,262 @@
-{% comment %} MARQUEE TICKER — CSS → src/input.css {% endcomment %}
+{% comment %} MARQUEE TICKER — Redesigned with premium editorial aesthetic {% endcomment %}
 
-
-<marquee-ticker class="mt-section" style="background-color: {{ section.settings.bg_color | default: '#0a0a0a' }};" data-speed="{{ section.settings.speed | default: 30 }}">
-  <div
-    class="mt-track"
-    style="
-      --mt-speed: {{ section.settings.speed | default: 30 }}s;
-      --mt-gap: {{ section.settings.gap | default: 24 }}px;
-      --mt-card-w: {{ section.settings.card_width | default: 280 }}px;
-    "
-    id="mt-track"
-  >
-    {%- comment -%} First copy of blocks {%- endcomment -%}
-    {% for block in section.blocks %}
-      {% if block.type == 'ticker_card' %}
-        <div class="mt-card" {{ block.shopify_attributes }}>
-          <!-- Media -->
-          <div class="mt-card-media">
-            {% if block.settings.video != blank %}
-              <video
-                src="{{ block.settings.video.sources[0].url }}"
-                autoplay muted loop playsinline
-                poster="{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 600 }}{% endif %}"
-              ></video>
-            {% elsif block.settings.image != blank %}
-              <img
-                src="{{ block.settings.image | image_url: width: 600 }}"
-                alt="{{ block.settings.title | default: 'Card' | escape }}"
-                loading="lazy" width="600" height="450"
-              />
-            {% else %}
-              <img
-                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&auto=format&fit=crop"
-                alt="Placeholder" loading="lazy" width="600" height="450"
-              />
-            {% endif %}
-          </div>
-
-          <!-- Body -->
-          <div class="mt-card-body">
-            {% if block.settings.title != blank %}
-              <p class="mt-card-title" style="font-family: {{ block.settings.font | default: 'var(--font-heading)' }};">
-                {{ block.settings.title }}
-              </p>
-            {% endif %}
-            {% if block.settings.description != blank %}
-              <p class="mt-card-desc">{{ block.settings.description }}</p>
-            {% endif %}
-            {% if block.settings.link_text != blank %}
-              <a
-                href="{{ block.settings.link_url | default: '#' }}"
-                class="mt-card-link"
-                {% if block.settings.link_external %}target="_blank" rel="noopener"{% endif %}
-              >{{ block.settings.link_text }}</a>
-            {% endif %}
-          </div>
-        </div>
+<marquee-ticker
+  class="mt-section block"
+  style="background-color: {{ section.settings.bg_color | default: '#0a0a0a' }};"
+  data-speed="{{ section.settings.speed | default: 30 }}"
+>
+  <!-- ── Section Header ── -->
+  <div style="max-width: 1280px; margin: 0 auto; padding: 0 1.25rem;" class="md:px-10">
+    <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem;" class="md:flex-row md:items-end md:justify-between md:mb-10">
+      <div>
+        {% if section.settings.eyebrow != blank %}
+          <p style="font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 0.75rem;">
+            {{ section.settings.eyebrow }}
+          </p>
+        {% endif %}
+        <h2 style="font-family: var(--font-heading); font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; color: #ffffff; line-height: 1.1; letter-spacing: -0.02em;">
+          {{ section.settings.heading | default: 'Trending Styles' }}
+        </h2>
+      </div>
+      {% if section.settings.cta_text != blank %}
+        <a href="{{ section.settings.cta_url | default: '#' }}"
+           style="font-family: var(--font-body); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.5); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 2px; transition: color 0.3s ease, border-color 0.3s ease; white-space: nowrap;"
+           onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.6)'"
+           onmouseout="this.style.color='rgba(255,255,255,0.5)';this.style.borderColor='rgba(255,255,255,0.2)'"
+        >
+          {{ section.settings.cta_text }}
+        </a>
       {% endif %}
-    {% endfor %}
+    </div>
+  </div>
 
-    {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
-    {% for block in section.blocks %}
-      {% if block.type == 'ticker_card' %}
-        <div class="mt-card" aria-hidden="true">
-          <div class="mt-card-media">
-            {% if block.settings.video != blank %}
-              <video
-                src="{{ block.settings.video.sources[0].url }}"
-                autoplay muted loop playsinline
-                poster="{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 600 }}{% endif %}"
-              ></video>
-            {% elsif block.settings.image != blank %}
-              <img
-                src="{{ block.settings.image | image_url: width: 600 }}"
-                alt="{{ block.settings.title | default: 'Card' | escape }}"
-                loading="lazy" width="600" height="450"
-              />
-            {% else %}
-              <img
-                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&auto=format&fit=crop"
-                alt="Placeholder" loading="lazy" width="600" height="450"
-              />
-            {% endif %}
+  <!-- ── Card Track ── -->
+  <div class="mt-track-wrap" style="position: relative; overflow: hidden;">
+    <!-- Edge fades -->
+    <div class="mt-fade-left" style="position: absolute; top: 0; bottom: 0; left: 0; width: 120px; z-index: 5; pointer-events: none; background: linear-gradient(to right, {{ section.settings.bg_color | default: '#0a0a0a' }}, transparent);"></div>
+    <div class="mt-fade-right" style="position: absolute; top: 0; bottom: 0; right: 0; width: 120px; z-index: 5; pointer-events: none; background: linear-gradient(to left, {{ section.settings.bg_color | default: '#0a0a0a' }}, transparent);"></div>
+
+    <div
+      class="mt-track"
+      style="
+        --mt-speed: {{ section.settings.speed | default: 30 }}s;
+        --mt-gap: {{ section.settings.gap | default: 24 }}px;
+        --mt-card-w: {{ section.settings.card_width | default: 280 }}px;
+      "
+      id="mt-track"
+    >
+      {%- comment -%} First copy of blocks {%- endcomment -%}
+      {% for block in section.blocks %}
+        {% if block.type == 'ticker_card' %}
+          <div class="mt-card" {{ block.shopify_attributes }}>
+            <!-- Media with gradient overlay -->
+            <div class="mt-card-media">
+              {% if block.settings.video != blank %}
+                <video
+                  src="{{ block.settings.video.sources[0].url }}"
+                  autoplay muted loop playsinline
+                  poster="{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 600 }}{% endif %}"
+                ></video>
+              {% elsif block.settings.image != blank %}
+                <img
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  alt="{{ block.settings.title | default: 'Card' | escape }}"
+                  loading="lazy" width="600" height="450"
+                />
+              {% else %}
+                <img
+                  src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&auto=format&fit=crop"
+                  alt="Placeholder" loading="lazy" width="600" height="450"
+                />
+              {% endif %}
+              <!-- Gradient overlay for depth -->
+              <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.25) 100%); pointer-events: none;"></div>
+            </div>
+
+            <!-- Body -->
+            <div class="mt-card-body">
+              {% if block.settings.title != blank %}
+                <p class="mt-card-title" style="font-family: {{ block.settings.font | default: 'var(--font-heading)' }};">
+                  {{ block.settings.title }}
+                </p>
+              {% endif %}
+              {% if block.settings.description != blank %}
+                <p class="mt-card-desc">{{ block.settings.description }}</p>
+              {% endif %}
+              {% if block.settings.link_text != blank %}
+                <a
+                  href="{{ block.settings.link_url | default: '#' }}"
+                  class="mt-card-link"
+                  {% if block.settings.link_external %}target="_blank" rel="noopener"{% endif %}
+                >
+                  {{ block.settings.link_text }}
+                  <svg style="display: inline-block; width: 10px; height: 10px; margin-left: 4px; vertical-align: middle;" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                </a>
+              {% endif %}
+            </div>
           </div>
-          <div class="mt-card-body">
-            {% if block.settings.title != blank %}
-              <p class="mt-card-title" style="font-family: {{ block.settings.font | default: 'var(--font-heading)' }};">
-                {{ block.settings.title }}
-              </p>
-            {% endif %}
-            {% if block.settings.description != blank %}
-              <p class="mt-card-desc">{{ block.settings.description }}</p>
-            {% endif %}
-            {% if block.settings.link_text != blank %}
-              <a
-                href="{{ block.settings.link_url | default: '#' }}"
-                class="mt-card-link"
-                tabindex="-1"
-                {% if block.settings.link_external %}target="_blank" rel="noopener"{% endif %}
-              >{{ block.settings.link_text }}</a>
-            {% endif %}
+        {% endif %}
+      {% endfor %}
+
+      {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
+      {% for block in section.blocks %}
+        {% if block.type == 'ticker_card' %}
+          <div class="mt-card" aria-hidden="true">
+            <div class="mt-card-media">
+              {% if block.settings.video != blank %}
+                <video
+                  src="{{ block.settings.video.sources[0].url }}"
+                  autoplay muted loop playsinline
+                  poster="{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 600 }}{% endif %}"
+                ></video>
+              {% elsif block.settings.image != blank %}
+                <img
+                  src="{{ block.settings.image | image_url: width: 600 }}"
+                  alt="{{ block.settings.title | default: 'Card' | escape }}"
+                  loading="lazy" width="600" height="450"
+                />
+              {% else %}
+                <img
+                  src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&auto=format&fit=crop"
+                  alt="Placeholder" loading="lazy" width="600" height="450"
+                />
+              {% endif %}
+              <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.25) 100%); pointer-events: none;"></div>
+            </div>
+            <div class="mt-card-body">
+              {% if block.settings.title != blank %}
+                <p class="mt-card-title" style="font-family: {{ block.settings.font | default: 'var(--font-heading)' }};">
+                  {{ block.settings.title }}
+                </p>
+              {% endif %}
+              {% if block.settings.description != blank %}
+                <p class="mt-card-desc">{{ block.settings.description }}</p>
+              {% endif %}
+              {% if block.settings.link_text != blank %}
+                <a
+                  href="{{ block.settings.link_url | default: '#' }}"
+                  class="mt-card-link"
+                  tabindex="-1"
+                  {% if block.settings.link_external %}target="_blank" rel="noopener"{% endif %}
+                >
+                  {{ block.settings.link_text }}
+                  <svg style="display: inline-block; width: 10px; height: 10px; margin-left: 4px; vertical-align: middle;" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                </a>
+              {% endif %}
+            </div>
           </div>
-        </div>
-      {% endif %}
-    {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- ── Mobile scroll indicator ── -->
+  <div class="mt-scroll-indicator" style="display: none; justify-content: center; gap: 0.35rem; padding-top: 1.25rem;">
+    <span style="font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.3);">
+      ← Swipe to explore →
+    </span>
   </div>
 </marquee-ticker>
 
 <script>
-  customElements.define('marquee-ticker', class extends HTMLElement {
-    connectedCallback() {
-      this._track = this.querySelector('.mt-track');
-      if (!this._track) return;
+  if (!customElements.get('marquee-ticker')) {
+    customElements.define('marquee-ticker', class extends HTMLElement {
+      connectedCallback() {
+        this._track = this.querySelector('.mt-track');
+        if (!this._track) return;
 
-      /* Only run mobile transform logic on mobile */
-      this._mq = window.matchMedia('(max-width: 767px)');
-      if (!this._mq.matches) return;
+        /* Only run mobile transform logic on mobile */
+        this._mq = window.matchMedia('(max-width: 767px)');
 
-      this._posX = 0;
-      this._speed = 0.5;
-      this._touching = false;
-      this._startTouchX = 0;
-      this._startPosX = 0;
-      this._resumeTimer = null;
-      this._halfWidth = 0;
-
-      this._measureHalf();
-
-      /* Bind methods */
-      this._tick = this._tick.bind(this);
-      this._onTouchStart = this._onTouchStart.bind(this);
-      this._onTouchMove = this._onTouchMove.bind(this);
-      this._onTouchEnd = this._onTouchEnd.bind(this);
-      this._measureHalf = this._measureHalf.bind(this);
-
-      /* Start auto-scroll */
-      this._raf = requestAnimationFrame(this._tick);
-
-      /* Touch listeners */
-      this._track.addEventListener('touchstart', this._onTouchStart, { passive: true });
-      this._track.addEventListener('touchmove', this._onTouchMove, { passive: true });
-      this._track.addEventListener('touchend', this._onTouchEnd, { passive: true });
-      window.addEventListener('resize', this._measureHalf);
-    }
-
-    disconnectedCallback() {
-      if (this._raf) cancelAnimationFrame(this._raf);
-      if (this._resumeTimer) clearTimeout(this._resumeTimer);
-      if (this._track) {
-        this._track.removeEventListener('touchstart', this._onTouchStart);
-        this._track.removeEventListener('touchmove', this._onTouchMove);
-        this._track.removeEventListener('touchend', this._onTouchEnd);
-      }
-      window.removeEventListener('resize', this._measureHalf);
-    }
-
-    _measureHalf() {
-      this._halfWidth = this._track.scrollWidth / 2;
-    }
-
-    _tick() {
-      if (!this._touching) {
-        this._posX -= this._speed;
-        if (Math.abs(this._posX) >= this._halfWidth) {
-          this._posX += this._halfWidth;
+        /* Show scroll indicator on mobile */
+        const indicator = this.querySelector('.mt-scroll-indicator');
+        if (this._mq.matches && indicator) {
+          indicator.style.display = 'flex';
         }
+
+        if (!this._mq.matches) return;
+
+        this._posX = 0;
+        this._speed = 0.5;
+        this._touching = false;
+        this._startTouchX = 0;
+        this._startPosX = 0;
+        this._resumeTimer = null;
+        this._halfWidth = 0;
+
+        this._measureHalf();
+
+        /* Bind methods */
+        this._tick = this._tick.bind(this);
+        this._onTouchStart = this._onTouchStart.bind(this);
+        this._onTouchMove = this._onTouchMove.bind(this);
+        this._onTouchEnd = this._onTouchEnd.bind(this);
+        this._measureHalf = this._measureHalf.bind(this);
+
+        /* Start auto-scroll */
+        this._raf = requestAnimationFrame(this._tick);
+
+        /* Touch listeners */
+        this._track.addEventListener('touchstart', this._onTouchStart, { passive: true });
+        this._track.addEventListener('touchmove', this._onTouchMove, { passive: true });
+        this._track.addEventListener('touchend', this._onTouchEnd, { passive: true });
+        window.addEventListener('resize', this._measureHalf);
+      }
+
+      disconnectedCallback() {
+        if (this._raf) cancelAnimationFrame(this._raf);
+        if (this._resumeTimer) clearTimeout(this._resumeTimer);
+        if (this._track) {
+          this._track.removeEventListener('touchstart', this._onTouchStart);
+          this._track.removeEventListener('touchmove', this._onTouchMove);
+          this._track.removeEventListener('touchend', this._onTouchEnd);
+        }
+        window.removeEventListener('resize', this._measureHalf);
+      }
+
+      _measureHalf() {
+        this._halfWidth = this._track.scrollWidth / 2;
+      }
+
+      _tick() {
+        if (!this._touching) {
+          this._posX -= this._speed;
+          if (Math.abs(this._posX) >= this._halfWidth) {
+            this._posX += this._halfWidth;
+          }
+          this._track.style.transform = 'translateX(' + this._posX + 'px)';
+        }
+        this._raf = requestAnimationFrame(this._tick);
+      }
+
+      _onTouchStart(e) {
+        this._touching = true;
+        if (this._resumeTimer) clearTimeout(this._resumeTimer);
+        this._startTouchX = e.touches[0].clientX;
+        this._startPosX = this._posX;
+
+        /* Hide scroll indicator after first touch */
+        const indicator = this.querySelector('.mt-scroll-indicator');
+        if (indicator) indicator.style.opacity = '0';
+      }
+
+      _onTouchMove(e) {
+        if (!this._touching) return;
+        var dx = e.touches[0].clientX - this._startTouchX;
+        this._posX = this._startPosX + dx;
+        if (this._posX > 0) this._posX -= this._halfWidth;
+        if (Math.abs(this._posX) >= this._halfWidth) this._posX += this._halfWidth;
         this._track.style.transform = 'translateX(' + this._posX + 'px)';
       }
-      this._raf = requestAnimationFrame(this._tick);
-    }
 
-    _onTouchStart(e) {
-      this._touching = true;
-      if (this._resumeTimer) clearTimeout(this._resumeTimer);
-      this._startTouchX = e.touches[0].clientX;
-      this._startPosX = this._posX;
-    }
-
-    _onTouchMove(e) {
-      if (!this._touching) return;
-      var dx = e.touches[0].clientX - this._startTouchX;
-      this._posX = this._startPosX + dx;
-      if (this._posX > 0) this._posX -= this._halfWidth;
-      if (Math.abs(this._posX) >= this._halfWidth) this._posX += this._halfWidth;
-      this._track.style.transform = 'translateX(' + this._posX + 'px)';
-    }
-
-    _onTouchEnd() {
-      var self = this;
-      this._resumeTimer = setTimeout(function() {
-        self._touching = false;
-      }, 1500);
-    }
-  });
+      _onTouchEnd() {
+        var self = this;
+        this._resumeTimer = setTimeout(function () {
+          self._touching = false;
+        }, 1500);
+      }
+    });
+  }
 </script>
 
 {% schema %}
@@ -200,6 +264,37 @@
   "name": "Marquee Ticker",
   "tag": "section",
   "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow Text",
+      "default": "Curated Collection"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Trending Styles"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Text",
+      "default": "View All"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA URL"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
     {
       "type": "color",
       "id": "bg_color",
