@@ -3,6 +3,9 @@
 ══════════════════════════════════════════════ -->
 
 <style>
+  /* ── Alpine.js x-cloak ── */
+  [x-cloak] { display: none !important; }
+
   /* ── Footer Accordion (mobile) ── */
   .ft-accordion-icon {
     position: relative;
@@ -37,17 +40,8 @@
     opacity: 0;
   }
 
-  /* Accordion body: collapsible on mobile */
-  @media (max-width: 767px) {
-    .ft-accordion-body {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .ft-accordion-body.open {
-      max-height: 400px;
-    }
-  }
+  /* Accordion body: Alpine x-show handles visibility.
+     On desktop, the nav is always visible via md:!block override. */
 </style>
 
 <footer id="site-footer" class="block bg-[#0a0a0a] text-white font-body" role="contentinfo">
@@ -89,7 +83,7 @@
       </div>
 
       <!-- COL 2: Quick Links -->
-      <div class="md:pt-0" x-data="{ open: false }">
+      <div class="md:pt-0" x-data="{ open: (window.innerWidth >= 768) }">
         <!-- Desktop title -->
         <p class="hidden md:block font-body text-[0.72rem] font-medium uppercase tracking-[0.2em] text-white/40 mb-5">
           {{ section.settings.col2_title | default: 'Quick links' }}
@@ -104,7 +98,20 @@
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <!-- Links -->
-        <nav class="ft-accordion-body flex flex-col gap-0 md:!max-h-none md:!overflow-visible" :class="open ? 'open' : ''" aria-label="{{ section.settings.col2_title | default: 'Quick links' }}">
+        <nav
+          class="flex flex-col gap-0"
+          x-show="open"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 -translate-y-2"
+          x-transition:enter-end="opacity-100 translate-y-0"
+          x-transition:leave="transition ease-in duration-200"
+          x-transition:leave-start="opacity-100 translate-y-0"
+          x-transition:leave-end="opacity-0 -translate-y-2"
+          x-cloak
+          aria-label="{{ section.settings.col2_title | default: 'Quick links' }}"
+        >
+          <!-- Desktop: always show -->
+        
           <div class="py-3 md:py-0 flex flex-col gap-0">
             {% if section.settings.c2_link1_label != blank %}<a href="{{ section.settings.c2_link1_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.45rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c2_link1_label }}</a>{% endif %}
             {% if section.settings.c2_link2_label != blank %}<a href="{{ section.settings.c2_link2_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.45rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c2_link2_label }}</a>{% endif %}
@@ -117,7 +124,7 @@
       </div>
 
       <!-- COL 3: Support -->
-      <div class="md:pt-0" x-data="{ open: false }">
+      <div class="md:pt-0" x-data="{ open: (window.innerWidth >= 768) }">
         <p class="hidden md:block font-body text-[0.72rem] font-medium uppercase tracking-[0.2em] text-white/40 mb-5">
           {{ section.settings.col3_title | default: 'Support' }}
         </p>
@@ -129,7 +136,18 @@
           <span class="font-body text-base font-semibold">{{ section.settings.col3_title | default: 'Support' }}</span>
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
-        <nav class="ft-accordion-body flex flex-col gap-0 md:!max-h-none md:!overflow-visible" :class="open ? 'open' : ''" aria-label="{{ section.settings.col3_title | default: 'Support' }}">
+        <nav
+          class="flex flex-col gap-0"
+          x-show="open"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 -translate-y-2"
+          x-transition:enter-end="opacity-100 translate-y-0"
+          x-transition:leave="transition ease-in duration-200"
+          x-transition:leave-start="opacity-100 translate-y-0"
+          x-transition:leave-end="opacity-0 -translate-y-2"
+          x-cloak
+          aria-label="{{ section.settings.col3_title | default: 'Support' }}"
+        >
           <div class="py-3 md:py-0 flex flex-col gap-0">
             {% if section.settings.c3_link1_label != blank %}<a href="{{ section.settings.c3_link1_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.45rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c3_link1_label }}</a>{% endif %}
             {% if section.settings.c3_link2_label != blank %}<a href="{{ section.settings.c3_link2_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.45rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c3_link2_label }}</a>{% endif %}
@@ -142,7 +160,7 @@
       </div>
 
       <!-- COL 4: Follow Us (text links with arrow icons) -->
-      <div class="md:pt-0" x-data="{ open: false }">
+      <div class="md:pt-0" x-data="{ open: (window.innerWidth >= 768) }">
         <p class="hidden md:block font-body text-[0.72rem] font-medium uppercase tracking-[0.2em] text-white/40 mb-5">
           Follow us on
         </p>
@@ -154,7 +172,18 @@
           <span class="font-body text-base font-semibold">Follow us on</span>
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
-        <nav class="ft-accordion-body flex flex-col gap-0 md:!max-h-none md:!overflow-visible" :class="open ? 'open' : ''" aria-label="Social media links">
+        <nav
+          class="flex flex-col gap-0"
+          x-show="open"
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 -translate-y-2"
+          x-transition:enter-end="opacity-100 translate-y-0"
+          x-transition:leave="transition ease-in duration-200"
+          x-transition:leave-start="opacity-100 translate-y-0"
+          x-transition:leave-end="opacity-0 -translate-y-2"
+          x-cloak
+          aria-label="Social media links"
+        >
           <div class="py-3 md:py-0 flex flex-col gap-0">
             {% if section.settings.social_facebook != blank %}
             <a href="{{ section.settings.social_facebook }}" class="group flex items-center gap-1.5 font-body text-[0.82rem] text-white/50 no-underline py-[0.45rem] transition-colors duration-300 hover:text-white" target="_blank" rel="noopener">
