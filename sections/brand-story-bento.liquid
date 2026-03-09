@@ -302,12 +302,22 @@
     }
   }
 
-  /* Desktop: make .bsb-mobile-cards transparent wrapper */
+  /* Desktop: show desktop cards, hide mobile cards */
   @media (min-width: 768px) {
     .bsb-mobile-cards {
-      display: contents;
+      display: none;
     }
     .bsb-scroll-bar-track {
+      display: none;
+    }
+    .bsb-desktop-card {
+      display: block;
+    }
+  }
+
+  /* Mobile: show mobile cards, hide desktop cards */
+  @media (max-width: 767px) {
+    .bsb-desktop-card {
       display: none;
     }
   }
@@ -318,7 +328,7 @@
   <div class="bsb-track-wrapper">
     <div class="bsb-track" id="bsb-track">
 
-      <!-- Text Panel (scrolls away to the left) -->
+      <!-- Text Panel -->
       <div class="bsb-text" id="bsb-text">
         <h2 class="bsb-heading">
           {{ section.settings.heading }}
@@ -336,14 +346,13 @@
         </div>
       </div>
 
-      <!-- Dynamic Collection Cards -->
-      <div class="bsb-mobile-cards">
+      <!-- Desktop Cards (inside track for horizontal GSAP scroll) -->
       {%- assign collection_handles = 'card1_collection,card2_collection,card3_collection' | split: ',' -%}
       {%- for handle_key in collection_handles -%}
         {%- assign col = section.settings[handle_key] -%}
         {%- if col != blank -%}
           {%- assign card_image = col.image | default: col.products.first.featured_image -%}
-          <div class="bsb-card">
+          <div class="bsb-card bsb-desktop-card">
             <div class="bsb-card-img-wrap">
               {% if card_image != blank %}
                 <img
@@ -367,14 +376,45 @@
           </div>
         {%- endif -%}
       {%- endfor -%}
-      </div>
-
-      <!-- Scroll Progress Bar (mobile only) -->
-      <div class="bsb-scroll-bar-track" id="bsb-scroll-bar">
-        <div class="bsb-scroll-bar-thumb" id="bsb-scroll-thumb"></div>
-      </div>
 
     </div>
+  </div>
+
+  <!-- Mobile Cards (OUTSIDE overflow-hidden wrapper for swipe to work) -->
+  <div class="bsb-mobile-cards">
+    {%- for handle_key in collection_handles -%}
+      {%- assign col = section.settings[handle_key] -%}
+      {%- if col != blank -%}
+        {%- assign card_image = col.image | default: col.products.first.featured_image -%}
+        <div class="bsb-card">
+          <div class="bsb-card-img-wrap">
+            {% if card_image != blank %}
+              <img
+                src="{{ card_image | image_url: width: 800 }}"
+                alt="{{ card_image.alt | default: col.title }}"
+                class="bsb-card-img"
+                loading="lazy"
+                width="800"
+                height="600"
+              />
+            {% else %}
+              {{ 'collection-1' | placeholder_svg_tag: 'bsb-card-img' }}
+            {% endif %}
+            <div class="bsb-card-tag">{{ col.title }}</div>
+          </div>
+          <div class="bsb-card-bottom">
+            <h3 class="bsb-card-title">{{ col.title }}</h3>
+            <a href="{{ col.url }}" class="bsb-card-link">SHOP NOW</a>
+          </div>
+          <div class="bsb-card-sep"></div>
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  <!-- Scroll Progress Bar (mobile only) -->
+  <div class="bsb-scroll-bar-track" id="bsb-scroll-bar">
+    <div class="bsb-scroll-bar-thumb" id="bsb-scroll-thumb"></div>
   </div>
 
 </section>
