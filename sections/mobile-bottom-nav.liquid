@@ -182,11 +182,11 @@
       var delta = currentY - lastY;
 
       if (delta > threshold) {
-        /* Scrolling DOWN → hide nav */
-        nav.classList.remove('mob-nav--visible');
-      } else if (delta < -threshold) {
-        /* Scrolling UP → show nav */
+        /* Scrolling DOWN → show nav */
         nav.classList.add('mob-nav--visible');
+      } else if (delta < -threshold) {
+        /* Scrolling UP → hide nav */
+        nav.classList.remove('mob-nav--visible');
       }
 
       lastY = currentY;
