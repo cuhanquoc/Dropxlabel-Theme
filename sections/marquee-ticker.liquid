@@ -63,12 +63,15 @@
 
                 <!-- Product Info -->
                 <div class="flex-1 min-w-0">
-                  <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: #0a0a0a; margin-bottom: 0.35rem;">
-                    {{ product.title }}
+                  <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: #0a0a0a; margin-bottom: 0.35rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                    {% if block.settings.custom_title != blank %}{{ block.settings.custom_title }}{% else %}{{ product.title }}{% endif %}
                   </p>
-                  <p style="font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; color: #0a0a0a;">
-                    {{ product.price | money }}
-                  </p>
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    {% if product.compare_at_price > product.price %}
+                      <span style="font-family: var(--font-body); font-weight: 400; font-size: 0.78rem; color: rgba(10,10,10,0.45); text-decoration: line-through;">{{ product.compare_at_price | money }}</span>
+                    {% endif %}
+                    <span style="font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; color: #0a0a0a;">{{ product.price | money }}</span>
+                  </div>
                 </div>
 
                 <!-- Arrow Icon -->
@@ -157,6 +160,12 @@
           "type": "product",
           "id": "product",
           "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Short Title (optional)",
+          "info": "Override long product names with a short title, e.g. 'Summer Shirt'"
         },
         {
           "type": "color",
