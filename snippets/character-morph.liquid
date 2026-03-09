@@ -1,0 +1,40 @@
+{% comment %}
+  ─────────────────────────────────────────────────────
+  CHARACTER MORPH — JolyUI-inspired text animation
+  Cycles through an array of words, animating each
+  character with staggered blur + 3D rotation via GSAP.
+
+  Usage:
+    {% render 'character-morph',
+       texts: 'World,Design,Beauty,Fashion',
+       interval: 3000,
+       class: 'font-heading text-4xl font-bold text-white'
+    %}
+  ─────────────────────────────────────────────────────
+{% endcomment %}
+
+{%- liquid
+  assign morph_texts = texts | default: 'World,Design,Beauty,Fashion'
+  assign morph_interval = interval | default: 3000
+  assign morph_stagger = stagger | default: 0.03
+  assign morph_duration = duration | default: 0.5
+  assign morph_class = class | default: ''
+-%}
+
+<character-morph
+  data-texts='[{% for t in morph_texts | split: ',' %}"{{ t | strip }}"{% unless forloop.last %},{% endunless %}{% endfor %}]'
+  data-interval="{{ morph_interval }}"
+  data-stagger="{{ morph_stagger }}"
+  data-duration="{{ morph_duration }}"
+  class="relative inline-flex whitespace-nowrap {{ morph_class }}"
+>
+  {%- assign first_word = morph_texts | split: ',' | first | strip -%}
+  <span class="character-morph-word"></span>
+  {%- comment -%} Width sizer: prevents layout shift during transitions {%- endcomment -%}
+  {%- assign max_len = 0 -%}
+  {%- for t in morph_texts | split: ',' -%}
+    {%- assign len = t | strip | size -%}
+    {%- if len > max_len -%}{%- assign max_len = len -%}{%- endif -%}
+  {%- endfor -%}
+  <span class="invisible absolute" aria-hidden="true">{% for i in (1..max_len) %}M{% endfor %}</span>
+</character-morph>

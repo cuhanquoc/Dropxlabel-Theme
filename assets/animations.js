@@ -37,6 +37,96 @@ class HeroBanner extends HTMLElement {
 }
 customElements.define('hero-banner', HeroBanner);
 
+/* ═══ Web Component: <character-morph> ═══
+   JolyUI Character Morph → GSAP translation
+   Cycles through words with per-character staggered
+   blur + 3D rotation entrance/exit animations.
+   ═══════════════════════════════════════════ */
+class CharacterMorph extends HTMLElement {
+  connectedCallback() {
+    this._texts = JSON.parse(this.dataset.texts || '[]');
+    this._interval = parseInt(this.dataset.interval) || 3000;
+    this._stagger = parseFloat(this.dataset.stagger) || 0.03;
+    this._duration = parseFloat(this.dataset.duration) || 0.5;
+    this._ease = 'power2.out'; // closest match to [0.215, 0.61, 0.355, 1]
+    this._index = 0;
+    this._chars = [];
+    this._wordEl = this.querySelector('.character-morph-word');
+
+    if (!this._texts.length || typeof gsap === 'undefined' || !this._wordEl) return;
+
+    this._showWord(this._texts[0], false);
+    this._timer = setInterval(() => this._nextWord(), this._interval);
+  }
+
+  disconnectedCallback() {
+    if (this._timer) clearInterval(this._timer);
+    if (this._tl) this._tl.kill();
+  }
+
+  _createChars(text) {
+    this._wordEl.innerHTML = '';
+    this._chars = [];
+    for (var i = 0; i < text.length; i++) {
+      var span = document.createElement('span');
+      span.className = 'inline-block';
+      span.style.transformStyle = 'preserve-3d';
+      span.style.willChange = 'transform, opacity, filter';
+      span.textContent = text[i] === ' ' ? '\u00A0' : text[i];
+      this._wordEl.appendChild(span);
+      this._chars.push(span);
+    }
+  }
+
+  _showWord(text, animate) {
+    this._createChars(text);
+
+    if (animate !== false && this._chars.length) {
+      gsap.from(this._chars, {
+        opacity: 0,
+        y: 20,
+        filter: 'blur(8px)',
+        rotationX: -90,
+        duration: this._duration,
+        stagger: this._stagger,
+        ease: this._ease,
+        onComplete: () => {
+          // Clean up will-change after animation
+          this._chars.forEach(function (c) { c.style.willChange = 'auto'; });
+        }
+      });
+    }
+  }
+
+  _nextWord() {
+    var self = this;
+    if (!this._chars.length) {
+      this._index = (this._index + 1) % this._texts.length;
+      this._showWord(this._texts[this._index], true);
+      return;
+    }
+
+    // Exit animation: move up, blur out, rotate
+    this._tl = gsap.timeline({
+      onComplete: function () {
+        self._index = (self._index + 1) % self._texts.length;
+        self._showWord(self._texts[self._index], true);
+      }
+    });
+
+    this._tl.to(this._chars, {
+      opacity: 0,
+      y: -20,
+      filter: 'blur(8px)',
+      rotationX: 90,
+      duration: this._duration,
+      stagger: this._stagger,
+      ease: this._ease
+    });
+  }
+}
+customElements.define('character-morph', CharacterMorph);
+
 document.addEventListener('DOMContentLoaded', function () {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   gsap.registerPlugin(ScrollTrigger);
