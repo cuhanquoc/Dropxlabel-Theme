@@ -114,6 +114,7 @@
         "description": "Explore our latest collection. From classic styles to modern trends, find the perfect look for every season. Shop now and elevate your wardrobe!",
         "button_text": "Explore More",
         "button_url": "",
+        "bg_image": "{{ metaobjects[\"shopify--color-pattern\"].asphalt.image.value }}",
         "bg_color": "#f2f0ec",
         "card1_tag": "Elegant Collection",
         "card1_title": "Elegant n Chic",
