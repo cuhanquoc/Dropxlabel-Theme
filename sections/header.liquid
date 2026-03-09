@@ -4,12 +4,12 @@
 <header class="site-header absolute left-0 w-full z-50 flex justify-between items-center px-10 py-6 text-white bg-transparent" style="top: var(--ab-height, 0px);">
 
   <!-- LEFT: Navigation Links -->
-  <!-- Hamburger Button (mobile only) -->
-  <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu" aria-expanded="false" onclick="MobileMenu.toggle()">
+  <!-- Hamburger Button (mobile only) — links directly to Catalog -->
+  <a href="{{ routes.collections_url }}" class="hamburger-btn" id="hamburger-btn" aria-label="Catalog">
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
-  </button>
+  </a>
 
   <nav class="hidden md:flex items-center gap-8">
     <a href="{{ routes.root_url }}" class="nav-link">Home</a>

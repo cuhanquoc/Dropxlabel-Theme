@@ -107,7 +107,7 @@
   <div class="mob-nav-track">
 
     {%- comment -%} ── HOME ── {%- endcomment -%}
-    <a href="{{ section.settings.home_url | default: '/' }}" class="mob-nav-item">
+    <a href="{{ section.settings.home_url | default: '/' }}" class="mob-nav-item" onclick="event.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); setTimeout(function(){ window.location.href='{{ section.settings.home_url | default: '/' }}'; }, 300);">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
         <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/>
       </svg>
