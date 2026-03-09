@@ -302,110 +302,36 @@
         </div>
       </div>
 
-      <!-- Card 1 -->
-      <div class="bsb-card">
-        <div class="bsb-card-img-wrap">
-          {% if section.settings.card1_image != blank %}
-            <img
-              src="{{ section.settings.card1_image | image_url: width: 800 }}"
-              alt="{{ section.settings.card1_image.alt | default: section.settings.card1_title }}"
-              class="bsb-card-img"
-              loading="lazy"
-              width="800"
-              height="600"
-            />
-          {% else %}
-            <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=85&auto=format&fit=crop"
-              alt="Fashion Model"
-              class="bsb-card-img"
-              loading="lazy"
-              width="800"
-              height="600"
-            />
-          {% endif %}
-          {% if section.settings.card1_tag != blank %}
-            <div class="bsb-card-tag">{{ section.settings.card1_tag }}</div>
-          {% endif %}
-        </div>
-        <div class="bsb-card-bottom">
-          <h3 class="bsb-card-title">{{ section.settings.card1_title | default: 'Elegant Evening Wear' }}</h3>
-          <a href="{{ section.settings.card1_url | default: '#' }}" class="bsb-card-link">
-            {{ section.settings.card1_button | default: 'SHOP NOW' }}
-          </a>
-        </div>
-        <div class="bsb-card-sep"></div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="bsb-card">
-        <div class="bsb-card-img-wrap">
-          {% if section.settings.card2_image != blank %}
-            <img
-              src="{{ section.settings.card2_image | image_url: width: 800 }}"
-              alt="{{ section.settings.card2_image.alt | default: section.settings.card2_title }}"
-              class="bsb-card-img"
-              loading="lazy"
-              width="800"
-              height="600"
-            />
-          {% else %}
-            <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=85&auto=format&fit=crop"
-              alt="Fashion Model"
-              class="bsb-card-img"
-              loading="lazy"
-              width="800"
-              height="600"
-            />
-          {% endif %}
-          {% if section.settings.card2_tag != blank %}
-            <div class="bsb-card-tag">{{ section.settings.card2_tag }}</div>
-          {% endif %}
-        </div>
-        <div class="bsb-card-bottom">
-          <h3 class="bsb-card-title">{{ section.settings.card2_title | default: 'Luxury Winter Collection' }}</h3>
-          <a href="{{ section.settings.card2_url | default: '#' }}" class="bsb-card-link">
-            {{ section.settings.card2_button | default: 'Shop Now' }}
-          </a>
-        </div>
-        <div class="bsb-card-sep"></div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="bsb-card">
-        <div class="bsb-card-img-wrap">
-          {% if section.settings.card3_image != blank %}
-            <img
-              src="{{ section.settings.card3_image | image_url: width: 800 }}"
-              alt="{{ section.settings.card3_image.alt | default: section.settings.card3_title }}"
-              class="bsb-card-img"
-              loading="lazy"
-              width="800"
-              height="600"
-            />
-          {% else %}
-            <img
-              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=85&auto=format&fit=crop"
-              alt="Fashion Model"
-              class="bsb-card-img"
-              loading="lazy"
-              width="800"
-              height="600"
-            />
-          {% endif %}
-          {% if section.settings.card3_tag != blank %}
-            <div class="bsb-card-tag">{{ section.settings.card3_tag }}</div>
-          {% endif %}
-        </div>
-        <div class="bsb-card-bottom">
-          <h3 class="bsb-card-title">{{ section.settings.card3_title | default: 'Urban Street Style' }}</h3>
-          <a href="{{ section.settings.card3_url | default: '#' }}" class="bsb-card-link">
-            {{ section.settings.card3_button | default: 'SHOP NOW' }}
-          </a>
-        </div>
-        <div class="bsb-card-sep"></div>
-      </div>
+      <!-- Dynamic Collection Cards -->
+      {%- assign collection_handles = 'card1_collection,card2_collection,card3_collection' | split: ',' -%}
+      {%- for handle_key in collection_handles -%}
+        {%- assign col = section.settings[handle_key] -%}
+        {%- if col != blank -%}
+          {%- assign card_image = col.image | default: col.products.first.featured_image -%}
+          <div class="bsb-card">
+            <div class="bsb-card-img-wrap">
+              {% if card_image != blank %}
+                <img
+                  src="{{ card_image | image_url: width: 800 }}"
+                  alt="{{ card_image.alt | default: col.title }}"
+                  class="bsb-card-img"
+                  loading="lazy"
+                  width="800"
+                  height="600"
+                />
+              {% else %}
+                {{ 'collection-1' | placeholder_svg_tag: 'bsb-card-img' }}
+              {% endif %}
+              <div class="bsb-card-tag">{{ col.title }}</div>
+            </div>
+            <div class="bsb-card-bottom">
+              <h3 class="bsb-card-title">{{ col.title }}</h3>
+              <a href="{{ col.url }}" class="bsb-card-link">SHOP NOW</a>
+            </div>
+            <div class="bsb-card-sep"></div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
 
     </div>
   </div>
@@ -463,102 +389,22 @@
     },
     {
       "type": "header",
-      "content": "── Card 1 ──"
+      "content": "── Collection Cards ──"
     },
     {
-      "type": "image_picker",
-      "id": "card1_image",
-      "label": "Card 1 Image",
-      "info": "Recommended: 800 × 600px (4:3 ratio)"
+      "type": "collection",
+      "id": "card1_collection",
+      "label": "Card 1 — Collection"
     },
     {
-      "type": "text",
-      "id": "card1_tag",
-      "label": "Card 1 Overlay Tag",
-      "default": "Grace, Glamour, Style, Confidence"
+      "type": "collection",
+      "id": "card2_collection",
+      "label": "Card 2 — Collection"
     },
     {
-      "type": "text",
-      "id": "card1_title",
-      "label": "Card 1 Title",
-      "default": "Elegant Evening Wear"
-    },
-    {
-      "type": "text",
-      "id": "card1_button",
-      "label": "Card 1 Button Text",
-      "default": "SHOP NOW"
-    },
-    {
-      "type": "url",
-      "id": "card1_url",
-      "label": "Card 1 Button Link"
-    },
-    {
-      "type": "header",
-      "content": "── Card 2 ──"
-    },
-    {
-      "type": "image_picker",
-      "id": "card2_image",
-      "label": "Card 2 Image",
-      "info": "Recommended: 800 × 600px (4:3 ratio)"
-    },
-    {
-      "type": "text",
-      "id": "card2_tag",
-      "label": "Card 2 Overlay Tag",
-      "default": "Warm, Cozy, Elegant, Premium"
-    },
-    {
-      "type": "text",
-      "id": "card2_title",
-      "label": "Card 2 Title",
-      "default": "Luxury Winter Collection"
-    },
-    {
-      "type": "text",
-      "id": "card2_button",
-      "label": "Card 2 Button Text",
-      "default": "Shop Now"
-    },
-    {
-      "type": "url",
-      "id": "card2_url",
-      "label": "Card 2 Button Link"
-    },
-    {
-      "type": "header",
-      "content": "── Card 3 ──"
-    },
-    {
-      "type": "image_picker",
-      "id": "card3_image",
-      "label": "Card 3 Image",
-      "info": "Recommended: 800 × 600px (4:3 ratio)"
-    },
-    {
-      "type": "text",
-      "id": "card3_tag",
-      "label": "Card 3 Overlay Tag",
-      "default": "Bold, Modern, Timeless"
-    },
-    {
-      "type": "text",
-      "id": "card3_title",
-      "label": "Card 3 Title",
-      "default": "Urban Street Style"
-    },
-    {
-      "type": "text",
-      "id": "card3_button",
-      "label": "Card 3 Button Text",
-      "default": "SHOP NOW"
-    },
-    {
-      "type": "url",
-      "id": "card3_url",
-      "label": "Card 3 Button Link"
+      "type": "collection",
+      "id": "card3_collection",
+      "label": "Card 3 — Collection"
     }
   ],
   "presets": [
