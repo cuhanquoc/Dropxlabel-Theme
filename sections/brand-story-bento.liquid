@@ -204,12 +204,14 @@
   @media (max-width: 767px) {
     .bsb-track-wrapper {
       padding: 3rem 0 2rem;
+      overflow: visible;
     }
 
     .bsb-track {
       flex-direction: column;
       gap: 2rem;
       padding: 0 1.25rem;
+      overflow: visible;
     }
 
     .bsb-text {
@@ -233,10 +235,13 @@
       display: flex;
       gap: 1.25rem;
       overflow-x: auto;
+      overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       scroll-snap-type: x mandatory;
       scrollbar-width: none;
-      padding-right: 1.25rem;
+      padding: 0 1.25rem;
+      margin: 0 -1.25rem;
+      scroll-behavior: smooth;
     }
 
     .bsb-mobile-cards::-webkit-scrollbar {
@@ -245,6 +250,7 @@
 
     .bsb-card {
       flex: 0 0 80vw;
+      min-width: 80vw;
       max-width: 80vw;
       scroll-snap-align: start;
     }
@@ -256,6 +262,25 @@
     .bsb-card-link {
       font-size: 0.65rem;
       padding: 0.45rem 1.2rem;
+    }
+
+    /* ── Scroll Progress Bar ── */
+    .bsb-scroll-bar-track {
+      display: block;
+      margin: 1.5rem 1.25rem 0;
+      height: 3px;
+      background: rgba(0,0,0,0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bsb-scroll-bar-thumb {
+      display: block;
+      height: 100%;
+      background: #0a0a0a;
+      border-radius: 3px;
+      width: 33%;
+      transition: transform 150ms ease;
     }
   }
 
@@ -281,6 +306,9 @@
   @media (min-width: 768px) {
     .bsb-mobile-cards {
       display: contents;
+    }
+    .bsb-scroll-bar-track {
+      display: none;
     }
   }
 </style>
@@ -341,10 +369,37 @@
       {%- endfor -%}
       </div>
 
+      <!-- Scroll Progress Bar (mobile only) -->
+      <div class="bsb-scroll-bar-track" id="bsb-scroll-bar">
+        <div class="bsb-scroll-bar-thumb" id="bsb-scroll-thumb"></div>
+      </div>
+
     </div>
   </div>
 
 </section>
+
+<script>
+  (function() {
+    var container = document.querySelector('.bsb-mobile-cards');
+    var thumb = document.getElementById('bsb-scroll-thumb');
+    if (!container || !thumb) return;
+
+    function updateThumb() {
+      var scrollWidth = container.scrollWidth - container.clientWidth;
+      if (scrollWidth <= 0) return;
+      var progress = container.scrollLeft / scrollWidth;
+      var trackWidth = thumb.parentElement.clientWidth;
+      var thumbWidth = thumb.clientWidth;
+      var maxTranslate = trackWidth - thumbWidth;
+      thumb.style.transform = 'translateX(' + (progress * maxTranslate) + 'px)';
+    }
+
+    container.addEventListener('scroll', updateThumb, { passive: true });
+    window.addEventListener('resize', updateThumb);
+    updateThumb();
+  })();
+</script>
 
 {% schema %}
 {
