@@ -1109,10 +1109,32 @@
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--color-text);
-        overflow: hidden;
+        overflow: visible;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        flex-wrap: wrap;
       "
     >
-      {{ section.settings.heading }}
+      <span>{{ section.settings.heading_prefix | default: 'Trending' }}</span>
+      <character-morph
+        data-texts='[{%- for word in section.settings.morph_words | split: ',' -%}"{{ word | strip }}"{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]'
+        data-interval="3000"
+        data-stagger="0.03"
+        data-duration="0.5"
+        class="relative inline-flex whitespace-nowrap"
+        style="font-family: var(--font-heading); font-weight: 600; letter-spacing: 0.12em;"
+      >
+        <span class="character-morph-word"></span>
+        {%- assign morph_arr = section.settings.morph_words | split: ',' -%}
+        {%- assign max_len = 0 -%}
+        {%- for w in morph_arr -%}
+          {%- assign len = w | strip | size -%}
+          {%- if len > max_len -%}{%- assign max_len = len -%}{%- endif -%}
+        {%- endfor -%}
+        <span class="invisible absolute" aria-hidden="true">{%- for i in (1..max_len) -%}M{%- endfor -%}</span>
+      </character-morph>
     </h2>
   </div>
 
@@ -1769,8 +1791,21 @@
   "settings": [
     {
       "type": "text",
+      "id": "heading_prefix",
+      "label": "Heading — Static Prefix",
+      "default": "Trending"
+    },
+    {
+      "type": "text",
+      "id": "morph_words",
+      "label": "Heading — Animated Words (comma-separated)",
+      "default": "Products,Styles,Picks,Fashion",
+      "info": "Words that cycle with character morph animation"
+    },
+    {
+      "type": "text",
       "id": "heading",
-      "label": "Heading",
+      "label": "Heading (fallback/SEO)",
       "default": "Trending Products"
     },
     {
