@@ -1,0 +1,363 @@
+{% comment %}
+  ─────────────────────────────────────────
+  QUICK VIEW MODAL — Snippet
+  Extracted from featured-collection.liquid
+  Usage: {% render 'quick-view-modal' %}
+  ─────────────────────────────────────────
+{% endcomment %}
+
+<!-- ═══ Quick View Modal ═══ -->
+<div class="qv-overlay" id="qv-overlay" onclick="if(event.target===this)QuickView.close();">
+  <div class="qv-modal">
+
+    <button class="qv-close" onclick="QuickView.close();">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <!-- Left: Gallery -->
+    <div class="qv-gallery" id="qv-gallery">
+      <!-- Images injected by JS -->
+      <div class="qv-gallery-thumbs" id="qv-gallery-thumbs"></div>
+      <button class="qv-arrow qv-arrow--prev" onclick="QuickView.prevImg();">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+      </button>
+      <button class="qv-arrow qv-arrow--next" onclick="QuickView.nextImg();">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <!-- Right: Details -->
+    <div class="qv-details" id="qv-details">
+      <h3 class="qv-title" id="qv-title"></h3>
+      <span class="qv-sku" id="qv-sku"></span>
+      <p class="qv-price" id="qv-price"></p>
+
+      <div class="qv-stock" id="qv-stock">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#22c55e" stroke="#fff" stroke-width="3"><circle cx="12" cy="12" r="11" stroke="none"/><path d="M8 12l3 3 5-5" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="qv-stock-text">{{ section.settings.stock_text | default: '30 in stock' }}</span>
+      </div>
+
+      <!-- Options injected by JS -->
+      <div id="qv-options"></div>
+
+      <!-- Quantity -->
+      <div>
+        <p class="qv-option-label">Quantity</p>
+        <div class="qv-qty">
+          <button onclick="QuickView.qty(-1);">−</button>
+          <span class="qv-qty-value" id="qv-qty">1</span>
+          <button onclick="QuickView.qty(1);">+</button>
+        </div>
+      </div>
+
+      <!-- Info rows -->
+      <div class="qv-pickup-row">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div>
+          <strong>{{ section.settings.pickup_location | default: 'Pickup available at California Warehouse' }}</strong>
+          <small>{{ section.settings.pickup_ready | default: 'Usually ready in 24 hours' }}</small>
+        </div>
+        <a href="/policies/shipping-policy">Check availability at other stores</a>
+      </div>
+
+      <div class="qv-info-rows-wrap">
+        <div class="qv-info-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 18H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3.93a2 2 0 0 0 1.66-.9l.82-1.2a2 2 0 0 1 1.66-.9H18a2 2 0 0 1 2 2v2"/><circle cx="7" cy="18" r="2"/><path d="M15 18H9"/><circle cx="17" cy="18" r="2"/><path d="M22 12v4a2 2 0 0 1-2 2h-1"/><path d="M14 12h4l3 3"/></svg>
+          {{ section.settings.delivery_text | default: 'Free delivery estimated' }}
+        </div>
+        <div class="qv-info-row">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+          {{ section.settings.returns_text | default: 'Free + easy returns' }}
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="qv-actions">
+        <button class="qv-btn qv-btn--cart" id="qv-add-cart" onclick="QuickView.addToCart();">Add to cart</button>
+        <button class="qv-btn qv-btn--buy" onclick="QuickView.buyNow();">Buy it now</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* ═══════════════════════════════════════════════════
+     QUICK VIEW MODAL — Full Product Details
+  ═══════════════════════════════════════════════════ */
+  var QuickView = (function () {
+    var overlay = document.getElementById('qv-overlay');
+    var gallery = document.getElementById('qv-gallery');
+    var thumbsWrap = document.getElementById('qv-gallery-thumbs');
+    var imgs = [];
+    var currentIdx = 0;
+    var qtyVal = 1;
+
+    function open(btn) {
+      var title = btn.getAttribute('data-product-title');
+      var price = btn.getAttribute('data-product-price');
+      var comparePrice = btn.getAttribute('data-product-compare-price');
+      var sku = btn.getAttribute('data-product-sku');
+      var available = btn.getAttribute('data-product-available') === 'true';
+      var url = btn.getAttribute('data-product-url');
+
+      document.getElementById('qv-title').textContent = title;
+      document.getElementById('qv-sku').textContent = sku || '';
+
+      /* Price with compare */
+      var priceEl = document.getElementById('qv-price');
+      if (comparePrice && comparePrice.trim() !== '') {
+        priceEl.innerHTML = '<span class="qv-price-sale">' + price + '</span> <span class="qv-price-compare">' + comparePrice + '</span>';
+        priceEl.classList.add('has-sale');
+      } else {
+        priceEl.textContent = price;
+        priceEl.classList.remove('has-sale');
+      }
+
+      document.getElementById('qv-stock-text').textContent = available ? '{{ section.settings.stock_text | default: "30 in stock" }}' : 'Out of stock';
+
+      /* Images */
+      try { imgs = JSON.parse(btn.getAttribute('data-product-images')); } catch (e) { imgs = []; }
+      var galleryImgs = gallery.querySelectorAll('img.qv-main-img');
+      galleryImgs.forEach(function (el) { el.remove(); });
+      thumbsWrap.innerHTML = '';
+
+      imgs.forEach(function (src, i) {
+        var img = document.createElement('img');
+        img.src = src;
+        img.className = 'qv-main-img' + (i === 0 ? ' is-active' : '');
+        img.loading = 'lazy';
+        gallery.insertBefore(img, thumbsWrap);
+
+        var thumb = document.createElement('span');
+        thumb.className = 'qv-thumb' + (i === 0 ? ' is-active' : '');
+        thumb.innerHTML = '<img src="' + src + '" loading="lazy" />';
+        thumb.onclick = function () { goTo(i); };
+        thumbsWrap.appendChild(thumb);
+      });
+      currentIdx = 0;
+
+      /* Options */
+      var optionsWrap = document.getElementById('qv-options');
+      optionsWrap.innerHTML = '';
+      try {
+        var options = JSON.parse(btn.getAttribute('data-product-options'));
+        var variants = JSON.parse(btn.getAttribute('data-product-variants'));
+        allVariants = variants;
+        selectedOptions = {};
+
+        /* Pre-select first value of each option */
+        options.forEach(function(o) { if (o.values && o.values.length) selectedOptions[o.name] = o.values[0]; });
+
+        options.forEach(function (opt) {
+          var div = document.createElement('div');
+          div.style.marginBottom = '0.5rem';
+
+          var label = document.createElement('p');
+          label.className = 'qv-option-label';
+          var firstVal = opt.values[0] || '';
+          label.innerHTML = opt.name.toUpperCase() + ' : <span style="font-weight:400;letter-spacing:0;text-transform:none">' + firstVal + '</span>';
+          div.appendChild(label);
+
+          var isColor = /color|colour|màu|mau/i.test(opt.name);
+          var isSize = /size|kích|kich|cỡ|co/i.test(opt.name);
+
+          var swatchWrap = document.createElement('div');
+          swatchWrap.className = isColor ? 'qv-color-swatches' : 'qv-size-swatches';
+
+          opt.values.forEach(function (val, idx) {
+            if (isColor) {
+              var swatch = document.createElement('span');
+              swatch.className = 'qv-color-swatch' + (idx === 0 ? ' is-active' : '');
+
+              /* Use variant image as thumbnail, fallback to color name mapping */
+              var variantImg = null;
+              for (var vi = 0; vi < variants.length; vi++) {
+                if (variants[vi].title && variants[vi].title.indexOf(val) > -1 && variants[vi].featured_image) {
+                  var fi = variants[vi].featured_image;
+                  variantImg = (typeof fi === 'string') ? fi : (fi.src || null);
+                  break;
+                }
+              }
+
+              if (variantImg) {
+                swatch.style.backgroundImage = 'url(' + variantImg + ')';
+                swatch.style.backgroundSize = 'cover';
+                swatch.style.backgroundPosition = 'center';
+              } else {
+                var colorMap = {
+                  'black':'#1a1a1a','white':'#f5f5f5','red':'#c0392b','blue':'#2980b9','green':'#27ae60',
+                  'yellow':'#f1c40f','orange':'#e67e22','purple':'#8e44ad','pink':'#e91e90','brown':'#6b4226',
+                  'grey':'#888','gray':'#888','navy':'#1a2744','beige':'#d4c8a8','cream':'#fffdd0',
+                  'khaki':'#c3b091','dark khaki':'#bdb76b','olive':'#556b2f','teal':'#008080','cyan':'#00bcd4',
+                  'maroon':'#800000','burgundy':'#800020','coral':'#ff7f50','salmon':'#fa8072','gold':'#ffd700',
+                  'silver':'#c0c0c0','tan':'#d2b48c','ivory':'#fffff0','lavender':'#e6e6fa','mint':'#98ff98',
+                  'charcoal':'#333','ash':'#b2beb5','sand':'#c2b280','wine':'#722f37','sage':'#bcb88a',
+                  'dark':'#222','light blue':'#add8e6','light green':'#90ee90','light pink':'#ffb6c1',
+                  'dark blue':'#00008b','dark green':'#006400','dark red':'#8b0000','dark brown':'#3e2723',
+                  'xanh':'#2980b9','đỏ':'#c0392b','đen':'#1a1a1a','trắng':'#f5f5f5','tím':'#8e44ad',
+                  'hồng':'#e91e90','nâu':'#6b4226','vàng':'#f1c40f','xám':'#888','kem':'#fffdd0',
+                  'xanh lá':'#27ae60','xanh dương':'#2980b9'
+                };
+                /* Try exact match, then check each word */
+                var bg = colorMap[val.toLowerCase()];
+                if (!bg) {
+                  var words = val.toLowerCase().split(/[\s\/\-]+/);
+                  for (var wi = 0; wi < words.length; wi++) {
+                    if (colorMap[words[wi]]) { bg = colorMap[words[wi]]; break; }
+                  }
+                }
+                swatch.style.backgroundColor = bg || '#ccc';
+              }
+
+              swatch.title = val;
+              swatch.onclick = function () {
+                swatchWrap.querySelectorAll('.qv-color-swatch').forEach(function (s) { s.classList.remove('is-active'); });
+                swatch.classList.add('is-active');
+                selectedOptions[opt.name] = val;
+                label.innerHTML = opt.name.toUpperCase() + ' : <span style="font-weight:400;letter-spacing:0;text-transform:none">' + val + '</span>';
+                /* Switch main gallery image to this variant */
+                if (variantImg) {
+                  var allImgs = gallery.querySelectorAll('img.qv-main-img');
+                  for (var gi = 0; gi < allImgs.length; gi++) {
+                    if (allImgs[gi].src.indexOf(variantImg.split('?')[0].split('/').pop()) > -1) {
+                      goTo(gi);
+                      break;
+                    }
+                  }
+                }
+              };
+              swatchWrap.appendChild(swatch);
+            } else {
+              var btn2 = document.createElement('button');
+              btn2.className = 'qv-size-swatch' + (idx === 0 ? ' is-active' : '');
+              btn2.textContent = val;
+              btn2.onclick = function () {
+                swatchWrap.querySelectorAll('.qv-size-swatch').forEach(function (s) { s.classList.remove('is-active'); });
+                btn2.classList.add('is-active');
+                selectedOptions[opt.name] = val;
+                label.innerHTML = opt.name.toUpperCase() + ' : <span style="font-weight:400;letter-spacing:0;text-transform:none">' + val + '</span>';
+              };
+              swatchWrap.appendChild(btn2);
+            }
+          });
+
+          div.appendChild(swatchWrap);
+          optionsWrap.appendChild(div);
+        });
+      } catch (e) {}
+
+      qtyVal = 1;
+      document.getElementById('qv-qty').textContent = '1';
+      overlay.classList.add('is-open');
+      /* Lock background scroll */
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      overlay.classList.remove('is-open');
+      /* Unlock background scroll */
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+    }
+
+    function goTo(idx, direction) {
+      var allImgs = gallery.querySelectorAll('img.qv-main-img');
+      var allThumbs = thumbsWrap.querySelectorAll('.qv-thumb');
+
+      /* Add slide-out class to current image */
+      var slideOut = direction === 'next' ? 'slide-left' : 'slide-right';
+      var slideIn = direction === 'next' ? 'slide-right' : 'slide-left';
+
+      if (direction && allImgs[currentIdx]) {
+        allImgs[currentIdx].classList.add(slideOut);
+      }
+
+      allImgs.forEach(function (el) { el.classList.remove('is-active'); });
+      allThumbs.forEach(function (el) { el.classList.remove('is-active'); });
+
+      if (allImgs[idx]) {
+        if (direction) {
+          allImgs[idx].classList.add(slideIn);
+          allImgs[idx].classList.add('is-active');
+          /* Force reflow then remove slide class */
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+              allImgs[idx].classList.remove(slideIn);
+              allImgs.forEach(function (el) { el.classList.remove(slideOut); });
+            });
+          });
+        } else {
+          allImgs[idx].classList.add('is-active');
+        }
+      }
+      if (allThumbs[idx]) {
+        allThumbs[idx].classList.add('is-active');
+        allThumbs[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+      currentIdx = idx;
+    }
+
+    function prevImg() { goTo(currentIdx > 0 ? currentIdx - 1 : imgs.length - 1, 'prev'); }
+    function nextImg() { goTo(currentIdx < imgs.length - 1 ? currentIdx + 1 : 0, 'next'); }
+
+    function qty(delta) {
+      qtyVal = Math.max(1, qtyVal + delta);
+      document.getElementById('qv-qty').textContent = qtyVal;
+    }
+
+    /* Track selected variant */
+    var selectedOptions = {};
+    var allVariants = [];
+
+    function getSelectedVariantId() {
+      var opts = Object.values(selectedOptions);
+      for (var v = 0; v < allVariants.length; v++) {
+        var title = allVariants[v].title || '';
+        var match = true;
+        for (var o = 0; o < opts.length; o++) {
+          if (title.indexOf(opts[o]) === -1) { match = false; break; }
+        }
+        if (match) return allVariants[v].id;
+      }
+      return allVariants.length ? allVariants[0].id : null;
+    }
+
+    function addToCart() {
+      var variantId = getSelectedVariantId();
+      if (!variantId) { alert('Please select options'); return; }
+      var cartBtn = document.getElementById('qv-add-cart');
+      cartBtn.textContent = 'Adding...';
+      cartBtn.disabled = true;
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: [{ id: variantId, quantity: qtyVal }] })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function() {
+        cartBtn.textContent = '✓ Added!';
+        setTimeout(function() {
+          cartBtn.textContent = 'Add to cart';
+          cartBtn.disabled = false;
+        }, 1500);
+      })
+      .catch(function() {
+        cartBtn.textContent = 'Error';
+        setTimeout(function() {
+          cartBtn.textContent = 'Add to cart';
+          cartBtn.disabled = false;
+        }, 1500);
+      });
+    }
+
+    function buyNow() {
+      var variantId = getSelectedVariantId();
+      if (!variantId) { alert('Please select options'); return; }
+      window.location.href = '/cart/clear?return_to=/checkout?line_items[][variant_id]=' + variantId + '%26line_items[][quantity]=' + qtyVal;
+    }
+
+    return { open: open, close: close, prevImg: prevImg, nextImg: nextImg, qty: qty, addToCart: addToCart, buyNow: buyNow };
+  }());
+</script>

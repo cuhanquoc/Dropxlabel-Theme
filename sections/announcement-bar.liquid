@@ -2,106 +2,10 @@
   ─────────────────────────────────────────
   ANNOUNCEMENT BAR — Top Banner
   Editable text, colors, and animation
+  CSS → src/input.css
   ─────────────────────────────────────────
 {% endcomment %}
 
-<style>
-  .announcement-bar {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-    z-index: 60;
-    padding: 10px 1rem;
-    text-align: center;
-    font-family: var(--font-body);
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .announcement-bar a {
-    color: inherit;
-    text-decoration: none;
-    transition: opacity 0.3s ease;
-  }
-
-  .announcement-bar a:hover {
-    opacity: 0.75;
-  }
-
-  /* ── Animation: Slide Down ── */
-  @keyframes ab-slide-down {
-    from { transform: translateY(-100%); opacity: 0; }
-    to   { transform: translateY(0);     opacity: 1; }
-  }
-
-  /* ── Animation: Fade In ── */
-  @keyframes ab-fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  /* ── Animation: Marquee Scroll ── */
-  @keyframes ab-marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-
-  .announcement-bar[data-animation="slide_down"] {
-    animation: ab-slide-down 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  .announcement-bar[data-animation="fade_in"] {
-    animation: ab-fade-in 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  }
-
-  .announcement-bar[data-animation="marquee"] .ab-marquee-track {
-    display: flex;
-    width: max-content;
-    animation: ab-marquee 18s linear infinite;
-    will-change: transform;
-  }
-
-  .announcement-bar[data-animation="marquee"] .ab-marquee-track:hover {
-    animation-play-state: paused;
-  }
-
-  .ab-marquee-item {
-    white-space: nowrap;
-    padding: 0 3rem;
-  }
-
-  .ab-static-text {
-    display: inline-block;
-  }
-
-  /* Hide marquee track for non-marquee modes */
-  .announcement-bar:not([data-animation="marquee"]) .ab-marquee-track {
-    display: none;
-  }
-
-  .announcement-bar[data-animation="marquee"] .ab-static-text {
-    display: none;
-  }
-
-  /* ── Desktop (≥ 768px) ── */
-  @media (min-width: 768px) {
-    .announcement-bar {
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      padding: 10px 2rem;
-    }
-  }
-
-  /* ── Mobile (< 768px) ── */
-  @media (max-width: 767px) {
-    .announcement-bar {
-      font-size: 0.62rem;
-      letter-spacing: 0.1em;
-      padding: 8px 0.75rem;
-    }
-  }
-</style>
 
 {% if section.settings.show_bar %}
   <div
