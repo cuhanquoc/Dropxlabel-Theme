@@ -152,15 +152,51 @@
     },
     "marquee_ticker_6CKgye": {
       "type": "marquee-ticker",
-      "name": "Marquee Ticker",
+      "blocks": {
+        "card_1": {
+          "type": "product_card",
+          "settings": {
+            "card_color": "#F0E068"
+          }
+        },
+        "card_2": {
+          "type": "product_card",
+          "settings": {
+            "card_color": "#B8A8E8"
+          }
+        },
+        "card_3": {
+          "type": "product_card",
+          "settings": {
+            "card_color": "#D88CC4"
+          }
+        },
+        "card_4": {
+          "type": "product_card",
+          "settings": {
+            "card_color": "#C8E040"
+          }
+        },
+        "card_5": {
+          "type": "product_card",
+          "settings": {
+            "card_color": "#E8A0B0"
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4",
+        "card_5"
+      ],
       "settings": {
         "heading": "TRENDING STYLES YOU CAN'T MISS!",
         "description_1": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers. Each piece is thoughtfully selected for its quality, comfort, and popularity, making it easy to stay stylish without compromising on ease.",
         "description_2": "From everyday essentials to standout statement looks, our bestsellers offer something for every wardrobe. Refresh your style with fashion that blends modern design and timeless appeal, and stay ahead of the curve with pieces that truly make an impact.",
         "cta_text": "SHOP NOW",
-        "cta_url": "shopify://products/american-danish-flag-graphic-tee-usa-denmark-dual-flag-t-shirt-for-fashionalble-person",
-        "collection": "minimalism",
-        "max_products": 5
+        "cta_url": "shopify://products/american-danish-flag-graphic-tee-usa-denmark-dual-flag-t-shirt-for-fashionalble-person"
       }
     },
     "customer-help-center": {

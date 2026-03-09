@@ -1,4 +1,4 @@
-{% comment %} TRENDING STYLES — Featured Products with Colorful Cards {% endcomment %}
+{% comment %} TRENDING STYLES — Product Cards with Blocks {% endcomment %}
 
 <section class="relative overflow-hidden" style="background-color: #0a0a0a;">
   <!-- Subtle gradient glow background -->
@@ -23,7 +23,7 @@
       </p>
     {% endif %}
 
-    <!-- ── CTA Button — pill with arrow ── -->
+    <!-- ── CTA Button ── -->
     {% if section.settings.cta_text != blank %}
       <a href="{{ section.settings.cta_url | default: '/collections/all' }}"
          class="inline-flex items-center gap-3 rounded-full border border-white/20 bg-transparent hover:bg-white/5 transition-all duration-300 pr-6 pl-1.5 py-1.5 mb-12 md:mb-16 min-h-[48px] group">
@@ -38,79 +38,73 @@
       </a>
     {% endif %}
 
-    <!-- ── Product Cards ── -->
-    {% assign collection = section.settings.collection %}
-    {% assign card_colors = 'F0E068,B8A8E8,D88CC4,C8E040,E8A0B0,A8D8EA,FFD699,C4E8B0' | split: ',' %}
-    {% assign max_products = section.settings.max_products | default: 6 %}
+    <!-- ── Product Cards from Blocks ── -->
+    {% if section.blocks.size > 0 %}
+      <div class="rounded-2xl border border-white/[0.08] p-3 md:p-4 flex flex-col gap-3 md:gap-4">
+        {% for block in section.blocks %}
+          {% if block.type == 'product_card' %}
+            {% assign product = block.settings.product %}
+            {% assign bg = block.settings.card_color | default: '#F0E068' %}
 
-    <div class="rounded-2xl border border-white/[0.08] p-3 md:p-4 flex flex-col gap-3 md:gap-4">
-      {% if collection != blank %}
-        {% for product in collection.products limit: max_products %}
-          {% assign color_index = forloop.index0 | modulo: card_colors.size %}
-          {% assign bg_color = card_colors[color_index] %}
+            {% if product != blank %}
+              <a href="{{ product.url }}"
+                 class="flex items-center gap-4 md:gap-5 rounded-xl md:rounded-2xl p-3 md:p-4 transition-transform duration-300 hover:scale-[1.01] min-h-[100px] group"
+                 style="background-color: {{ bg }};"
+                 {{ block.shopify_attributes }}>
+                <!-- Product Image -->
+                <div class="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-lg md:rounded-xl overflow-hidden shrink-0 bg-white/20">
+                  {% if product.featured_image != blank %}
+                    <img src="{{ product.featured_image | image_url: width: 280 }}"
+                         alt="{{ product.title | escape }}"
+                         loading="lazy" width="280" height="280"
+                         class="w-full h-full object-cover">
+                  {% endif %}
+                </div>
 
-          <a href="{{ product.url }}"
-             class="flex items-center gap-4 md:gap-5 rounded-xl md:rounded-2xl p-3 md:p-4 transition-transform duration-300 hover:scale-[1.01] min-h-[100px] group"
-             style="background-color: #{{ bg_color }};">
-            <!-- Product Image -->
-            <div class="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-lg md:rounded-xl overflow-hidden shrink-0 bg-white/20">
-              {% if product.featured_image != blank %}
-                <img src="{{ product.featured_image | image_url: width: 280 }}"
-                     alt="{{ product.title | escape }}"
-                     loading="lazy" width="280" height="280"
-                     class="w-full h-full object-cover">
-              {% endif %}
-            </div>
+                <!-- Product Info -->
+                <div class="flex-1 min-w-0">
+                  <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: #0a0a0a; margin-bottom: 0.35rem;">
+                    {{ product.title }}
+                  </p>
+                  <p style="font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; color: #0a0a0a;">
+                    {{ product.price | money }}
+                  </p>
+                </div>
 
-            <!-- Product Info -->
-            <div class="flex-1 min-w-0">
-              <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: #0a0a0a; margin-bottom: 0.35rem;">
-                {{ product.title }}
-              </p>
-              <p style="font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; color: #0a0a0a;">
-                {{ product.price | money }}
-              </p>
-            </div>
-
-            <!-- Arrow Icon -->
-            <span class="w-11 h-11 rounded-full border-2 border-[#0a0a0a]/20 flex items-center justify-center shrink-0 group-hover:border-[#0a0a0a]/40 transition-colors duration-300">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0a0a0a" stroke-width="1.8">
-                <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/>
-              </svg>
-            </span>
-          </a>
+                <!-- Arrow Icon -->
+                <span class="w-11 h-11 rounded-full border-2 border-[#0a0a0a]/20 flex items-center justify-center shrink-0 group-hover:border-[#0a0a0a]/40 transition-colors duration-300">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0a0a0a" stroke-width="1.8">
+                    <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/>
+                  </svg>
+                </span>
+              </a>
+            {% else %}
+              <!-- Placeholder when no product selected -->
+              <div class="flex items-center gap-4 md:gap-5 rounded-xl md:rounded-2xl p-3 md:p-4 min-h-[100px]"
+                   style="background-color: {{ bg }};"
+                   {{ block.shopify_attributes }}>
+                <div class="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-lg md:rounded-xl overflow-hidden shrink-0 bg-white/30">
+                  {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: #0a0a0a; margin-bottom: 0.35rem;">
+                    Select a product
+                  </p>
+                  <p style="font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; color: #0a0a0a;">
+                    $0.00
+                  </p>
+                </div>
+                <span class="w-11 h-11 rounded-full border-2 border-[#0a0a0a]/20 flex items-center justify-center shrink-0">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0a0a0a" stroke-width="1.8">
+                    <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/>
+                  </svg>
+                </span>
+              </div>
+            {% endif %}
+          {% endif %}
         {% endfor %}
-      {% else %}
-        <!-- Placeholder cards when no collection selected -->
-        {% assign placeholder_names = 'Summer Shirt,Women Sweater,Loose T-shirt,Wool Overcoat,Sports Bra' | split: ',' %}
-        {% assign placeholder_prices = '$1,200.00 USD,$4,500.00 USD,$3,500.00 USD,$4,500.00 USD,$4,500.00 USD' | split: ',' %}
-
-        {% for name in placeholder_names %}
-          {% assign color_index = forloop.index0 | modulo: card_colors.size %}
-          {% assign bg_color = card_colors[color_index] %}
-
-          <div class="flex items-center gap-4 md:gap-5 rounded-xl md:rounded-2xl p-3 md:p-4 min-h-[100px]"
-               style="background-color: #{{ bg_color }};">
-            <div class="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-lg md:rounded-xl overflow-hidden shrink-0 bg-white/30">
-              {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'placeholder-svg' }}
-            </div>
-            <div class="flex-1 min-w-0">
-              <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: #0a0a0a; margin-bottom: 0.35rem;">
-                {{ name }}
-              </p>
-              <p style="font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; color: #0a0a0a;">
-                {{ placeholder_prices[forloop.index0] }}
-              </p>
-            </div>
-            <span class="w-11 h-11 rounded-full border-2 border-[#0a0a0a]/20 flex items-center justify-center shrink-0">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0a0a0a" stroke-width="1.8">
-                <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/>
-              </svg>
-            </span>
-          </div>
-        {% endfor %}
-      {% endif %}
-    </div>
+      </div>
+    {% endif %}
 
   </div>
 </section>
@@ -152,29 +146,37 @@
       "type": "url",
       "id": "cta_url",
       "label": "Button URL"
-    },
+    }
+  ],
+  "blocks": [
     {
-      "type": "header",
-      "content": "Products"
-    },
-    {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection"
-    },
-    {
-      "type": "range",
-      "id": "max_products",
-      "label": "Max Products to Show",
-      "min": 2,
-      "max": 10,
-      "step": 1,
-      "default": 5
+      "type": "product_card",
+      "name": "Product Card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "color",
+          "id": "card_color",
+          "label": "Card Background Color",
+          "default": "#F0E068"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Trending Styles"
+      "name": "Trending Styles",
+      "blocks": [
+        { "type": "product_card", "settings": { "card_color": "#F0E068" } },
+        { "type": "product_card", "settings": { "card_color": "#B8A8E8" } },
+        { "type": "product_card", "settings": { "card_color": "#D88CC4" } },
+        { "type": "product_card", "settings": { "card_color": "#C8E040" } },
+        { "type": "product_card", "settings": { "card_color": "#E8A0B0" } }
+      ]
     }
   ]
 }
