@@ -37,9 +37,6 @@
     transform: translate(-50%, -50%) rotate(90deg);
     opacity: 0;
   }
-
-  /* Accordion body: Alpine x-show handles visibility.
-     On desktop, the nav is always visible via md:!block override. */
 </style>
 
 <footer id="site-footer" class="block bg-[#0a0a0a] text-white font-body" role="contentinfo">
@@ -96,7 +93,7 @@
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
-          class="flex flex-col gap-0"
+          class="flex flex-col gap-0 md:!block"
           data-ft-panel
           style="display:none"
           aria-label="{{ section.settings.col2_title | default: 'Quick links' }}"
@@ -127,7 +124,7 @@
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
-          class="flex flex-col gap-0"
+          class="flex flex-col gap-0 md:!block"
           data-ft-panel
           style="display:none"
           aria-label="{{ section.settings.col3_title | default: 'Support' }}"
@@ -157,7 +154,7 @@
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
-          class="flex flex-col gap-0"
+          class="flex flex-col gap-0 md:!block"
           data-ft-panel
           style="display:none"
           aria-label="Social media links"
