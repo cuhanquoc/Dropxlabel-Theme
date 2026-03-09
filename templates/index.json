@@ -14,7 +14,7 @@
       "settings": {
         "eyebrow_text": "buy 2 get 3",
         "headline": "Small Pieces Of Art You Can Wear",
-        "subheadline": "Life’s Too Short for Boring T-Shirts",
+        "subheadline": "Summer is waitting you",
         "cta_text": "Explore Now",
         "cta_url": "shopify://collections/all",
         "marquee_text": "ORIGINAL",
@@ -90,7 +90,7 @@
         "bg_color": "#ffffff",
         "cta_text": "View All",
         "cta_url": "",
-        "qv_modal_bg": "#0e0e0e",
+        "qv_modal_bg": "#937878",
         "qv_gallery_bg": "#ffffff",
         "qv_title_color": "#ffffff",
         "qv_price_color": "#ffffff",
@@ -111,7 +111,7 @@
       "type": "brand-story-bento",
       "settings": {
         "heading": "<em>FASHION</em> THAT<br>FLOWS WITH<br>THE SEASONS",
-        "description": "Explore our latest collection of timeless fashion. From classic styles to modern trends, find the perfect look for every season. Shop now and elevate your wardrobe!",
+        "description": "Explore our latest collection. From classic styles to modern trends, find the perfect look for every season. Shop now and elevate your wardrobe!",
         "button_text": "Explore More",
         "button_url": "",
         "bg_color": "#f2f0ec",
