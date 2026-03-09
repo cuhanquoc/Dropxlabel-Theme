@@ -136,30 +136,21 @@
     .mt-card { width: 320px; }
   }
 
-  /* ── Mobile (< 768px): JS hybrid auto-scroll + manual swipe ── */
+  /* ── Mobile (< 768px): JS-driven transform auto + touch drag ── */
   @media (max-width: 767px) {
     .mt-section {
       padding: 1.5rem 0;
-      overflow: visible;
+      /* overflow: hidden stays from base — no spillover */
     }
 
     .mt-section::before,
     .mt-section::after {
-      display: none;
+      width: 24px;
     }
 
-    /* Disable CSS animation; JS handles auto-scroll */
+    /* Disable CSS animation on mobile; JS drives transform */
     .mt-track {
       animation: none !important;
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding: 0 1.5rem;
-    }
-
-    .mt-track::-webkit-scrollbar {
-      display: none;
     }
 
     .mt-card {
@@ -168,25 +159,6 @@
 
     .mt-card-title {
       font-size: 0.875rem;
-    }
-
-    /* Scroll Progress Bar */
-    .mt-scroll-bar {
-      display: block;
-      margin: 1rem 1.5rem 0;
-      height: 4px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .mt-scroll-thumb {
-      display: block;
-      height: 100%;
-      background: rgba(255,255,255,0.4);
-      border-radius: 4px;
-      width: 25%;
-      transition: transform 150ms ease;
     }
   }
 
@@ -302,67 +274,77 @@
       {% endif %}
     {% endfor %}
   </div>
-
-  <!-- Scroll Progress Bar (mobile only) -->
-  <div class="mt-scroll-bar" id="mt-scroll-bar">
-    <div class="mt-scroll-thumb" id="mt-scroll-thumb"></div>
-  </div>
 </section>
 
 <script>
   (function() {
     var track = document.getElementById('mt-track');
-    var thumb = document.getElementById('mt-scroll-thumb');
-    if (!track || !thumb) return;
+    if (!track) return;
 
-    /* ── Scroll bar thumb sync ── */
-    function updateThumb() {
-      var sw = track.scrollWidth - track.clientWidth;
-      if (sw <= 0) return;
-      var progress = track.scrollLeft / sw;
-      var barW = thumb.parentElement.clientWidth;
-      var tW = thumb.clientWidth;
-      thumb.style.transform = 'translateX(' + (progress * (barW - tW)) + 'px)';
-    }
+    /* Only run on mobile */
+    var mq = window.matchMedia('(max-width: 767px)');
+    if (!mq.matches) return;
 
-    track.addEventListener('scroll', updateThumb, { passive: true });
-
-    /* ── Mobile: JS-driven auto-scroll + touch takeover ── */
-    var isMobile = window.matchMedia('(max-width: 767px)');
-    if (!isMobile.matches) return;
-
-    var speed = 0.5; /* px per frame */
-    var raf = null;
+    var posX = 0;           /* current translateX position (negative) */
+    var speed = 0.5;        /* px per frame for auto-scroll */
     var touching = false;
+    var startTouchX = 0;
+    var startPosX = 0;
     var resumeTimer = null;
+    var halfWidth = 0;
 
-    function autoScroll() {
-      if (!touching) {
-        track.scrollLeft += speed;
-        /* Loop: when past halfway (duplicate), jump back */
-        var half = track.scrollWidth / 2;
-        if (track.scrollLeft >= half) {
-          track.scrollLeft -= half;
-        }
-      }
-      raf = requestAnimationFrame(autoScroll);
+    function measureHalf() {
+      /* half = total width of first copy of blocks */
+      halfWidth = track.scrollWidth / 2;
+    }
+    measureHalf();
+
+    function setTransform(x) {
+      track.style.transform = 'translateX(' + x + 'px)';
     }
 
-    /* Start auto-scroll */
-    raf = requestAnimationFrame(autoScroll);
+    /* ── Auto-scroll loop ── */
+    function tick() {
+      if (!touching) {
+        posX -= speed;
+        /* Seamless loop: jump back when past halfway */
+        if (Math.abs(posX) >= halfWidth) {
+          posX += halfWidth;
+        }
+        setTransform(posX);
+      }
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
 
-    /* Touch: pause auto, let user drag freely */
-    track.addEventListener('touchstart', function() {
+    /* ── Touch: pause auto, let user drag ── */
+    track.addEventListener('touchstart', function(e) {
       touching = true;
       if (resumeTimer) clearTimeout(resumeTimer);
+      startTouchX = e.touches[0].clientX;
+      startPosX = posX;
     }, { passive: true });
 
-    /* Touch end: resume auto-scroll after 1.5s */
+    track.addEventListener('touchmove', function(e) {
+      if (!touching) return;
+      var dx = e.touches[0].clientX - startTouchX;
+      posX = startPosX + dx;
+
+      /* Wrap around for seamless feel */
+      if (posX > 0) posX -= halfWidth;
+      if (Math.abs(posX) >= halfWidth) posX += halfWidth;
+
+      setTransform(posX);
+    }, { passive: true });
+
     track.addEventListener('touchend', function() {
+      /* Resume auto-scroll after 1.5s */
       resumeTimer = setTimeout(function() {
         touching = false;
       }, 1500);
     }, { passive: true });
+
+    window.addEventListener('resize', measureHalf);
   })();
 </script>
 
