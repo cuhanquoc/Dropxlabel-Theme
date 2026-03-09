@@ -36,21 +36,25 @@
     will-change: transform;
   }
 
+  /* 4px grid: 0.25rem = 4px, 0.5rem = 8px, 0.75rem = 12px,
+     1rem = 16px, 1.25rem = 20px, 1.5rem = 24px, 2rem = 32px,
+     2.5rem = 40px, 3rem = 48px, 4rem = 64px, 5rem = 80px */
+
   /* ── Text Panel (inline in the track) ── */
   .bsb-text {
     flex: 0 0 380px;
     max-width: 380px;
-    padding-top: 2rem;
+    padding-top: 2rem; /* 32px */
   }
 
   .bsb-heading {
     font-family: var(--font-heading);
-    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
     font-weight: 800;
     line-height: 1.08;
     letter-spacing: 0.02em;
     color: #0a0a0a;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.5rem; /* 24px */
   }
 
   .bsb-heading em {
@@ -60,8 +64,8 @@
 
   .bsb-desc {
     font-family: var(--font-body);
-    font-size: 0.85rem;
-    line-height: 1.85;
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.75;
     color: #555;
     max-width: 320px;
     margin-bottom: 2rem;
@@ -70,14 +74,14 @@
   .bsb-cta-wrap {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.75rem; /* 12px */
   }
 
   .bsb-cta-icon {
-    width: 44px;
-    height: 44px;
+    width: 48px; /* 48px = 12×4 */
+    height: 48px;
     border-radius: 50%;
-    border: 1.5px solid #0a0a0a;
+    border: 2px solid #0a0a0a;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -93,11 +97,11 @@
 
   .bsb-cta-btn {
     display: inline-block;
-    padding: 0.7rem 1.6rem;
-    border: 1.5px solid #0a0a0a;
+    padding: 0.75rem 1.5rem; /* 12px 24px */
+    border: 2px solid #0a0a0a;
     border-radius: 9999px;
     font-family: var(--font-body);
-    font-size: 0.78rem;
+    font-size: 0.75rem; /* 12px */
     font-weight: 600;
     letter-spacing: 0.02em;
     color: #0a0a0a;
@@ -122,8 +126,8 @@
     aspect-ratio: 4/3;
     border-radius: 16px;
     overflow: hidden;
-    border: 5px solid rgba(255,255,255,0.85);
-    box-shadow: 0 4px 30px rgba(0,0,0,0.06);
+    border: 4px solid rgba(255,255,255,0.85); /* 4px */
+    box-shadow: 0 4px 32px rgba(0,0,0,0.06); /* 32px */
     background-color: #e8e5e0;
   }
 
@@ -141,38 +145,38 @@
   /* Floating tag on image */
   .bsb-card-tag {
     position: absolute;
-    bottom: 1rem;
-    left: 1rem;
+    bottom: 1rem; /* 16px */
+    left: 1rem; /* 16px */
     background-color: rgba(255,255,255,0.92);
     backdrop-filter: blur(8px);
-    padding: 0.6rem 1rem;
-    border-radius: 10px;
+    padding: 0.5rem 1rem; /* 8px 16px */
+    border-radius: 8px; /* 8px = 2×4 */
     font-family: var(--font-body);
-    font-size: 0.82rem;
+    font-size: 0.75rem; /* 12px */
     font-weight: 600;
     color: #0a0a0a;
     line-height: 1.4;
-    max-width: 200px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    max-width: 200px; /* 200px = 50×4 */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   }
 
   /* Card bottom: title + button stacked */
   .bsb-card-bottom {
-    padding: 1.25rem 0.25rem 1.5rem;
+    padding: 1.25rem 0.25rem 1.5rem; /* 20px 4px 24px */
   }
 
   .bsb-card-title {
     font-family: var(--font-heading);
-    font-size: 1.6rem;
+    font-size: 1.5rem; /* 24px */
     font-weight: 700;
     color: #0a0a0a;
     letter-spacing: -0.02em;
-    margin-bottom: 0.85rem;
+    margin-bottom: 0.75rem; /* 12px */
   }
 
   .bsb-card-link {
     display: inline-block;
-    padding: 0.65rem 1.8rem;
+    padding: 0.75rem 1.75rem; /* 12px 28px */
     border: 2px solid #0a0a0a;
     border-radius: 9999px;
     font-family: var(--font-body);
@@ -196,21 +200,21 @@
     width: 100%;
     height: 2px;
     background: linear-gradient(to right, #b0ada8, #d6d3ce);
-    margin-top: 0.25rem;
+    margin-top: 0.25rem; /* 4px */
     border-radius: 2px;
   }
 
   /* ── Mobile ── */
   @media (max-width: 767px) {
     .bsb-track-wrapper {
-      padding: 3rem 0 2rem;
+      padding: 3rem 0 2rem; /* 48px 0 32px */
       overflow: visible;
     }
 
     .bsb-track {
       flex-direction: column;
       gap: 2rem;
-      padding: 0 1.25rem;
+      padding: 0 1.25rem; /* 0 20px */
       overflow: visible;
     }
 
@@ -227,18 +231,18 @@
 
     .bsb-desc {
       font-size: 0.8rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.5rem; /* 24px */
     }
 
     /* On mobile: cards become a continuous horizontal scroll */
     .bsb-mobile-cards {
       display: flex;
-      gap: 1.25rem;
+      gap: 1rem; /* 16px */
       overflow-x: auto;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      padding: 0.5rem 1.75rem;
+      padding: 0.5rem 1.5rem; /* 8px 24px */
       margin: 0 -1.25rem;
     }
 
@@ -253,21 +257,21 @@
     }
 
     .bsb-card-title {
-      font-size: 1.15rem;
+      font-size: 1.25rem; /* 20px */
     }
 
     .bsb-card-link {
-      font-size: 0.65rem;
-      padding: 0.45rem 1.2rem;
+      font-size: 0.75rem; /* 12px */
+      padding: 0.5rem 1.25rem; /* 8px 20px */
     }
 
     /* ── Scroll Progress Bar ── */
     .bsb-scroll-bar-track {
       display: block;
-      margin: 1.5rem 1.25rem 0;
-      height: 3px;
+      margin: 1.5rem 1.5rem 0; /* 24px 24px 0 */
+      height: 4px;
       background: rgba(0,0,0,0.08);
-      border-radius: 3px;
+      border-radius: 4px;
       overflow: hidden;
     }
 
@@ -275,7 +279,7 @@
       display: block;
       height: 100%;
       background: #0a0a0a;
-      border-radius: 3px;
+      border-radius: 4px;
       width: 33%;
       transition: transform 150ms ease;
     }
