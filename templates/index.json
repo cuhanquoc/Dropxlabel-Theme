@@ -113,21 +113,12 @@
         "heading": "<em>FASHION</em> THAT<br>FLOWS WITH<br>THE SEASONS",
         "description": "Explore our latest collection. From classic styles to modern trends, find the perfect look for every season. Shop now and elevate your wardrobe!",
         "button_text": "Explore More",
-        "button_url": "",
+        "button_url": "shopify://collections/best-sellers",
         "bg_image": "{{ metaobjects[\"shopify--color-pattern\"].asphalt.image.value }}",
         "bg_color": "#f2f0ec",
-        "card1_tag": "Elegant Collection",
-        "card1_title": "Elegant n Chic",
-        "card1_button": "discover",
-        "card1_url": "shopify://collections/elegant",
-        "card2_tag": "Old Money Collection",
-        "card2_title": "Quiet Luxury Vibes",
-        "card2_button": "discover",
-        "card2_url": "shopify://collections/old-money",
-        "card3_tag": "Basic Collection",
-        "card3_title": "Simple",
-        "card3_button": "discover",
-        "card3_url": ""
+        "card1_collection": "best-sellers",
+        "card2_collection": "bikini",
+        "card3_collection": "dark-light-academia"
       }
     },
     "trending-accordion": {
