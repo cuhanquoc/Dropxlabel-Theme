@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-banner": {
@@ -104,12 +113,9 @@
         "heading": "<em>FASHION</em> THAT<br>FLOWS WITH<br>THE SEASONS",
         "description": "Explore our latest collection. From classic styles to modern trends, find the perfect look for every season. Shop now and elevate your wardrobe!",
         "button_text": "Explore More",
-        "button_url": "shopify://collections/best-sellers",
+        "button_url": "",
         "bg_image": "{{ metaobjects[\"shopify--color-pattern\"].asphalt.image.value }}",
-        "bg_color": "#f2f0ec",
-        "card1_collection": "best-sellers",
-        "card2_collection": "bikini",
-        "card3_collection": "dark-light-academia"
+        "bg_color": "#f2f0ec"
       }
     },
     "trending-accordion": {
@@ -306,7 +312,7 @@
       "name": "Marquee Ticker",
       "settings": {
         "bg_color": "#0a0a0a",
-        "speed": 80,
+        "speed": 45,
         "gap": 48,
         "card_width": 260
       }
