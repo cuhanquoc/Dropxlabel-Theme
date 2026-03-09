@@ -29,18 +29,43 @@
           "mega_column_C3a3D7": {
             "type": "mega_column",
             "settings": {
-              "title": "Shirt",
+              "title": "Items",
               "title_font_size": 20,
               "title_font_weight": "700",
               "title_color": "#1a1a1a",
-              "link_1_label": "Funny",
-              "link_1_url": "https://dearnest.co/collections/funny-design",
-              "link_2_label": "Embroidered",
-              "link_2_url": "https://dearnest.co/collections/embroidered",
-              "link_3_label": "Christmas",
-              "link_3_url": "https://dearnest.co/collections/christmas",
-              "link_4_label": "Haloween",
-              "link_4_url": "https://dearnest.co/collections/halloween",
+              "link_1_label": "Dress",
+              "link_1_url": "shopify://collections/dress",
+              "link_2_label": "Top",
+              "link_2_url": "shopify://collections/top",
+              "link_3_label": "Shirt",
+              "link_3_url": "shopify://collections/tshirt",
+              "link_4_label": "Skirt/Short",
+              "link_4_url": "shopify://collections/skirt",
+              "link_5_label": "Pants",
+              "link_5_url": "shopify://collections/pants",
+              "link_6_label": "Jeans",
+              "link_6_url": "shopify://collections/jeans",
+              "link_7_label": "Bodysuit",
+              "link_7_url": "shopify://collections/bodysuits",
+              "link_8_label": "",
+              "link_8_url": ""
+            }
+          },
+          "mega_column_GK8mxQ": {
+            "type": "mega_column",
+            "settings": {
+              "title": "Seasons",
+              "title_font_size": 24,
+              "title_font_weight": "700",
+              "title_color": "#1a1a1a",
+              "link_1_label": "Summer Collection",
+              "link_1_url": "",
+              "link_2_label": "",
+              "link_2_url": "",
+              "link_3_label": "",
+              "link_3_url": "",
+              "link_4_label": "",
+              "link_4_url": "",
               "link_5_label": "",
               "link_5_url": "",
               "link_6_label": "",
@@ -50,17 +75,44 @@
               "link_8_label": "",
               "link_8_url": ""
             }
+          },
+          "mega_column_ypJYC9": {
+            "type": "mega_column",
+            "settings": {
+              "title": "Styles",
+              "title_font_size": 19,
+              "title_font_weight": "700",
+              "title_color": "#1a1a1a",
+              "link_1_label": "Basic",
+              "link_1_url": "shopify://collections/minimalism",
+              "link_2_label": "Vintage",
+              "link_2_url": "shopify://collections/vintage",
+              "link_3_label": "Elegant",
+              "link_3_url": "shopify://collections/elegant",
+              "link_4_label": "Old Money",
+              "link_4_url": "shopify://collections/old-money",
+              "link_5_label": "Cottage",
+              "link_5_url": "shopify://collections/cottage",
+              "link_6_label": "Dark/ Light Academia",
+              "link_6_url": "shopify://collections/dark-light-academia",
+              "link_7_label": "",
+              "link_7_url": "",
+              "link_8_label": "",
+              "link_8_url": ""
+            }
           }
         },
         "block_order": [
-          "mega_column_C3a3D7"
+          "mega_column_C3a3D7",
+          "mega_column_GK8mxQ",
+          "mega_column_ypJYC9"
         ],
         "settings": {
           "logo_width": 120,
           "logo_text": "dearnest",
-          "mega_image_label": "Women's Fashion",
+          "mega_image_label": "Styles",
           "mega_image_link": "",
-          "mega_video_label": "Men's Fashion",
+          "mega_video_label": "Items",
           "mega_video_link": ""
         }
       },
