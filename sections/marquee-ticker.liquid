@@ -136,11 +136,71 @@
     .mt-card { width: 320px; }
   }
 
-  /* ── Mobile (< 768px) ── */
+  /* ── Mobile (< 768px): manual swipe instead of auto-scroll ── */
   @media (max-width: 767px) {
-    .mt-section { padding: 1.5rem 0; }
-    .mt-card { width: 220px; }
-    .mt-card-title { font-size: 0.85rem; }
+    .mt-section {
+      padding: 1.5rem 0;
+    }
+
+    /* Hide fade edges on mobile for cleaner swipe */
+    .mt-section::before,
+    .mt-section::after {
+      width: 32px;
+    }
+
+    /* Stop auto-animation, enable manual scroll */
+    .mt-track {
+      animation: none !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding: 0 1.5rem;
+      scroll-behavior: auto;
+    }
+
+    .mt-track::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Duplicate cards not needed for manual scroll */
+    .mt-card[aria-hidden="true"] {
+      display: none;
+    }
+
+    .mt-card {
+      width: 220px;
+    }
+
+    .mt-card-title {
+      font-size: 0.875rem;
+    }
+
+    /* Scroll Progress Bar */
+    .mt-scroll-bar {
+      display: block;
+      margin: 1rem 1.5rem 0;
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .mt-scroll-thumb {
+      display: block;
+      height: 100%;
+      background: rgba(255,255,255,0.4);
+      border-radius: 4px;
+      width: 25%;
+      transition: transform 150ms ease;
+    }
+  }
+
+  /* Desktop: hide scroll bar + ensure duplicates show */
+  @media (min-width: 768px) {
+    .mt-scroll-bar {
+      display: none;
+    }
   }
 </style>
 
@@ -248,7 +308,33 @@
       {% endif %}
     {% endfor %}
   </div>
+
+  <!-- Scroll Progress Bar (mobile only) -->
+  <div class="mt-scroll-bar" id="mt-scroll-bar">
+    <div class="mt-scroll-thumb" id="mt-scroll-thumb"></div>
+  </div>
 </section>
+
+<script>
+  (function() {
+    var track = document.getElementById('mt-track');
+    var thumb = document.getElementById('mt-scroll-thumb');
+    if (!track || !thumb) return;
+
+    function updateThumb() {
+      var sw = track.scrollWidth - track.clientWidth;
+      if (sw <= 0) return;
+      var progress = track.scrollLeft / sw;
+      var trackW = thumb.parentElement.clientWidth;
+      var thumbW = thumb.clientWidth;
+      thumb.style.transform = 'translateX(' + (progress * (trackW - thumbW)) + 'px)';
+    }
+
+    track.addEventListener('scroll', updateThumb, { passive: true });
+    window.addEventListener('resize', updateThumb);
+    updateThumb();
+  })();
+</script>
 
 {% schema %}
 {
