@@ -1,692 +1,170 @@
-<style>
-  /* ─────────────────────────────────────────────────
-     FOOTER — Release-Style Design
-     Desktop: 4-col top row, brand middle, copyright bottom
-     Mobile: accordion collapsible sections with +/- toggle
-  ───────────────────────────────────────────────── */
-
-  .ft-section {
-    background-color: #0a0a0a;
-    color: #ffffff;
-    font-family: var(--font-body);
-  }
-
-  /* ── TOP ROW: Newsletter + 3 Link Columns ── */
-  .ft-top-row {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-    padding: 3.5rem 1.5rem 0;
-  }
-
-  /* ── Eyebrow Labels ── */
-  .ft-eyebrow {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    color: rgba(255,255,255,0.45);
-    margin-bottom: 1rem;
-    line-height: 1;
-  }
-
-  /* ── Newsletter ── */
-  .ft-newsletter {
-    padding-bottom: 2.5rem;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-  }
-
-  .ft-newsletter-desc {
-    font-family: var(--font-body);
-    font-size: 0.92rem;
-    font-weight: 400;
-    color: rgba(255,255,255,0.75);
-    line-height: 1.5;
-    margin-bottom: 1.75rem;
-    max-width: 340px;
-  }
-
-  .ft-email-form {
-    display: flex;
-    align-items: center;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 9999px;
-    overflow: hidden;
-    max-width: 400px;
-    transition: border-color 300ms ease;
-  }
-
-  .ft-email-form:focus-within {
-    border-color: rgba(255,255,255,0.5);
-  }
-
-  .ft-email-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    color: #ffffff;
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    letter-spacing: 0.03em;
-    padding: 0.9rem 1.4rem;
-    outline: none;
-    min-width: 0;
-  }
-
-  .ft-email-input::placeholder {
-    color: rgba(255,255,255,0.3);
-    font-size: 0.82rem;
-  }
-
-  .ft-subscribe-btn {
-    font-family: var(--font-body);
-    font-size: 0.62rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-    color: #ffffff;
-    background: transparent;
-    border: none;
-    border-left: 1px solid rgba(255,255,255,0.15);
-    padding: 0.9rem 1.6rem;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background-color 300ms ease, color 300ms ease;
-  }
-
-  .ft-subscribe-btn:hover {
-    background-color: #ffffff;
-    color: #0a0a0a;
-  }
-
-  /* ── Link Columns (Desktop: inline, Mobile: accordion) ── */
-  .ft-links-area {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .ft-link-col-title {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 500;
-    color: #ffffff;
-    letter-spacing: 0.01em;
-  }
-
-  .ft-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .ft-link {
-    display: block;
-    font-family: var(--font-body);
-    font-size: 0.88rem;
-    font-weight: 400;
-    color: rgba(255,255,255,0.55);
-    text-decoration: none;
-    padding: 0.4rem 0;
-    transition: color 300ms ease;
-    line-height: 1.4;
-  }
-
-  .ft-link:hover {
-    color: #ffffff;
-  }
-
-  /* ── Mobile Accordion ── */
-  .ft-accordion {
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    padding: 0;
-  }
-
-  .ft-accordion-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 1.5rem 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #ffffff;
-  }
-
-  .ft-accordion-icon {
-    position: relative;
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-  }
-
-  .ft-accordion-icon::before,
-  .ft-accordion-icon::after {
-    content: '';
-    position: absolute;
-    background-color: rgba(255,255,255,0.6);
-    transition: transform 300ms cubic-bezier(0.25, 1, 0.5, 1), opacity 300ms ease;
-  }
-
-  /* horizontal bar (minus) */
-  .ft-accordion-icon::before {
-    top: 50%;
-    left: 2px;
-    right: 2px;
-    height: 1.5px;
-    transform: translateY(-50%);
-  }
-
-  /* vertical bar (plus part) */
-  .ft-accordion-icon::after {
-    left: 50%;
-    top: 2px;
-    bottom: 2px;
-    width: 1.5px;
-    transform: translateX(-50%);
-  }
-
-  /* When open: rotate vertical into horizontal = just minus */
-  .ft-accordion-header[aria-expanded="true"] .ft-accordion-icon::after {
-    transform: translateX(-50%) rotate(90deg);
-    opacity: 0;
-  }
-
-  .ft-accordion-body {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 400ms cubic-bezier(0.16, 1, 0.3, 1),
-                padding 300ms ease;
-    padding-bottom: 0;
-  }
-
-  .ft-accordion-body.open {
-    max-height: 400px;
-    padding-bottom: 1.5rem;
-  }
-
-  /* ── BRAND SECTION ── */
-  .ft-brand-section {
-    padding: 2rem 1.5rem 0;
-    border-top: 1px solid rgba(255,255,255,0.08);
-  }
-
-  .ft-brand-name {
-    font-family: var(--font-heading);
-    font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: 400;
-    font-style: italic;
-    color: #ffffff;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    margin-bottom: 0.75rem;
-  }
-
-  /* Social icons placed inside grid on desktop */
-  .ft-social-in-grid {
-    display: none;
-  }
-
-  .ft-brand-desc {
-    font-family: var(--font-body);
-    font-size: 0.88rem;
-    font-weight: 400;
-    color: rgba(255,255,255,0.5);
-    line-height: 1.6;
-    max-width: 420px;
-    margin-bottom: 2rem;
-  }
-
-  /* ── Social Icons ── */
-  .ft-social-icons {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2.5rem;
-  }
-
-  .ft-social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    color: #ffffff;
-    text-decoration: none;
-    transition: opacity 300ms ease, transform 300ms ease;
-  }
-
-  .ft-social-link:hover {
-    opacity: 0.7;
-    transform: translateY(-2px);
-  }
-
-  .ft-social-link svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  /* ── Scroll to Top Button ── */
-  .ft-scroll-top {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 50%;
-    background: transparent;
-    color: #ffffff;
-    cursor: pointer;
-    transition: background-color 300ms ease, border-color 300ms ease;
-  }
-
-  .ft-scroll-top:hover {
-    background-color: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.3);
-  }
-
-  /* ── BOTTOM BAR ── */
-  .ft-bottom-bar {
-    padding: 2rem 1.5rem 2.5rem;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
-
-  .ft-copyright {
-    font-family: var(--font-body);
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.3);
-    line-height: 1.5;
-  }
-
-  .ft-copyright a {
-    color: rgba(255,255,255,0.3);
-    text-decoration: none;
-    transition: color 200ms ease;
-  }
-
-  .ft-copyright a:hover {
-    color: rgba(255,255,255,0.6);
-  }
-
-  /* ── Payment Icons ── */
-  .ft-payment-icons {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    flex-wrap: wrap;
-  }
-
-  .ft-pay-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 24px;
-    opacity: 0.5;
-    transition: opacity 300ms ease;
-  }
-
-  .ft-pay-icon:hover {
-    opacity: 0.85;
-  }
-
-  .ft-pay-icon svg {
-    height: 100%;
-    width: auto;
-  }
-
-  /* ═══════════════════════════════════════
-     DESKTOP (≥ 768px)
-  ═══════════════════════════════════════ */
-  @media (min-width: 768px) {
-    .ft-top-row {
-      grid-template-columns: minmax(280px, 1.2fr) 1fr 1fr 1fr;
-      gap: 3rem;
-      padding: 4rem 3.5rem;
-    }
-
-    .ft-newsletter {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .ft-email-form {
-      max-width: 100%;
-    }
-
-    /* On desktop, accordion wrapper is not accordion — just open columns */
-    .ft-accordion {
-      border-bottom: none;
-      padding: 0;
-    }
-
-    .ft-accordion-header {
-      display: none; /* hide accordion toggle on desktop */
-    }
-
-    .ft-accordion-body {
-      max-height: none !important;
-      overflow: visible;
-      padding-bottom: 0;
-    }
-
-    .ft-link-col-title-desktop {
-      display: block;
-    }
-
-    /* Social icons in top grid (below Shop) on desktop */
-    .ft-social-in-grid {
-      display: flex;
-      margin-top: 1.5rem;
-    }
-
-    .ft-brand-section {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding: 2rem 3.5rem;
-      gap: 2rem;
-      border-top: none;
-    }
-
-    .ft-brand-left {
-      flex: 1;
-    }
-
-    /* Hide social icons in brand section on desktop — they're in the grid */
-    .ft-brand-center {
-      display: none;
-    }
-
-    .ft-brand-right {
-      display: flex;
-      align-items: flex-end;
-      justify-content: flex-end;
-      flex: 0 0 auto;
-    }
-
-    .ft-bottom-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.5rem 3.5rem 2rem;
-    }
-
-    .ft-social-icons {
-      margin-bottom: 0;
-    }
-
-    .ft-brand-desc {
-      margin-bottom: 0;
-    }
-  }
-
-  /* ═══════════════════════════════════════
-     LARGE DESKTOP (≥ 1024px)
-  ═══════════════════════════════════════ */
-  @media (min-width: 1024px) {
-    .ft-top-row {
-      padding: 4.5rem 5rem;
-      gap: 3.5rem;
-    }
-
-    .ft-brand-section {
-      padding: 3.5rem 5rem;
-    }
-
-    .ft-bottom-bar {
-      padding: 1.5rem 5rem 2.5rem;
-    }
-  }
-
-  /* ═══════════════════════════════════════
-     MOBILE (< 768px)
-  ═══════════════════════════════════════ */
-  @media (max-width: 767px) {
-    .ft-top-row {
-      padding: 3rem 1.5rem 0;
-    }
-
-    .ft-newsletter {
-      text-align: center;
-      padding-bottom: 2rem;
-    }
-
-    .ft-newsletter .ft-eyebrow {
-      text-align: center;
-    }
-
-    .ft-newsletter-desc {
-      margin-left: auto;
-      margin-right: auto;
-      max-width: 100%;
-      text-align: center;
-    }
-
-    .ft-email-form {
-      max-width: 100%;
-    }
-
-    .ft-links-area {
-      padding: 0 1.5rem;
-    }
-
-    /* Desktop column titles hidden on mobile */
-    .ft-link-col-title-desktop {
-      display: none;
-    }
-
-    .ft-brand-section {
-      padding: 3rem 1.5rem 0;
-      flex-direction: column;
-    }
-
-    .ft-brand-name {
-      font-size: clamp(3rem, 12vw, 5rem);
-    }
-
-    .ft-brand-center {
-      margin-top: 2rem;
-    }
-
-    .ft-brand-right {
-      position: absolute;
-      right: 1.5rem;
-      bottom: 0;
-    }
-
-    .ft-bottom-bar {
-      flex-direction: column;
-      gap: 1.5rem;
-      text-align: center;
-      padding: 2rem 1.5rem 2.5rem;
-    }
-
-    .ft-social-icons {
-      justify-content: flex-start;
-    }
-
-    .ft-payment-icons {
-      justify-content: center;
-    }
-  }
-</style>
-
 <!-- ══════════════════════════════════════════════
-     FOOTER — Release-Style
+     FOOTER — Quiet Luxury | Tailwind-Only
 ══════════════════════════════════════════════ -->
-<footer id="site-footer" class="ft-section" role="contentinfo">
+<footer id="site-footer" class="block bg-[#0a0a0a] text-white font-body" role="contentinfo">
 
-  <!-- ── TOP ROW: Newsletter + 3 Link Columns ── -->
-  <div class="ft-top-row">
+  <!-- ── TOP ROW: 4-column grid ── -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr] gap-10 lg:gap-14 px-6 md:px-10 lg:px-14 pt-16 pb-10 md:pt-20 md:pb-14">
 
-    <!-- NEWSLETTER -->
-    <div class="ft-newsletter" data-footer-col>
-      <p class="ft-eyebrow">Newsletter</p>
-      <p class="ft-newsletter-desc">
-        {{ section.settings.newsletter_text | default: 'Sign up to receive 10% off your first order' }}
+    <!-- COL 1: Description + Newsletter -->
+    <div class="max-w-[400px]">
+      <p class="font-body text-[0.88rem] leading-[1.7] text-white/50 mb-8">
+        {{ section.settings.newsletter_text | default: 'Whether you\'re looking for chic essentials, statement outfits, or casual staples, we\'ve got something to suit every style. Browse our fresh arrivals and update your wardrobe with the season\'s hottest looks today!' }}
       </p>
+
+      <!-- Newsletter Form -->
       <form action="/contact#contact_form" method="post" onsubmit="event.preventDefault();" novalidate>
         <input type="hidden" name="form_type" value="customer" />
         <input type="hidden" name="utf8" value="✓" />
         <input type="hidden" name="contact[tags]" value="newsletter" />
-        <div class="ft-email-form">
+        <div class="ft-email-form flex items-center rounded-full border border-white/20 overflow-hidden max-w-[400px] transition-colors duration-300 focus-within:border-white/50">
           <label for="footer-email" class="sr-only">Email address</label>
           <input
             id="footer-email"
             name="contact[email]"
             type="email"
-            class="ft-email-input"
-            placeholder="Email address"
+            class="flex-1 bg-transparent border-none text-white font-body text-[0.82rem] tracking-[0.03em] py-4 px-6 outline-none min-w-0 placeholder:text-white/30"
+            placeholder="Email"
             required
             autocomplete="email"
           />
-          <button type="submit" class="ft-subscribe-btn">Subscribe</button>
+          <button type="submit" class="ft-subscribe-btn shrink-0 font-body text-[0.72rem] font-semibold uppercase tracking-[0.15em] text-[#0a0a0a] bg-white border-none rounded-full py-3 px-8 mr-1 cursor-pointer whitespace-nowrap transition-all duration-300 hover:bg-white/90">
+            Subscribe
+          </button>
         </div>
       </form>
     </div>
 
-    <!-- COMPANY (Desktop: visible column, Mobile: accordion) -->
-    <div class="ft-accordion" data-footer-col x-data="{ open: false }">
+    <!-- COL 2: Quick Links -->
+    <div class="md:pt-0" x-data="{ open: false }">
       <!-- Desktop title -->
-      <p class="ft-eyebrow ft-link-col-title-desktop">{{ section.settings.col2_title | default: 'Company' }}</p>
+      <p class="hidden md:block font-body text-[0.72rem] font-medium uppercase tracking-[0.2em] text-white/40 mb-5">
+        {{ section.settings.col2_title | default: 'Quick links' }}
+      </p>
       <!-- Mobile accordion toggle -->
-      <button class="ft-accordion-header" :aria-expanded="open" @click="open = !open">
-        <span class="ft-link-col-title">{{ section.settings.col2_title | default: 'Company' }}</span>
-        <span class="ft-accordion-icon" aria-hidden="true"></span>
+      <button class="ft-accordion-header flex md:hidden items-center justify-between w-full py-5 bg-transparent border-none border-b border-white/[0.08] cursor-pointer text-white" :aria-expanded="open" @click="open = !open">
+        <span class="font-body text-base font-medium">{{ section.settings.col2_title | default: 'Quick links' }}</span>
+        <span class="ft-accordion-icon relative w-5 h-5 shrink-0" aria-hidden="true"></span>
       </button>
-      <div class="ft-accordion-body" x-show="open" x-transition>
-        <nav class="ft-nav" aria-label="{{ section.settings.col2_title | default: 'Company' }}">
-          {% if section.settings.c2_link1_label != blank %}<a href="{{ section.settings.c2_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link1_label }}</a>{% endif %}
-          {% if section.settings.c2_link2_label != blank %}<a href="{{ section.settings.c2_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link2_label }}</a>{% endif %}
-          {% if section.settings.c2_link3_label != blank %}<a href="{{ section.settings.c2_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link3_label }}</a>{% endif %}
-          {% if section.settings.c2_link4_label != blank %}<a href="{{ section.settings.c2_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link4_label }}</a>{% endif %}
-          {% if section.settings.c2_link5_label != blank %}<a href="{{ section.settings.c2_link5_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link5_label }}</a>{% endif %}
-          {% if section.settings.c2_link6_label != blank %}<a href="{{ section.settings.c2_link6_url | default: '#' }}" class="ft-link">{{ section.settings.c2_link6_label }}</a>{% endif %}
-        </nav>
-      </div>
+      <!-- Links -->
+      <nav class="ft-accordion-body flex flex-col gap-0 md:!max-h-none md:!overflow-visible" :class="open ? 'open' : ''" aria-label="{{ section.settings.col2_title | default: 'Quick links' }}">
+        {% if section.settings.c2_link1_label != blank %}<a href="{{ section.settings.c2_link1_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c2_link1_label }}</a>{% endif %}
+        {% if section.settings.c2_link2_label != blank %}<a href="{{ section.settings.c2_link2_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c2_link2_label }}</a>{% endif %}
+        {% if section.settings.c2_link3_label != blank %}<a href="{{ section.settings.c2_link3_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c2_link3_label }}</a>{% endif %}
+        {% if section.settings.c2_link4_label != blank %}<a href="{{ section.settings.c2_link4_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c2_link4_label }}</a>{% endif %}
+        {% if section.settings.c2_link5_label != blank %}<a href="{{ section.settings.c2_link5_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c2_link5_label }}</a>{% endif %}
+        {% if section.settings.c2_link6_label != blank %}<a href="{{ section.settings.c2_link6_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c2_link6_label }}</a>{% endif %}
+      </nav>
     </div>
 
-    <!-- PAGES -->
-    <div class="ft-accordion" data-footer-col x-data="{ open: false }">
-      <p class="ft-eyebrow ft-link-col-title-desktop">{{ section.settings.col3_title | default: 'Pages' }}</p>
-      <button class="ft-accordion-header" :aria-expanded="open" @click="open = !open">
-        <span class="ft-link-col-title">{{ section.settings.col3_title | default: 'Pages' }}</span>
-        <span class="ft-accordion-icon" aria-hidden="true"></span>
+    <!-- COL 3: Support -->
+    <div class="md:pt-0" x-data="{ open: false }">
+      <p class="hidden md:block font-body text-[0.72rem] font-medium uppercase tracking-[0.2em] text-white/40 mb-5">
+        {{ section.settings.col3_title | default: 'Support' }}
+      </p>
+      <button class="ft-accordion-header flex md:hidden items-center justify-between w-full py-5 bg-transparent border-none border-b border-white/[0.08] cursor-pointer text-white" :aria-expanded="open" @click="open = !open">
+        <span class="font-body text-base font-medium">{{ section.settings.col3_title | default: 'Support' }}</span>
+        <span class="ft-accordion-icon relative w-5 h-5 shrink-0" aria-hidden="true"></span>
       </button>
-      <div class="ft-accordion-body" x-show="open" x-transition>
-        <nav class="ft-nav" aria-label="{{ section.settings.col3_title | default: 'Pages' }}">
-          {% if section.settings.c3_link1_label != blank %}<a href="{{ section.settings.c3_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link1_label }}</a>{% endif %}
-          {% if section.settings.c3_link2_label != blank %}<a href="{{ section.settings.c3_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link2_label }}</a>{% endif %}
-          {% if section.settings.c3_link3_label != blank %}<a href="{{ section.settings.c3_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link3_label }}</a>{% endif %}
-          {% if section.settings.c3_link4_label != blank %}<a href="{{ section.settings.c3_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link4_label }}</a>{% endif %}
-          {% if section.settings.c3_link5_label != blank %}<a href="{{ section.settings.c3_link5_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link5_label }}</a>{% endif %}
-          {% if section.settings.c3_link6_label != blank %}<a href="{{ section.settings.c3_link6_url | default: '#' }}" class="ft-link">{{ section.settings.c3_link6_label }}</a>{% endif %}
-        </nav>
-      </div>
+      <nav class="ft-accordion-body flex flex-col gap-0 md:!max-h-none md:!overflow-visible" :class="open ? 'open' : ''" aria-label="{{ section.settings.col3_title | default: 'Support' }}">
+        {% if section.settings.c3_link1_label != blank %}<a href="{{ section.settings.c3_link1_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c3_link1_label }}</a>{% endif %}
+        {% if section.settings.c3_link2_label != blank %}<a href="{{ section.settings.c3_link2_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c3_link2_label }}</a>{% endif %}
+        {% if section.settings.c3_link3_label != blank %}<a href="{{ section.settings.c3_link3_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c3_link3_label }}</a>{% endif %}
+        {% if section.settings.c3_link4_label != blank %}<a href="{{ section.settings.c3_link4_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c3_link4_label }}</a>{% endif %}
+        {% if section.settings.c3_link5_label != blank %}<a href="{{ section.settings.c3_link5_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c3_link5_label }}</a>{% endif %}
+        {% if section.settings.c3_link6_label != blank %}<a href="{{ section.settings.c3_link6_url | default: '#' }}" class="block font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white uppercase tracking-[0.08em]">{{ section.settings.c3_link6_label }}</a>{% endif %}
+      </nav>
     </div>
 
-    <!-- SHOP -->
-    <div class="ft-accordion" data-footer-col x-data="{ open: false }">
-      <p class="ft-eyebrow ft-link-col-title-desktop">{{ section.settings.col4_title | default: 'Shop' }}</p>
-      <button class="ft-accordion-header" :aria-expanded="open" @click="open = !open">
-        <span class="ft-link-col-title">{{ section.settings.col4_title | default: 'Shop' }}</span>
-        <span class="ft-accordion-icon" aria-hidden="true"></span>
+    <!-- COL 4: Follow Us (text links with arrow icons) -->
+    <div class="md:pt-0" x-data="{ open: false }">
+      <p class="hidden md:block font-body text-[0.72rem] font-medium uppercase tracking-[0.2em] text-white/40 mb-5">
+        Follow us on
+      </p>
+      <button class="ft-accordion-header flex md:hidden items-center justify-between w-full py-5 bg-transparent border-none border-b border-white/[0.08] cursor-pointer text-white" :aria-expanded="open" @click="open = !open">
+        <span class="font-body text-base font-medium">Follow us on</span>
+        <span class="ft-accordion-icon relative w-5 h-5 shrink-0" aria-hidden="true"></span>
       </button>
-      <div class="ft-accordion-body" x-show="open" x-transition>
-        <nav class="ft-nav" aria-label="{{ section.settings.col4_title | default: 'Shop' }}">
-          {% if section.settings.c4_link1_label != blank %}<a href="{{ section.settings.c4_link1_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link1_label }}</a>{% endif %}
-          {% if section.settings.c4_link2_label != blank %}<a href="{{ section.settings.c4_link2_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link2_label }}</a>{% endif %}
-          {% if section.settings.c4_link3_label != blank %}<a href="{{ section.settings.c4_link3_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link3_label }}</a>{% endif %}
-          {% if section.settings.c4_link4_label != blank %}<a href="{{ section.settings.c4_link4_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link4_label }}</a>{% endif %}
-          {% if section.settings.c4_link5_label != blank %}<a href="{{ section.settings.c4_link5_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link5_label }}</a>{% endif %}
-          {% if section.settings.c4_link6_label != blank %}<a href="{{ section.settings.c4_link6_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link6_label }}</a>{% endif %}
-          {% if section.settings.c4_link7_label != blank %}<a href="{{ section.settings.c4_link7_url | default: '#' }}" class="ft-link">{{ section.settings.c4_link7_label }}</a>{% endif %}
-        </nav>
-      </div>
-      <!-- Social icons under Shop on desktop -->
-      <div class="ft-social-in-grid ft-social-icons">
-        <a href="{{ section.settings.social_instagram | default: '#' }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      <nav class="ft-accordion-body flex flex-col gap-0 md:!max-h-none md:!overflow-visible" :class="open ? 'open' : ''" aria-label="Social media links">
+        {% if section.settings.social_instagram != blank %}
+        <a href="{{ section.settings.social_instagram }}" class="ft-social-text-link group flex items-center gap-1.5 font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white" target="_blank" rel="noopener">
+          Facebook
+          <svg class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
         </a>
-        <a href="{{ section.settings.social_youtube | default: '#' }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="YouTube">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.55A3.02 3.02 0 0 0 .5 6.19 31.7 31.7 0 0 0 0 12a31.7 31.7 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.87.55 9.38.55 9.38.55s7.5 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14A31.7 31.7 0 0 0 24 12a31.7 31.7 0 0 0-.5-5.81zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+        {% endif %}
+        {% if section.settings.social_twitter != blank %}
+        <a href="{{ section.settings.social_twitter }}" class="ft-social-text-link group flex items-center gap-1.5 font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white" target="_blank" rel="noopener">
+          X (Twitter)
+          <svg class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
         </a>
-        <a href="{{ section.settings.social_tiktok | default: '#' }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="TikTok">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.8.1V9.01a6.33 6.33 0 0 0-.8-.05 6.34 6.34 0 0 0-6.34 6.34A6.34 6.34 0 0 0 9.49 21.64a6.34 6.34 0 0 0 6.34-6.34V9.19a8.16 8.16 0 0 0 4.77 1.52V7.32a4.85 4.85 0 0 1-1.01-.63z"/></svg>
+        {% endif %}
+        {% if section.settings.social_instagram != blank %}
+        <a href="{{ section.settings.social_instagram }}" class="ft-social-text-link group flex items-center gap-1.5 font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white" target="_blank" rel="noopener">
+          Instagram
+          <svg class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
         </a>
-        <a href="{{ section.settings.social_twitter | default: '#' }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="X">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        {% endif %}
+        {% if section.settings.social_youtube != blank %}
+        <a href="{{ section.settings.social_youtube }}" class="ft-social-text-link group flex items-center gap-1.5 font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white" target="_blank" rel="noopener">
+          YouTube
+          <svg class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
         </a>
-        <a href="{{ section.settings.social_vimeo | default: '#' }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="Vimeo">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609C15.9 20.465 12.999 22.5 10.525 22.5c-1.532 0-2.83-1.415-3.887-4.248C5.764 15.08 4.888 10.47 3.81 7.692 2.83 4.927 1.79 3.545.592 3.545c-.193 0-.868.407-2.025 1.22L0 3.64C1.15 2.72 2.137 1.818 2.96.931 4.397-.513 5.49-1.242 6.233-1.315c1.96-.19 3.166 1.15 3.62 4.02.482 3.1.82 5.032 1.005 5.793.558 2.535 1.17 3.8 1.834 3.8.518 0 1.296-.82 2.333-2.46 1.035-1.642 1.59-2.893 1.665-3.754.14-1.424-.41-2.14-1.65-2.14-.59 0-1.197.135-1.823.404 1.212-3.968 3.525-5.894 6.942-5.776 2.533.084 3.727 1.715 3.584 4.894z"/></svg>
+        {% endif %}
+        {% if section.settings.social_tiktok != blank %}
+        <a href="{{ section.settings.social_tiktok }}" class="ft-social-text-link group flex items-center gap-1.5 font-body text-[0.82rem] text-white/50 no-underline py-[0.35rem] transition-colors duration-300 hover:text-white" target="_blank" rel="noopener">
+          Pinterest
+          <svg class="w-3 h-3 opacity-50 group-hover:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
         </a>
-      </div>
+        {% endif %}
+      </nav>
     </div>
 
   </div>
   <!-- / Top Row -->
 
-  <!-- ── BRAND SECTION ── -->
-  <div class="ft-brand-section" style="position: relative;">
+  <!-- ── BOTTOM BAR ── -->
+  <div class="flex flex-col md:flex-row items-center md:items-center justify-between gap-4 px-6 md:px-10 lg:px-14 py-5 border-t border-white/[0.06]">
 
-    <!-- Left: Brand name + description -->
-    <div class="ft-brand-left">
-      <p class="ft-brand-name">{{ section.settings.brand_name | default: shop.name }}</p>
-      <p class="ft-brand-desc">
-        {{ section.settings.brand_desc | default: 'A premium Shopify theme designed by Dropxlabel.' }}
-      </p>
+    <!-- Left: Localization -->
+    <div class="flex items-center gap-3 text-white/40 text-[0.75rem]">
+      {%- form 'localization', id: 'FooterLanguageCurrencyForm', class: 'flex items-center gap-2' -%}
+        {%- if localization.available_countries.size > 1 or localization.available_languages.size > 1 -%}
+          <div class="flex items-center gap-1 cursor-pointer hover:text-white/60 transition-colors duration-200">
+            <!-- Flag emoji placeholder -->
+            <span class="text-base">🇺🇸</span>
+            <span class="font-body text-[0.75rem] tracking-wide">
+              {{ localization.country.currency.iso_code }} / {{ localization.language.iso_code | upcase }}
+            </span>
+            <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </div>
+        {%- endif -%}
+      {%- endform -%}
     </div>
 
-    <!-- Center: Social Icons -->
-    <div class="ft-brand-center">
-      <div class="ft-social-icons">
-        <a href="{{ section.settings.social_instagram | default: '#' }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          </a>
-          <a href="{{ section.settings.social_youtube | default: '#' }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="YouTube">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.19a3.02 3.02 0 0 0-2.12-2.14C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.38.55A3.02 3.02 0 0 0 .5 6.19 31.7 31.7 0 0 0 0 12a31.7 31.7 0 0 0 .5 5.81 3.02 3.02 0 0 0 2.12 2.14c1.87.55 9.38.55 9.38.55s7.5 0 9.38-.55a3.02 3.02 0 0 0 2.12-2.14A31.7 31.7 0 0 0 24 12a31.7 31.7 0 0 0-.5-5.81zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
-          </a>
-          <a href="{{ section.settings.social_tiktok | default: '#' }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="TikTok">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.8.1V9.01a6.33 6.33 0 0 0-.8-.05 6.34 6.34 0 0 0-6.34 6.34A6.34 6.34 0 0 0 9.49 21.64a6.34 6.34 0 0 0 6.34-6.34V9.19a8.16 8.16 0 0 0 4.77 1.52V7.32a4.85 4.85 0 0 1-1.01-.63z"/></svg>
-          </a>
-          <a href="{{ section.settings.social_twitter | default: '#' }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="X">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-          </a>
-          <a href="{{ section.settings.social_vimeo | default: '#' }}" class="ft-social-link" target="_blank" rel="noopener" aria-label="Vimeo">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609C15.9 20.465 12.999 22.5 10.525 22.5c-1.532 0-2.83-1.415-3.887-4.248C5.764 15.08 4.888 10.47 3.81 7.692 2.83 4.927 1.79 3.545.592 3.545c-.193 0-.868.407-2.025 1.22L0 3.64C1.15 2.72 2.137 1.818 2.96.931 4.397-.513 5.49-1.242 6.233-1.315c1.96-.19 3.166 1.15 3.62 4.02.482 3.1.82 5.032 1.005 5.793.558 2.535 1.17 3.8 1.834 3.8.518 0 1.296-.82 2.333-2.46 1.035-1.642 1.59-2.893 1.665-3.754.14-1.424-.41-2.14-1.65-2.14-.59 0-1.197.135-1.823.404 1.212-3.968 3.525-5.894 6.942-5.776 2.533.084 3.727 1.715 3.584 4.894z"/></svg>
-          </a>
+    <!-- Center: Copyright -->
+    <p class="font-body text-[0.72rem] text-white/30 text-center">
+      &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}.
+      <a href="https://www.shopify.com" class="text-white/30 no-underline hover:text-white/50 transition-colors duration-200" target="_blank" rel="noopener">Powered by Shopify</a>
+    </p>
+
+    <!-- Right: Payment Icons + Scroll to Top -->
+    <div class="flex items-center gap-4">
+      <div class="flex items-center gap-1 flex-wrap" aria-label="Accepted payment methods">
+        {%- for type in shop.enabled_payment_types -%}
+          <span class="inline-flex items-center justify-center h-6 opacity-50 hover:opacity-80 transition-opacity duration-300">{{ type | payment_type_svg_tag }}</span>
+        {%- endfor -%}
       </div>
-    </div>
-
-    <!-- Right: Scroll to Top -->
-    <div class="ft-brand-right">
-      <button class="ft-scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Scroll to top">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <!-- Scroll to Top -->
+      <button class="flex items-center justify-center w-9 h-9 rounded-full border border-white/15 bg-transparent text-white cursor-pointer transition-all duration-300 hover:bg-white/10 hover:border-white/30 shrink-0" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Scroll to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="m18 15-6-6-6 6"/>
         </svg>
       </button>
     </div>
 
   </div>
-  <!-- / Brand Section -->
-
-  <!-- ── BOTTOM BAR ── -->
-  <div class="ft-bottom-bar">
-    <p class="ft-copyright">
-      Copyright &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
-      <a href="https://www.shopify.com" target="_blank" rel="noopener">Powered by Shopify.</a>
-    </p>
-    <div class="ft-payment-icons" aria-label="Accepted payment methods">
-      {%- for type in shop.enabled_payment_types -%}
-        <span class="ft-pay-icon">{{ type | payment_type_svg_tag }}</span>
-      {%- endfor -%}
-    </div>
-  </div>
 
 </footer>
-
 
 
 
@@ -701,70 +179,38 @@
       "type": "textarea",
       "id": "newsletter_text",
       "label": "Newsletter Description",
-      "default": "Sign up to receive 10% off your first order"
+      "default": "Whether you're looking for chic essentials, statement outfits, or casual staples, we've got something to suit every style. Browse our fresh arrivals and update your wardrobe with the season's hottest looks today!"
     },
 
-    { "type": "header", "content": "── Company ──" },
-    { "type": "text", "id": "col2_title", "label": "Column Title", "default": "Company" },
-    { "type": "text", "id": "c2_link1_label", "label": "Link 1 Label", "default": "Search" },
+    { "type": "header", "content": "── Quick Links ──" },
+    { "type": "text", "id": "col2_title", "label": "Column Title", "default": "Quick links" },
+    { "type": "text", "id": "c2_link1_label", "label": "Link 1 Label", "default": "HOME" },
     { "type": "url",  "id": "c2_link1_url",   "label": "Link 1 URL" },
-    { "type": "text", "id": "c2_link2_label", "label": "Link 2 Label", "default": "Contact" },
+    { "type": "text", "id": "c2_link2_label", "label": "Link 2 Label", "default": "SEARCH" },
     { "type": "url",  "id": "c2_link2_url",   "label": "Link 2 URL" },
-    { "type": "text", "id": "c2_link3_label", "label": "Link 3 Label", "default": "Terms" },
+    { "type": "text", "id": "c2_link3_label", "label": "Link 3 Label", "default": "COLLECTIONS" },
     { "type": "url",  "id": "c2_link3_url",   "label": "Link 3 URL" },
-    { "type": "text", "id": "c2_link4_label", "label": "Link 4 Label", "default": "Privacy Policy" },
+    { "type": "text", "id": "c2_link4_label", "label": "Link 4 Label", "default": "ABOUT US" },
     { "type": "url",  "id": "c2_link4_url",   "label": "Link 4 URL" },
-    { "type": "text", "id": "c2_link5_label", "label": "Link 5 Label" },
+    { "type": "text", "id": "c2_link5_label", "label": "Link 5 Label", "default": "NEWS" },
     { "type": "url",  "id": "c2_link5_url",   "label": "Link 5 URL" },
     { "type": "text", "id": "c2_link6_label", "label": "Link 6 Label" },
     { "type": "url",  "id": "c2_link6_url",   "label": "Link 6 URL" },
 
-    { "type": "header", "content": "── Pages ──" },
-    { "type": "text", "id": "col3_title", "label": "Column Title", "default": "Pages" },
-    { "type": "text", "id": "c3_link1_label", "label": "Link 1 Label", "default": "FAQ" },
+    { "type": "header", "content": "── Support ──" },
+    { "type": "text", "id": "col3_title", "label": "Column Title", "default": "Support" },
+    { "type": "text", "id": "c3_link1_label", "label": "Link 1 Label", "default": "PRIVACY POLICY" },
     { "type": "url",  "id": "c3_link1_url",   "label": "Link 1 URL" },
-    { "type": "text", "id": "c3_link2_label", "label": "Link 2 Label", "default": "Blog" },
+    { "type": "text", "id": "c3_link2_label", "label": "Link 2 Label", "default": "REFUND POLICY" },
     { "type": "url",  "id": "c3_link2_url",   "label": "Link 2 URL" },
-    { "type": "text", "id": "c3_link3_label", "label": "Link 3 Label", "default": "Lookbook" },
+    { "type": "text", "id": "c3_link3_label", "label": "Link 3 Label", "default": "SHIPPING POLICY" },
     { "type": "url",  "id": "c3_link3_url",   "label": "Link 3 URL" },
-    { "type": "text", "id": "c3_link4_label", "label": "Link 4 Label", "default": "Collections" },
+    { "type": "text", "id": "c3_link4_label", "label": "Link 4 Label", "default": "CONTACT" },
     { "type": "url",  "id": "c3_link4_url",   "label": "Link 4 URL" },
-    { "type": "text", "id": "c3_link5_label", "label": "Link 5 Label" },
+    { "type": "text", "id": "c3_link5_label", "label": "Link 5 Label", "default": "FAQ" },
     { "type": "url",  "id": "c3_link5_url",   "label": "Link 5 URL" },
     { "type": "text", "id": "c3_link6_label", "label": "Link 6 Label" },
     { "type": "url",  "id": "c3_link6_url",   "label": "Link 6 URL" },
-
-    { "type": "header", "content": "── Shop ──" },
-    { "type": "text", "id": "col4_title", "label": "Column Title", "default": "Shop" },
-    { "type": "text", "id": "c4_link1_label", "label": "Link 1 Label", "default": "Tops" },
-    { "type": "url",  "id": "c4_link1_url",   "label": "Link 1 URL" },
-    { "type": "text", "id": "c4_link2_label", "label": "Link 2 Label", "default": "T-shirts" },
-    { "type": "url",  "id": "c4_link2_url",   "label": "Link 2 URL" },
-    { "type": "text", "id": "c4_link3_label", "label": "Link 3 Label", "default": "Knitwear" },
-    { "type": "url",  "id": "c4_link3_url",   "label": "Link 3 URL" },
-    { "type": "text", "id": "c4_link4_label", "label": "Link 4 Label", "default": "Dresses" },
-    { "type": "url",  "id": "c4_link4_url",   "label": "Link 4 URL" },
-    { "type": "text", "id": "c4_link5_label", "label": "Link 5 Label", "default": "Bottoms" },
-    { "type": "url",  "id": "c4_link5_url",   "label": "Link 5 URL" },
-    { "type": "text", "id": "c4_link6_label", "label": "Link 6 Label", "default": "Jackets & Coats" },
-    { "type": "url",  "id": "c4_link6_url",   "label": "Link 6 URL" },
-    { "type": "text", "id": "c4_link7_label", "label": "Link 7 Label" },
-    { "type": "url",  "id": "c4_link7_url",   "label": "Link 7 URL" },
-
-    { "type": "header", "content": "── Brand ──" },
-    {
-      "type": "text",
-      "id": "brand_name",
-      "label": "Brand Name",
-      "default": "dropxlabel",
-      "info": "Large italic text displayed in brand section"
-    },
-    {
-      "type": "textarea",
-      "id": "brand_desc",
-      "label": "Brand Description",
-      "default": "Dropxlabel is a premium official Shopify theme designed by DigiFist."
-    },
 
     { "type": "header", "content": "── Social Links ──" },
     { "type": "url", "id": "social_instagram", "label": "Instagram URL" },
