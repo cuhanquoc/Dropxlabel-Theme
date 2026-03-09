@@ -37,6 +37,13 @@
     transform: translate(-50%, -50%) rotate(90deg);
     opacity: 0;
   }
+
+  /* ── CSS-Driven Accordion State ── */
+  [data-ft-panel] { display: none; }
+  [data-ft-toggle][aria-expanded="true"] + [data-ft-panel] { display: flex !important; }
+  @media (min-width: 768px) {
+    [data-ft-panel] { display: flex !important; }
+  }
 </style>
 
 <footer id="site-footer" class="block bg-[#0a0a0a] text-white font-body" role="contentinfo">
@@ -93,9 +100,8 @@
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
-          class="flex flex-col gap-0 md:!block"
+          class="flex flex-col gap-0"
           data-ft-panel
-          style="display:none"
           aria-label="{{ section.settings.col2_title | default: 'Quick links' }}"
         >
         
@@ -124,9 +130,8 @@
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
-          class="flex flex-col gap-0 md:!block"
+          class="flex flex-col gap-0"
           data-ft-panel
-          style="display:none"
           aria-label="{{ section.settings.col3_title | default: 'Support' }}"
         >
           <div class="py-3 md:py-0 flex flex-col gap-0">
@@ -154,9 +159,8 @@
           <span class="ft-accordion-icon" aria-hidden="true"></span>
         </button>
         <nav
-          class="flex flex-col gap-0 md:!block"
+          class="flex flex-col gap-0"
           data-ft-panel
-          style="display:none"
           aria-label="Social media links"
         >
           <div class="py-3 md:py-0 flex flex-col gap-0">
@@ -241,39 +245,15 @@
 </footer>
 
 <script>
-  /* ── Footer Accordion — Vanilla JS ── */
+  /* ── Footer Accordion — CSS-Driven State ── */
   (function () {
     var footer = document.getElementById('site-footer');
     if (!footer) return;
-    var toggles = footer.querySelectorAll('[data-ft-toggle]');
 
-    function isDesktop() { return window.innerWidth >= 768; }
-
-    /* Auto-open all panels on desktop */
-    function syncDesktop() {
-      var panels = footer.querySelectorAll('[data-ft-panel]');
-      panels.forEach(function (p) {
-        if (isDesktop()) {
-          p.style.display = '';
-        }
-      });
-      toggles.forEach(function (t) {
-        if (isDesktop()) t.setAttribute('aria-expanded', 'true');
-      });
-    }
-    syncDesktop();
-    window.addEventListener('resize', syncDesktop);
-
-    /* Click toggle for mobile */
-    toggles.forEach(function (btn) {
+    footer.querySelectorAll('[data-ft-toggle]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        if (isDesktop()) return;
-        var parent = btn.closest('[data-ft-accordion]');
-        var panel = parent ? parent.querySelector('[data-ft-panel]') : null;
-        if (!panel) return;
         var isOpen = btn.getAttribute('aria-expanded') === 'true';
         btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-        panel.style.display = isOpen ? 'none' : '';
       });
     });
   }());
