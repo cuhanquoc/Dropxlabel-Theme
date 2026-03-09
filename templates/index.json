@@ -307,6 +307,23 @@
         "gap": 48,
         "card_width": 260
       }
+    },
+    "customer-help-center": {
+      "type": "customer-help-center",
+      "settings": {
+        "heading": "Customer Help Center",
+        "description": "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here.",
+        "q1": "What is your return and exchange policy?",
+        "a1": "We offer a hassle-free return and exchange policy within 30 days of delivery. Items must be unused, in original packaging, and with tags intact. For exchanges, simply initiate a request through our return portal or contact support.",
+        "q2": "What if I received a damaged or incorrect item?",
+        "a2": "If you receive a damaged or incorrect item, please contact our support team within 48 hours of delivery with photos of the issue. We'll arrange a replacement or full refund as quickly as possible.",
+        "q3": "How can I track my order?",
+        "a3": "Once your order is shipped, you'll receive a confirmation email with a tracking number. You can use this number on our website or the carrier's site to track your package in real time.",
+        "q4": "What payment methods do you accept?",
+        "a4": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, Google Pay, and Shop Pay. All transactions are secured with SSL encryption.",
+        "q5": "Can I modify or cancel my order after placing it?",
+        "a5": "You can modify or cancel your order within 1 hour of placing it by contacting our support team. After that window, orders enter processing and cannot be changed."
+      }
     }
   },
   "order": [
@@ -314,6 +331,7 @@
     "featured-collection",
     "brand-story-bento",
     "trending-accordion",
-    "marquee_ticker_6CKgye"
+    "marquee_ticker_6CKgye",
+    "customer-help-center"
   ]
 }
