@@ -1,0 +1,346 @@
+<style>
+  /* ═══════════════════════════════════════
+     MOBILE BOTTOM NAV — Sticky Tab Bar
+  ═══════════════════════════════════════ */
+
+  /* Hide completely on desktop */
+  .mob-nav {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .mob-nav {
+      display: block;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background: #ffffff;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    .mob-nav.mob-nav--visible {
+      transform: translateY(0);
+    }
+
+    .mob-nav-track {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0.5rem 0 0.25rem;
+    }
+
+    .mob-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+      text-decoration: none;
+      color: {{ section.settings.icon_color | default: '#1a1a1a' }};
+      flex: 1;
+      padding: 0.25rem 0;
+      position: relative;
+      transition: color 0.25s ease, transform 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .mob-nav-item:active {
+      transform: scale(0.92);
+    }
+
+    .mob-nav-item svg {
+      width: {{ section.settings.icon_size | default: 24 }}px;
+      height: {{ section.settings.icon_size | default: 24 }}px;
+      stroke-width: 1.5;
+      flex-shrink: 0;
+    }
+
+    .mob-nav-label {
+      font-family: var(--font-body);
+      font-size: {{ section.settings.label_size | default: 10 }}px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    /* Cart badge */
+    .mob-nav-badge {
+      position: absolute;
+      top: -2px;
+      right: 50%;
+      margin-right: -16px;
+      min-width: 16px;
+      height: 16px;
+      border-radius: 9999px;
+      background: {{ section.settings.badge_bg | default: '#0a0a0a' }};
+      color: {{ section.settings.badge_color | default: '#ffffff' }};
+      font-size: 9px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      line-height: 1;
+    }
+
+    /* Add bottom padding to body so content doesn't hide behind nav */
+    body {
+      padding-bottom: 64px;
+    }
+  }
+</style>
+
+<nav class="mob-nav" id="mob-bottom-nav" aria-label="Mobile navigation">
+  <div class="mob-nav-track">
+
+    {%- comment -%} ── HOME ── {%- endcomment -%}
+    <a href="{{ section.settings.home_url | default: '/' }}" class="mob-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/>
+      </svg>
+      <span class="mob-nav-label">{{ section.settings.home_label | default: 'Home' }}</span>
+    </a>
+
+    {%- comment -%} ── MENU ── {%- endcomment -%}
+    <a href="{{ section.settings.menu_url | default: '/collections' }}" class="mob-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      <span class="mob-nav-label">{{ section.settings.menu_label | default: 'Menu' }}</span>
+    </a>
+
+    {%- comment -%} ── SEARCH ── {%- endcomment -%}
+    <a href="{{ section.settings.search_url | default: '/search' }}" class="mob-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <span class="mob-nav-label">{{ section.settings.search_label | default: 'Search' }}</span>
+    </a>
+
+    {%- comment -%} ── SHOP ── {%- endcomment -%}
+    <a href="{{ section.settings.shop_url | default: '/collections/all' }}" class="mob-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+        <circle cx="7" cy="6" r="1.5" fill="currentColor"/>
+        <circle cx="7" cy="12" r="1.5" fill="currentColor"/>
+        <circle cx="7" cy="18" r="1.5" fill="currentColor"/>
+      </svg>
+      <span class="mob-nav-label">{{ section.settings.shop_label | default: 'Shop' }}</span>
+    </a>
+
+    {%- comment -%} ── ACCOUNT ── {%- endcomment -%}
+    <a href="{{ section.settings.account_url | default: '/account' }}" class="mob-nav-item">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 21v-1a5 5 0 0110 0v1"/>
+        <path d="M20 21v-1a5 5 0 00-4-4.9"/>
+      </svg>
+      <span class="mob-nav-label">{{ section.settings.account_label | default: 'Account' }}</span>
+    </a>
+
+    {%- comment -%} ── CART ── {%- endcomment -%}
+    <a href="{{ section.settings.cart_url | default: '/cart' }}" class="mob-nav-item" id="mob-nav-cart">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 01-8 0"/>
+      </svg>
+      {% if cart.item_count > 0 %}
+        <span class="mob-nav-badge" id="mob-nav-badge">{{ cart.item_count }}</span>
+      {% endif %}
+      <span class="mob-nav-label">{{ section.settings.cart_label | default: 'Cart' }}</span>
+    </a>
+
+  </div>
+</nav>
+
+<script>
+  /* ── Show on scroll-down, hide on scroll-up ── */
+  (function() {
+    var nav = document.getElementById('mob-bottom-nav');
+    if (!nav) return;
+
+    var lastY = window.scrollY;
+    var threshold = 10;
+    var ticking = false;
+
+    function onScroll() {
+      var currentY = window.scrollY;
+      var delta = currentY - lastY;
+
+      if (delta > threshold) {
+        /* Scrolling DOWN → show nav */
+        nav.classList.add('mob-nav--visible');
+      } else if (delta < -threshold) {
+        /* Scrolling UP → hide nav */
+        nav.classList.remove('mob-nav--visible');
+      }
+
+      lastY = currentY;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    /* Show if already scrolled down on page load */
+    if (window.scrollY > 100) {
+      nav.classList.add('mob-nav--visible');
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Mobile Bottom Nav",
+  "settings": [
+    {
+      "type": "header",
+      "content": "── Appearance ──"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon & Text Color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "min": 18,
+      "max": 32,
+      "step": 2,
+      "default": 24,
+      "label": "Icon Size (px)"
+    },
+    {
+      "type": "range",
+      "id": "label_size",
+      "min": 8,
+      "max": 14,
+      "step": 1,
+      "default": 10,
+      "label": "Label Font Size (px)"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg",
+      "label": "Cart Badge Background",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "color",
+      "id": "badge_color",
+      "label": "Cart Badge Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "── Home ──"
+    },
+    {
+      "type": "text",
+      "id": "home_label",
+      "label": "Home Label",
+      "default": "Home"
+    },
+    {
+      "type": "url",
+      "id": "home_url",
+      "label": "Home URL"
+    },
+    {
+      "type": "header",
+      "content": "── Menu ──"
+    },
+    {
+      "type": "text",
+      "id": "menu_label",
+      "label": "Menu Label",
+      "default": "Menu"
+    },
+    {
+      "type": "url",
+      "id": "menu_url",
+      "label": "Menu URL"
+    },
+    {
+      "type": "header",
+      "content": "── Search ──"
+    },
+    {
+      "type": "text",
+      "id": "search_label",
+      "label": "Search Label",
+      "default": "Search"
+    },
+    {
+      "type": "url",
+      "id": "search_url",
+      "label": "Search URL"
+    },
+    {
+      "type": "header",
+      "content": "── Shop ──"
+    },
+    {
+      "type": "text",
+      "id": "shop_label",
+      "label": "Shop Label",
+      "default": "Shop"
+    },
+    {
+      "type": "url",
+      "id": "shop_url",
+      "label": "Shop URL"
+    },
+    {
+      "type": "header",
+      "content": "── Account ──"
+    },
+    {
+      "type": "text",
+      "id": "account_label",
+      "label": "Account Label",
+      "default": "Account"
+    },
+    {
+      "type": "url",
+      "id": "account_url",
+      "label": "Account URL"
+    },
+    {
+      "type": "header",
+      "content": "── Cart ──"
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "Cart Label",
+      "default": "Cart"
+    },
+    {
+      "type": "url",
+      "id": "cart_url",
+      "label": "Cart URL"
+    }
+  ]
+}
+{% endschema %}
