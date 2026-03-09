@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-banner": {
@@ -106,7 +115,10 @@
         "button_text": "Explore More",
         "button_url": "",
         "bg_image": "{{ metaobjects[\"shopify--color-pattern\"].asphalt.image.value }}",
-        "bg_color": "#f2f0ec"
+        "bg_color": "#f2f0ec",
+        "card1_collection": "",
+        "card2_collection": "",
+        "card3_collection": ""
       }
     },
     "trending-accordion": {
@@ -140,172 +152,15 @@
     },
     "marquee_ticker_6CKgye": {
       "type": "marquee-ticker",
-      "blocks": {
-        "ticker_card_fFdKwT": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Style Title",
-            "font": "assistant_n4",
-            "description": "A short caption for this card.",
-            "link_text": "Explore more",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_mjNFrg": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Style Title",
-            "font": "assistant_n4",
-            "description": "A short caption for this card.",
-            "link_text": "Explore more",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_QKtJHW": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Style Title",
-            "font": "assistant_n4",
-            "description": "A short caption for this card.",
-            "link_text": "Explore more",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_PpiJGe": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Style Title",
-            "font": "assistant_n4",
-            "description": "A short caption for this card.",
-            "link_text": "Explore more",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_Q8wTzw": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Style Title",
-            "font": "assistant_n4",
-            "description": "A short caption for this card.",
-            "link_text": "Explore more",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_WxQc3x": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Style Title",
-            "font": "assistant_n4",
-            "description": "A short caption for this card.",
-            "link_text": "Explore more",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_6YBiKn": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Style Title",
-            "font": "assistant_n4",
-            "description": "A short caption for this card.",
-            "link_text": "Explore more",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_rxzn7i": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Elegant Layers",
-            "font": "assistant_n4",
-            "description": "Layered silhouettes that redefine sophistication.",
-            "link_text": "Explore more",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_3W9iJY": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Urban Minimalism",
-            "font": "assistant_n4",
-            "description": "Clean lines, muted tones, effortless cool.",
-            "link_text": "View collection",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_LzwnTV": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Raw Denim Edit",
-            "font": "assistant_n4",
-            "description": "Washed textures and vintage-inspired fits.",
-            "link_text": "Shop now",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_trpWPL": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "The Silk Series",
-            "font": "assistant_n4",
-            "description": "Fluid fabrics for after-hours elegance.",
-            "link_text": "Discover",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_4j6yin": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Street Luxe",
-            "font": "assistant_n4",
-            "description": "Where streetwear meets high fashion.",
-            "link_text": "See more",
-            "link_url": "",
-            "link_external": true
-          }
-        },
-        "ticker_card_mpbRx7": {
-          "type": "ticker_card",
-          "settings": {
-            "title": "Monochrome Mood",
-            "font": "assistant_n4",
-            "description": "Black, white, and everything in between.",
-            "link_text": "Browse",
-            "link_url": "",
-            "link_external": true
-          }
-        }
-      },
-      "block_order": [
-        "ticker_card_fFdKwT",
-        "ticker_card_mjNFrg",
-        "ticker_card_QKtJHW",
-        "ticker_card_PpiJGe",
-        "ticker_card_Q8wTzw",
-        "ticker_card_WxQc3x",
-        "ticker_card_6YBiKn",
-        "ticker_card_rxzn7i",
-        "ticker_card_3W9iJY",
-        "ticker_card_LzwnTV",
-        "ticker_card_trpWPL",
-        "ticker_card_4j6yin",
-        "ticker_card_mpbRx7"
-      ],
       "name": "Marquee Ticker",
       "settings": {
-        "bg_color": "#0a0a0a",
-        "speed": 45,
-        "gap": 48,
-        "card_width": 260
+        "heading": "TRENDING STYLES YOU CAN'T MISS!",
+        "description_1": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers. Each piece is thoughtfully selected for its quality, comfort, and popularity, making it easy to stay stylish without compromising on ease.",
+        "description_2": "From everyday essentials to standout statement looks, our bestsellers offer something for every wardrobe. Refresh your style with fashion that blends modern design and timeless appeal, and stay ahead of the curve with pieces that truly make an impact.",
+        "cta_text": "SHOP NOW",
+        "cta_url": "shopify://products/american-danish-flag-graphic-tee-usa-denmark-dual-flag-t-shirt-for-fashionalble-person",
+        "collection": "minimalism",
+        "max_products": 5
       }
     },
     "customer-help-center": {
@@ -313,6 +168,7 @@
       "settings": {
         "heading": "Customer Help Center",
         "description": "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here.",
+        "bg_color": "#ffffff",
         "q1": "What is your return and exchange policy?",
         "a1": "We offer a hassle-free return and exchange policy within 30 days of delivery. Items must be unused, in original packaging, and with tags intact. For exchanges, simply initiate a request through our return portal or contact support.",
         "q2": "What if I received a damaged or incorrect item?",
@@ -322,7 +178,13 @@
         "q4": "What payment methods do you accept?",
         "a4": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, Google Pay, and Shop Pay. All transactions are secured with SSL encryption.",
         "q5": "Can I modify or cancel my order after placing it?",
-        "a5": "You can modify or cancel your order within 1 hour of placing it by contacting our support team. After that window, orders enter processing and cannot be changed."
+        "a5": "You can modify or cancel your order within 1 hour of placing it by contacting our support team. After that window, orders enter processing and cannot be changed.",
+        "q6": "",
+        "a6": "",
+        "q7": "",
+        "a7": "",
+        "q8": "",
+        "a8": ""
       }
     }
   },
