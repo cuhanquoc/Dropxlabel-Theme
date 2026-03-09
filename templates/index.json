@@ -153,39 +153,44 @@
     "marquee_ticker_6CKgye": {
       "type": "marquee-ticker",
       "blocks": {
-        "card_1": {
+        "product_card_qF7t4D": {
           "type": "product_card",
           "settings": {
-            "card_color": "#F0E068"
+            "product": "american-danish-flag-graphic-tee-usa-denmark-dual-flag-t-shirt-for-fashionalble-person",
+            "card_color": "#f0e068"
           }
         },
         "card_2": {
           "type": "product_card",
           "settings": {
-            "card_color": "#B8A8E8"
+            "product": "bruno-mars-the-romantic-tour-2026™-wash-t-shirt",
+            "card_color": "#b8a8e8"
           }
         },
         "card_3": {
           "type": "product_card",
           "settings": {
-            "card_color": "#D88CC4"
+            "product": "candy-graphic-t-shirt-retro-sweets-tee",
+            "card_color": "#d88cc4"
           }
         },
         "card_4": {
           "type": "product_card",
           "settings": {
-            "card_color": "#C8E040"
+            "product": "candy-graphic-t-shirt-retro-sweets-tee",
+            "card_color": "#c8e040"
           }
         },
         "card_5": {
           "type": "product_card",
           "settings": {
-            "card_color": "#E8A0B0"
+            "product": "bruno-mars-the-romantic-tour-north-america-europe-uk™-wash-t-shirt",
+            "card_color": "#e8a0b0"
           }
         }
       },
       "block_order": [
-        "card_1",
+        "product_card_qF7t4D",
         "card_2",
         "card_3",
         "card_4",
