@@ -277,6 +277,13 @@
       max-width: 380px;
     }
   }
+
+  /* Desktop: make .bsb-mobile-cards transparent wrapper */
+  @media (min-width: 768px) {
+    .bsb-mobile-cards {
+      display: contents;
+    }
+  }
 </style>
 
 <section class="bsb-section" id="brand-story-bento">
@@ -303,6 +310,7 @@
       </div>
 
       <!-- Dynamic Collection Cards -->
+      <div class="bsb-mobile-cards">
       {%- assign collection_handles = 'card1_collection,card2_collection,card3_collection' | split: ',' -%}
       {%- for handle_key in collection_handles -%}
         {%- assign col = section.settings[handle_key] -%}
@@ -332,6 +340,7 @@
           </div>
         {%- endif -%}
       {%- endfor -%}
+      </div>
 
     </div>
   </div>
