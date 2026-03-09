@@ -227,3 +227,22 @@ document.addEventListener('DOMContentLoaded', function () {
   }());
 
 });
+
+/* ═══ JolyUI Button Spotlight — Mouse Tracking ═══
+   Updates --joly-mx / --joly-my CSS vars on hover
+   to drive the radial-gradient spotlight in input.css.
+   Uses event delegation for performance.
+   ═══════════════════════════════════════════════ */
+(function () {
+  var SELECTORS = '.joly-btn, .bsb-cta-btn, .bsb-cta-icon, .bsb-card-link, [data-joly-btn]';
+
+  document.addEventListener('mousemove', function (e) {
+    var btn = e.target.closest(SELECTORS);
+    if (!btn) return;
+    var rect = btn.getBoundingClientRect();
+    var mx = ((e.clientX - rect.left) / rect.width * 100);
+    var my = ((e.clientY - rect.top) / rect.height * 100);
+    btn.style.setProperty('--joly-mx', mx + '%');
+    btn.style.setProperty('--joly-my', my + '%');
+  }, { passive: true });
+}());
