@@ -70,8 +70,8 @@
               "link_5_url": "shopify://collections/cottage",
               "link_6_label": "Dark/ Light Academia",
               "link_6_url": "shopify://collections/dark-light-academia",
-              "link_7_label": "",
-              "link_7_url": "",
+              "link_7_label": "Sexy",
+              "link_7_url": "shopify://collections/sexy",
               "link_8_label": "",
               "link_8_url": ""
             }
@@ -168,6 +168,28 @@
           "social_tiktok": "",
           "social_twitter": "",
           "social_vimeo": ""
+        }
+      },
+      "mobile-bottom-nav": {
+        "type": "mobile-bottom-nav",
+        "settings": {
+          "icon_color": "#1a1a1a",
+          "icon_size": 24,
+          "label_size": 10,
+          "badge_bg": "#0a0a0a",
+          "badge_color": "#ffffff",
+          "home_label": "Home",
+          "home_url": "",
+          "menu_label": "Menu",
+          "menu_url": "",
+          "search_label": "Search",
+          "search_url": "",
+          "shop_label": "Shop",
+          "shop_url": "",
+          "account_label": "Account",
+          "account_url": "",
+          "cart_label": "Cart",
+          "cart_url": ""
         }
       }
     },
