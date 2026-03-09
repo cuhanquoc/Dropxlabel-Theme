@@ -1,370 +1,180 @@
-{% comment %} MARQUEE TICKER — Cosmic borderless cards, Quiet Luxury UI {% endcomment %}
+{% comment %} TRENDING STYLES — Featured Products with Colorful Cards {% endcomment %}
 
-<marquee-ticker
-  class="mt-section block"
-  style="background-color: {{ section.settings.bg_color | default: '#0a0a0a' }};"
-  data-speed="{{ section.settings.speed | default: 30 }}"
->
-  <!-- ── Card Track ── -->
-  <div class="mt-track-wrap relative overflow-hidden py-16 md:py-24">
-    <!-- Edge fades -->
-    <div class="mt-fade-left absolute top-0 bottom-0 left-0 z-[5] pointer-events-none"
-         style="width: 120px; background: linear-gradient(to right, {{ section.settings.bg_color | default: '#0a0a0a' }}, transparent);"></div>
-    <div class="mt-fade-right absolute top-0 bottom-0 right-0 z-[5] pointer-events-none"
-         style="width: 120px; background: linear-gradient(to left, {{ section.settings.bg_color | default: '#0a0a0a' }}, transparent);"></div>
+<section class="relative overflow-hidden" style="background-color: #0a0a0a;">
+  <!-- Subtle gradient glow background -->
+  <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(120,180,80,0.08) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 80% 10%, rgba(200,180,60,0.06) 0%, transparent 50%), radial-gradient(ellipse 50% 30% at 20% 5%, rgba(100,200,120,0.05) 0%, transparent 50%);"></div>
 
-    <div
-      class="mt-track flex w-max gap-8"
-      style="
-        --mt-speed: {{ section.settings.speed | default: 30 }}s;
-        --mt-gap: {{ section.settings.gap | default: 32 }}px;
-        --mt-card-w: {{ section.settings.card_width | default: 280 }}px;
-        animation: mt-scroll var(--mt-speed) linear infinite;
-        gap: var(--mt-gap);
-      "
-      id="mt-track"
-    >
-      {%- comment -%} First copy of blocks {%- endcomment -%}
-      {% for block in section.blocks %}
-        {% if block.type == 'ticker_card' %}
-          <div class="mt-card flex-shrink-0 group" style="width: var(--mt-card-w);" {{ block.shopify_attributes }}>
-            <!-- Media — fixed aspect ratio per quiet-luxury-ui rule -->
-            <div class="relative aspect-[4/5] overflow-hidden rounded-xl">
-              {% if block.settings.video != blank %}
-                <video
-                  src="{{ block.settings.video.sources[0].url }}"
-                  autoplay muted loop playsinline
-                  poster="{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 600 }}{% endif %}"
-                  class="w-full h-full object-cover"
-                ></video>
-              {% elsif block.settings.image != blank %}
-                <img
-                  src="{{ block.settings.image | image_url: width: 600 }}"
-                  alt="{{ block.settings.title | default: 'Card' | escape }}"
-                  loading="lazy" width="600" height="750"
-                  class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                />
-              {% else %}
-                <img
-                  src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&auto=format&fit=crop"
-                  alt="Placeholder" loading="lazy" width="600" height="750"
-                  class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                />
+  <div class="relative z-10 max-w-[640px] mx-auto px-5 md:px-8 py-16 md:py-24">
+
+    <!-- ── Hero Text ── -->
+    <h2 style="font-family: var(--font-heading); font-size: clamp(2rem, 7vw, 3.2rem); font-weight: 800; line-height: 1.05; letter-spacing: 0.02em; text-transform: uppercase; color: #ffffff; margin-bottom: 1.75rem;">
+      {{ section.settings.heading | default: "TRENDING STYLES YOU CAN'T MISS!" }}
+    </h2>
+
+    {% if section.settings.description_1 != blank %}
+      <p style="font-family: var(--font-body); font-size: 0.92rem; line-height: 1.75; color: rgba(255,255,255,0.6); margin-bottom: 1.25rem; max-width: 560px;">
+        {{ section.settings.description_1 }}
+      </p>
+    {% endif %}
+
+    {% if section.settings.description_2 != blank %}
+      <p style="font-family: var(--font-body); font-size: 0.92rem; line-height: 1.75; color: rgba(255,255,255,0.6); margin-bottom: 2.5rem; max-width: 560px;">
+        {{ section.settings.description_2 }}
+      </p>
+    {% endif %}
+
+    <!-- ── CTA Button — pill with arrow ── -->
+    {% if section.settings.cta_text != blank %}
+      <a href="{{ section.settings.cta_url | default: '/collections/all' }}"
+         class="inline-flex items-center gap-3 rounded-full border border-white/20 bg-transparent hover:bg-white/5 transition-all duration-300 pr-6 pl-1.5 py-1.5 mb-12 md:mb-16 min-h-[48px] group">
+        <span class="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0a0a0a" stroke-width="2">
+            <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/>
+          </svg>
+        </span>
+        <span style="font-family: var(--font-body); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #ffffff;">
+          {{ section.settings.cta_text }}
+        </span>
+      </a>
+    {% endif %}
+
+    <!-- ── Product Cards ── -->
+    {% assign collection = section.settings.collection %}
+    {% assign card_colors = 'F0E068,B8A8E8,D88CC4,C8E040,E8A0B0,A8D8EA,FFD699,C4E8B0' | split: ',' %}
+    {% assign max_products = section.settings.max_products | default: 6 %}
+
+    <div class="rounded-2xl border border-white/[0.08] p-3 md:p-4 flex flex-col gap-3 md:gap-4">
+      {% if collection != blank %}
+        {% for product in collection.products limit: max_products %}
+          {% assign color_index = forloop.index0 | modulo: card_colors.size %}
+          {% assign bg_color = card_colors[color_index] %}
+
+          <a href="{{ product.url }}"
+             class="flex items-center gap-4 md:gap-5 rounded-xl md:rounded-2xl p-3 md:p-4 transition-transform duration-300 hover:scale-[1.01] min-h-[100px] group"
+             style="background-color: #{{ bg_color }};">
+            <!-- Product Image -->
+            <div class="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-lg md:rounded-xl overflow-hidden shrink-0 bg-white/20">
+              {% if product.featured_image != blank %}
+                <img src="{{ product.featured_image | image_url: width: 280 }}"
+                     alt="{{ product.title | escape }}"
+                     loading="lazy" width="280" height="280"
+                     class="w-full h-full object-cover">
               {% endif %}
-
-              <!-- Cosmic gradient veil — dissolves bottom into bg -->
-              <div class="absolute inset-0 pointer-events-none"
-                   style="background: linear-gradient(180deg, transparent 40%, {{ section.settings.bg_color | default: '#0a0a0a' }}cc 75%, {{ section.settings.bg_color | default: '#0a0a0a' }} 100%);"></div>
-
-              <!-- Hover glow ring -->
-              <div class="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                   style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 0 40px rgba(255,255,255,0.04);"></div>
-
-              <!-- Text overlay — sits on the faded bottom -->
-              <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6 flex flex-col gap-2">
-                {% if block.settings.title != blank %}
-                  <p class="font-heading font-semibold text-[1rem] md:text-[1.05rem] leading-tight tracking-wide text-white"
-                     style="font-family: {{ block.settings.font | default: 'var(--font-heading)' }};">
-                    {{ block.settings.title }}
-                  </p>
-                {% endif %}
-                {% if block.settings.description != blank %}
-                  <p class="font-body text-[0.78rem] leading-relaxed text-white/50">
-                    {{ block.settings.description }}
-                  </p>
-                {% endif %}
-                {% if block.settings.link_text != blank %}
-                  <a href="{{ block.settings.link_url | default: '#' }}"
-                     class="mt-card-link inline-flex items-center gap-1.5 font-body text-[0.72rem] tracking-wider uppercase text-white/40 hover:text-white transition-colors duration-300 mt-1 min-h-[44px] min-w-[44px] py-2"
-                     {% if block.settings.link_external %}target="_blank" rel="noopener"{% endif %}
-                  >
-                    {{ block.settings.link_text }}
-                    <svg class="w-2.5 h-2.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                  </a>
-                {% endif %}
-              </div>
             </div>
-          </div>
-        {% endif %}
-      {% endfor %}
 
-      {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
-      {% for block in section.blocks %}
-        {% if block.type == 'ticker_card' %}
-          <div class="mt-card flex-shrink-0 group" style="width: var(--mt-card-w);" aria-hidden="true">
-            <div class="relative aspect-[4/5] overflow-hidden rounded-xl">
-              {% if block.settings.video != blank %}
-                <video
-                  src="{{ block.settings.video.sources[0].url }}"
-                  autoplay muted loop playsinline
-                  poster="{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 600 }}{% endif %}"
-                  class="w-full h-full object-cover"
-                ></video>
-              {% elsif block.settings.image != blank %}
-                <img
-                  src="{{ block.settings.image | image_url: width: 600 }}"
-                  alt="{{ block.settings.title | default: 'Card' | escape }}"
-                  loading="lazy" width="600" height="750"
-                  class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                />
-              {% else %}
-                <img
-                  src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80&auto=format&fit=crop"
-                  alt="Placeholder" loading="lazy" width="600" height="750"
-                  class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                />
-              {% endif %}
-
-              <div class="absolute inset-0 pointer-events-none"
-                   style="background: linear-gradient(180deg, transparent 40%, {{ section.settings.bg_color | default: '#0a0a0a' }}cc 75%, {{ section.settings.bg_color | default: '#0a0a0a' }} 100%);"></div>
-
-              <div class="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                   style="box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 0 40px rgba(255,255,255,0.04);"></div>
-
-              <div class="absolute bottom-0 left-0 right-0 p-5 md:p-6 flex flex-col gap-2">
-                {% if block.settings.title != blank %}
-                  <p class="font-heading font-semibold text-[1rem] md:text-[1.05rem] leading-tight tracking-wide text-white"
-                     style="font-family: {{ block.settings.font | default: 'var(--font-heading)' }};">
-                    {{ block.settings.title }}
-                  </p>
-                {% endif %}
-                {% if block.settings.description != blank %}
-                  <p class="font-body text-[0.78rem] leading-relaxed text-white/50">
-                    {{ block.settings.description }}
-                  </p>
-                {% endif %}
-                {% if block.settings.link_text != blank %}
-                  <a href="{{ block.settings.link_url | default: '#' }}"
-                     class="mt-card-link inline-flex items-center gap-1.5 font-body text-[0.72rem] tracking-wider uppercase text-white/40 hover:text-white transition-colors duration-300 mt-1 min-h-[44px] min-w-[44px] py-2"
-                     tabindex="-1"
-                     {% if block.settings.link_external %}target="_blank" rel="noopener"{% endif %}
-                  >
-                    {{ block.settings.link_text }}
-                    <svg class="w-2.5 h-2.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                  </a>
-                {% endif %}
-              </div>
+            <!-- Product Info -->
+            <div class="flex-1 min-w-0">
+              <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: #0a0a0a; margin-bottom: 0.35rem;">
+                {{ product.title }}
+              </p>
+              <p style="font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; color: #0a0a0a;">
+                {{ product.price | money }}
+              </p>
             </div>
+
+            <!-- Arrow Icon -->
+            <span class="w-11 h-11 rounded-full border-2 border-[#0a0a0a]/20 flex items-center justify-center shrink-0 group-hover:border-[#0a0a0a]/40 transition-colors duration-300">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0a0a0a" stroke-width="1.8">
+                <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/>
+              </svg>
+            </span>
+          </a>
+        {% endfor %}
+      {% else %}
+        <!-- Placeholder cards when no collection selected -->
+        {% assign placeholder_names = 'Summer Shirt,Women Sweater,Loose T-shirt,Wool Overcoat,Sports Bra' | split: ',' %}
+        {% assign placeholder_prices = '$1,200.00 USD,$4,500.00 USD,$3,500.00 USD,$4,500.00 USD,$4,500.00 USD' | split: ',' %}
+
+        {% for name in placeholder_names %}
+          {% assign color_index = forloop.index0 | modulo: card_colors.size %}
+          {% assign bg_color = card_colors[color_index] %}
+
+          <div class="flex items-center gap-4 md:gap-5 rounded-xl md:rounded-2xl p-3 md:p-4 min-h-[100px]"
+               style="background-color: #{{ bg_color }};">
+            <div class="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-lg md:rounded-xl overflow-hidden shrink-0 bg-white/30">
+              {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1.05rem; line-height: 1.3; color: #0a0a0a; margin-bottom: 0.35rem;">
+                {{ name }}
+              </p>
+              <p style="font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; color: #0a0a0a;">
+                {{ placeholder_prices[forloop.index0] }}
+              </p>
+            </div>
+            <span class="w-11 h-11 rounded-full border-2 border-[#0a0a0a]/20 flex items-center justify-center shrink-0">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0a0a0a" stroke-width="1.8">
+                <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/>
+              </svg>
+            </span>
           </div>
-        {% endif %}
-      {% endfor %}
+        {% endfor %}
+      {% endif %}
     </div>
+
   </div>
-
-  <!-- Mobile swipe indicator -->
-  <div class="mt-scroll-indicator hidden justify-center gap-1 pb-6">
-    <span class="font-body text-[0.6rem] tracking-widest uppercase text-white/25">
-      ← Swipe to explore →
-    </span>
-  </div>
-</marquee-ticker>
-
-<script>
-  if (!customElements.get('marquee-ticker')) {
-    customElements.define('marquee-ticker', class extends HTMLElement {
-      connectedCallback() {
-        this._track = this.querySelector('.mt-track');
-        if (!this._track) return;
-
-        this._mq = window.matchMedia('(max-width: 767px)');
-
-        /* Show scroll indicator on mobile */
-        const indicator = this.querySelector('.mt-scroll-indicator');
-        if (this._mq.matches && indicator) {
-          indicator.classList.remove('hidden');
-          indicator.classList.add('flex');
-        }
-
-        if (!this._mq.matches) return;
-
-        this._posX = 0;
-        this._speed = 0.5;
-        this._touching = false;
-        this._startTouchX = 0;
-        this._startPosX = 0;
-        this._resumeTimer = null;
-        this._halfWidth = 0;
-
-        this._measureHalf();
-
-        this._tick = this._tick.bind(this);
-        this._onTouchStart = this._onTouchStart.bind(this);
-        this._onTouchMove = this._onTouchMove.bind(this);
-        this._onTouchEnd = this._onTouchEnd.bind(this);
-        this._measureHalf = this._measureHalf.bind(this);
-
-        this._raf = requestAnimationFrame(this._tick);
-
-        this._track.addEventListener('touchstart', this._onTouchStart, { passive: true });
-        this._track.addEventListener('touchmove', this._onTouchMove, { passive: true });
-        this._track.addEventListener('touchend', this._onTouchEnd, { passive: true });
-        window.addEventListener('resize', this._measureHalf);
-      }
-
-      disconnectedCallback() {
-        if (this._raf) cancelAnimationFrame(this._raf);
-        if (this._resumeTimer) clearTimeout(this._resumeTimer);
-        if (this._track) {
-          this._track.removeEventListener('touchstart', this._onTouchStart);
-          this._track.removeEventListener('touchmove', this._onTouchMove);
-          this._track.removeEventListener('touchend', this._onTouchEnd);
-        }
-        window.removeEventListener('resize', this._measureHalf);
-      }
-
-      _measureHalf() {
-        this._halfWidth = this._track.scrollWidth / 2;
-      }
-
-      _tick() {
-        if (!this._touching) {
-          this._posX -= this._speed;
-          if (Math.abs(this._posX) >= this._halfWidth) {
-            this._posX += this._halfWidth;
-          }
-          this._track.style.transform = 'translateX(' + this._posX + 'px)';
-        }
-        this._raf = requestAnimationFrame(this._tick);
-      }
-
-      _onTouchStart(e) {
-        this._touching = true;
-        if (this._resumeTimer) clearTimeout(this._resumeTimer);
-        this._startTouchX = e.touches[0].clientX;
-        this._startPosX = this._posX;
-
-        const indicator = this.querySelector('.mt-scroll-indicator');
-        if (indicator) {
-          indicator.classList.add('opacity-0');
-        }
-      }
-
-      _onTouchMove(e) {
-        if (!this._touching) return;
-        var dx = e.touches[0].clientX - this._startTouchX;
-        this._posX = this._startPosX + dx;
-        if (this._posX > 0) this._posX -= this._halfWidth;
-        if (Math.abs(this._posX) >= this._halfWidth) this._posX += this._halfWidth;
-        this._track.style.transform = 'translateX(' + this._posX + 'px)';
-      }
-
-      _onTouchEnd() {
-        var self = this;
-        this._resumeTimer = setTimeout(function () {
-          self._touching = false;
-        }, 1500);
-      }
-    });
-  }
-</script>
+</section>
 
 {% schema %}
 {
-  "name": "Marquee Ticker",
+  "name": "Trending Styles",
   "tag": "section",
   "settings": [
     {
-      "type": "color",
-      "id": "bg_color",
-      "label": "Background Color",
-      "default": "#0a0a0a"
+      "type": "header",
+      "content": "Heading & Text"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "TRENDING STYLES YOU CAN'T MISS!"
+    },
+    {
+      "type": "textarea",
+      "id": "description_1",
+      "label": "Description Paragraph 1",
+      "default": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers. Each piece is thoughtfully selected for its quality, comfort, and popularity, making it easy to stay stylish without compromising on ease."
+    },
+    {
+      "type": "textarea",
+      "id": "description_2",
+      "label": "Description Paragraph 2",
+      "default": "From everyday essentials to standout statement looks, our bestsellers offer something for every wardrobe. Refresh your style with fashion that blends modern design and timeless appeal, and stay ahead of the curve with pieces that truly make an impact."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Text",
+      "default": "SHOP NOW"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
     },
     {
       "type": "range",
-      "id": "speed",
-      "min": 10,
-      "max": 80,
-      "step": 5,
-      "default": 30,
-      "label": "Scroll Speed (seconds)",
-      "info": "Lower = faster"
-    },
-    {
-      "type": "range",
-      "id": "gap",
-      "min": 8,
-      "max": 64,
-      "step": 4,
-      "default": 32,
-      "label": "Gap between cards (px)"
-    },
-    {
-      "type": "range",
-      "id": "card_width",
-      "min": 200,
-      "max": 400,
-      "step": 20,
-      "default": 280,
-      "label": "Card Width (px)"
-    }
-  ],
-  "blocks": [
-    {
-      "type": "ticker_card",
-      "name": "Card",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image",
-          "info": "Recommended: 600 × 750px (4:5)"
-        },
-        {
-          "type": "video",
-          "id": "video",
-          "label": "Video (optional)",
-          "info": "Overrides the image if provided. Upload via Files > Videos."
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "Style Title"
-        },
-        {
-          "type": "font_picker",
-          "id": "font",
-          "label": "Title Font",
-          "default": "assistant_n4"
-        },
-        {
-          "type": "textarea",
-          "id": "description",
-          "label": "Description",
-          "default": "A short caption for this card."
-        },
-        {
-          "type": "text",
-          "id": "link_text",
-          "label": "Link Text",
-          "default": "Explore more",
-          "info": "Subtle underlined link"
-        },
-        {
-          "type": "url",
-          "id": "link_url",
-          "label": "Link URL"
-        },
-        {
-          "type": "checkbox",
-          "id": "link_external",
-          "label": "Open in new tab",
-          "default": true
-        }
-      ]
+      "id": "max_products",
+      "label": "Max Products to Show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 5
     }
   ],
   "presets": [
     {
-      "name": "Marquee Ticker",
-      "blocks": [
-        { "type": "ticker_card", "settings": { "title": "Elegant Layers", "description": "Layered silhouettes that redefine sophistication.", "link_text": "Explore more" } },
-        { "type": "ticker_card", "settings": { "title": "Urban Minimalism", "description": "Clean lines, muted tones, effortless cool.", "link_text": "View collection" } },
-        { "type": "ticker_card", "settings": { "title": "Raw Denim Edit", "description": "Washed textures and vintage-inspired fits.", "link_text": "Shop now" } },
-        { "type": "ticker_card", "settings": { "title": "The Silk Series", "description": "Fluid fabrics for after-hours elegance.", "link_text": "Discover" } },
-        { "type": "ticker_card", "settings": { "title": "Street Luxe", "description": "Where streetwear meets high fashion.", "link_text": "See more" } },
-        { "type": "ticker_card", "settings": { "title": "Monochrome Mood", "description": "Black, white, and everything in between.", "link_text": "Browse" } }
-      ]
+      "name": "Trending Styles"
     }
   ]
 }
