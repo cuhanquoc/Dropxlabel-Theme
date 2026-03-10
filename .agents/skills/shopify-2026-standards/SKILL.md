@@ -163,6 +163,15 @@ description: >
 
 ---
 
+## 10. DOM & JavaScript Safety
+
+### Xóa phần tử HTML (DOM Removal)
+- **CẤM** xóa một thẻ HTML có `id=` hoặc class đặc biệt mà không kiểm tra JavaScript.
+- **BẮT BUỘC** tìm kiếm (`grep_search`) ID/class đó trong khối `<script>` hoặc các file `.js` liên quan trước khi xóa.
+- Nếu muốn xóa HTML mà JS đang gọi, phải cập nhật JS an toàn BẰNG CÁCH thêm Optional Chaining (`el?.textContent`) hoặc lệnh điều kiện (`if (el)`), tránh gây lỗi "Uncaught TypeError: null".
+
+---
+
 ## Quick Reference — Checklist Trước Deploy
 
 - [ ] Shopify CLI `theme dev` hoạt động
@@ -177,3 +186,4 @@ description: >
 - [ ] Metaobjects dùng `.value` chain đúng
 - [ ] Cart dùng AJAX API + Section Rendering
 - [ ] Không chỉnh sửa `checkout.liquid`
+- [ ] **KHÔNG xóa ID/Class HTML đang được JS gọi**
