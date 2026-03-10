@@ -338,9 +338,16 @@
 <style>
 /* ── Carousel track ── */
 #fc-track {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-snap-type: x mandatory !important;
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior-x: contain !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  -webkit-overflow-scrolling: touch;
 }
 #fc-track::-webkit-scrollbar { display: none; }
 
@@ -349,6 +356,8 @@
   flex: 0 0 auto !important; /* Đảm bảo thẻ KHÔNG bị bóp méo khi không đủ chỗ */
   width: 85vw !important;    /* Mobile: Hiện đúng 1 thẻ và 1 góc của thẻ tiếp theo */
   max-width: none !important;
+  scroll-snap-align: start !important;
+  scroll-snap-stop: always !important;
 }
 @media (min-width: 640px) {
   .fc-card { width: calc(50% - 12px) !important; } /* Tablet: 2 thẻ + 1 góc */
