@@ -623,7 +623,7 @@
           {% endif %}
           
           {% if pairs_products.size > 0 %}
-          <div style="margin-top: 3.5rem; margin-bottom: 2.5rem;">
+          <div style="margin-top: 3.5rem; margin-bottom: 2.5rem; max-width: 100%; min-width: 0; overflow: hidden;">
             <!-- Header -->
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
               <h2 style="font-family: var(--font-heading, sans-serif); font-weight: 800; font-size: 1.35rem; letter-spacing: 0em; text-transform: uppercase; margin: 0; color: #000;">PAIRS WELL WITH</h2>
@@ -638,7 +638,7 @@
             </div>
             
             <!-- Carousel Track -->
-            <div id="pairs-carousel-track" style="display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 0.5rem;">
+            <div id="pairs-carousel-track" style="display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 0.5rem; width: 100%;">
               <style>#pairs-carousel-track::-webkit-scrollbar { display: none; }</style>
               {% for p in pairs_products limit: 6 %}
               <div style="scroll-snap-align: start; flex: 0 0 calc(33.333% - 11px); min-width: 150px;">
