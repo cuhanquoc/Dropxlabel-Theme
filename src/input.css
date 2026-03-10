@@ -571,6 +571,7 @@ body {
     display: block;
     text-decoration: none;
     cursor: pointer;
+    opacity: 1;
 }
 
 .mc-product-title {
@@ -738,8 +739,8 @@ body {
 }
 
 @media (min-width: 768px) {
-    #main-collection .pt-40 {
-        padding-top: 10rem;
+    #main-collection .pt-24 {
+        padding-top: 7rem;
     }
 
     .mc-quick-view {
@@ -759,14 +760,14 @@ body {
 }
 
 @media (min-width: 1024px) {
-    #main-collection .pt-40 {
-        padding-top: 10rem;
+    #main-collection .pt-24 {
+        padding-top: 8rem;
     }
 }
 
 @media (max-width: 767px) {
-    #main-collection .pt-40 {
-        padding-top: 7rem;
+    #main-collection .pt-24 {
+        padding-top: 5rem;
     }
 
     .mc-filter-tag {
