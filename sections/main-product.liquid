@@ -218,11 +218,19 @@
 
   /* Accordion details (Description/Materials) */
   .product-accordion {
-    border-top: 1px solid var(--color-border);
+    border-top: none;
+    background-color: #000;
+    color: #fff;
+    width: 100%;
+    margin-top: 3rem;
   }
 
   .product-accordion-item {
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid #333;
+    padding: 0 1rem;
+  }
+  .product-accordion-item:last-child {
+    border-bottom: none;
   }
 
   .product-accordion-trigger {
@@ -230,40 +238,58 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1.1rem 0;
+    padding: 1.25rem 0;
     background: none;
     border: none;
     cursor: pointer;
-    font-family: var(--font-body);
-    font-size: 0.72rem;
-    letter-spacing: 0.14em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0;
     text-transform: uppercase;
-    color: var(--color-text);
+    color: #fff;
   }
 
   .product-accordion-body {
     max-height: 0;
     overflow: hidden;
-    transition: max-height 400ms cubic-bezier(0.16, 1, 0.3, 1),
-                padding 300ms ease;
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    line-height: 1.8;
-    color: var(--color-muted);
+    transition: max-height 400ms ease, padding 300ms ease;
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #ccc;
   }
 
   .product-accordion-body.open {
-    max-height: 400px;
+    max-height: 800px;
     padding-bottom: 1.25rem;
   }
 
-  /* Accordion icon rotate */
-  .accordion-icon {
-    transition: transform 300ms ease;
+  .accordion-icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #fff;
+    border-radius: 50%;
     flex-shrink: 0;
+    color: #fff;
   }
 
-  .product-accordion-trigger[aria-expanded="true"] .accordion-icon {
+  .accordion-icon-plus {
+    display: block;
+  }
+  .accordion-icon-minus {
+    display: none;
+  }
+
+  .product-accordion-trigger[aria-expanded="true"] .accordion-icon-plus {
+    display: none;
+  }
+  .product-accordion-trigger[aria-expanded="true"] .accordion-icon-minus {
+    display: block;
+  }  .product-accordion-trigger[aria-expanded="true"] .accordion-icon {
     transform: rotate(45deg);
   }
 
@@ -682,35 +708,60 @@
           </div>
           {% endif %}
 
-          <!-- Product Accordions -->
-          <div class="product-accordion mt-10">
-            <div class="product-accordion-item">
-              <button type="button" class="product-accordion-trigger" aria-expanded="true" onclick="toggleAccordion(this)">
-                <span>Description</span>
-                <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-              </button>
-              <div class="product-accordion-body open">
-                {% if product.description != blank %}
-                  {{ product.description }}
-                {% else %}
-                  <p>{{ product.title }} — curated with intention, crafted for permanence.</p>
-                {% endif %}
+          <!-- Product Accordions (Dynamic from Blocks) -->
+          <div class="product-accordion">
+            {% assign has_accordions = false %}
+            {% for block in section.blocks %}
+              {% if block.type == 'description' or block.type == 'accordion' %}
+                {% assign has_accordions = true %}
+                <div class="product-accordion-item" {{ block.shopify_attributes }}>
+                  <button type="button" class="product-accordion-trigger" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" onclick="toggleAccordion(this)">
+                    <span>{{ block.settings.heading | escape }}</span>
+                    <div class="accordion-icon-circle">
+                      <svg class="accordion-icon-plus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      <svg class="accordion-icon-minus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </div>
+                  </button>
+                  <div class="product-accordion-body {% if forloop.first %}open{% endif %}">
+                    {% if block.type == 'description' %}
+                      <div class="prose" style="padding-bottom: 1.25rem;">
+                        {% if product.description != blank %}
+                          {{ product.description }}
+                        {% else %}
+                          <p>{{ product.title }} is a timeless wardrobe essential, offering a perfect balance of style and comfort. Designed with a classic neckline and high-quality construction, it provides a sleek and versatile look suitable for any occasion.</p>
+                        {% endif %}
+                      </div>
+                    {% else %}
+                      <div class="prose" style="padding-bottom: 1.25rem;">
+                        {{ block.settings.content }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+
+            {% if has_accordions == false %}
+              <!-- Fallback if no blocks added in the theme editor -->
+              <div class="product-accordion-item">
+                <button type="button" class="product-accordion-trigger" aria-expanded="true" onclick="toggleAccordion(this)">
+                  <span>DESCRIPTION</span>
+                  <div class="accordion-icon-circle">
+                    <svg class="accordion-icon-plus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <svg class="accordion-icon-minus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </div>
+                </button>
+                <div class="product-accordion-body open">
+                  <div class="prose" style="padding-bottom: 1.25rem;">
+                    {% if product.description != blank %}
+                      {{ product.description }}
+                    {% else %}
+                      <p>This is a timeless wardrobe essential, offering a perfect balance of style and comfort.</p>
+                    {% endif %}
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="product-accordion-item">
-              <button type="button" class="product-accordion-trigger" aria-expanded="false" onclick="toggleAccordion(this)">
-                <span>Materials & Care</span>
-                <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-              </button>
-              <div class="product-accordion-body">
-                {% assign material_meta = product.metafields.custom.materials %}
-                {% if material_meta != blank %}
-                  <p>{{ material_meta }}</p>
-                {% else %}
-                  <p>Composition varies by style — refer to garment label for fibre content. Gentle hand wash or dry clean recommended to preserve the integrity of the fabric.</p>
-                {% endif %}
-              </div>
-            </div>
+            {% endif %}
           </div>
 
         {%- endform -%}
@@ -1022,6 +1073,37 @@
           "info": "Paste an SVG icon here (24x24 recommended). Example: <svg width=\"24\" height=\"24\" ...></svg>"
         }
       ]
+    },
+    {
+      "type": "accordion",
+      "name": "Accordion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Accordion Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Accordion content goes here.</p>"
+        }
+      ]
+    },
+    {
+      "type": "description",
+      "name": "Product Description",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "DESCRIPTION"
+        }
+      ]
     }
   ],
   "presets": [
@@ -1068,6 +1150,33 @@
           "settings": {
             "social_url": "mailto:hello@example.com",
             "social_icon_svg": "<svg width=\"24\" height=\"24\" fill=\"currentColor\" viewBox=\"0 0 24 24\"><path d=\"M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z\"/></svg>"
+          }
+        },
+        {
+          "type": "description",
+          "settings": {
+            "heading": "DESCRIPTION"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "heading": "INTERNATIONAL SHIPPING AVAILABLE",
+            "content": "<p>We offer international shipping to most destinations worldwide. Shipping costs and delivery times are calculated at checkout based on your location. Please note that customs duties and taxes may apply depending on your country's regulations.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "heading": "PREMIUM FABRICS",
+            "content": "<p>Our garments are crafted from premium, high-quality fabrics thoughtfully sourced for durability and comfort. Composition varies by style — please refer to the garment label for specific fiber content. Gentle hand wash or dry clean is recommended.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "heading": "DISCOVER YOUR PERFECT SIZE",
+            "content": "<p>Not sure about your size? Refer to our comprehensive size guide to find the perfect fit. Measurements are provided in both inches and centimeters for your convenience.</p>"
           }
         }
       ]
