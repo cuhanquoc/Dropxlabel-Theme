@@ -126,7 +126,7 @@
                   {{ product.price | money }}
                 </span>
                 {%- if product.compare_at_price_min > product.price -%}
-                  <span class="fc-compare font-body line-through" style="font-size:calc({{ fc_title_size }} * 0.95);color:{{ fc_compare_color }};">
+                  <span class="fc-compare font-body line-through opacity-70" style="font-size:calc({{ fc_title_size }} * 0.7); color:{{ fc_compare_color }}; text-decoration: line-through !important; margin-left: 4px;">
                     {{ product.compare_at_price_min | money }}
                   </span>
                 {%- endif -%}
@@ -219,7 +219,7 @@
               <div class="flex items-center justify-start gap-2 mt-1 flex-wrap">
                 <span class="fc-price font-body font-semibold" style="font-size:calc({{ fc_title_size }} * 1.15);color:{{ fc_price_color }};">{{ ph_price }}</span>
                 {%- if ph_c != '$0' and ph_c != '' -%}
-                  <span class="fc-compare font-body line-through" style="font-size:calc({{ fc_title_size }} * 0.95);color:{{ fc_compare_color }};">{{ ph_c }}</span>
+                  <span class="fc-compare font-body line-through opacity-70" style="font-size:calc({{ fc_title_size }} * 0.7); color:{{ fc_compare_color }}; text-decoration: line-through !important; margin-left: 4px;">{{ ph_c }}</span>
                 {%- endif -%}
               </div>
               <!-- Demo swatches -->
