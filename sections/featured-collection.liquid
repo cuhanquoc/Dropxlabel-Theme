@@ -19,7 +19,7 @@
   </div>
 
   <!-- ── Carousel ── -->
-  <div class="relative px-5 md:px-10 pb-16">
+  <div class="relative pb-16">
     <div
       class="fc-track flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory pb-3" style="scroll-behavior: smooth; -webkit-overflow-scrolling: touch;"
       id="fc-track"
@@ -341,6 +341,9 @@
   display: flex !important;
   flex-wrap: nowrap !important;
   overflow-x: auto !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  scroll-padding-left: 20px !important;
   overflow-y: hidden !important;
   scroll-snap-type: x mandatory !important;
   scroll-behavior: smooth !important;
@@ -348,6 +351,13 @@
   overscroll-behavior-x: contain !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+@media (min-width: 768px) {
+  #fc-track {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+    scroll-padding-left: 40px !important;
+  }
 }
 #fc-track::-webkit-scrollbar { display: none; }
 
@@ -490,6 +500,13 @@
   transition: transform 0.42s cubic-bezier(0.32,0.72,0,1);
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+@media (min-width: 768px) {
+  #fc-track {
+    padding-left: 40px !important;
+    padding-right: 40px !important;
+    scroll-padding-left: 40px !important;
+  }
 }
 .fc-qv-panel::-webkit-scrollbar { display: none; }
 .fc-qv-modal.fc-qv-open .fc-qv-panel { transform: translateY(0); }
