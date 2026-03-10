@@ -1,220 +1,823 @@
-<section class="product-section w-full bg-white text-[#0a0a0a] pb-12" data-section-id="{{ section.id }}" data-product-handle="{{ product.handle }}">
-  <style>
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    
-    .shopify-payment-button__button {
-      border-radius: 0px !important;
-      height: 3.25rem !important;
-      font-family: inherit !important;
-      font-weight: 500 !important;
-      font-size: 15px !important;
-      letter-spacing: 0 !important;
-      text-transform: none !important;
-      background-color: transparent !important;
-      color: black !important;
-      border: 1px solid black !important;
-      outline: none !important;
-      box-shadow: none !important;
+<style>
+  /* ─────────────────────────────────────────
+     MAIN PRODUCT — Quiet Luxury Edition
+  ───────────────────────────────────────── */
+
+  /* Image stack item */
+  .product-image-item {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f5f4f1;
+  }
+
+  .product-image-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .product-image-item:hover img {
+    transform: scale(1.025);
+  }
+
+  /* Breadcrumb */
+  .product-breadcrumb {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .product-breadcrumb:hover {
+    color: var(--color-accent);
+    opacity: 1;
+  }
+
+  /* Vendor tag */
+  .product-vendor {
+    font-family: var(--font-body);
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  /* Product title */
+  .product-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.7rem, 2.8vw, 2.5rem);
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  /* Price */
+  .product-price {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-text);
+    letter-spacing: 0.04em;
+  }
+
+  .product-price-compare {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--color-muted);
+    text-decoration: line-through;
+    margin-left: 0.6rem;
+  }
+
+  /* Option label */
+  .option-label {
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  /* Size buttons */
+  .size-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 48px;
+    padding: 0 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--color-text);
+    background: transparent;
+    cursor: pointer;
+    transition: border-color 250ms ease, background-color 250ms ease, color 250ms ease;
+  }
+
+  .size-btn:hover,
+  .size-btn.active {
+    border-color: var(--color-text);
+    background-color: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .size-btn.unavailable {
+    opacity: 0.35;
+    cursor: not-allowed;
+    text-decoration: line-through;
+  }
+
+  /* Color swatch */
+  .color-swatch {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 250ms ease, transform 250ms ease;
+    position: relative;
+  }
+
+  .color-swatch:hover,
+  .color-swatch.active {
+    border-color: var(--color-text);
+    transform: scale(1.1);
+  }
+
+  .color-swatch::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    transition: border-color 250ms ease;
+  }
+
+  .color-swatch.active::after {
+    border-color: var(--color-text);
+  }
+
+  /* Quantity selector */
+  .qty-btn {
+    width: 40px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background-color 200ms ease;
+    user-select: none;
+  }
+
+  .qty-btn:hover {
+    background-color: var(--color-border);
+  }
+
+  .qty-input {
+    width: 52px;
+    height: 48px;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    border-left: none;
+    border-right: none;
+    text-align: center;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--color-text);
+    background: transparent;
+    outline: none;
+  }
+
+  /* Add to Cart button */
+  .btn-add-to-cart {
+    width: 100%;
+    height: 60px;
+    background-color: var(--color-text);
+    color: var(--color-bg);
+    border: 2px solid var(--color-text);
+    border-radius: 9999px;
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 350ms ease, color 350ms ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .btn-add-to-cart:hover {
+    background-color: transparent;
+    color: var(--color-text);
+  }
+
+  .btn-add-to-cart:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Accordion details (Description/Materials) */
+  .product-accordion {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .product-accordion-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .product-accordion-trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.1rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-text);
+  }
+
+  .product-accordion-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 400ms cubic-bezier(0.16, 1, 0.3, 1),
+                padding 300ms ease;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--color-muted);
+  }
+
+  .product-accordion-body.open {
+    max-height: 400px;
+    padding-bottom: 1.25rem;
+  }
+
+  /* Accordion icon rotate */
+  .accordion-icon {
+    transition: transform 300ms ease;
+    flex-shrink: 0;
+  }
+
+  .product-accordion-trigger[aria-expanded="true"] .accordion-icon {
+    transform: rotate(45deg);
+  }
+
+  /* Wishlist button */
+  .btn-wishlist {
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: background-color 250ms ease, border-color 250ms ease, color 250ms ease;
+    flex-shrink: 0;
+  }
+
+  .btn-wishlist:hover {
+    background-color: var(--color-text);
+    border-color: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  /* ─── Mobile Responsive ─── */
+  @media (max-width: 767px) {
+    #main-product {
+      padding-top: 1.5rem;
+      padding-bottom: 2rem;
     }
-  </style>
+    #main-product .sticky {
+      position: relative !important;
+      top: auto !important;
+    }
+    .size-btn {
+      min-width: 44px;
+      height: 44px;
+    }
+    .color-swatch {
+      width: 36px;
+      height: 36px;
+    }
+    .qty-btn {
+      width: 44px;
+      height: 44px;
+    }
+    .btn-add-to-cart {
+      height: 54px;
+    }
+    .btn-wishlist {
+      width: 54px;
+      height: 54px;
+    }
+    .product-title {
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+    }
+  }
+</style>
 
-  <div class="max-w-[1440px] mx-auto xl:px-10 xl:flex xl:gap-12 xl:items-start pt-0 xl:pt-12 pb-12">
-    
-    <!-- GALLERY: 1 Main Image on top, Scrollable Thumbnails below (Green Sweater Style) -->
-    <div class="product-gallery w-full xl:w-1/2 xl:sticky xl:top-[120px]">
-      <!-- Main Image -->
-      <div class="w-full relative bg-[#f4f4f4] aspect-[4/5] xl:rounded-none overflow-hidden flex items-center justify-center">
-        {% if product.featured_image %}
-          <img id="ProductMainImage" src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.title | escape }}" class="w-full h-full object-cover transition-opacity duration-300">
-        {% else %}
-          {{ 'product-1' | placeholder_svg_tag: 'w-full h-full text-gray-300 object-cover' }}
-        {% endif %}
-      </div>
-      
-      <!-- Thumbnail Slider -->
-      {% if product.media.size > 1 %}
-        <div class="overflow-x-auto snap-x flex gap-[2px] mt-[2px] hide-scrollbar relative w-full" id="ProductThumbnails">
-          {% for media in product.media %}
-            <button type="button" 
-                    class="shrink-0 w-[calc(33.3333%-1.33px)] aspect-[4/5] bg-[#f4f4f4] snap-start relative group outline-none"
-                    onclick="document.getElementById('ProductMainImage').src='{{ media.preview_image | image_url: width: 1200 }}'">
-              <img src="{{ media.preview_image | image_url: width: 400 }}" alt="{{ media.alt | escape }}" class="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-opacity">
-            </button>
-          {% endfor %}
+{%- comment -%}
+  ─────────────────────────────────────────
+  MAIN PRODUCT SECTION
+  Used in: templates/product.json
+  ─────────────────────────────────────────
+{%- endcomment -%}
+
+<div
+  id="main-product"
+  class="max-w-screen-xl mx-auto px-6 md:px-10 py-12"
+  data-product-id="{{ product.id }}"
+>
+
+  <!-- Breadcrumb -->
+  <nav aria-label="Breadcrumb" class="mb-8 flex items-center gap-2">
+    <a href="{{ routes.root_url }}" class="product-breadcrumb">Home</a>
+    <span style="color: var(--color-border); font-size: 0.65rem;">›</span>
+    <a href="{{ product.collections.first.url | default: routes.collections_url }}" class="product-breadcrumb">
+      {{ product.collections.first.title | default: 'Catalog' }}
+    </a>
+    <span style="color: var(--color-border); font-size: 0.65rem;">›</span>
+    <span style="font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.14em; color: var(--color-text); text-transform: uppercase;">
+      {{ product.title }}
+    </span>
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       Main 2-Column Grid: 60% Images / 40% Info
+  ══════════════════════════════════════════ -->
+  <div class="grid md:grid-cols-5 gap-10 md:gap-16">
+
+    <!-- ── LEFT: Image Gallery ── -->
+    <div class="md:col-span-3">
+      <div class="flex flex-col gap-3">
+
+        <!-- Main Image -->
+        <div class="w-full relative bg-[#f5f4f1] rounded-lg overflow-hidden flex items-center justify-center">
+          {% if product.featured_image %}
+            <img id="ProductMainImage" src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.title | escape }}" class="w-full h-auto object-contain transition-opacity duration-300">
+          {% else %}
+            <div class="w-full aspect-[3/4] bg-[#f5f4f1] flex items-center justify-center">
+               {{ 'product-1' | placeholder_svg_tag: 'w-full h-full text-gray-300 object-cover' }}
+            </div>
+          {% endif %}
         </div>
-      {% endif %}
-    </div>
-
-    <!-- PRODUCT INFO: User's Classic Layout -->
-    <div class="product-info w-full px-5 py-8 xl:px-0 xl:w-1/2 xl:max-w-[480px]">
-      
-      <!-- Title & Price (Matched to User's Screenshot) -->
-      <h1 class="text-[17px] md:text-[22px] font-body font-medium mb-1 leading-snug">{{ product.title }}</h1>
-      <div class="text-[20px] md:text-[24px] font-body font-bold mb-3 mt-1">
-        <span id="ProductPrice">{{ product.selected_or_first_available_variant.price | money }} {{ cart.currency.iso_code }}</span>
-        {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
-          <s class="text-[#888] text-lg ml-2 font-normal" id="ProductComparePrice">{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
+        
+        <!-- Thumbnail Slider -->
+        {% if product.media.size > 1 %}
+          <div class="overflow-x-auto snap-x flex gap-3 hide-scrollbar relative w-full" id="ProductThumbnails" style="-ms-overflow-style: none; scrollbar-width: none;">
+            <style>#ProductThumbnails::-webkit-scrollbar { display: none; }</style>
+            {% for media in product.media %}
+              <button type="button" 
+                      class="shrink-0 w-[24%] min-w-[70px] rounded-md overflow-hidden bg-[#f5f4f1] snap-start relative group outline-none"
+                      onclick="document.getElementById('ProductMainImage').src='{{ media.preview_image | image_url: width: 1200 }}'">
+                <img src="{{ media.preview_image | image_url: width: 400 }}" alt="{{ media.alt | escape }}" class="w-full h-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity">
+              </button>
+            {% endfor %}
+          </div>
         {% endif %}
+
       </div>
-      <p class="text-[15px] font-body text-[#0a0a0a] mb-6">Taxes included. <a href="#" class="text-[#c1a067] underline hover:text-[#a08453] transition-colors">Shipping</a> calculated at checkout.</p>
+    </div>
+    <!-- / Left Column -->
 
-      <hr class="border-t border-[#eaeaea] mb-6">
+    <!-- ── RIGHT: Product Info (40% = 2/5 cols) — STICKY ── -->
+    <div class="md:col-span-2">
+      <div class="sticky top-10">
 
-      <!-- Product Form -->
-      {%- form 'product', product, id: 'ProductForm', class: 'block' -%}
-        <input type="hidden" name="id" id="VariantSelector" value="{{ product.selected_or_first_available_variant.id }}">
+        {%- form 'product', product, id: 'product-form', novalidate: 'novalidate' -%}
+          <!-- Hidden variant input -->
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="selected-variant-id" />
 
-        <!-- Variants -->
-        {%- unless product.has_only_default_variant -%}
-          <div class="space-y-6 mb-7 pt-2">
-            {%- for option in product.options_with_values -%}
-              <div>
-                {%- liquid
-                   assign is_color = false
-                   assign downcased_option = option.name | downcase
-                   if downcased_option == 'color' or downcased_option == 'colour' or downcased_option == 'màu sắc' or downcased_option == 'màu'
-                     assign is_color = true
-                   endif
-                -%}
-                
-                <div class="flex justify-between items-end mb-3">
-                  <label class="text-[14px] font-bold font-body uppercase tracking-tight">{{ option.name }} : <span class="font-bold ml-1 text-[#0a0a0a]" id="OptionValue-{{ forloop.index0 }}">{{ option.selected_value }}</span></label>
-                  {%- if option.name == 'Size' or option.name == 'Kích thước' -%}
-                    <button type="button" class="text-[13px] font-bold font-body uppercase tracking-tight hover:text-gray-600 transition-colors">
-                       SIZE CHART
-                    </button>
-                  {%- endif -%}
+          <!-- Vendor -->
+          {% if product.vendor != blank %}
+            <p class="product-vendor mb-3">{{ product.vendor }}</p>
+          {% endif %}
+
+          <!-- Title -->
+          <h1 class="product-title mb-5">{{ product.title }}</h1>
+
+          <!-- Price -->
+          <div class="flex items-baseline gap-1 mb-8">
+            <span class="product-price" id="product-price">
+              {{ product.selected_or_first_available_variant.price | money }}
+            </span>
+            {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+              <span class="product-price-compare">
+                {{ product.selected_or_first_available_variant.compare_at_price | money }}
+              </span>
+            {% endif %}
+          </div>
+
+          <!-- Thin divider -->
+          <div style="height: 1px; background-color: var(--color-border); margin-bottom: 2rem;"></div>
+
+          <!-- ── Variant Options ── -->
+          {% unless product.has_only_default_variant %}
+            {% for option in product.options_with_values %}
+
+              {%- assign option_name_lower = option.name | downcase -%}
+              <div class="mb-7">
+
+                <!-- Option Label + selected value -->
+                <div class="flex items-center justify-between mb-3">
+                  <p class="option-label">{{ option.name }}</p>
+                  <p style="font-family: var(--font-body); font-size: 0.75rem; color: var(--color-muted);" id="selected-{{ option.name | handleize }}">
+                    {{ option.selected_value }}
+                  </p>
                 </div>
-                
-                {% if is_color %}
-                  <!-- Swatches for Color (Like the square image swatch in screenshot) -->
-                  <div class="flex flex-wrap gap-[10px]">
-                    {%- for value in option.values -%}
-                      <label class="relative cursor-pointer group">
-                        <input type="radio" class="sr-only peer" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-option-index="{{ forloop.parentloop.index0 }}" onchange="updateVariant(this)">
-                        
-                        {%- assign variant_image = blank -%}
-                        {%- for variant in product.variants -%}
-                          {%- if variant.options[forloop.parentloop.index0] == value and variant.image -%}
-                            {%- assign variant_image = variant.image -%}
-                            {%- break -%}
-                          {%- endif -%}
-                        {%- endfor -%}
-                          
-                        <!-- Square swatch with gap -->
-                        <div class="w-[60px] h-[60px] overflow-hidden border-[1px] border-transparent peer-checked:border-gray-800 transition-all p-[3px] opacity-70 hover:opacity-100 peer-checked:opacity-100">
-                          <div class="w-full h-full overflow-hidden bg-gray-100">
-                            {% if variant_image != blank %}
-                              <img src="{{ variant_image | image_url: width: 100 }}" class="w-full h-full object-cover" alt="{{ value }}">
-                            {% else %}
-                              <div class="w-full h-full flex items-center justify-center text-[10px]" style="background-color: {{ value | split: ' ' | last | downcase | remove: '"' | remove: "'" }};">{{ value }}</div>
-                            {% endif %}
-                          </div>
-                        </div>
-                      </label>
-                    {%- endfor -%}
+
+                {% if option_name_lower == 'color' or option_name_lower == 'colour' or option_name_lower == 'màu' %}
+                  <!-- Color Swatches -->
+                  <div class="flex flex-wrap gap-3" role="radiogroup" aria-label="{{ option.name }}">
+                    {% for value in option.values %}
+                      {%- assign swatch_color = value | downcase | replace: ' ', '-' -%}
+                      <button
+                        type="button"
+                        class="color-swatch {% if value == option.selected_value %}active{% endif %}"
+                        style="background-color: {{ value | downcase }};"
+                        title="{{ value }}"
+                        aria-label="{{ value }}"
+                        data-option-position="{{ option.position }}"
+                        data-option-value="{{ value }}"
+                        onclick="selectOption(this, '{{ option.name | escape }}', '{{ value | escape }}')"
+                      ></button>
+                    {% endfor %}
                   </div>
+
                 {% else %}
-                  <!-- Connected Grid for Sizes (Like user's table border logic) -->
-                  <div class="flex flex-wrap border-l border-t border-[#e2e2e2]">
-                    {%- for value in option.values -%}
-                      <label class="relative cursor-pointer group flex-grow-0">
-                        <input type="radio" class="sr-only peer" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-option-index="{{ forloop.parentloop.index0 }}" onchange="updateVariant(this)">
-                        
-                        <!-- Grid cell -->
-                        <div class="h-[44px] min-w-[50px] px-3 flex items-center justify-center border-r border-b border-[#e2e2e2] text-[14px] font-body text-[#0a0a0a] bg-white peer-checked:font-bold transition-all hover:bg-gray-50">
-                          {{ value }}
-                        </div>
-                        <div class="absolute inset-0 border-0 peer-checked:border-2 peer-checked:border-black opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"></div>
-                      </label>
-                    {%- endfor -%}
+                  <!-- Size / Generic Option Buttons -->
+                  <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ option.name }}">
+                    {% for value in option.values %}
+                      <button
+                        type="button"
+                        class="size-btn {% if value == option.selected_value %}active{% endif %}"
+                        data-option-position="{{ option.position }}"
+                        data-option-value="{{ value }}"
+                        aria-label="{{ option.name }}: {{ value }}"
+                        onclick="selectOption(this, '{{ option.name | escape }}', '{{ value | escape }}')"
+                      >
+                        {{ value }}
+                      </button>
+                    {% endfor %}
                   </div>
                 {% endif %}
+
               </div>
-            {%- endfor -%}
+            {% endfor %}
+          {% endunless %}
+
+          <!-- ── Quantity + Add to Cart ── -->
+          <div class="mb-5">
+            <!-- Quantity Selector -->
+            <div class="flex items-center mb-4">
+              <p class="option-label mr-5" style="white-space:nowrap;">Quantity</p>
+              <div class="flex" style="border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden;">
+                <button
+                  type="button"
+                  class="qty-btn"
+                  aria-label="Decrease quantity"
+                  onclick="adjustQty(-1)"
+                >−</button>
+                <input
+                  id="qty-input"
+                  type="number"
+                  name="quantity"
+                  value="1"
+                  min="1"
+                  class="qty-input"
+                  aria-label="Product quantity"
+                />
+                <button
+                  type="button"
+                  class="qty-btn"
+                  aria-label="Increase quantity"
+                  onclick="adjustQty(1)"
+                >+</button>
+              </div>
+            </div>
+
+            <!-- Add to Cart + Wishlist row -->
+            <div class="flex gap-3">
+              <button
+                type="submit"
+                name="add"
+                id="add-to-cart-btn"
+                class="btn-add-to-cart"
+                {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+                  <path d="M3 6h18"/>
+                  <path d="M16 10a4 4 0 0 1-8 0"/>
+                </svg>
+                {% if product.selected_or_first_available_variant.available %}
+                  Add to Cart
+                {% else %}
+                  Sold Out
+                {% endif %}
+              </button>
+
+              <!-- Wishlist -->
+              <button
+                type="button"
+                class="btn-wishlist"
+                aria-label="Add to wishlist"
+                onclick="this.querySelector('svg').style.fill='currentColor'; this.classList.toggle('wishlisted');"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Dynamic Checkout Buttons (Apple Pay, Shop Pay, PayPal, etc.) -->
+            <div class="mt-3">
+              {{ form | payment_button }}
+            </div>
+
+            <style>
+              /* ─── Dynamic Checkout Button Styling ─── */
+              .shopify-payment-button {
+                margin-top: 0;
+              }
+              .shopify-payment-button__button {
+                border-radius: 9999px !important;
+                min-height: 52px !important;
+                font-family: var(--font-body) !important;
+                font-size: 0.75rem !important;
+                letter-spacing: 0.08em !important;
+                transition: opacity 300ms ease, transform 200ms ease !important;
+              }
+              .shopify-payment-button__button:hover {
+                opacity: 0.9 !important;
+                transform: translateY(-1px) !important;
+              }
+              .shopify-payment-button__button--unbranded {
+                background-color: var(--color-text) !important;
+                color: var(--color-bg) !important;
+                border-radius: 9999px !important;
+              }
+              .shopify-payment-button__more-options {
+                font-family: var(--font-body) !important;
+                font-size: 0.68rem !important;
+                letter-spacing: 0.12em !important;
+                text-transform: uppercase !important;
+                color: var(--color-muted) !important;
+                margin-top: 0.75rem !important;
+                transition: color 250ms ease !important;
+              }
+              .shopify-payment-button__more-options:hover {
+                color: var(--color-accent) !important;
+              }
+
+              @media (max-width: 767px) {
+                .shopify-payment-button__button {
+                  min-height: 48px !important;
+                }
+              }
+            </style>
           </div>
-        {%- endunless -%}
 
-        <!-- Quantity -->
-        <div class="mb-8 pt-2">
-          <label class="text-[14px] font-bold font-body uppercase tracking-tight mb-3 block">Quantity</label>
-          <div class="flex items-center w-[120px] h-[44px] border border-gray-300">
-            <button type="button" class="w-10 h-full flex items-center justify-center text-xl text-gray-500 hover:text-black hover:bg-gray-50 outline-none transition-colors" onclick="document.getElementById('QuantityInput').stepDown()">−</button>
-            <input type="number" id="QuantityInput" name="quantity" class="w-full h-full text-center text-[15px] font-body bg-transparent outline-none appearance-none font-medium" value="1" min="1" aria-label="Quantity">
-            <button type="button" class="w-10 h-full flex items-center justify-center text-xl text-gray-500 hover:text-black hover:bg-gray-50 outline-none transition-colors" onclick="document.getElementById('QuantityInput').stepUp()">+</button>
+          <!-- ── Product Accordion (Description + Material) ── -->
+          <div class="product-accordion mt-8">
+
+            <!-- Description -->
+            <div class="product-accordion-item">
+              <button
+                type="button"
+                class="product-accordion-trigger"
+                aria-expanded="true"
+                onclick="toggleAccordion(this)"
+              >
+                <span>Description</span>
+                <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+              </button>
+              <div class="product-accordion-body open">
+                {% if product.description != blank %}
+                  {{ product.description }}
+                {% else %}
+                  <p>{{ product.title }} — curated with intention, crafted for permanence.</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <!-- Materials -->
+            <div class="product-accordion-item">
+              <button
+                type="button"
+                class="product-accordion-trigger"
+                aria-expanded="false"
+                onclick="toggleAccordion(this)"
+              >
+                <span>Materials & Care</span>
+                <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14"/>
+                </svg>
+              </button>
+              <div class="product-accordion-body">
+                {% assign material_meta = product.metafields.custom.materials %}
+                {% if material_meta != blank %}
+                  <p>{{ material_meta }}</p>
+                {% else %}
+                  <p>
+                    Composition varies by style — refer to garment label for fibre content.
+                    Gentle hand wash or dry clean recommended to preserve the integrity of the fabric.
+                  </p>
+                {% endif %}
+              </div>
+            </div>
+
           </div>
-        </div>
+          <!-- / Product Accordion -->
 
-        <!-- Submit Buttons (NATURAL FLOW) -->
-        <div class="flex flex-col gap-3 mb-8 w-full">
-          <button type="submit" class="w-full h-[50px] bg-white text-black border border-black flex items-center justify-center text-[15px] font-body font-medium hover:bg-black hover:text-white transition-colors duration-300 uppercase tracking-widest">
-            Add to cart
-          </button>
-          
-          {%- if section.settings.show_dynamic_checkout -%}
-            {{ form | payment_button }}
-          {%- else -%}
-            <button type="button" class="w-full h-[50px] bg-black text-white flex items-center justify-center text-[15px] font-body font-medium hover:opacity-80 transition-opacity duration-300 uppercase tracking-widest">
-              Buy it now
-            </button>
-          {%- endif -%}
-        </div>
+        {%- endform -%}
 
-      {%- endform -%}
-
-      <!-- Socials / Description Area below form if needed -->
+      </div>
     </div>
+    <!-- / Right Column -->
+
   </div>
+</div>
 
-  <script>
-    var productVariants = {{ product.variants | json }};
-    function updateVariant(radio) {
-      if(!radio.checked) return;
-      
-      var index = radio.getAttribute('data-option-index');
-      var displayElement = document.getElementById('OptionValue-' + index);
-      if(displayElement) displayElement.textContent = radio.value;
 
-      var checkedOptions = Array.from(document.querySelectorAll('#ProductForm input[type="radio"]:checked')).map(r => r.value);
-      var currentVariant = productVariants.find(v => {
-        return checkedOptions.every((val, i) => v.options[i] === val);
-      });
+<script>
+  /* ─────────────────────────────────────────────────
+     MAIN PRODUCT — Variant Selection & UI Logic
+  ───────────────────────────────────────────────── */
 
-      if(currentVariant) {
-        document.getElementById('VariantSelector').value = currentVariant.id;
-        var priceFormatter = new Intl.NumberFormat('en-US', { style: 'currency', currency: '{{ cart.currency.iso_code }}' });
-        document.getElementById('ProductPrice').textContent = priceFormatter.format(currentVariant.price / 100);
-        var newUrl = new URL(window.location.href);
-        newUrl.searchParams.set('variant', currentVariant.id);
-        window.history.replaceState({}, '', newUrl);
-        
-        // Option to switch to variant image if it exists
-        if(currentVariant.featured_media) {
-            var mediaUrl = currentVariant.featured_media.preview_image.src;
-            // Hacky quick extraction since src is full URL form, but Liquid passes object. 
-            // In a real scenario we'd use Shopify JS API properly.
-        }
+  const productData = {{ product.variants | json }};
+
+  /* ── Quantity adjust ── */
+  function adjustQty(delta) {
+    const input = document.getElementById('qty-input');
+    const next  = Math.max(1, parseInt(input.value || 1) + delta);
+    input.value = next;
+  }
+
+  /* ── Option select ── */
+  function selectOption(el, optionName, value) {
+    /* Highlight active button/swatch */
+    const group = el.closest('[role="radiogroup"]');
+    group.querySelectorAll('.size-btn, .color-swatch').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+
+    /* Update displayed selected value label */
+    const label = document.getElementById('selected-' + optionName.toLowerCase().replace(/\s+/g, '-'));
+    if (label) label.textContent = value;
+
+    /* Find matching variant */
+    updateSelectedVariant();
+  }
+
+  function updateSelectedVariant() {
+    /* Collect current selections from all active buttons */
+    const selected = {};
+    document.querySelectorAll('[data-option-position]').forEach(el => {
+      if (el.classList.contains('active')) {
+        selected[parseInt(el.dataset.optionPosition)] = el.dataset.optionValue;
+      }
+    });
+
+    /* Match to a variant */
+    const match = productData.find(v =>
+      Object.entries(selected).every(([pos, val]) => v['option' + pos] === val)
+    );
+
+    if (match) {
+      document.getElementById('selected-variant-id').value = match.id;
+      /* Update price */
+      const priceEl = document.getElementById('product-price');
+      if (priceEl) {
+        priceEl.textContent = (match.price / 100).toLocaleString('vi-VN') + '₫';
+      }
+      /* Update add to cart state */
+      const btn = document.getElementById('add-to-cart-btn');
+      if (btn) {
+        btn.disabled = !match.available;
+        btn.querySelector('span') || (btn.lastChild.textContent = match.available ? ' Add to Cart' : ' Sold Out');
       }
     }
-  </script>
-</section>
+  }
 
-{% schema %}
-{
-  "name": "Product Main",
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "show_dynamic_checkout",
-      "label": "Show dynamic checkout button",
-      "default": true
+  /* ── Product accordion ── */
+  function toggleAccordion(trigger) {
+    const body     = trigger.nextElementSibling;
+    const isOpen   = trigger.getAttribute('aria-expanded') === 'true';
+    trigger.setAttribute('aria-expanded', !isOpen);
+    body.classList.toggle('open', !isOpen);
+  }
+
+  /* ─────────────────────────────────────────────────
+     AJAX ADD TO CART
+     - Intercepts form#product-form submit
+     - POST /cart/add.js → on success: open CartDrawer
+     - Updates header cart count without page reload
+     - Falls back to native submit on any fetch error
+  ───────────────────────────────────────────────── */
+  (function () {
+    const form   = document.getElementById('product-form');
+    const btn    = document.getElementById('add-to-cart-btn');
+    if (!form || !btn) return;
+
+    /* ── Button state helpers ── */
+    const ICON_SVG = btn.querySelector('svg') ? btn.querySelector('svg').outerHTML : '';
+
+    function setBtnLoading() {
+      btn.disabled = true;
+      btn.style.opacity = '0.65';
+      btn.innerHTML = ICON_SVG + ' Adding\u2026';
     }
-  ],
-  "presets": [
-    {
-      "name": "Product Main Feature"
+
+    function setBtnSuccess() {
+      btn.innerHTML = ICON_SVG + ' Added!';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      setTimeout(resetBtn, 1600);
     }
-  ]
-}
-{% endschema %}
+
+    function setBtnError(msg) {
+      btn.innerHTML = ICON_SVG + ' ' + (msg || 'Try again');
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      setTimeout(resetBtn, 2000);
+    }
+
+    function resetBtn() {
+      btn.innerHTML = ICON_SVG + ' Add to Cart';
+      btn.disabled  = false;
+      btn.style.opacity = '1';
+    }
+
+    /* ── Refresh cart count on all badges ── */
+    function refreshCartCount() {
+      fetch('/cart.js')
+        .then(r => r.json())
+        .then(cart => {
+          /* Update cart-drawer count text */
+          const countEl = document.getElementById('cd-count');
+          if (countEl) {
+            const n = cart.item_count;
+            countEl.textContent = n + (n === 1 ? ' item' : ' items');
+          }
+          /* Update header badge */
+          document.querySelectorAll('.cart-count').forEach(el => {
+            el.textContent = cart.item_count;
+            el.style.display = cart.item_count > 0 ? '' : 'none';
+          });
+          /* Update drawer subtotal */
+          const subtotalEl = document.getElementById('cd-subtotal');
+          if (subtotalEl) {
+            subtotalEl.textContent = (cart.total_price / 100).toLocaleString('vi-VN') + '\u20ab';
+          }
+        })
+        .catch(() => {});
+    }
+
+    /* ── AJAX Submit ── */
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const variantId = document.getElementById('selected-variant-id')?.value;
+      const quantity  = parseInt(document.getElementById('qty-input')?.value || 1);
+
+      if (!variantId) { form.submit(); return; } /* safety fallback */
+
+      setBtnLoading();
+
+      fetch('/cart/add.js', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: parseInt(variantId), quantity: quantity }),
+      })
+      .then(async r => {
+        if (!r.ok) {
+          const err = await r.json().catch(() => ({}));
+          throw new Error(err.description || 'Could not add item');
+        }
+        return r.json();
+      })
+      .then(() => {
+        setBtnSuccess();
+        refreshCartCount();
+
+        /* Open the CartDrawer */
+        if (typeof window.CartDrawer !== 'undefined') {
+          window.CartDrawer.open();
+        }
+      })
+      .catch(err => {
+        setBtnError(err.message);
+      });
+    });
+  }());
+
+</script>
+
