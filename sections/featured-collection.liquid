@@ -361,11 +361,19 @@
 
 /* ── Card sizing ── */
 .fc-card {
-  width: 68vw;
-  max-width: 300px;
+  flex: 0 0 auto !important; /* Đảm bảo thẻ KHÔNG bị bóp méo khi không đủ chỗ */
+  width: 85vw !important;    /* Mobile: Hiện đúng 1 thẻ và 1 góc của thẻ tiếp theo */
+  max-width: none !important;
 }
-@media (min-width: 640px) { .fc-card { width: 260px; } }
-@media (min-width: 1024px) { .fc-card { width: 280px; } }
+@media (min-width: 640px) {
+  .fc-card { width: calc(50% - 12px) !important; } /* Tablet: 2 thẻ + 1 góc */
+}
+@media (min-width: 1024px) {
+  .fc-card { width: calc(33.333% - 16px) !important; } /* Desktop: 3 thẻ + 1 góc */
+}
+@media (min-width: 1280px) {
+  .fc-card { width: calc(25% - 16px) !important; } /* Màn to: 4 thẻ + 1 góc */
+}
 
 /* ── Card image zoom ── */
 .fc-img {
