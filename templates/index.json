@@ -29,15 +29,16 @@
         "heading": "Trending Products",
         "heading_color": "#0a0a0a",
         "heading_size": "clamp(4rem,16vw,11rem)",
-        "collection": "minimalism",
-        "products_to_show": 8,
+        "product_list": [
+          "american-danish-flag-graphic-tee-usa-denmark-dual-flag-t-shirt-for-fashionalble-person",
+          "fashionable-t-shirt-dear-world-we-hate-him-too-statue-of-liberty-protest-tee",
+          "hoodie-vintage-portrait-photo™-retro-photography-hoodie-for-art-lovers-aesthetic-style-fans"
+        ],
         "title_font_size": "1.2rem",
         "title_color": "#999999",
         "title_font_weight": "500",
         "price_color": "#111111",
-        "compare_color": "#999999",
-        "show_view_all": true,
-        "view_all_text": "View All"
+        "compare_color": "#999999"
       }
     },
     "brand-story-bento": {
