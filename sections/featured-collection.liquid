@@ -14,7 +14,9 @@
       class="font-body font-black uppercase leading-[0.88] tracking-[-0.02em]"
       style="font-size: {{ section.settings.heading_size | default: 'clamp(2.8rem,11vw,7.5rem)' }}; color: {{ section.settings.heading_color | default: '#0a0a0a' }};"
     >
-      {{ section.settings.heading | default: 'TRENDING PRODUCTS' }}
+      <span class="fc-heading-motion">
+        {{ section.settings.heading | default: 'TRENDING PRODUCTS' }}
+      </span>
     </h2>
   </div>
 
@@ -343,6 +345,17 @@
      STYLES
 ══════════════════════════════════════════════ -->
 <style>
+/* ── Heading Motion ── */
+@keyframes fcHeadingFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.fc-heading-motion {
+  display: inline-block;
+  animation: fcHeadingFloat 4.5s ease-in-out infinite;
+  will-change: transform;
+}
+
 /* ── Carousel track ── */
 #fc-track {
   display: flex !important;
