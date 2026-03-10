@@ -861,7 +861,7 @@
     // Populate
     titleEl.textContent = currentProduct.title;
     titleEl.href        = currentProduct.url;
-    skuEl.textContent   = currentProduct.sku ? 'SKU: ' + currentProduct.sku : '';
+    if (skuEl) skuEl.textContent = currentProduct.sku ? 'SKU: ' + currentProduct.sku : '';
     priceEl.textContent = currentProduct.money;
 
     if (currentProduct.compare && currentProduct.compare !== currentProduct.money && currentProduct.compare !== '$0.00') {
