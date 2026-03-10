@@ -25,86 +25,19 @@
     },
     "featured-collection": {
       "type": "featured-collection",
-      "blocks": {
-        "product_item_pjTbdr": {
-          "type": "product_item",
-          "settings": {
-            "product": "bruno-mars-the-romantic-tour-north-america-europe-uk™-wash-t-shirt"
-          }
-        },
-        "product_item_BcH6Fp": {
-          "type": "product_item",
-          "settings": {
-            "product": "candy-graphic-t-shirt-retro-sweets-tee"
-          }
-        },
-        "product_item_LJYjqY": {
-          "type": "product_item",
-          "settings": {
-            "product": "concert-t-shirt-bruno-mars-the-romantic-tour-™-2026-world-tour-fan-tee-for-concertgoers-pop-music-lovers"
-          }
-        },
-        "product_item_dEQjYM": {
-          "type": "product_item",
-          "settings": {
-            "product": "concert-t-shirt-bruno-mars-the-romantic-tour-™-2026-world-tour-fan-tee-for-concertgoers-pop-music-lovers"
-          }
-        },
-        "product_item_icrDme": {
-          "type": "product_item",
-          "settings": {
-            "product": "flag-graphic-t-shirt"
-          }
-        },
-        "product_item_J7PN39": {
-          "type": "product_item",
-          "settings": {
-            "product": ""
-          }
-        },
-        "product_item_iNp7de": {
-          "type": "product_item",
-          "settings": {
-            "product": ""
-          }
-        },
-        "product_item_4BrpVq": {
-          "type": "product_item",
-          "settings": {
-            "product": ""
-          }
-        }
-      },
-      "block_order": [
-        "product_item_pjTbdr",
-        "product_item_BcH6Fp",
-        "product_item_LJYjqY",
-        "product_item_dEQjYM",
-        "product_item_icrDme",
-        "product_item_J7PN39",
-        "product_item_iNp7de",
-        "product_item_4BrpVq"
-      ],
       "settings": {
         "heading": "Trending Products",
-        "bg_color": "#dbd6d6",
-        "cta_text": "View All",
-        "cta_url": "",
-        "qv_modal_bg": "#937878",
-        "qv_gallery_bg": "#ffffff",
-        "qv_title_color": "#ffffff",
-        "qv_price_color": "#ffffff",
-        "qv_label_color": "#ffffff",
-        "qv_text_color": "#999999",
-        "qv_btn_bg": "#333333",
-        "qv_btn_text": "#ffffff",
-        "qv_accent_color": "#ffffff",
-        "qv_animation_speed": 400,
-        "stock_text": "30 in stock",
-        "pickup_location": "Pickup available at California Warehouse",
-        "pickup_ready": "Usually ready in 24 hours",
-        "delivery_text": "Free delivery estimated",
-        "returns_text": "Free + easy returns"
+        "heading_color": "#0a0a0a",
+        "heading_size": "clamp(4rem,16vw,11rem)",
+        "collection": "minimalism",
+        "products_to_show": 8,
+        "title_font_size": "1.2rem",
+        "title_color": "#999999",
+        "title_font_weight": "500",
+        "price_color": "#111111",
+        "compare_color": "#999999",
+        "show_view_all": true,
+        "view_all_text": "View All"
       }
     },
     "brand-story-bento": {
