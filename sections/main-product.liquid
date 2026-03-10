@@ -219,10 +219,10 @@
   /* Accordion details (Description/Materials) */
   .product-accordion {
     border-top: none;
-    background-color: #000;
+    background-color: transparent;
     color: #fff;
     width: 100%;
-    margin-top: 3rem;
+    margin-top: 0;
   }
 
   .product-accordion-item {
@@ -708,61 +708,7 @@
           </div>
           {% endif %}
 
-          <!-- Product Accordions (Dynamic from Blocks) -->
-          <div class="product-accordion">
-            {% assign has_accordions = false %}
-            {% for block in section.blocks %}
-              {% if block.type == 'description' or block.type == 'accordion' %}
-                {% assign has_accordions = true %}
-                <div class="product-accordion-item" {{ block.shopify_attributes }}>
-                  <button type="button" class="product-accordion-trigger" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" onclick="toggleAccordion(this)">
-                    <span>{{ block.settings.heading | escape }}</span>
-                    <div class="accordion-icon-circle">
-                      <svg class="accordion-icon-plus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                      <svg class="accordion-icon-minus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                    </div>
-                  </button>
-                  <div class="product-accordion-body {% if forloop.first %}open{% endif %}">
-                    {% if block.type == 'description' %}
-                      <div class="prose" style="padding-bottom: 1.25rem;">
-                        {% if product.description != blank %}
-                          {{ product.description }}
-                        {% else %}
-                          <p>{{ product.title }} is a timeless wardrobe essential, offering a perfect balance of style and comfort. Designed with a classic neckline and high-quality construction, it provides a sleek and versatile look suitable for any occasion.</p>
-                        {% endif %}
-                      </div>
-                    {% else %}
-                      <div class="prose" style="padding-bottom: 1.25rem;">
-                        {{ block.settings.content }}
-                      </div>
-                    {% endif %}
-                  </div>
-                </div>
-              {% endif %}
-            {% endfor %}
 
-            {% if has_accordions == false %}
-              <!-- Fallback if no blocks added in the theme editor -->
-              <div class="product-accordion-item">
-                <button type="button" class="product-accordion-trigger" aria-expanded="true" onclick="toggleAccordion(this)">
-                  <span>DESCRIPTION</span>
-                  <div class="accordion-icon-circle">
-                    <svg class="accordion-icon-plus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    <svg class="accordion-icon-minus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                  </div>
-                </button>
-                <div class="product-accordion-body open">
-                  <div class="prose" style="padding-bottom: 1.25rem;">
-                    {% if product.description != blank %}
-                      {{ product.description }}
-                    {% else %}
-                      <p>This is a timeless wardrobe essential, offering a perfect balance of style and comfort.</p>
-                    {% endif %}
-                  </div>
-                </div>
-              </div>
-            {% endif %}
-          </div>
 
         {%- endform -%}
 
@@ -772,6 +718,78 @@
 
   </div>
 </div>
+
+<!-- ── Full Width Accordion Area ── -->
+{% assign has_accordions = false %}
+{% for block in section.blocks %}
+  {% if block.type == 'description' or block.type == 'accordion' %}
+    {% assign has_accordions = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% if has_accordions %}
+<div style="background-color: #000; width: 100%; margin-top: 4rem;">
+  <div class="mx-auto" style="max-width: 900px; padding: 2rem 1rem;">
+    <div class="product-accordion">
+      {% for block in section.blocks %}
+        {% if block.type == 'description' or block.type == 'accordion' %}
+          <div class="product-accordion-item" {{ block.shopify_attributes }}>
+            <button type="button" class="product-accordion-trigger" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" onclick="toggleAccordion(this)">
+              <span>{{ block.settings.heading | escape }}</span>
+              <div class="accordion-icon-circle">
+                <svg class="accordion-icon-plus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <svg class="accordion-icon-minus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </div>
+            </button>
+            <div class="product-accordion-body {% if forloop.first %}open{% endif %}">
+              {% if block.type == 'description' %}
+                <div class="prose" style="padding-bottom: 1.25rem;">
+                  {% if product.description != blank %}
+                    {{ product.description }}
+                  {% else %}
+                    <p>{{ product.title }} is a timeless wardrobe essential, offering a perfect balance of style and comfort. Designed with a classic neckline and high-quality construction, it provides a sleek and versatile look suitable for any occasion.</p>
+                  {% endif %}
+                </div>
+              {% else %}
+                <div class="prose" style="padding-bottom: 1.25rem;">
+                  {{ block.settings.content }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% else %}
+  <!-- Fallback if no blocks added in the theme editor -->
+  <div style="background-color: #000; width: 100%; margin-top: 4rem;">
+    <div class="mx-auto" style="max-width: 900px; padding: 2rem 1rem;">
+      <div class="product-accordion">
+        <div class="product-accordion-item">
+          <button type="button" class="product-accordion-trigger" aria-expanded="true" onclick="toggleAccordion(this)">
+            <span>DESCRIPTION</span>
+            <div class="accordion-icon-circle">
+              <svg class="accordion-icon-plus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <svg class="accordion-icon-minus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </div>
+          </button>
+          <div class="product-accordion-body open">
+            <div class="prose" style="padding-bottom: 1.25rem;">
+              {% if product.description != blank %}
+                {{ product.description }}
+              {% else %}
+                <p>This is a timeless wardrobe essential, offering a perfect balance of style and comfort.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
 
 
 <script>
