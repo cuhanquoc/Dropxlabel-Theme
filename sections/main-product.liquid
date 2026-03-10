@@ -378,7 +378,7 @@
     <!-- / Left Column -->
 
     <!-- ── RIGHT: Product Info (40% = 2/5 cols) — STICKY ── -->
-    <div class="md:col-span-2 px-6 md:px-0">
+    <div class="md:col-span-2 px-6 md:px-0" style="padding-top: 1rem;">
       <div class="sticky top-10">
 
         {%- form 'product', product, id: 'product-form', novalidate: 'novalidate' -%}
@@ -387,22 +387,28 @@
 
           <!-- Vendor -->
           {% if product.vendor != blank %}
-            <p class="product-vendor mb-3">{{ product.vendor }}</p>
+            <p class="product-vendor mb-2" style="font-weight: 500; font-size: 0.9rem;">{{ product.vendor }}</p>
           {% endif %}
 
-          <!-- Title -->
-          <h1 class="product-title mb-5">{{ product.title }}</h1>
-
-          <!-- Price -->
-          <div class="flex items-baseline gap-1 mb-8">
-            <span class="product-price" id="product-price">
-              {{ product.selected_or_first_available_variant.price | money }}
-            </span>
-            {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
-              <span class="product-price-compare">
-                {{ product.selected_or_first_available_variant.compare_at_price | money }}
-              </span>
-            {% endif %}
+          <!-- Title, Price, Taxes Layout -->
+          <div style="margin-bottom: 2.5rem;">
+            <h1 class="product-title" style="font-size: clamp(1.8rem, 4vw, 2.2rem); font-weight: 600; line-height: 1.25; margin-bottom: 0.75rem;">{{ product.title }}</h1>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; items-baseline: center; gap: 12px; font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 700;">
+                <span class="product-price" id="product-price">
+                  {{ product.selected_or_first_available_variant.price | money }} {% if shop.currency %}{{ shop.currency }}{% endif %}
+                </span>
+                {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+                  <span class="product-price-compare" style="text-decoration: line-through; color: var(--color-muted); font-weight: 400; font-size: 1.2rem;">
+                    {{ product.selected_or_first_available_variant.compare_at_price | money }}
+                  </span>
+                {% endif %}
+              </div>
+              <p style="font-size: 0.95rem; color: #111;">
+                Taxes included. <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}" style="text-decoration: underline; color: inherit;">Shipping</a> calculated at checkout.
+              </p>
+            </div>
           </div>
 
           <!-- Thin divider -->
@@ -415,23 +421,38 @@
               {%- assign option_name_lower = option.name | downcase -%}
               <div class="mb-7">
 
-                <!-- Option Label + selected value -->
-                <div class="flex items-center justify-between mb-3">
-                  <p class="option-label">{{ option.name }}</p>
-                  <p style="font-family: var(--font-body); font-size: 0.75rem; color: var(--color-muted);" id="selected-{{ option.name | handleize }}">
-                    {{ option.selected_value }}
-                  </p>
+                <!-- Option Label + Size Chart -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                  <div style="font-family: Arial, sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase;">
+                    {{ option.name }} : <span id="selected-{{ option.name | handleize }}" style="font-weight: 700;">{{ option.selected_value | upcase }}</span>
+                  </div>
+                  {% if option_name_lower == 'size' or option_name_lower == 'kích thước' %}
+                    <button type="button" onclick="document.getElementById('size-chart-modal').showModal()" style="display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.9rem; background: none; border: none; cursor: pointer; color: #111;">
+                      Size chart
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 8v8"/><path d="M11 8v4"/><path d="M15 8v8"/></svg>
+                    </button>
+                    <!-- Size Chart Modal -->
+                    <dialog id="size-chart-modal" style="padding: 2rem; border-radius: 12px; border: 1px solid #eaeaea; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 600px; z-index: 100;">
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h2 style="font-weight: 700; font-size: 1.2rem; margin: 0;">Size Chart</h2>
+                        <button onclick="document.getElementById('size-chart-modal').close()" style="background: none; border: none; font-size: 2rem; cursor: pointer; line-height: 1;">&times;</button>
+                      </div>
+                      <div id="size-chart-content" style="font-size: 0.95rem; line-height: 1.6;">
+                        {{ section.settings.size_chart_text | default: "Please select a size chart text block in the Theme Editor." }}
+                      </div>
+                    </dialog>
+                  {% endif %}
                 </div>
 
                 {% if option_name_lower == 'color' or option_name_lower == 'colour' or option_name_lower == 'màu' %}
                   <!-- Color Swatches -->
-                  <div class="flex flex-wrap gap-3" role="radiogroup" aria-label="{{ option.name }}">
+                  <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ option.name }}">
                     {% for value in option.values %}
                       {%- assign swatch_color = value | downcase | replace: ' ', '-' -%}
                       <button
                         type="button"
                         class="color-swatch {% if value == option.selected_value %}active{% endif %}"
-                        style="background-color: {{ value | downcase }};"
+                        style="background-color: {{ value | downcase }}; border: 1px solid #ddd;"
                         title="{{ value }}"
                         aria-label="{{ value }}"
                         data-option-position="{{ option.position }}"
@@ -448,148 +469,170 @@
                       <button
                         type="button"
                         class="size-btn {% if value == option.selected_value %}active{% endif %}"
+                        style="min-width: 64px; height: 48px; border: 1px solid #111; border-radius: 4px; font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; background: transparent; cursor: pointer; transition: all 0.2s;"
                         data-option-position="{{ option.position }}"
                         data-option-value="{{ value }}"
                         aria-label="{{ option.name }}: {{ value }}"
                         onclick="selectOption(this, '{{ option.name | escape }}', '{{ value | escape }}')"
+                        onmouseenter="if(!this.classList.contains('active')) { this.style.backgroundColor='#f5f5f5'; }"
+                        onmouseleave="if(!this.classList.contains('active')) { this.style.backgroundColor='transparent'; }"
                       >
                         {{ value }}
                       </button>
                     {% endfor %}
                   </div>
+                  <style>
+                    /* Force active size state */
+                    .size-btn.active {
+                      background-color: #111 !important;
+                      color: #fff !important;
+                    }
+                  </style>
                 {% endif %}
 
               </div>
             {% endfor %}
           {% endunless %}
 
-          <!-- ── Quantity + Add to Cart ── -->
-          <div class="mb-5">
-            <!-- Quantity Selector -->
-            <div class="flex items-center mb-4">
-              <p class="option-label mr-5" style="white-space:nowrap;">Quantity</p>
-              <div class="flex" style="border: 1px solid var(--color-border); border-radius: 8px; overflow: hidden;">
-                <button
-                  type="button"
-                  class="qty-btn"
-                  aria-label="Decrease quantity"
-                  onclick="adjustQty(-1)"
-                >−</button>
-                <input
-                  id="qty-input"
-                  type="number"
-                  name="quantity"
-                  value="1"
-                  min="1"
-                  class="qty-input"
-                  aria-label="Product quantity"
-                />
-                <button
-                  type="button"
-                  class="qty-btn"
-                  aria-label="Increase quantity"
-                  onclick="adjustQty(1)"
-                >+</button>
-              </div>
-            </div>
-
-            <!-- Add to Cart + Wishlist row -->
-            <div class="flex gap-3">
-              <button
-                type="submit"
-                name="add"
-                id="add-to-cart-btn"
-                class="btn-add-to-cart"
-                {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
-                  <path d="M3 6h18"/>
-                  <path d="M16 10a4 4 0 0 1-8 0"/>
-                </svg>
-                {% if product.selected_or_first_available_variant.available %}
-                  Add to Cart
-                {% else %}
-                  Sold Out
-                {% endif %}
-              </button>
-
-              <!-- Wishlist -->
+          <!-- ── Quantity ── -->
+          <div style="margin-bottom: 2rem;">
+            <p style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.75rem;">Quantity</p>
+            <div style="display: inline-flex; border: 1px solid var(--color-text); border-radius: 6px; overflow: hidden; width: 140px; height: 50px;">
               <button
                 type="button"
-                class="btn-wishlist"
-                aria-label="Add to wishlist"
-                onclick="this.querySelector('svg').style.fill='currentColor'; this.classList.toggle('wishlisted');"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
-              </button>
+                style="flex: 1; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; font-size: 1.5rem; font-weight: 300;"
+                aria-label="Decrease quantity"
+                onclick="adjustQty(-1)"
+              >−</button>
+              <input
+                id="qty-input"
+                type="number"
+                name="quantity"
+                value="1"
+                min="1"
+                style="flex: 1; min-width: 0; text-align: center; border: none; font-family: var(--font-body); font-size: 1.1rem; color: var(--color-text); background: transparent; outline: none; appearance: textfield;"
+              />
+              <button
+                type="button"
+                style="flex: 1; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; font-size: 1.5rem; font-weight: 400;"
+                aria-label="Increase quantity"
+                onclick="adjustQty(1)"
+              >+</button>
             </div>
-
-            <!-- Dynamic Checkout Buttons (Apple Pay, Shop Pay, PayPal, etc.) -->
-            <div class="mt-3">
-              {{ form | payment_button }}
-            </div>
-
-            <style>
-              /* ─── Dynamic Checkout Button Styling ─── */
-              .shopify-payment-button {
-                margin-top: 0;
-              }
-              .shopify-payment-button__button {
-                border-radius: 9999px !important;
-                min-height: 52px !important;
-                font-family: var(--font-body) !important;
-                font-size: 0.75rem !important;
-                letter-spacing: 0.08em !important;
-                transition: opacity 300ms ease, transform 200ms ease !important;
-              }
-              .shopify-payment-button__button:hover {
-                opacity: 0.9 !important;
-                transform: translateY(-1px) !important;
-              }
-              .shopify-payment-button__button--unbranded {
-                background-color: var(--color-text) !important;
-                color: var(--color-bg) !important;
-                border-radius: 9999px !important;
-              }
-              .shopify-payment-button__more-options {
-                font-family: var(--font-body) !important;
-                font-size: 0.68rem !important;
-                letter-spacing: 0.12em !important;
-                text-transform: uppercase !important;
-                color: var(--color-muted) !important;
-                margin-top: 0.75rem !important;
-                transition: color 250ms ease !important;
-              }
-              .shopify-payment-button__more-options:hover {
-                color: var(--color-accent) !important;
-              }
-
-              @media (max-width: 767px) {
-                .shopify-payment-button__button {
-                  min-height: 48px !important;
-                }
-              }
-            </style>
           </div>
 
-          <!-- ── Product Accordion (Description + Material) ── -->
-          <div class="product-accordion mt-8">
+          <!-- ── Stock Indicator (Dynamic) ── -->
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; font-size: 1.05rem;">
+            <svg id="variant-stock-icon" width="24" height="24" viewBox="0 0 24 24" fill="#00a82d" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="white"/>
+            </svg>
+            <span id="variant-stock-display" style="font-weight: 400;">
+              {% assign current_variant = product.selected_or_first_available_variant %}
+              {% if current_variant.inventory_management and current_variant.inventory_quantity > 0 %}
+                {{ current_variant.inventory_quantity }} in stock
+              {% elsif current_variant.available %}
+                In stock
+              {% else %}
+                Out of stock
+              {% endif %}
+            </span>
+          </div>
 
-            <!-- Description -->
+          <!-- ── Pickup Availability ── -->
+          <div style="background-color: #eefbf1; border: 1px solid #d4ebd9; border-radius: 6px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 2rem;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-top: 2px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <div style="flex: 1;">
+              <p style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; line-height: 1.3;">
+                {{ section.settings.pickup_title | default: 'Pickup available at California Warehouse' }}
+              </p>
+              <p style="font-size: 0.9rem; color: #333; margin-bottom: 0.75rem;">
+                {{ section.settings.pickup_time | default: 'Usually ready in 24 hours' }}
+              </p>
+              <a href="#" style="font-size: 0.85rem; text-decoration: underline; color: var(--color-text);">Check availability at other stores</a>
+            </div>
+          </div>
+
+          <!-- ── Trust Badges ── -->
+          <div style="display: flex; gap: 1rem; justify-content: space-between; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1.5rem 0; margin-bottom: 3rem;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+               <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+               <span style="font-size: 0.95rem;">{{ section.settings.delivery_text | default: 'Free delivery within 2 days' }}</span>
+            </div>
+            <div style="width: 1px; height: 24px; background-color: #eee;"></div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+               <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m3 9a9 9 0 1 0 5-6.5l-3 2"/><path d="m2 2v6h6"/><path d="m9 11v6l3-1.5 3 1.5v-6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+               <span style="font-size: 0.95rem; padding: 2px 4px; border-radius: 4px;">{{ section.settings.returns_text | default: 'Free + easy returns' }}</span>
+            </div>
+          </div>
+
+          <!-- Add to Cart (Re-styled a bit) -->
+          <div class="mb-5 flex gap-3">
+            <button
+              type="submit"
+              name="add"
+              id="add-to-cart-btn"
+              class="btn-add-to-cart"
+              {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+              style="border-radius: 8px; border: 1px solid #111; font-weight: 700; font-size: 0.9rem; letter-spacing: 0em; text-transform: none; flex: 1; height: 60px;"
+            >
+              {% if product.selected_or_first_available_variant.available %}
+                Add to Cart
+              {% else %}
+                Sold Out
+              {% endif %}
+            </button>
+            <button
+              type="button"
+              class="btn-wishlist"
+              aria-label="Add to wishlist"
+              onclick="this.querySelector('svg').style.fill='currentColor'; this.classList.toggle('wishlisted');"
+              style="border-radius: 8px; height: 60px; width: 60px; border: 1px solid var(--color-border);"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Dynamic Checkout -->
+          <div class="mt-3">
+            <style>
+              .shopify-payment-button__button {
+                border-radius: 8px !important;
+                min-height: 60px !important;
+              }
+            </style>
+            {{ form | payment_button }}
+          </div>
+
+          <!-- ── Social Icons ── -->
+          <div style="display: flex; align-items: center; gap: 1rem; margin-top: 3rem;">
+            <strong style="font-size: 1.1rem; font-weight: 700;">Social:</strong>
+            <div style="display: flex; gap: 1.5rem; align-items: center; font-size: 1.5rem;">
+              <!-- Facebook (Circled) -->
+              <a href="#" style="display: flex; justify-content: center; align-items: center; width: 48px; height: 48px; border: 2px solid #eaeaea; border-radius: 50%; color: #333;"><svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H7.5v-3H10V9.5C10 7.03 11.46 5.6 13.72 5.6c1.1 0 2.25.2 2.25.2v2.47h-1.27c-1.25 0-1.64.77-1.64 1.56V12h2.8l-.45 3h-2.35v6.8A10.02 10.02 0 0 0 22 12z"/></svg></a>
+              <!-- X (Twitter) -->
+              <a href="#" style="color: #111;"><svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+              <!-- Pinterest -->
+              <a href="#" style="color: #111;"><svg width="28" height="28" fill="currentColor" viewBox="0 0 24 24"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.951-7.252 4.168 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.367 18.624 0 12.017 0z"/></svg></a>
+              <!-- Telegram -->
+              <a href="#" style="color: #111;"><svg width="28" height="28" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.38-.63-.22-1.12-.34-1.08-.72.02-.2.27-.41.77-.63 3.03-1.31 5.04-2.18 6.06-2.61 2.88-1.21 3.48-1.42 3.86-1.43.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06-.01.13-.03.25z"/></svg></a>
+              <!-- WhatsApp -->
+              <a href="#" style="color: #111;"><svg width="28" height="28" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a5.8 5.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.574-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c0-5.445 4.454-9.88 9.896-9.88 2.65 0 5.145 1.035 7.018 2.912 1.873 1.873 2.905 4.36 2.905 7.01 0 5.438-4.444 9.88-9.935 9.88h.001M22 12.015c0-5.5-4.475-9.988-9.96-9.988S2.08 6.516 2.08 12.015c0 1.754.457 3.46 1.328 4.97L2 22l5.127-1.346A9.914 9.914 0 0012.04 22c5.485 0 9.96-4.488 9.96-9.985"/></svg></a>
+              <!-- Email -->
+              <a href="#" style="background: #000; border-radius: 6px; padding: 4px; display: flex; justify-content: center; align-items: center; color: #fff;"><svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></a>
+            </div>
+          </div>
+
+          <!-- Product Accordions -->
+          <div class="product-accordion mt-10">
             <div class="product-accordion-item">
-              <button
-                type="button"
-                class="product-accordion-trigger"
-                aria-expanded="true"
-                onclick="toggleAccordion(this)"
-              >
+              <button type="button" class="product-accordion-trigger" aria-expanded="true" onclick="toggleAccordion(this)">
                 <span>Description</span>
-                <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M12 5v14M5 12h14"/>
-                </svg>
+                <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
               </button>
               <div class="product-accordion-body open">
                 {% if product.description != blank %}
@@ -599,35 +642,21 @@
                 {% endif %}
               </div>
             </div>
-
-            <!-- Materials -->
             <div class="product-accordion-item">
-              <button
-                type="button"
-                class="product-accordion-trigger"
-                aria-expanded="false"
-                onclick="toggleAccordion(this)"
-              >
+              <button type="button" class="product-accordion-trigger" aria-expanded="false" onclick="toggleAccordion(this)">
                 <span>Materials & Care</span>
-                <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M12 5v14M5 12h14"/>
-                </svg>
+                <svg class="accordion-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
               </button>
               <div class="product-accordion-body">
                 {% assign material_meta = product.metafields.custom.materials %}
                 {% if material_meta != blank %}
                   <p>{{ material_meta }}</p>
                 {% else %}
-                  <p>
-                    Composition varies by style — refer to garment label for fibre content.
-                    Gentle hand wash or dry clean recommended to preserve the integrity of the fabric.
-                  </p>
+                  <p>Composition varies by style — refer to garment label for fibre content. Gentle hand wash or dry clean recommended to preserve the integrity of the fabric.</p>
                 {% endif %}
               </div>
             </div>
-
           </div>
-          <!-- / Product Accordion -->
 
         {%- endform -%}
 
@@ -644,7 +673,22 @@
      MAIN PRODUCT — Variant Selection & UI Logic
   ───────────────────────────────────────────────── */
 
-  const productData = {{ product.variants | json }};
+  const productData = [
+  {% for v in product.variants %}
+    {
+      id: {{ v.id }},
+      title: {{ v.title | json }},
+      option1: {{ v.option1 | json }},
+      option2: {{ v.option2 | json }},
+      option3: {{ v.option3 | json }},
+      price: {{ v.price }},
+      compare_at_price: {{ v.compare_at_price | default: 'null' }},
+      available: {{ v.available }},
+      inventory_management: {{ v.inventory_management | json }},
+      inventory_quantity: {{ v.inventory_quantity | default: 0 }}
+    }{% unless forloop.last %},{% endunless %}
+  {% endfor %}
+  ];
 
   /* ── Quantity adjust ── */
   function adjustQty(delta) {
@@ -655,27 +699,64 @@
 
   /* ── Option select ── */
   function selectOption(el, optionName, value) {
-    /* Highlight active button/swatch */
     const group = el.closest('[role="radiogroup"]');
     group.querySelectorAll('.size-btn, .color-swatch').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
 
-    /* Update displayed selected value label */
     const label = document.getElementById('selected-' + optionName.toLowerCase().replace(/\s+/g, '-'));
-    if (label) label.textContent = value;
+    if (label) label.textContent = value.toUpperCase();
 
-    /* Find matching variant */
     updateSelectedVariant();
   }
 
   function updateSelectedVariant() {
-    /* Collect current selections from all active buttons */
+    /* Collect current selections */
     const selected = {};
     document.querySelectorAll('[data-option-position]').forEach(el => {
       if (el.classList.contains('active')) {
         selected[parseInt(el.dataset.optionPosition)] = el.dataset.optionValue;
       }
     });
+
+    /* Match to a variant */
+    const match = productData.find(v =>
+      Object.entries(selected).every(([pos, val]) => v['option' + pos] === val)
+    );
+
+    if (match) {
+      document.getElementById('selected-variant-id').value = match.id;
+      
+      /* Update price */
+      const priceEl = document.getElementById('product-price');
+      if (priceEl) priceEl.innerHTML = (match.price / 100).toLocaleString('vi-VN') + ' {{ shop.currency }}';
+      
+      /* Update add to cart state */
+      const btn = document.getElementById('add-to-cart-btn');
+      if (btn) {
+        btn.disabled = !match.available;
+        btn.innerHTML = match.available ? 'Add to Cart' : 'Sold Out';
+      }
+
+      /* Update stock text natively */
+      const stockEl = document.getElementById('variant-stock-display');
+      const stockIcon = document.getElementById('variant-stock-icon');
+      if (stockEl && stockIcon) {
+        if (match.inventory_management && match.inventory_quantity > 0) {
+          stockEl.textContent = match.inventory_quantity + ' in stock';
+          stockIcon.setAttribute('fill', '#00a82d');
+          stockEl.style.color = '#111';
+        } else if (match.available) {
+          stockEl.textContent = 'In stock';
+          stockIcon.setAttribute('fill', '#00a82d');
+          stockEl.style.color = '#111';
+        } else {
+          stockEl.textContent = 'Out of stock';
+          stockIcon.setAttribute('fill', '#888');
+          stockEl.style.color = '#888';
+        }
+      }
+    }
+  });
 
     /* Match to a variant */
     const match = productData.find(v =>
@@ -813,6 +894,7 @@
 </script>
 
 
+
 {% schema %}
 {
   "name": "Product Layout",
@@ -830,7 +912,42 @@
       "unit": "px",
       "label": "Gallery Gap / Stroke Thickness",
       "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Product Information"
+    },
+    {
+      "type": "richtext",
+      "id": "size_chart_text",
+      "label": "Size Chart Content",
+      "default": "<p>S (Chest: 36\", Length: 28\")</p><p>M (Chest: 38\", Length: 29\")</p><p>L (Chest: 40\", Length: 30\")</p>"
+    },
+    {
+      "type": "text",
+      "id": "pickup_title",
+      "label": "Pickup Title",
+      "default": "Pickup available at California Warehouse"
+    },
+    {
+      "type": "text",
+      "id": "pickup_time",
+      "label": "Pickup Time",
+      "default": "Usually ready in 24 hours"
+    },
+    {
+      "type": "text",
+      "id": "delivery_text",
+      "label": "Delivery Text",
+      "default": "Free delivery within 2 days"
+    },
+    {
+      "type": "text",
+      "id": "returns_text",
+      "label": "Returns Text",
+      "default": "Free + easy returns"
     }
   ]
 }
 {% endschema %}
+
