@@ -290,7 +290,7 @@
   /* ─── Mobile Responsive ─── */
   @media (max-width: 767px) {
     #main-product {
-      padding-top: 1.5rem;
+      padding-top: 0rem;
       padding-bottom: 2rem;
     }
     #main-product .sticky {
@@ -344,7 +344,7 @@
 
     <!-- ── LEFT: Image Gallery ── -->
     <div class="md:col-span-3">
-      <div style="display: flex; flex-direction: column; gap: 1px; background-color: #fff; width: 100%;">
+      <div style="display: flex; flex-direction: column; gap: 2px; background-color: #fff; width: 100%;">
 
         <!-- Main Image -->
         <div style="width: 100%; position: relative; background-color: #f5f4f1; display: flex; align-items: center; justify-content: center; overflow: hidden;">
@@ -359,11 +359,11 @@
         
         <!-- Thumbnail Slider -->
         {% if product.media.size > 1 %}
-          <div id="ProductThumbnails" style="display: flex; flex-wrap: nowrap; gap: 1px; overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; scrollbar-width: none; -ms-overflow-style: none;">
+          <div id="ProductThumbnails" style="display: flex; flex-wrap: nowrap; gap: 2px; overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; scrollbar-width: none; -ms-overflow-style: none;">
             <style>#ProductThumbnails::-webkit-scrollbar { display: none; }</style>
             {% for media in product.media %}
               <button type="button" aria-label="Thumbnail"
-                      style="flex: 0 0 calc(25% - 0.75px); min-width: 0; outline: none; border: none; background-color: #f5f4f1; padding: 0; cursor: pointer; aspect-ratio: 4/5; overflow: hidden; display: block;"
+                      style="flex: 0 0 calc(25% - 1.5px); min-width: 0; outline: none; border: none; background-color: #f5f4f1; padding: 0; cursor: pointer; aspect-ratio: 4/5; overflow: hidden; display: block;"
                       onclick="var main=document.getElementById('ProductMainImage'); if(main) main.src='{{ media.preview_image | image_url: width: 1200 }}'">
                 <img src="{{ media.preview_image | image_url: width: 400 }}" alt="{{ media.alt | escape }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
               </button>
