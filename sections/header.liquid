@@ -24,7 +24,11 @@
   </style>
 {%- endif -%}
 
+{%- if is_home -%}
 <header class="site-header left-0 w-full z-40 flex justify-between items-center px-5 md:px-10 py-4 md:py-6 transition-colors duration-300" style="top: var(--ab-height, 0px);">
+{%- else -%}
+<header class="site-header left-0 w-full z-40 flex justify-between items-center px-5 md:px-10 py-4 md:py-6 transition-colors duration-300">
+{%- endif -%}
 
   <!-- LEFT: Navigation Links -->
   <!-- Hamburger Button (mobile only) — links directly to Catalog -->
