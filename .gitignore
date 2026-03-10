@@ -1,2 +1,13 @@
 node_modules/
 src/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build artifacts (optional)
+# assets/theme.css
