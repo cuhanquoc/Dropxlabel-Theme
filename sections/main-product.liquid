@@ -370,13 +370,13 @@
         
         <!-- Thumbnail Slider -->
         {% if product.media.size > 1 %}
-          <div class="overflow-x-auto snap-x flex gap-3 hide-scrollbar relative w-full" id="ProductThumbnails" style="-ms-overflow-style: none; scrollbar-width: none;">
+          <div id="ProductThumbnails" class="w-full" style="display: flex; gap: 8px; overflow-x: auto; box-sizing: border-box; -webkit-overflow-scrolling: touch; -ms-overflow-style: none; scrollbar-width: none;">
             <style>#ProductThumbnails::-webkit-scrollbar { display: none; }</style>
             {% for media in product.media %}
-              <button type="button" 
-                      class="shrink-0 w-[24%] min-w-[70px] rounded-md overflow-hidden bg-[#f5f4f1] snap-start relative group outline-none"
-                      onclick="document.getElementById('ProductMainImage').src='{{ media.preview_image | image_url: width: 1200 }}'">
-                <img src="{{ media.preview_image | image_url: width: 400 }}" alt="{{ media.alt | escape }}" class="w-full h-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity">
+              <button type="button" aria-label="Thumbnail"
+                      style="flex: 0 0 24%; min-width: 70px; border: none; background: #f5f4f1; border-radius: 6px; padding: 0; overflow: hidden; cursor: pointer; outline: none; aspect-ratio: 4/5;"
+                      onclick="var main=document.getElementById('ProductMainImage'); if(main) main.src='{{ media.preview_image | image_url: width: 1200 }}'">
+                <img src="{{ media.preview_image | image_url: width: 400 }}" alt="{{ media.alt | escape }}" style="width: 100%; height: 100%; object-fit: contain; display: block; mix-blend-mode: multiply;">
               </button>
             {% endfor %}
           </div>
