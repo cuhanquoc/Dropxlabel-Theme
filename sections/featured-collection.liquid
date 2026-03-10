@@ -21,7 +21,7 @@
   <!-- ── Carousel ── -->
   <div class="relative px-5 md:px-10 pb-16">
     <div
-      class="fc-track flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory pb-3 cursor-grab select-none"
+      class="fc-track flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory pb-3" style="scroll-behavior: smooth; -webkit-overflow-scrolling: touch;"
       id="fc-track"
       role="list"
       aria-label="Trending products"
@@ -250,15 +250,7 @@
     <!-- /Carousel track -->
   </div>
 
-  <!-- View All -->
-  {% if section.settings.show_view_all and section.settings.collection != blank %}
-    <div class="pb-14 text-center">
-      <a
-        href="{{ section.settings.collection.url }}"
-        class="fc-view-all font-body uppercase tracking-[0.18em] text-[0.68rem] font-semibold text-[#0a0a0a] border border-[#0a0a0a]/60 rounded-full px-8 py-3 inline-block hover:bg-[#0a0a0a] hover:text-white transition-all duration-300"
-      >{{ section.settings.view_all_text | default: 'View All' }}</a>
-    </div>
-  {% endif %}
+
 
 </featured-collection>
 
@@ -961,36 +953,19 @@
   ────────────────────────────────────────── */
   class FeaturedCollection extends HTMLElement {
     connectedCallback() {
-      this._initCarousel();
+      
       this._initCards();
       this._initScrollTop();
       this._initGSAP();
     }
 
     disconnectedCallback() {
-      const track = this.querySelector('#fc-track');
-      if (track && this._trackHandlers) {
-        track.removeEventListener('mousedown',  this._trackHandlers.down);
-        track.removeEventListener('mousemove',  this._trackHandlers.move);
-        track.removeEventListener('mouseup',    this._trackHandlers.up);
-        track.removeEventListener('mouseleave', this._trackHandlers.leave);
-      }
+
       window.removeEventListener('scroll', this._scrollHandler);
       if (this._gsapCtx) this._gsapCtx.revert();
     }
 
-    _initCarousel() {
-      const track = this.querySelector('#fc-track');
-      if (!track) return;
-      let isDown = false, startX = 0, scrollLeft = 0;
-      const down  = e => { isDown = true; track.classList.add('cursor-grabbing'); startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; };
-      const leave = () => { isDown = false; track.classList.remove('cursor-grabbing'); };
-      const up    = () => { isDown = false; track.classList.remove('cursor-grabbing'); };
-      const move  = e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - track.offsetLeft; track.scrollLeft = scrollLeft - (x - startX) * 1.4; };
-      track.addEventListener('mousedown', down); track.addEventListener('mouseleave', leave);
-      track.addEventListener('mouseup', up); track.addEventListener('mousemove', move);
-      this._trackHandlers = { down, leave, up, move };
-    }
+
 
     _initCards() {
       this.querySelectorAll('.fc-qv-trigger').forEach(btn => {
@@ -1146,22 +1121,6 @@
       "id": "compare_color",
       "label": "Compare-at (strikethrough) Color",
       "default": "#999999"
-    },
-    {
-      "type": "header",
-      "content": "View All Button"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_view_all",
-      "label": "Show 'View All' Button",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "view_all_text",
-      "label": "Button Text",
-      "default": "View All"
     }
   ],
   "presets": [
