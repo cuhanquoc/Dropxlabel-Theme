@@ -1,12 +1,12 @@
 {% paginate collections by 15 %}
-<section class="w-full bg-[#ffffff] pt-4 md:pt-8 pb-24 md:pb-32 px-5 md:px-10">
+<section class="w-full bg-[#ffffff] pt-16 md:pt-24 pb-24 md:pb-32 px-5 md:px-10">
   <div class="max-w-7xl mx-auto">
     <!-- Header -->
     <header class="text-center">
-      <h1 class="font-heading text-[3.5rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem] leading-none tracking-[-0.04em] text-[#0a0a0a] uppercase mb-4">
+      <h1 class="font-heading text-4xl md:text-6xl lg:text-[6rem] leading-none tracking-[-0.02em] text-[#0a0a0a] uppercase mb-6">
         {{ section.settings.title | default: 'Collections' }}
       </h1>
-      <p class="mt-4 text-xl md:text-2xl lg:text-[2rem] text-[#666] font-body max-w-4xl mx-auto tracking-normal">
+      <p class="mt-4 text-base md:text-xl lg:text-2xl text-[#666] font-body max-w-4xl mx-auto tracking-normal">
         {{ section.settings.description | default: 'Discover our curated selections.' }}
       </p>
     </header>
