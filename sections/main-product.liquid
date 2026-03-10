@@ -344,7 +344,8 @@
 
     <!-- ── LEFT: Image Gallery ── -->
     <div class="md:col-span-3">
-      <div style="display: flex; flex-direction: column; gap: 2px; background-color: #fff; width: 100%;">
+      {% assign gallery_gap = section.settings.gallery_gap | default: 10 %}
+      <div style="display: flex; flex-direction: column; gap: {{ gallery_gap }}px; background-color: #fff; width: 100%;">
 
         <!-- Main Image -->
         <div style="width: 100%; position: relative; background-color: #f5f4f1; display: flex; align-items: center; justify-content: center; overflow: hidden;">
@@ -359,11 +360,12 @@
         
         <!-- Thumbnail Slider -->
         {% if product.media.size > 1 %}
-          <div id="ProductThumbnails" style="display: flex; flex-wrap: nowrap; gap: 2px; overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; scrollbar-width: none; -ms-overflow-style: none;">
+          <div id="ProductThumbnails" style="display: flex; flex-wrap: nowrap; gap: {{ gallery_gap }}px; overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; scrollbar-width: none; -ms-overflow-style: none;">
             <style>#ProductThumbnails::-webkit-scrollbar { display: none; }</style>
+            {% assign gap_compensate = gallery_gap | times: 0.75 %}
             {% for media in product.media %}
               <button type="button" aria-label="Thumbnail"
-                      style="flex: 0 0 calc(25% - 1.5px); min-width: 0; outline: none; border: none; background-color: #f5f4f1; padding: 0; cursor: pointer; aspect-ratio: 4/5; overflow: hidden; display: block;"
+                      style="flex: 0 0 calc(25% - {{ gap_compensate }}px); min-width: 0; outline: none; border: none; background-color: #f5f4f1; padding: 0; cursor: pointer; aspect-ratio: 4/5; overflow: hidden; display: block;"
                       onclick="var main=document.getElementById('ProductMainImage'); if(main) main.src='{{ media.preview_image | image_url: width: 1200 }}'">
                 <img src="{{ media.preview_image | image_url: width: 400 }}" alt="{{ media.alt | escape }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
               </button>
@@ -810,3 +812,25 @@
 
 </script>
 
+
+{% schema %}
+{
+  "name": "Product Layout",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image Gallery"
+    },
+    {
+      "type": "range",
+      "id": "gallery_gap",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Gallery Gap / Stroke Thickness",
+      "default": 10
+    }
+  ]
+}
+{% endschema %}
