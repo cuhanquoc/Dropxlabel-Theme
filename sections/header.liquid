@@ -7,7 +7,24 @@
     assign is_home = true
   endif
 -%}
-<header class="site-header left-0 w-full z-40 flex justify-between items-center px-5 md:px-10 py-4 md:py-6 transition-colors duration-300 {% if is_home %}absolute text-white bg-transparent{% else %}relative text-[#0a0a0a] bg-white border-b border-[#eaeaea]{% endif %}" style="top: var(--ab-height, 0px);">
+{%- if is_home -%}
+  <style>
+    .site-header { position: absolute; background-color: transparent; }
+    .site-header, .nav-link, .icon-btn, .mega-trigger { color: #ffffff !important; }
+    .hamburger-line { background-color: #ffffff !important; }
+    .site-header svg { stroke: #ffffff !important; }
+  </style>
+{%- else -%}
+  <style>
+    .site-header { position: relative; background-color: #ffffff; border-bottom: 1px solid #eaeaea; }
+    .site-header, .nav-link, .icon-btn, .mega-trigger { color: #0a0a0a !important; }
+    .hamburger-line { background-color: #0a0a0a !important; }
+    .site-header svg { stroke: #0a0a0a !important; }
+    .header-logo-img { filter: invert(1); } /* Auto-contrast white logo to black */
+  </style>
+{%- endif -%}
+
+<header class="site-header left-0 w-full z-40 flex justify-between items-center px-5 md:px-10 py-4 md:py-6 transition-colors duration-300" style="top: var(--ab-height, 0px);">
 
   <!-- LEFT: Navigation Links -->
   <!-- Hamburger Button (mobile only) — links directly to Catalog -->
