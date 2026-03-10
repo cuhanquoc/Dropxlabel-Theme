@@ -27,15 +27,8 @@
       aria-label="Trending products"
     >
 
-      {%- if section.settings.collection != blank -%}
-        {%- assign fc_products = section.settings.collection.products -%}
-      {%- else -%}
-        {%- assign fc_products = null -%}
-      {%- endif -%}
-
-      {%- if fc_products != null and fc_products.size > 0 -%}
-
-        {%- for product in fc_products limit: section.settings.products_to_show -%}
+      {%- if section.settings.product_list != blank -%}
+        {%- for product in section.settings.product_list -%}
 
           {%- comment -%} Build variant JSON for JS {%- endcomment -%}
           {%- assign v_json = '[' -%}
@@ -1059,22 +1052,14 @@
     },
     {
       "type": "header",
-      "content": "Collection"
+      "content": "Selected Products"
     },
     {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection",
-      "info": "Leave blank to show demo placeholder cards."
-    },
-    {
-      "type": "range",
-      "id": "products_to_show",
-      "min": 2,
-      "max": 20,
-      "step": 1,
-      "default": 8,
-      "label": "Number of Products"
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Choose Products",
+      "limit": 12,
+      "info": "Select specific products to display."
     },
     {
       "type": "header",
