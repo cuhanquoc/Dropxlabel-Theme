@@ -2,11 +2,25 @@
 description: Impact analysis workflow — MUST run before ANY code change to prevent regressions and side effects
 ---
 
-# 🧠 Think Before Code — Impact Analysis
+# Think Before You Code (Impact Analysis)
 
-**MANDATORY**: Before making ANY code change, you MUST complete this checklist using the `sequential-thinking` MCP tool. Do NOT skip steps.
+Always execute this workflow **BEFORE** making any changes to the codebase. This ensures safety, prevents regressions, and forces a thorough understanding of the current architecture.
 
-## Step 1: Identify the Blast Radius
+## Step 0: Read Historical Bug Registry (MANDATORY)
+1. `view_file` on `/.agents/workflows/bug-registry.md` to review the project's historical bugs and past architectural mistakes.
+2. Cross-reference the user's current request with the bug registry. Are you about to repeat a known mistake? If yes, explicitly declare what you are doing differently this time.
+
+## Step 1: Trace Dependencies (The "Blast Radius" Check)
+1. Identify the primary file you intend to change.
+2. Use `grep_search` to find all other files that reference this file, its classes, its IDs, or its liquid tags.
+3. Document the list of affected files in your planning.
+
+## Step 2: Understand the Current Implementation
+1. `view_file` on the target file.
+2. Read the entire section you plan to modify, not just the specific lines.
+3. Understand the *why* behind the current code. Is it a workaround? Is it part of a fragile system?
+
+## Step 3: Identify the Blast Radius
 
 Use `mcp_sequential-thinking_sequentialthinking` to answer these questions:
 
