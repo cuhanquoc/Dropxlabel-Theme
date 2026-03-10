@@ -257,100 +257,91 @@
   aria-modal="true"
   aria-label="Quick view"
   aria-hidden="true"
-  style="transition: opacity 0.3s ease;"
 >
-  <!-- Overlay clicks here close the modal -->
-  <div class="fc-qv-overlay-top" id="fc-qv-backdrop" aria-label="Close quick view" style="position:fixed;inset:0;background:rgba(10,10,10,0.5);backdrop-filter:blur(4px);z-index:-1;"></div>
+  <!-- Top overlay — click to close -->
+  <div class="fc-qv-overlay-top" id="fc-qv-backdrop" aria-label="Close quick view"></div>
 
   <!-- Bottom panel -->
-  <div class="fc-qv-panel" id="fc-qv-panel" role="document" style="max-height: 94vh; padding: 0; display: flex; flex-direction: column;">
-    
+  <div class="fc-qv-panel" id="fc-qv-panel" role="document">
     <!-- Top Handle & Close -->
-    <div style="flex-shrink:0; position:relative; width:100%; display:flex; justify-content:center; padding:16px 0; background:white; border-top-left-radius:32px; border-top-right-radius:32px; z-index:10;">
-      <div style="width:48px; height:5px; background:#e4e4e4; border-radius:99px;"></div>
-      <button id="fc-qv-close-btn" aria-label="Close" style="position:absolute; top:12px; right:16px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; background:#f4f4f4; color:#0a0a0a; border-radius:50%; border:none; cursor:pointer;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    <div class="fc-qv-header">
+      <div class="fc-qv-handle"></div>
+      <button class="fc-qv-close-new" id="fc-qv-close-btn" aria-label="Close">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
 
-    <!-- Scrollable Content -->
-    <div style="flex:1; overflow-y:auto; padding:0 20px 24px; position:relative;" class="disable-scrollbars">
-      
-      <!-- Gallery -->
-      <div class="fc-qv-gallery" style="width:100%; background:#f4f4f4; position:relative; overflow:hidden; border-radius:20px; box-shadow:0 1px 3px rgba(0,0,0,0.05); margin-bottom:24px; aspect-ratio:3/4; border:none;">
-        <div class="fc-qv-gallery-track" id="fc-qv-gallery-track" style="position:absolute; top:0; left:0; width:100%; height:100%;">
-          <!-- Images injected here -->
+    <!-- Inner Scroll Area -->
+    <div class="fc-qv-scroll-area">
+      <!-- Image gallery -->
+      <div class="fc-qv-gallery">
+        <div class="fc-qv-gallery-track" id="fc-qv-gallery-track">
+          <!-- Images injected by JS -->
         </div>
         <!-- Arrows -->
-        <button class="fc-qv-arrow fc-qv-arrow-prev" id="fc-qv-prev" aria-label="Previous image" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); width:36px; height:36px; background:rgba(255,255,255,0.8); border-radius:50%; display:flex; align-items:center; justify-content:center; border:none; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+        <button class="fc-qv-arrow fc-qv-arrow-prev" id="fc-qv-prev" aria-label="Previous image">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
-        <button class="fc-qv-arrow fc-qv-arrow-next" id="fc-qv-next" aria-label="Next image" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); width:36px; height:36px; background:rgba(255,255,255,0.8); border-radius:50%; display:flex; align-items:center; justify-content:center; border:none; box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+        <button class="fc-qv-arrow fc-qv-arrow-next" id="fc-qv-next" aria-label="Next image">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
         </button>
         <!-- Dot nav -->
-        <div class="fc-qv-dots" id="fc-qv-dots" style="position:absolute; bottom:16px; left:0; width:100%; display:flex; justify-content:center; gap:8px;"></div>
+        <div class="fc-qv-dots" id="fc-qv-dots"></div>
       </div>
 
       <!-- Product details -->
       <div class="fc-qv-info">
-        <a class="fc-qv-title" id="fc-qv-title" href="#" style="font-family:var(--font-body-family); font-weight:700; color:#0a0a0a; font-size:1.15rem; line-height:1.3; display:block; text-decoration:none;"></a>
-        
-        <div style="display:flex; align-items:center; gap:8px; margin-top:8px; flex-wrap:wrap;">
-          <span class="fc-qv-price" id="fc-qv-price" style="font-family:var(--font-body-family); font-weight:700; font-size:1.1rem; color:#0a0a0a;"></span>
-          <span class="fc-qv-compare" id="fc-qv-compare" style="font-family:var(--font-body-family); font-size:0.8rem; color:#999; opacity:0.7; text-decoration:line-through !important; display:none;"></span>
+        <a class="fc-qv-title font-body font-bold text-[#0a0a0a] text-[1.15rem] leading-tight block" id="fc-qv-title" href="#"></a>
+        <div class="flex items-center gap-3 mt-2 flex-wrap">
+          <span class="fc-qv-price font-body font-bold text-[1.1rem] text-[#0a0a0a]" id="fc-qv-price"></span>
+          <span class="fc-qv-compare font-body text-[0.88rem] text-[#999] line-through hidden" id="fc-qv-compare"></span>
         </div>
 
         <!-- Variant options (injected) -->
-        <div class="fc-qv-variants" id="fc-qv-variants" style="margin-top:24px; padding-top:20px; border-top:1px solid #f0f0f0;"></div>
+        <div class="fc-qv-variants mt-6 pt-5 border-t border-[#f0f0f0]" id="fc-qv-variants"></div>
 
         <!-- Quantity -->
-        <div class="fc-qv-qty-row hidden" id="fc-qv-qty-row" style="margin-top:24px;">
-          <div style="font-family:var(--font-body-family); font-size:1rem; font-weight:700; color:#0a0a0a; margin-bottom:12px;">Quantity</div>
-          <div class="fc-qv-qty-ctrl" style="display:flex; align-items:center; justify-content:space-between; border:1px solid #d1d5db; border-radius:10px; width:130px; height:48px; padding:0 4px;">
-            <button class="fc-qv-qty-btn" id="fc-qv-qty-dec" aria-label="Decrease" style="width:40px; height:100%; display:flex; align-items:center; justify-content:center; font-size:24px; color:#555; background:none; border:none; cursor:pointer;">−</button>
-            <span class="fc-qv-qty-val" id="fc-qv-qty-val" style="font-family:var(--font-body-family); font-weight:600; font-size:1.1rem; color:#0a0a0a;">1</span>
-            <button class="fc-qv-qty-btn" id="fc-qv-qty-inc" aria-label="Increase" style="width:40px; height:100%; display:flex; align-items:center; justify-content:center; font-size:24px; color:#555; background:none; border:none; cursor:pointer;">+</button>
+        <div class="fc-qv-qty-row hidden mt-6" id="fc-qv-qty-row">
+          <div class="font-body text-[1rem] font-bold text-[#0a0a0a] w-full mb-3">Quantity</div>
+          <div class="fc-qv-qty-ctrl-new">
+            <button class="fc-qv-qty-btn-new" id="fc-qv-qty-dec" aria-label="Decrease">−</button>
+            <span class="fc-qv-qty-val-new font-body font-semibold" id="fc-qv-qty-val">1</span>
+            <button class="fc-qv-qty-btn-new" id="fc-qv-qty-inc" aria-label="Increase">+</button>
           </div>
         </div>
 
         <!-- Trust Badges -->
-        <div style="margin-top:32px; background:#f2fcf5; padding:16px; border-radius:12px; display:flex; gap:12px; border:1px solid #e1f5e8;">
-          <svg style="flex-shrink:0; width:20px; height:20px; margin-top:2px; color:#0a0a0a;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle><path d="M12 22s-2-3.5-3-6"></path></svg>
-          <div style="flex:1;">
-             <div style="font-weight:700; color:#0a0a0a; font-size:0.85rem; line-height:1.2;">Pickup available at California Warehouse</div>
-             <div style="color:#333; margin-top:4px; font-size:0.8rem;">Usually ready in 24 hours</div>
+        <div class="mt-8 bg-[#f2fcf5] p-4 rounded-xl flex gap-3 border border-[#e1f5e8]">
+          <svg class="w-5 h-5 flex-shrink-0 mt-0.5 text-[#0a0a0a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle><path d="M12 22s-2-3.5-3-6"></path></svg>
+          <div class="flex-1">
+             <div class="font-bold text-[#0a0a0a] text-[0.85rem] leading-snug">Pickup available at California Warehouse</div>
+             <div class="text-[#333] mt-1 text-[0.8rem]">Usually ready in 24 hours</div>
           </div>
         </div>
 
-        <div style="margin-top:24px; font-family:var(--font-body-family); font-size:0.875rem; color:#333; margin-bottom:32px;">
-          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
-             <svg style="width:24px; height:24px; flex-shrink:0; stroke:#0a0a0a;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-             <span style="letter-spacing:0.02em;">Free delivery on <strong style="font-weight:700; color:#0a0a0a;">February 7th - 13th</strong></span>
+        <div class="mt-6 font-body text-[0.875rem] text-[#333] mb-8">
+          <div class="flex items-center gap-3 mb-4">
+             <svg class="w-6 h-6 flex-shrink-0 stroke-[#0a0a0a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+             <span class="tracking-wide">Free delivery on <strong class="font-bold text-[#0a0a0a]">February 7th - 13th</strong></span>
           </div>
-          <div style="display:flex; align-items:center; gap:12px;">
-             <svg style="width:24px; height:24px; flex-shrink:0; stroke:#0a0a0a;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-             <span style="letter-spacing:0.02em;">Free + easy returns</span>
+          <div class="flex items-center gap-3">
+             <svg class="w-6 h-6 flex-shrink-0 stroke-[#0a0a0a]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+             <span class="tracking-wide">Free + easy returns</span>
           </div>
         </div>
 
       </div>
-    </div>
-    
-    <!-- Sticky Footer Buttons -->
-    <div style="flex-shrink:0; background:white; padding:16px; padding-bottom:40px; border-top:1px solid #f0f0f0; box-shadow:0 -8px 20px rgba(0,0,0,0.06); width:100%; z-index:20; position:relative;">
-      <div style="position:absolute; bottom:100%; left:0; width:100%; height:24px; background:linear-gradient(to top, white, transparent); pointer-events:none;"></div>
-      <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
-        <button class="fc-qv-atc" id="fc-qv-atc" style="width:100%; background:white; color:#0a0a0a; border:1px solid #0a0a0a; border-radius:99px; padding:14px 0; font-family:var(--font-body-family); font-weight:700; text-transform:uppercase; letter-spacing:0.1em; font-size:0.8rem; cursor:pointer;">
-          Add to Cart
-        </button>
-        <button class="fc-qv-bin" id="fc-qv-bin" style="width:100%; background:#0a0a0a; color:white; border:1px solid #0a0a0a; border-radius:99px; padding:14px 0; font-family:var(--font-body-family); font-weight:700; text-transform:uppercase; letter-spacing:0.1em; font-size:0.8rem; cursor:pointer;">
-          Buy it now
-        </button>
-      </div>
+    </div> <!-- /Scroll Area -->
+
+    <!-- Sticky Buttons -->
+    <div class="fc-qv-sticky-footer">
+      <div class="fc-qv-fade"></div>
+      <button class="fc-qv-atc-new font-body font-bold uppercase tracking-[0.1em]" id="fc-qv-atc">Add to Cart</button>
+      <button class="fc-qv-bin-new font-body font-bold uppercase tracking-[0.1em]" id="fc-qv-bin">Buy it now</button>
     </div>
 
   </div>
+  <!-- /Bottom panel -->
 </div>
 
 <!-- Scroll-to-top -->
@@ -721,7 +712,6 @@
   const prevBtn     = document.getElementById('fc-qv-prev');
   const nextBtn     = document.getElementById('fc-qv-next');
   const titleEl     = document.getElementById('fc-qv-title');
-  const skuEl       = document.getElementById('fc-qv-sku');
   const priceEl     = document.getElementById('fc-qv-price');
   const compareEl   = document.getElementById('fc-qv-compare');
   const variantsEl  = document.getElementById('fc-qv-variants');
@@ -861,7 +851,6 @@
     // Populate
     titleEl.textContent = currentProduct.title;
     titleEl.href        = currentProduct.url;
-    if (skuEl) skuEl.textContent = currentProduct.sku ? 'SKU: ' + currentProduct.sku : '';
     priceEl.textContent = currentProduct.money;
 
     if (currentProduct.compare && currentProduct.compare !== currentProduct.money && currentProduct.compare !== '$0.00') {

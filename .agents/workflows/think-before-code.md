@@ -71,4 +71,3 @@ Before committing:
 | Rename snippet | `{% render %}` calls break | Search for old name in all sections |
 | Edit schema | Shopify admin breaks | Check `settings_data.json` for matching keys |
 | Add `!important` | Creates specificity debt | Almost never use — find root cause instead |
-| Remove HTML element | Throws JS "null" reference errors | Grep for ID/class in `<script>` before deleting |
