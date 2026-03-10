@@ -1,19 +1,5 @@
 {% comment %} MAIN COLLECTION — CSS → src/input.css {% endcomment %}
 
-{%- comment -%}
-  ─────────────────────────────────────────
-  MAIN COLLECTION SECTION
-  Used in: templates/collection.json
-  Replace mock loop with:
-    {% for product in collection.products %}
-  ─────────────────────────────────────────
-{%- endcomment -%}
-
-{%- assign mc_primary = "photo-1515886657613-9f3515b0c78f|photo-1469334031218-e382a71b716b|photo-1485968579580-b6d095142e6e|photo-1509631179647-0177331693ae|photo-1479064555552-3ef4d0d87f10|photo-1490481651871-ab68de25d43d|photo-1572804013309-59a88b7e92f1|photo-1539109136881-3be0616acf4b|photo-1558769132-cb1aea458c5e|photo-1496747611176-843222e1e57c|photo-1434389677669-e08b4cac3105|photo-1445205170230-053b83016050" | split: "|" -%}
-{%- assign mc_hover   = "photo-1539109136881-3be0616acf4b|photo-1479064555552-3ef4d0d87f10|photo-1509631179647-0177331693ae|photo-1485968579580-b6d095142e6e|photo-1490481651871-ab68de25d43d|photo-1469334031218-e382a71b716b|photo-1515886657613-9f3515b0c78f|photo-1572804013309-59a88b7e92f1|photo-1496747611176-843222e1e57c|photo-1558769132-cb1aea458c5e|photo-1445205170230-053b83016050|photo-1434389677669-e08b4cac3105" | split: "|" -%}
-{%- assign mc_names   = "Sculptural Linen Coat|Minimal Silk Blouse|The Cashmere Set|Draped Crepe Dress|Tailored Wide Trousers|Raw Edge Knit Top|The Atelier Blazer|Asymmetric Hem Skirt|Oversized Linen Shirt|Slip Bias Dress|Structured Wool Coat|The Essential Turtleneck" | split: "|" -%}
-{%- assign mc_prices  = "4.200.000đ|2.800.000đ|5.600.000đ|3.900.000đ|3.200.000đ|2.400.000đ|6.100.000đ|2.950.000đ|1.980.000đ|3.450.000đ|7.200.000đ|1.750.000đ" | split: "|" -%}
-
 <div id="main-collection">
 
   <!-- ── Collection Hero Header ── -->
@@ -101,7 +87,7 @@
             Filter &amp; Sort
           </button>
           <span class="mc-count">
-            {{ collection.products_count | default: 12 }} {{ collection.products_count | default: 12 | pluralize: 'product', 'products' }}
+            {{ collection.products_count }} {{ collection.products_count | pluralize: 'product', 'products' }}
           </span>
         </div>
 
@@ -144,19 +130,23 @@
         class="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12"
       >
 
-        {% for i in (1..12) %}
-          {%- assign idx        = forloop.index0 -%}
-          {%- assign primary_id = mc_primary[idx] | strip -%}
-          {%- assign hover_id   = mc_hover[idx]   | strip -%}
-          {%- assign prod_name  = mc_names[idx]   | strip -%}
-          {%- assign prod_price = mc_prices[idx]  | strip -%}
+        {%- if collection.products.size == 0 -%}
+          <div class="col-span-full text-center py-20">
+            <p style="font-family: var(--font-body); font-size: 0.88rem; color: var(--color-muted); letter-spacing: 0.08em;">No products found in this collection.</p>
+          </div>
+        {%- else -%}
 
-          <!-- Product Card #{{ forloop.index }} -->
+        {% for product in collection.products %}
+          {%- assign featured_image   = product.featured_image -%}
+          {%- assign secondary_image  = product.images[1] -%}
+
+          <!-- Product Card: {{ product.title }} -->
           <a
-            href="#"
+            href="{{ product.url }}"
             class="mc-card"
             data-mc-card
-            aria-label="{{ prod_name }}"
+            data-product-handle="{{ product.handle }}"
+            aria-label="{{ product.title | escape }}"
           >
 
             <!-- Image Wrapper -->
@@ -165,30 +155,48 @@
               style="aspect-ratio: 3/4; border-radius: 4px;"
             >
               <!-- Primary Image -->
-              <img
-                src="https://images.unsplash.com/{{ primary_id }}?w=600&q=80&auto=format&fit=crop"
-                alt="{{ prod_name }}"
-                class="mc-img-primary"
-                loading="{% if forloop.index <= 4 %}eager{% else %}lazy{% endif %}"
-                width="600"
-                height="800"
-              />
+              {%- if featured_image -%}
+                <img
+                  src="{{ featured_image | image_url: width: 600 }}"
+                  alt="{{ featured_image.alt | default: product.title | escape }}"
+                  class="mc-img-primary"
+                  loading="{% if forloop.index <= 4 %}eager{% else %}lazy{% endif %}"
+                  width="600"
+                  height="800"
+                />
+              {%- else -%}
+                <div class="mc-img-primary flex items-center justify-center bg-gray-100">
+                  {{ 'image' | placeholder_svg_tag: 'w-16 h-16 text-gray-300' }}
+                </div>
+              {%- endif -%}
 
-              <!-- Hover / Lifestyle Image -->
-              <img
-                src="https://images.unsplash.com/{{ hover_id }}?w=600&q=80&auto=format&fit=crop"
-                alt="{{ prod_name }} — lifestyle"
-                class="mc-img-hover"
-                loading="lazy"
-                width="600"
-                height="800"
-              />
+              <!-- Hover / Secondary Image -->
+              {%- if secondary_image -%}
+                <img
+                  src="{{ secondary_image | image_url: width: 600 }}"
+                  alt="{{ secondary_image.alt | default: product.title | escape }} — alt view"
+                  class="mc-img-hover"
+                  loading="lazy"
+                  width="600"
+                  height="800"
+                />
+              {%- elsif featured_image -%}
+                <img
+                  src="{{ featured_image | image_url: width: 600 }}"
+                  alt="{{ featured_image.alt | default: product.title | escape }}"
+                  class="mc-img-hover"
+                  loading="lazy"
+                  width="600"
+                  height="800"
+                />
+              {%- endif -%}
 
               <!-- Quick View Button -->
               <button
                 class="mc-quick-view"
-                aria-label="Quick view {{ prod_name }}"
-                onclick="event.preventDefault(); event.stopPropagation();"
+                aria-label="Quick view {{ product.title | escape }}"
+                data-product-handle="{{ product.handle }}"
+                onclick="event.preventDefault(); event.stopPropagation(); if(window.QuickView) QuickView.open('{{ product.handle }}');"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
@@ -196,19 +204,36 @@
                 </svg>
                 Quick View
               </button>
+
+              <!-- Badges -->
+              {%- if product.available == false -%}
+                <span class="mc-badge mc-badge--sold" style="position:absolute;top:0.75rem;left:0.75rem;font-family:var(--font-body);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;background:#0a0a0a;color:#fff;padding:0.3rem 0.6rem;">Sold Out</span>
+              {%- elsif product.compare_at_price > product.price -%}
+                <span class="mc-badge mc-badge--sale" style="position:absolute;top:0.75rem;left:0.75rem;font-family:var(--font-body);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;background:#c0392b;color:#fff;padding:0.3rem 0.6rem;">Sale</span>
+              {%- endif -%}
             </div>
             <!-- / Image Wrapper -->
 
             <!-- Product Info -->
             <div class="text-center">
-              <p class="mc-product-title">{{ prod_name }}</p>
-              <p class="mc-product-price">{{ prod_price }}</p>
+              <p class="mc-product-title">{{ product.title }}</p>
+              <p class="mc-product-price">
+                {%- if product.price_varies -%}
+                  From {{ product.price_min | money }}
+                {%- else -%}
+                  {{ product.price | money }}
+                {%- endif -%}
+                {%- if product.compare_at_price > product.price -%}
+                  <s style="color:var(--color-muted);margin-left:0.4em;font-size:0.85em;">{{ product.compare_at_price | money }}</s>
+                {%- endif -%}
+              </p>
             </div>
 
           </a>
-          <!-- / Product Card #{{ forloop.index }} -->
+          <!-- / Product Card: {{ product.title }} -->
 
         {% endfor %}
+        {%- endif -%}
 
       </div>
       <!-- / Product Grid -->
