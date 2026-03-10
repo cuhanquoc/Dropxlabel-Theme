@@ -1,6 +1,6 @@
 {% comment %} FEATURED COLLECTION — Trending Products Carousel + Quick View Modal {% endcomment %}
 
-{%- assign fc_title_size   = section.settings.title_font_size   | default: '0.82rem' -%}
+{%- assign fc_title_size   = section.settings.title_font_size   | default: '1.4rem' -%}
 {%- assign fc_title_color  = section.settings.title_color        | default: '#111111' -%}
 {%- assign fc_title_weight = section.settings.title_font_weight  | default: '500' -%}
 {%- assign fc_price_color  = section.settings.price_color        | default: '#111111' -%}
@@ -67,7 +67,7 @@
           {%- assign imgs_json = imgs_json | append: ']' -%}
 
           {%- assign main_img = product.featured_image | image_url: width: 800 -%}
-          {%- assign truncated_title = product.title | truncate: 28 -%}
+          {%- assign truncated_title = product.title -%}
 
           <!-- Card -->
           <div
@@ -93,7 +93,7 @@
                 <img
                   src="{{ main_img }}"
                   alt="{{ product.featured_image.alt | default: product.title | escape }}"
-                  class="fc-img absolute inset-0 w-full h-full object-cover"
+                  class="fc-img absolute inset-0 w-full h-full object-cover" draggable="false"
                   loading="{% if forloop.index <= 2 %}eager{% else %}lazy{% endif %}"
                   width="800" height="1067"
                 />
@@ -117,7 +117,7 @@
             <!-- /Image container -->
 
             <!-- Product info -->
-            <div class="mt-3 px-0.5 text-center">
+            <div class="mt-3 px-0.5 text-left">
 
               <!-- Name -->
               <a
@@ -128,12 +128,12 @@
               >{{ truncated_title }}</a>
 
               <!-- Price row -->
-              <div class="flex items-center justify-center gap-2 mt-1 flex-wrap">
-                <span class="fc-price font-body font-semibold" style="font-size:{{ fc_title_size }};color:{{ fc_price_color }};">
+              <div class="flex items-center justify-start gap-2 mt-1 flex-wrap">
+                <span class="fc-price font-body font-semibold" style="font-size:calc({{ fc_title_size }} * 1.15);color:{{ fc_price_color }};">
                   {{ product.price | money }}
                 </span>
                 {%- if product.compare_at_price_min > product.price -%}
-                  <span class="fc-compare font-body line-through" style="font-size:{{ fc_title_size }};color:{{ fc_compare_color }};">
+                  <span class="fc-compare font-body line-through" style="font-size:calc({{ fc_title_size }} * 0.95);color:{{ fc_compare_color }};">
                     {{ product.compare_at_price_min | money }}
                   </span>
                 {%- endif -%}
@@ -141,7 +141,7 @@
 
               <!-- Variant swatches -->
               {%- if product.variants.size > 1 -%}
-                <div class="fc-swatches flex items-center justify-center gap-1.5 mt-2 flex-wrap">
+                <div class="fc-swatches flex items-center justify-start gap-2 mt-2 flex-wrap">
                   {%- for variant in product.variants limit: 6 -%}
                     {%- assign sw_img = '' -%}
                     {%- if variant.featured_image != blank -%}
@@ -192,7 +192,7 @@
           {%- assign ph_img   = ph_imgs[idx]   -%}
           {%- assign ph_color = ph_colors[idx] | split: "," -%}
           {%- assign full_img_url = "https://images.unsplash.com/" | append: ph_img | append: "?w=800&q=82&auto=format&fit=crop" -%}
-          {%- assign trunc_name = ph_name | truncate: 28 -%}
+          {%- assign trunc_name = ph_name -%}
 
           <div
             class="fc-card snap-start flex-none flex flex-col"
@@ -211,7 +211,7 @@
               <img
                 src="{{ full_img_url }}"
                 alt="{{ ph_name }}"
-                class="fc-img absolute inset-0 w-full h-full object-cover"
+                class="fc-img absolute inset-0 w-full h-full object-cover" draggable="false"
                 loading="{% if forloop.index <= 2 %}eager{% else %}lazy{% endif %}"
                 width="800" height="1067"
               />
@@ -221,16 +221,16 @@
               </button>
             </div>
 
-            <div class="mt-3 px-0.5 text-center">
+            <div class="mt-3 px-0.5 text-left">
               <p class="fc-product-name font-body leading-tight" style="font-size:{{ fc_title_size }};color:{{ fc_title_color }};font-weight:{{ fc_title_weight }};">{{ trunc_name }}</p>
-              <div class="flex items-center justify-center gap-2 mt-1 flex-wrap">
-                <span class="fc-price font-body font-semibold" style="font-size:{{ fc_title_size }};color:{{ fc_price_color }};">{{ ph_price }}</span>
+              <div class="flex items-center justify-start gap-2 mt-1 flex-wrap">
+                <span class="fc-price font-body font-semibold" style="font-size:calc({{ fc_title_size }} * 1.15);color:{{ fc_price_color }};">{{ ph_price }}</span>
                 {%- if ph_c != '$0' and ph_c != '' -%}
-                  <span class="fc-compare font-body line-through" style="font-size:{{ fc_title_size }};color:{{ fc_compare_color }};">{{ ph_c }}</span>
+                  <span class="fc-compare font-body line-through" style="font-size:calc({{ fc_title_size }} * 0.95);color:{{ fc_compare_color }};">{{ ph_c }}</span>
                 {%- endif -%}
               </div>
               <!-- Demo swatches -->
-              <div class="fc-swatches flex items-center justify-center gap-1.5 mt-2 flex-wrap">
+              <div class="fc-swatches flex items-center justify-start gap-2 mt-2 flex-wrap">
                 {%- for col in ph_color -%}
                   <button
                     class="fc-swatch{% if forloop.first %} active{% endif %}"
@@ -414,11 +414,22 @@
 .fc-qv-trigger:hover { background: rgba(255,255,255,0.97); }
 .fc-qv-plus { font-size: 1.2rem; font-weight: 300; line-height: 1; }
 
+/* ── Product text truncation ── */
+.fc-product-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  max-width: 100%;
+}
 /* ── Variant swatches ── */
 .fc-swatch {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
+  width: 34px;
+  height: 44px;
+  border-radius: 6px;
   border: 2px solid transparent;
   cursor: pointer;
   background-size: cover;
@@ -1099,12 +1110,12 @@
       "id": "title_font_size",
       "label": "Product Name Size",
       "options": [
-        { "value": "0.72rem", "label": "Small (11px)" },
-        { "value": "0.82rem", "label": "Default (13px)" },
-        { "value": "0.88rem", "label": "Medium (14px)" },
-        { "value": "1rem",    "label": "Large (16px)" }
+        { "value": "1.0rem", "label": "Small (16px)" },
+        { "value": "1.2rem", "label": "Medium (19px)" },
+        { "value": "1.4rem", "label": "Large (22px)" },
+        { "value": "1.65rem", "label": "Extra Large (26px)" }
       ],
-      "default": "0.82rem"
+      "default": "1.4rem"
     },
     {
       "type": "color",
