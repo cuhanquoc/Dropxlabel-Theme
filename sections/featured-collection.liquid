@@ -343,12 +343,12 @@
   overflow-x: auto !important;
   padding-left: 20px !important;
   padding-right: 20px !important;
-  scroll-padding-left: 20px !important;
+  
   overflow-y: hidden !important;
-  scroll-snap-type: x mandatory !important;
+  
   scroll-behavior: smooth !important;
   -webkit-overflow-scrolling: touch !important;
-  overscroll-behavior-x: contain !important;
+  overscroll-behavior-x: auto !important;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -356,7 +356,7 @@
   #fc-track {
     padding-left: 40px !important;
     padding-right: 40px !important;
-    scroll-padding-left: 40px !important;
+    
   }
 }
 #fc-track::-webkit-scrollbar { display: none; }
@@ -364,10 +364,10 @@
 /* ── Card sizing ── */
 .fc-card {
   flex: 0 0 auto !important; /* Đảm bảo thẻ KHÔNG bị bóp méo khi không đủ chỗ */
-  width: 85vw !important;    /* Mobile: Hiện đúng 1 thẻ và 1 góc của thẻ tiếp theo */
+  width: 72vw !important;    /* Mobile: Hiện đúng 1 thẻ và 1 góc của thẻ tiếp theo */
   max-width: none !important;
-  scroll-snap-align: start !important;
-  scroll-snap-stop: always !important;
+  
+  
 }
 @media (min-width: 640px) {
   .fc-card { width: calc(50% - 12px) !important; } /* Tablet: 2 thẻ + 1 góc */
@@ -505,7 +505,7 @@
   #fc-track {
     padding-left: 40px !important;
     padding-right: 40px !important;
-    scroll-padding-left: 40px !important;
+    
   }
 }
 .fc-qv-panel::-webkit-scrollbar { display: none; }
