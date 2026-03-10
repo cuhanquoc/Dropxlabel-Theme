@@ -1,23 +1,27 @@
-<section class="w-full bg-white text-[#0a0a0a] pb-12" data-section-id="{{ section.id }}" data-product-handle="{{ product.handle }}">
+<section class="product-section w-full bg-white text-[#0a0a0a] pb-12" data-section-id="{{ section.id }}" data-product-handle="{{ product.handle }}">
   <style>
     .hide-scrollbar::-webkit-scrollbar { display: none; }
     .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     
     /* Optional: Custom style for dynamic checkout button */
     .shopify-payment-button__button {
-      border-radius: 0 !important;
-      height: 3.5rem !important;
+      border-radius: 4px !important;
+      height: 3rem !important;
       font-family: inherit !important;
-      font-weight: bold !important;
-      letter-spacing: 0.1em !important;
-      text-transform: uppercase !important;
+      font-weight: 500 !important;
+      font-size: 1rem !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+      background-color: transparent !important;
+      color: black !important;
+      border: 1px solid black !important;
     }
   </style>
 
-  <div class="max-w-[1440px] mx-auto xl:px-10 xl:flex xl:gap-12 xl:items-start pt-16 md:pt-24 md:pb-12">
+  <div class="max-w-[1440px] mx-auto xl:px-10 xl:flex xl:gap-12 xl:items-start pt-0 xl:pt-12 pb-12">
     
-    <!-- GALLERY (Mobile First) -->
-    <div class="w-full xl:w-1/2 xl:sticky xl:top-[120px]">
+    <!-- GALLERY (Mobile First edge-to-edge) -->
+    <div class="product-gallery w-full xl:w-1/2 xl:sticky xl:top-[120px]">
       <!-- Main Image -->
       <div class="w-full relative bg-[#f4f4f4] aspect-[4/5] xl:rounded-lg overflow-hidden">
         {% if product.featured_image %}
@@ -29,7 +33,7 @@
       
       <!-- Thumbnail Slider -->
       {% if product.media.size > 1 %}
-        <div class="overflow-x-auto snap-x flex gap-[2px] mt-[2px] hide-scrollbar relative pb-2" id="ProductThumbnails">
+        <div class="overflow-x-auto snap-x flex gap-[2px] mt-[2px] hide-scrollbar relative bg-white" id="ProductThumbnails">
           {% for media in product.media %}
             <button type="button" 
                     class="shrink-0 w-[calc(33.333%-1.33px)] aspect-[4/5] bg-[#f4f4f4] snap-start relative group outline-none"
@@ -42,18 +46,19 @@
     </div>
 
     <!-- PRODUCT INFO -->
-    <div class="w-full px-5 py-8 xl:px-0 xl:w-1/2 xl:max-w-xl">
+    <div class="product-info w-full px-5 py-6 xl:px-0 xl:w-1/2 xl:max-w-[500px]">
+      
       <!-- Title & Price -->
-      <h1 class="text-2xl md:text-3xl font-heading font-bold mb-3 tracking-tight">{{ product.title }}</h1>
-      <div class="text-3xl md:text-4xl font-heading font-bold mb-2">
+      <h1 class="text-[1.375rem] md:text-3xl font-body font-bold mb-1 leading-snug">{{ product.title }}</h1>
+      <div class="text-[1.5rem] md:text-[2rem] font-body font-bold mb-2">
         <span id="ProductPrice">{{ product.selected_or_first_available_variant.price | money }} {{ cart.currency.iso_code }}</span>
         {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
-          <s class="text-[#888] text-lg ml-2" id="ProductComparePrice">{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
+          <s class="text-[#888] text-lg ml-2 font-normal" id="ProductComparePrice">{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
         {% endif %}
       </div>
-      <p class="text-sm text-[#444] mb-8">Taxes included. <a href="#" class="underline">Shipping</a> calculated at checkout.</p>
+      <p class="text-[15px] font-body text-[#0a0a0a] mb-6">Taxes included. <a href="#" class="underline">Shipping</a> calculated at checkout.</p>
 
-      <hr class="border-[#eaeaea] mb-8">
+      <hr class="border-t border-[#eaeaea] mb-6">
 
       <!-- Product Form -->
       {%- form 'product', product, id: 'ProductForm', class: 'block' -%}
@@ -61,27 +66,27 @@
 
         <!-- Variants -->
         {%- unless product.has_only_default_variant -%}
-          <div class="space-y-8 mb-8">
+          <div class="space-y-6 mb-6">
             {%- for option in product.options_with_values -%}
               <div>
-                <div class="flex justify-between items-end mb-4">
-                  <label class="text-sm font-bold uppercase tracking-wider">{{ option.name }}: <span class="font-medium ml-1 text-[#666]" id="OptionValue-{{ forloop.index0 }}">{{ option.selected_value }}</span></label>
+                {%- liquid
+                   assign is_color = false
+                   assign downcased_option = option.name | downcase
+                   if downcased_option == 'color' or downcased_option == 'colour' or downcased_option == 'màu sắc' or downcased_option == 'màu'
+                     assign is_color = true
+                   endif
+                -%}
+                <div class="flex justify-between items-center mb-3">
+                  <label class="text-[13px] font-bold font-body uppercase tracking-wider">{{ option.name }} : <span class="font-medium ml-1" id="OptionValue-{{ forloop.index0 }}">{{ option.selected_value }}</span></label>
                   {% if option.name == 'Size' or option.name == 'Kích thước' %}
-                    <button type="button" class="text-sm border-b border-black flex items-center font-bold">
+                    <button type="button" class="text-[14px] font-bold flex items-center font-body group">
                        Size chart 
-                       <svg class="ml-2 w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/><path d="M8 10v4"/><path d="M12 10v4"/><path d="M16 10v4"/></svg>
+                       <svg class="ml-2 w-[18px] h-[18px] group-hover:scale-105 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/><path d="M8 10v4"/><path d="M12 10v4"/><path d="M16 10v4"/></svg>
                     </button>
                   {% endif %}
                 </div>
                 
-                <div class="flex flex-wrap gap-3">
-                  {%- liquid
-                     assign is_color = false
-                     assign downcased_option = option.name | downcase
-                     if downcased_option == 'color' or downcased_option == 'colour' or downcased_option == 'màu sắc' or downcased_option == 'màu'
-                       assign is_color = true
-                     endif
-                  -%}
+                <div class="flex flex-wrap gap-[6px]">
                   {%- for value in option.values -%}
                     <label class="relative cursor-pointer">
                       <input type="radio" class="sr-only peer" name="options[{{ option.name | escape }}]" value="{{ value | escape }}" {% if option.selected_value == value %}checked{% endif %} data-option-index="{{ forloop.parentloop.index0 }}" onchange="updateVariant(this)">
@@ -95,17 +100,19 @@
                           {%- endif -%}
                         {%- endfor -%}
                         
-                        <div class="w-12 h-12 rounded overflow-hidden border-2 border-transparent peer-checked:border-black p-[2px] transition-all">
-                          <div class="w-full h-full rounded-sm overflow-hidden bg-gray-200">
+                        <!-- Very small subtle rounded square like screenshot -->
+                        <div class="w-8 h-8 rounded-[4px] overflow-hidden border border-gray-300 peer-checked:border-black p-[2px] transition-all">
+                          <div class="w-full h-full rounded-[2px] overflow-hidden bg-gray-200">
                             {% if variant_image != blank %}
-                              <img src="{{ variant_image | image_url: width: 100 }}" class="w-full h-full object-cover" alt="{{ value }}">
+                              <img src="{{ variant_image | image_url: width: 60 }}" class="w-full h-full object-cover" alt="{{ value }}">
                             {% else %}
                               <div class="w-full h-full" style="background-color: {{ value | split: ' ' | last | downcase | remove: '"' | remove: "'" }};"></div>
                             {% endif %}
                           </div>
                         </div>
                       {% else %}
-                        <div class="min-w-[4.5rem] h-12 px-4 flex items-center justify-center border border-gray-300 rounded font-medium text-sm peer-checked:bg-black peer-checked:text-white peer-checked:border-black transition-all">
+                        <!-- Rectangular block with rounded corners for size like screenshot -->
+                        <div class="min-w-[4.5rem] h-10 px-4 flex items-center justify-center border border-black rounded-[4px] font-medium text-[15px] font-body peer-checked:bg-black peer-checked:text-white peer-checked:border-black transition-all">
                           {{ value }}
                         </div>
                       {% endif %}
@@ -118,20 +125,21 @@
         {%- endunless -%}
 
         <!-- Quantity & Stock -->
-        <div class="mb-4">
-          <label class="text-sm font-bold uppercase tracking-wider mb-4 block">Quantity</label>
-          <div class="flex items-center w-36 h-14 border border-gray-300 rounded">
-            <button type="button" class="w-12 h-full flex items-center justify-center text-2xl hover:bg-gray-50 outline-none" onclick="document.getElementById('QuantityInput').stepDown()">−</button>
-            <input type="number" id="QuantityInput" name="quantity" class="w-full h-full text-center text-lg font-medium bg-transparent outline-none appearance-none" value="1" min="1" aria-label="Quantity">
-            <button type="button" class="w-12 h-full flex items-center justify-center text-2xl hover:bg-gray-50 outline-none" onclick="document.getElementById('QuantityInput').stepUp()">+</button>
+        <div class="mb-5">
+          <label class="text-[14px] font-bold font-body mb-2 block">Quantity</label>
+          <div class="flex items-center w-[120px] h-[46px] border border-gray-300 rounded-[4px]">
+            <button type="button" class="w-10 h-full flex items-center justify-center text-xl text-gray-500 hover:text-black hover:bg-gray-50 outline-none transition-colors" onclick="document.getElementById('QuantityInput').stepDown()">−</button>
+            <input type="number" id="QuantityInput" name="quantity" class="w-full h-full text-center text-[17px] font-body bg-transparent outline-none appearance-none" value="1" min="1" aria-label="Quantity">
+            <button type="button" class="w-10 h-full flex items-center justify-center text-xl text-gray-500 hover:text-black hover:bg-gray-50 outline-none transition-colors" onclick="document.getElementById('QuantityInput').stepUp()">+</button>
           </div>
         </div>
 
-        <div class="flex items-center gap-2 text-sm font-medium mb-8">
-          <div class="w-5 h-5 rounded-full bg-[#00a852] flex items-center justify-center text-white shrink-0">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <!-- Stock Status (Green Check) -->
+        <div class="flex items-center gap-2 text-[14px] font-body text-[#0a0a0a] mb-6">
+          <div class="w-[18px] h-[18px] rounded-full bg-[#00a852] flex items-center justify-center text-white shrink-0">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
           </div>
-          <span class="text-[#00a852]">
+          <span>
             {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
               {{ product.selected_or_first_available_variant.inventory_quantity }} in stock
             {% else %}
@@ -141,30 +149,34 @@
         </div>
 
         <!-- Pickup Info Box -->
-        <div class="bg-[#f0faef] p-5 rounded-md flex gap-4 mb-8">
-          <div class="mt-1 shrink-0 text-[#00a852]">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <div class="bg-[#f0faef] p-[18px] rounded-[4px] flex gap-[14px] mb-8 border border-green-100/50">
+          <div class="mt-0.5 shrink-0 text-[#000]">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line>
             </svg>
           </div>
-          <div class="text-[0.95rem]">
-            <p class="font-bold text-[#0a0a0a] leading-tight mb-1">Pickup available at California Warehouse</p>
-            <p class="text-[#666] mb-2">Usually ready in 24 hours</p>
-            <a href="#" class="underline text-xs text-[#0a0a0a] font-medium">Check availability at other stores</a>
+          <div class="text-[14px] font-body w-full">
+            <div class="flex flex-col gap-1">
+                <p class="font-bold text-[#0a0a0a] leading-tight">Pickup available at California Warehouse</p>
+                <p class="text-[#0a0a0a] leading-tight flex justify-between w-full">
+                   Usually ready in 24 hours 
+                   <a href="#" class="underline text-[13px] text-[#0a0a0a] font-medium ml-2 shrink-0 self-end">Check availability at other stores</a>
+                </p>
+            </div>
           </div>
         </div>
 
         <!-- Submit Buttons -->
-        <div class="flex flex-col gap-3 mb-8">
-          <button type="submit" class="w-full h-14 bg-white text-black border-[1.5px] border-black flex items-center justify-center text-sm font-bold tracking-widest uppercase hover:bg-black hover:text-white transition-colors duration-300">
+        <div class="flex flex-col gap-2.5 mb-8">
+          <button type="submit" class="w-full h-12 bg-white text-black border border-black rounded-[4px] flex items-center justify-center text-[15px] font-body font-medium hover:bg-black hover:text-white transition-colors duration-300">
             Add to cart
           </button>
           
           {%- if section.settings.show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- else -%}
-            <!-- Fallback Buy Now if dynamic checkout is off but they still want a button -->
-            <button type="button" class="w-full h-14 bg-black text-white flex items-center justify-center text-sm font-bold tracking-widest uppercase hover:opacity-80 transition-opacity duration-300">
+            <!-- Fallback Buy Now -->
+            <button type="button" class="w-full h-12 bg-black text-white rounded-[4px] flex items-center justify-center text-[15px] font-body font-medium hover:opacity-80 transition-opacity duration-300">
               Buy it now
             </button>
           {%- endif -%}
@@ -173,27 +185,28 @@
       {%- endform -%}
 
       <!-- Pointers / Trust Badges -->
-      <hr class="border-[#eaeaea] mb-6">
-      
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 text-sm font-medium mb-8">
+      <div class="flex justify-between items-center text-[14px] font-body font-medium text-[#0a0a0a] mb-8 w-full border-t border-[#eaeaea] pt-6">
          <div class="flex items-center gap-3">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
             Free delivery within 2 days
          </div>
-         <div class="hidden md:block w-px h-6 bg-gray-300"></div>
+         <div class="w-px h-5 bg-[#eaeaea]"></div>
          <div class="flex items-center gap-3">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
             Free + easy returns
          </div>
       </div>
       
       <!-- Socials -->
-      <div class="flex items-center gap-4 text-sm font-bold pt-4">
+      <div class="flex items-center gap-4 text-[14px] font-bold font-body pt-2">
          <span>Social:</span>
-         <div class="flex items-center gap-5">
-           <a href="#" class="hover:opacity-70 transition-opacity"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
-           <a href="#" class="hover:opacity-70 transition-opacity"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5 2.8 11.2 2.8 11.2c.8.2 1.6.2 2.4.1C-1.1 9.4-1.2 3.4-1.2 3.4c1 .6 2 .9 3.1.9-3.7-2.6-2.5-8.5-2.5-8.5 3.3 3.6 8.5 6.3 14 6.6C12.7 1.9 14.5.3 17 1.3c1.5.6 2.7 1.8 3.3 3.3.1.3.1.5.2.8.2-.1.4-.2.6-.4.7-.6 1.4-1.1 2-1.7-.1.4-.3.7-.5 1 .3-.1.6-.2.9-.4-.1.4-.3.8-.5 1.1z"></path></svg></a>
-           <a href="#" class="hover:opacity-70 transition-opacity"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"></path></svg></a>
+         <div class="flex items-center gap-4">
+           <a href="#" class="text-[#0a0a0a] hover:opacity-70 transition-opacity"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a>
+           <a href="#" class="text-[#0a0a0a] hover:opacity-70 transition-opacity"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"></path></svg></a>
+           <a href="#" class="text-[#0a0a0a] hover:opacity-70 transition-opacity"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.406.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.72-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.024 0 1.519.769 1.519 1.688 0 1.029-.653 2.568-.991 3.992-.284 1.193.597 2.164 1.77 2.164 2.123 0 3.756-2.241 3.756-5.474 0-2.861-2.056-4.86-4.991-4.86-3.398 0-5.393 2.549-5.393 5.184 0 1.027.395 2.127.889 2.726a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.923 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0Z"></path></svg></a>
+           <a href="#" class="text-[#0a0a0a] hover:opacity-70 transition-opacity"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" x2="11" y1="2" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></a>
+           <a href="#" class="text-[#0a0a0a] hover:opacity-70 transition-opacity"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"></path><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"></path></svg></a>
+           <a href="#" class="text-[#0a0a0a] hover:opacity-70 transition-opacity"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg></a>
          </div>
       </div>
       
