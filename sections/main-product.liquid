@@ -650,7 +650,7 @@
                       <img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title | escape }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;" />
                     {% endif %}
                   </div>
-                  <p style="font-family: var(--font-body, sans-serif); font-weight: 700; font-size: 0.85rem; line-height: 1.3; text-align: center; color: #000; margin: 0 0 0.4rem 0;">{{ p.title }}</p>
+                  <p style="font-family: var(--font-body, sans-serif); font-weight: 700; font-size: 0.85rem; line-height: 1.3; text-align: center; color: #000; margin: 0 0 0.4rem 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; white-space: normal;">{{ p.title }}</p>
                   <p style="font-family: var(--font-body, sans-serif); font-weight: 400; font-size: 0.85rem; text-align: center; color: #000; margin: 0;">{{ p.price | money }} {{ shop.currency }}</p>
                 </a>
               </div>
