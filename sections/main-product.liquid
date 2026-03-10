@@ -385,10 +385,7 @@
           <!-- Hidden variant input -->
           <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}" id="selected-variant-id" />
 
-          <!-- Vendor -->
-          {% if product.vendor != blank %}
-            <p class="product-vendor mb-2" style="font-weight: 500; font-size: 0.9rem;">{{ product.vendor }}</p>
-          {% endif %}
+          
 
           <!-- Title, Price, Taxes Layout -->
           <div style="margin-bottom: 2.5rem;">
@@ -523,8 +520,8 @@
 
           <!-- ── Stock Indicator (Dynamic) ── -->
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; font-size: 1.05rem;">
-            <svg id="variant-stock-icon" width="24" height="24" viewBox="0 0 24 24" fill="#00a82d" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="white"/>
+            <svg id="variant-stock-icon" width="20" height="20" viewBox="0 0 24 24" fill="#00a82d" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="currentColor"/>
             </svg>
             <span id="variant-stock-display" style="font-weight: 400;">
               {% assign current_variant = product.selected_or_first_available_variant %}
@@ -728,7 +725,16 @@
       
       /* Update price */
       const priceEl = document.getElementById('product-price');
-      if (priceEl) priceEl.innerHTML = (match.price / 100).toLocaleString('vi-VN') + ' {{ shop.currency }}';
+      if (priceEl) priceEl.innerHTML = (match.price / 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' {{ shop.currency }}';
+      
+      /* Update compare at price if exists */
+      const compareEl = document.querySelector('.product-price-compare');
+      if (compareEl && match.compare_at_price) {
+        compareEl.innerHTML = (match.compare_at_price / 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' {{ shop.currency }}';
+        compareEl.style.display = 'inline';
+      } else if (compareEl) {
+        compareEl.style.display = 'none';
+      }
       
       /* Update add to cart state */
       const btn = document.getElementById('add-to-cart-btn');
@@ -744,37 +750,19 @@
         if (match.inventory_management && match.inventory_quantity > 0) {
           stockEl.textContent = match.inventory_quantity + ' in stock';
           stockIcon.setAttribute('fill', '#00a82d');
+          stockIcon.style.color = '#00a82d';
           stockEl.style.color = '#111';
         } else if (match.available) {
           stockEl.textContent = 'In stock';
           stockIcon.setAttribute('fill', '#00a82d');
+          stockIcon.style.color = '#00a82d';
           stockEl.style.color = '#111';
         } else {
           stockEl.textContent = 'Out of stock';
           stockIcon.setAttribute('fill', '#888');
+          stockIcon.style.color = '#888';
           stockEl.style.color = '#888';
         }
-      }
-    }
-  });
-
-    /* Match to a variant */
-    const match = productData.find(v =>
-      Object.entries(selected).every(([pos, val]) => v['option' + pos] === val)
-    );
-
-    if (match) {
-      document.getElementById('selected-variant-id').value = match.id;
-      /* Update price */
-      const priceEl = document.getElementById('product-price');
-      if (priceEl) {
-        priceEl.textContent = (match.price / 100).toLocaleString('vi-VN') + '₫';
-      }
-      /* Update add to cart state */
-      const btn = document.getElementById('add-to-cart-btn');
-      if (btn) {
-        btn.disabled = !match.available;
-        btn.querySelector('span') || (btn.lastChild.textContent = match.available ? ' Add to Cart' : ' Sold Out');
       }
     }
   }
@@ -789,78 +777,66 @@
 
   /* ─────────────────────────────────────────────────
      AJAX ADD TO CART
-     - Intercepts form#product-form submit
-     - POST /cart/add.js → on success: open CartDrawer
-     - Updates header cart count without page reload
-     - Falls back to native submit on any fetch error
   ───────────────────────────────────────────────── */
   (function () {
     const form   = document.getElementById('product-form');
     const btn    = document.getElementById('add-to-cart-btn');
     if (!form || !btn) return;
 
-    /* ── Button state helpers ── */
-    const ICON_SVG = btn.querySelector('svg') ? btn.querySelector('svg').outerHTML : '';
-
     function setBtnLoading() {
       btn.disabled = true;
       btn.style.opacity = '0.65';
-      btn.innerHTML = ICON_SVG + ' Adding\u2026';
+      btn.innerHTML = 'Adding...';
     }
 
     function setBtnSuccess() {
-      btn.innerHTML = ICON_SVG + ' Added!';
+      btn.innerHTML = 'Added!';
       btn.style.opacity = '1';
       btn.disabled = false;
       setTimeout(resetBtn, 1600);
     }
 
     function setBtnError(msg) {
-      btn.innerHTML = ICON_SVG + ' ' + (msg || 'Try again');
+      btn.innerHTML = msg || 'Try again';
       btn.style.opacity = '1';
       btn.disabled = false;
       setTimeout(resetBtn, 2000);
     }
 
     function resetBtn() {
-      btn.innerHTML = ICON_SVG + ' Add to Cart';
+      btn.innerHTML = 'Add to Cart';
       btn.disabled  = false;
       btn.style.opacity = '1';
     }
 
-    /* ── Refresh cart count on all badges ── */
     function refreshCartCount() {
       fetch('/cart.js')
         .then(r => r.json())
         .then(cart => {
-          /* Update cart-drawer count text */
           const countEl = document.getElementById('cd-count');
           if (countEl) {
             const n = cart.item_count;
             countEl.textContent = n + (n === 1 ? ' item' : ' items');
           }
-          /* Update header badge */
           document.querySelectorAll('.cart-count').forEach(el => {
             el.textContent = cart.item_count;
             el.style.display = cart.item_count > 0 ? '' : 'none';
           });
-          /* Update drawer subtotal */
           const subtotalEl = document.getElementById('cd-subtotal');
           if (subtotalEl) {
-            subtotalEl.textContent = (cart.total_price / 100).toLocaleString('vi-VN') + '\u20ab';
+            subtotalEl.textContent = (cart.total_price / 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' {{ shop.currency }}';
           }
         })
         .catch(() => {});
     }
 
-    /* ── AJAX Submit ── */
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
       const variantId = document.getElementById('selected-variant-id')?.value;
       const quantity  = parseInt(document.getElementById('qty-input')?.value || 1);
 
-      if (!variantId) { form.submit(); return; } /* safety fallback */
+      if (!variantId) { form.submit(); return; }
 
       setBtnLoading();
 
@@ -880,7 +856,6 @@
         setBtnSuccess();
         refreshCartCount();
 
-        /* Open the CartDrawer */
         if (typeof window.CartDrawer !== 'undefined') {
           window.CartDrawer.open();
         }
@@ -889,8 +864,7 @@
         setBtnError(err.message);
       });
     });
-  }());
-
+  })();
 </script>
 
 
