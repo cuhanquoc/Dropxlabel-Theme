@@ -7,7 +7,7 @@
     assign is_home = true
   endif
 -%}
-{%- if is_home -%}
+{%- if is_home or request.page_type == 'product' -%}
   <style>
     .site-header { position: absolute; background-color: transparent; }
     .site-header, .nav-link, .icon-btn, .mega-trigger { color: #ffffff !important; }
@@ -24,7 +24,7 @@
   </style>
 {%- endif -%}
 
-{%- if is_home -%}
+{%- if is_home or request.page_type == 'product' -%}
 <header class="site-header left-0 w-full z-40 flex justify-between items-center px-5 md:px-10 py-4 md:py-6 transition-colors duration-300" style="top: var(--ab-height, 0px);">
 {%- else -%}
 <header class="site-header left-0 w-full z-40 flex justify-between items-center px-5 md:px-10 py-4 md:py-6 transition-colors duration-300">
