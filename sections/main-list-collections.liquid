@@ -1,13 +1,13 @@
 {% paginate collections by 15 %}
-<section class="bg-white text-[#0a0a0a] pt-32 pb-24 md:pt-40 md:pb-32 px-5 md:px-10">
-  <div class="max-w-[1440px] mx-auto">
+<section class="w-full bg-[#ffffff] pt-4 md:pt-8 pb-24 md:pb-32 px-5 md:px-10">
+  <div class="max-w-7xl mx-auto">
     <!-- Header -->
-    <header class="mb-16 md:mb-24 text-center max-w-3xl mx-auto">
-      <h1 class="font-heading text-[clamp(2.5rem,8vw,5.5rem)] font-light leading-[1.1] tracking-tight mb-4">
+    <header class="text-center">
+      <h1 class="font-heading text-[3.5rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8.5rem] leading-none tracking-[-0.04em] text-[#0a0a0a] uppercase mb-4">
         {{ section.settings.title | default: 'Collections' }}
       </h1>
-      <p class="font-body text-base md:text-lg text-[#666] tracking-wide">
-        {{ section.settings.subtitle | default: 'Discover our curated selections.' }}
+      <p class="mt-4 text-xl md:text-2xl lg:text-[2rem] text-[#666] font-body max-w-4xl mx-auto tracking-normal">
+        {{ section.settings.description | default: 'Discover our curated selections.' }}
       </p>
     </header>
 
