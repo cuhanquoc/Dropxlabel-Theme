@@ -1,33 +1,30 @@
-{% comment %} FEATURED COLLECTION — Trending Products Carousel {% endcomment %}
+{% comment %} FEATURED COLLECTION — Trending Products Carousel + Quick View Modal {% endcomment %}
 
-{%- assign fc_heading_size = section.settings.heading_size | default: 'clamp(3rem,12vw,8rem)' -%}
-{%- assign fc_title_size   = section.settings.title_font_size | default: '0.88rem' -%}
-{%- assign fc_title_color  = section.settings.title_color | default: '#222222' -%}
-{%- assign fc_title_weight = section.settings.title_font_weight | default: '400' -%}
-{%- assign fc_price_size   = section.settings.price_font_size | default: '0.82rem' -%}
-{%- assign fc_price_color  = section.settings.price_color | default: '#8A8A8A' -%}
+{%- assign fc_title_size   = section.settings.title_font_size   | default: '0.82rem' -%}
+{%- assign fc_title_color  = section.settings.title_color        | default: '#111111' -%}
+{%- assign fc_title_weight = section.settings.title_font_weight  | default: '500' -%}
+{%- assign fc_price_color  = section.settings.price_color        | default: '#111111' -%}
+{%- assign fc_compare_color = section.settings.compare_color     | default: '#999999' -%}
 
 <featured-collection class="block relative w-full overflow-hidden bg-white">
 
   <!-- ── Section Header ── -->
-  <div class="pt-16 pb-8 px-5 md:px-10 text-center">
+  <div class="pt-14 pb-6 px-5 md:px-10 text-center">
     <h2
-      class="font-body font-black uppercase leading-[0.88] tracking-[-0.02em] text-[#0a0a0a]"
-      style="font-size: {{ fc_heading_size }}; color: {{ section.settings.heading_color | default: '#0a0a0a' }};"
+      class="font-body font-black uppercase leading-[0.88] tracking-[-0.02em]"
+      style="font-size: {{ section.settings.heading_size | default: 'clamp(2.8rem,11vw,7.5rem)' }}; color: {{ section.settings.heading_color | default: '#0a0a0a' }};"
     >
       {{ section.settings.heading | default: 'TRENDING PRODUCTS' }}
     </h2>
   </div>
-  <!-- / Section Header -->
 
-  <!-- ── Product Carousel ── -->
-  <div class="fc-carousel-wrapper relative px-5 md:px-10 pb-20">
-
-    <!-- Scroll Track -->
+  <!-- ── Carousel ── -->
+  <div class="relative px-5 md:px-10 pb-16">
     <div
-      class="fc-carousel-track flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 cursor-grab select-none"
+      class="fc-track flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory pb-3 cursor-grab select-none"
       id="fc-track"
-      aria-label="Trending products carousel"
+      role="list"
+      aria-label="Trending products"
     >
 
       {%- if section.settings.collection != blank -%}
@@ -36,316 +33,992 @@
         {%- assign fc_products = null -%}
       {%- endif -%}
 
-      {% if fc_products != null and fc_products.size > 0 %}
+      {%- if fc_products != null and fc_products.size > 0 -%}
 
-        {% for product in fc_products limit: section.settings.products_to_show %}
-          {%- assign fc_img   = product.featured_image -%}
-          {%- assign fc_name  = product.title -%}
-          {%- assign fc_price = product.price | money -%}
-          {%- assign fc_url   = product.url -%}
+        {%- for product in fc_products limit: section.settings.products_to_show -%}
 
-          <!-- Product Card -->
-          <div class="fc-card snap-start flex-none w-[80vw] max-w-[340px] md:w-[320px] flex flex-col" data-fc-card>
+          {%- comment -%} Build variant JSON for JS {%- endcomment -%}
+          {%- assign v_json = '[' -%}
+          {%- for v in product.variants -%}
+            {%- assign v_img_url = '' -%}
+            {%- if v.featured_image != blank -%}
+              {%- assign v_img_url = v.featured_image | image_url: width: 900 -%}
+            {%- elsif product.featured_image != blank -%}
+              {%- assign v_img_url = product.featured_image | image_url: width: 900 -%}
+            {%- endif -%}
+            {%- assign v_swatch_url = '' -%}
+            {%- if v.featured_image != blank -%}
+              {%- assign v_swatch_url = v.featured_image | image_url: width: 120 -%}
+            {%- endif -%}
+            {%- assign v_compare = v.compare_at_price | default: 0 -%}
+            {%- capture v_entry -%}{"id":{{ v.id }},"title":{{ v.title | json }},"price":{{ v.price }},"compare":{{ v_compare }},"available":{{ v.available }},"img":{{ v_img_url | json }},"swatch":{{ v_swatch_url | json }},"option1":{{ v.option1 | json }},"option2":{{ v.option2 | json }},"option3":{{ v.option3 | json }}}{%- endcapture -%}
+            {%- assign v_json = v_json | append: v_entry -%}
+            {%- unless forloop.last -%}{%- assign v_json = v_json | append: ',' -%}{%- endunless -%}
+          {%- endfor -%}
+          {%- assign v_json = v_json | append: ']' -%}
 
-            <!-- Image Wrapper -->
-            <a href="{{ fc_url }}" class="block relative overflow-hidden rounded-2xl bg-gray-100" style="aspect-ratio: 3/4;">
+          {%- comment -%} Build images JSON {%- endcomment -%}
+          {%- assign imgs_json = '[' -%}
+          {%- for img in product.images limit: 8 -%}
+            {%- capture img_entry -%}{{ img | image_url: width: 900 | json }}{%- endcapture -%}
+            {%- assign imgs_json = imgs_json | append: img_entry -%}
+            {%- unless forloop.last -%}{%- assign imgs_json = imgs_json | append: ',' -%}{%- endunless -%}
+          {%- endfor -%}
+          {%- assign imgs_json = imgs_json | append: ']' -%}
 
-              {% if fc_img != blank %}
+          {%- assign main_img = product.featured_image | image_url: width: 800 -%}
+          {%- assign truncated_title = product.title | truncate: 28 -%}
+
+          <!-- Card -->
+          <div
+            class="fc-card snap-start flex-none flex flex-col"
+            role="listitem"
+            data-fc-card
+            data-product-id="{{ product.id }}"
+            data-product-title="{{ product.title | escape }}"
+            data-product-sku="{{ product.variants.first.sku | escape }}"
+            data-product-url="{{ product.url }}"
+            data-product-price="{{ product.price }}"
+            data-product-compare="{{ product.compare_at_price_min | default: 0 }}"
+            data-product-money="{{ product.price | money }}"
+            data-product-compare-money="{{ product.compare_at_price_min | money }}"
+            data-product-variants="{{ v_json | escape }}"
+            data-product-images="{{ imgs_json | escape }}"
+          >
+
+            <!-- Image container -->
+            <div class="fc-card-img-wrap relative rounded-2xl overflow-hidden bg-[#f2f2f2]" style="aspect-ratio:3/4;">
+
+              {% if product.featured_image != blank %}
                 <img
-                  src="{{ fc_img | image_url: width: 800 }}"
-                  alt="{{ fc_img.alt | default: fc_name | escape }}"
-                  class="fc-card-img"
+                  src="{{ main_img }}"
+                  alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                  class="fc-img absolute inset-0 w-full h-full object-cover"
                   loading="{% if forloop.index <= 2 %}eager{% else %}lazy{% endif %}"
-                  width="800"
-                  height="{{ 800 | divided_by: 0.75 | round }}"
+                  width="800" height="1067"
                 />
               {% else %}
-                <!-- Placeholder image (no product img) -->
-                <div class="absolute inset-0 flex items-end justify-center pb-6">
-                  {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover opacity-40' }}
+                <div class="absolute inset-0 flex items-center justify-center opacity-30">
+                  {{ 'product-1' | placeholder_svg_tag: 'w-24 h-24' }}
                 </div>
               {% endif %}
 
-              <!-- Quick View Overlay Button -->
+              <!-- QUICK VIEW button -->
               <button
-                class="fc-quick-view-btn"
-                aria-label="Quick view {{ fc_name | escape }}"
-                data-product-url="{{ fc_url }}"
-                data-product-id="{{ product.id }}"
-                onclick="event.preventDefault(); event.stopPropagation(); window.openQuickView && window.openQuickView('{{ product.handle }}');"
+                class="fc-qv-trigger"
+                aria-label="Quick view {{ product.title | escape }}"
+                data-card-id="{{ product.id }}"
               >
-                <span class="fc-quick-view-label">QUICK VIEW</span>
-                <span class="fc-quick-view-icon" aria-hidden="true">+</span>
+                <span class="fc-qv-label">QUICK VIEW</span>
+                <span class="fc-qv-plus" aria-hidden="true">+</span>
               </button>
 
-            </a>
-            <!-- / Image Wrapper -->
+            </div>
+            <!-- /Image container -->
 
-            <!-- Product Info -->
-            <div class="mt-3 px-1 text-center">
+            <!-- Product info -->
+            <div class="mt-3 px-0.5 text-center">
+
+              <!-- Name -->
               <a
-                href="{{ fc_url }}"
-                class="block font-body leading-snug hover:underline underline-offset-2 transition-all"
-                style="
-                  font-size: {{ fc_title_size }};
-                  color: {{ fc_title_color }};
-                  font-weight: {{ fc_title_weight }};
-                "
-              >
-                {{ fc_name }}
-              </a>
-              <p
-                class="font-body mt-1"
-                style="
-                  font-size: {{ fc_price_size }};
-                  color: {{ fc_price_color }};
-                "
-              >
-                {{ fc_price }}
-              </p>
+                href="{{ product.url }}"
+                class="fc-product-name block font-body leading-tight hover:underline underline-offset-2"
+                style="font-size:{{ fc_title_size }};color:{{ fc_title_color }};font-weight:{{ fc_title_weight }};"
+                title="{{ product.title | escape }}"
+              >{{ truncated_title }}</a>
+
+              <!-- Price row -->
+              <div class="flex items-center justify-center gap-2 mt-1 flex-wrap">
+                <span class="fc-price font-body font-semibold" style="font-size:{{ fc_title_size }};color:{{ fc_price_color }};">
+                  {{ product.price | money }}
+                </span>
+                {%- if product.compare_at_price_min > product.price -%}
+                  <span class="fc-compare font-body line-through" style="font-size:{{ fc_title_size }};color:{{ fc_compare_color }};">
+                    {{ product.compare_at_price_min | money }}
+                  </span>
+                {%- endif -%}
+              </div>
+
+              <!-- Variant swatches -->
+              {%- if product.variants.size > 1 -%}
+                <div class="fc-swatches flex items-center justify-center gap-1.5 mt-2 flex-wrap">
+                  {%- for variant in product.variants limit: 6 -%}
+                    {%- assign sw_img = '' -%}
+                    {%- if variant.featured_image != blank -%}
+                      {%- assign sw_img = variant.featured_image | image_url: width: 120 -%}
+                    {%- endif -%}
+                    <button
+                      class="fc-swatch{% if forloop.first %} active{% endif %}"
+                      aria-label="{{ variant.title | escape }}"
+                      data-variant-id="{{ variant.id }}"
+                      data-card="{{ product.id }}"
+                      {% if sw_img != blank %}
+                        style="background-image:url('{{ sw_img }}');"
+                      {% endif %}
+                    >
+                      {%- if sw_img == blank -%}
+                        <span class="sr-only">{{ variant.option1 }}</span>
+                      {%- endif -%}
+                    </button>
+                  {%- endfor -%}
+                  {%- if product.variants.size > 6 -%}
+                    <span class="fc-swatch-more font-body text-[10px] text-[#999]">+{{ product.variants.size | minus: 6 }}</span>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+
             </div>
-            <!-- / Product Info -->
+            <!-- /Product info -->
 
           </div>
-          <!-- / Product Card -->
+          <!-- /Card -->
 
-        {% endfor %}
+        {%- endfor -%}
 
-      {% else %}
+      {%- else -%}
 
-        <!-- ── Placeholder cards (no collection set) ── -->
-        {%- assign fc_placeholder_names  = "Full Sleeve Round Neck T-shirt|Distressed Knit Crewneck|Oversized Cargo Jacket|Minimal Linen Trousers|Ribbed Tank Essential|Wide-leg Denim|Tailored Bomber|Relaxed Polo" | split: "|" -%}
-        {%- assign fc_placeholder_prices = "$45.00|$68.00|$110.00|$72.00|$38.00|$88.00|$125.00|$55.00" | split: "|" -%}
-        {%- assign fc_placeholder_imgs   = "photo-1515886657613-9f3515b0c78f|photo-1558769132-cb1aea458c5e|photo-1539109136881-3be0616acf4b|photo-1509631179647-0177331693ae|photo-1485968579580-b6d095142e6e|photo-1472396961693-142e6e269027|photo-1490481651871-ab68de25d43d|photo-1469334031218-e382a71b716b" | split: "|" -%}
+        <!-- Placeholder cards -->
+        {%- assign ph_names  = "Full Sleeve Round Neck T-shirt|Distressed Knit Crewneck|Oversized Cargo Jacket|Minimal Linen Trousers|Ribbed Tank Essential|Wide-leg Denim|Tailored Bomber|Relaxed Polo" | split: "|" -%}
+        {%- assign ph_prices = "$45.00|$68.00|$110.00|$72.00|$38.00|$88.00|$125.00|$55.00" | split: "|" -%}
+        {%- assign ph_cmp    = "$0|$90.00|$0|$95.00|$0|$0|$160.00|$0" | split: "|" -%}
+        {%- assign ph_imgs   = "photo-1515886657613-9f3515b0c78f|photo-1558769132-cb1aea458c5e|photo-1539109136881-3be0616acf4b|photo-1509631179647-0177331693ae|photo-1485968579580-b6d095142e6e|photo-1472396961693-142e6e269027|photo-1490481651871-ab68de25d43d|photo-1469334031218-e382a71b716b" | split: "|" -%}
+        {%- assign ph_colors = "#5B5B4A,#8B7355,#3A3A3A,#1A1A1A|#8B7355,#3A3A3A|#4A6741,#101010|#F5F0E8,#C5A880|#FFFFFF,#1A1A1A|#3A3A3A,#1A1A1A|#101010,#4A6741|#FFFFFF,#3A3A3A" | split: "|" -%}
 
-        {% for i in (1..8) %}
-          {%- assign idx     = forloop.index0 -%}
-          {%- assign ph_name  = fc_placeholder_names[idx] -%}
-          {%- assign ph_price = fc_placeholder_prices[idx] -%}
-          {%- assign ph_img   = fc_placeholder_imgs[idx] -%}
+        {%- for i in (1..8) -%}
+          {%- assign idx = forloop.index0 -%}
+          {%- assign ph_name  = ph_names[idx]  -%}
+          {%- assign ph_price = ph_prices[idx] -%}
+          {%- assign ph_c     = ph_cmp[idx]    -%}
+          {%- assign ph_img   = ph_imgs[idx]   -%}
+          {%- assign ph_color = ph_colors[idx] | split: "," -%}
+          {%- assign full_img_url = "https://images.unsplash.com/" | append: ph_img | append: "?w=800&q=82&auto=format&fit=crop" -%}
+          {%- assign trunc_name = ph_name | truncate: 28 -%}
 
-          <!-- Placeholder Card #{{ forloop.index }} -->
-          <div class="fc-card snap-start flex-none w-[80vw] max-w-[340px] md:w-[320px] flex flex-col" data-fc-card>
-
-            <div class="block relative overflow-hidden rounded-2xl bg-gray-100" style="aspect-ratio: 3/4;">
+          <div
+            class="fc-card snap-start flex-none flex flex-col"
+            role="listitem"
+            data-fc-card
+            data-product-id="{{ forloop.index }}"
+            data-product-title="{{ ph_name }}"
+            data-product-sku="DEMO-{{ forloop.index }}"
+            data-product-url="#"
+            data-product-money="{{ ph_price }}"
+            data-product-compare-money="{{ ph_c }}"
+            data-product-variants="[]"
+            data-product-images='["{{ full_img_url }}"]'
+          >
+            <div class="fc-card-img-wrap relative rounded-2xl overflow-hidden bg-[#f2f2f2]" style="aspect-ratio:3/4;">
               <img
-                src="https://images.unsplash.com/{{ ph_img }}?w=800&q=82&auto=format&fit=crop"
+                src="{{ full_img_url }}"
                 alt="{{ ph_name }}"
-                class="fc-card-img"
+                class="fc-img absolute inset-0 w-full h-full object-cover"
                 loading="{% if forloop.index <= 2 %}eager{% else %}lazy{% endif %}"
-                width="800"
-                height="1067"
+                width="800" height="1067"
               />
-
-              <!-- Quick View Overlay Button -->
-              <button
-                class="fc-quick-view-btn"
-                aria-label="Quick view {{ ph_name }}"
-              >
-                <span class="fc-quick-view-label">QUICK VIEW</span>
-                <span class="fc-quick-view-icon" aria-hidden="true">+</span>
+              <button class="fc-qv-trigger" aria-label="Quick view {{ ph_name }}" data-card-id="{{ forloop.index }}">
+                <span class="fc-qv-label">QUICK VIEW</span>
+                <span class="fc-qv-plus" aria-hidden="true">+</span>
               </button>
             </div>
 
-            <!-- Product Info -->
-            <div class="mt-3 px-1 text-center">
-              <p
-                class="font-body leading-snug"
-                style="
-                  font-size: {{ fc_title_size }};
-                  color: {{ fc_title_color }};
-                  font-weight: {{ fc_title_weight }};
-                "
-              >
-                {{ ph_name }}
-              </p>
-              <p
-                class="font-body mt-1"
-                style="
-                  font-size: {{ fc_price_size }};
-                  color: {{ fc_price_color }};
-                "
-              >
-                {{ ph_price }}
-              </p>
+            <div class="mt-3 px-0.5 text-center">
+              <p class="fc-product-name font-body leading-tight" style="font-size:{{ fc_title_size }};color:{{ fc_title_color }};font-weight:{{ fc_title_weight }};">{{ trunc_name }}</p>
+              <div class="flex items-center justify-center gap-2 mt-1 flex-wrap">
+                <span class="fc-price font-body font-semibold" style="font-size:{{ fc_title_size }};color:{{ fc_price_color }};">{{ ph_price }}</span>
+                {%- if ph_c != '$0' and ph_c != '' -%}
+                  <span class="fc-compare font-body line-through" style="font-size:{{ fc_title_size }};color:{{ fc_compare_color }};">{{ ph_c }}</span>
+                {%- endif -%}
+              </div>
+              <!-- Demo swatches -->
+              <div class="fc-swatches flex items-center justify-center gap-1.5 mt-2 flex-wrap">
+                {%- for col in ph_color -%}
+                  <button
+                    class="fc-swatch{% if forloop.first %} active{% endif %}"
+                    aria-label="Color {{ forloop.index }}"
+                    style="background-color:{{ col }};"
+                  ></button>
+                {%- endfor -%}
+              </div>
             </div>
           </div>
-          <!-- / Placeholder Card #{{ forloop.index }} -->
 
-        {% endfor %}
-      {% endif %}
+        {%- endfor -%}
+
+      {%- endif -%}
 
     </div>
-    <!-- / Scroll Track -->
-
+    <!-- /Carousel track -->
   </div>
-  <!-- / Product Carousel -->
 
-  <!-- ── CTA: View All ── -->
+  <!-- View All -->
   {% if section.settings.show_view_all and section.settings.collection != blank %}
-    <div class="pb-16 text-center">
+    <div class="pb-14 text-center">
       <a
         href="{{ section.settings.collection.url }}"
-        class="fc-view-all font-body uppercase tracking-[0.2em] text-[0.7rem] font-semibold text-[#0a0a0a] border border-[#0a0a0a] rounded-full px-8 py-3 inline-block hover:bg-[#0a0a0a] hover:text-white transition-all duration-300"
-      >
-        {{ section.settings.view_all_text | default: 'View All' }}
-      </a>
+        class="fc-view-all font-body uppercase tracking-[0.18em] text-[0.68rem] font-semibold text-[#0a0a0a] border border-[#0a0a0a]/60 rounded-full px-8 py-3 inline-block hover:bg-[#0a0a0a] hover:text-white transition-all duration-300"
+      >{{ section.settings.view_all_text | default: 'View All' }}</a>
     </div>
   {% endif %}
 
 </featured-collection>
 
-<!-- ── Scroll-to-Top Button (fixed, bottom-right) ── -->
-<button
-  id="fc-scroll-top"
-  class="fc-scroll-top-btn"
-  aria-label="Scroll to top"
-  onclick="window.scrollTo({ top: 0, behavior: 'smooth' });"
+<!-- ══════════════════════════════════════════════
+     QUICK VIEW MODAL (global, single instance)
+══════════════════════════════════════════════ -->
+<div
+  id="fc-qv-modal"
+  class="fc-qv-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Quick view"
+  aria-hidden="true"
 >
-  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="M12 19V5M5 12l7-7 7 7"/>
-  </svg>
+  <!-- Top overlay (1/4) — click to close, X button -->
+  <div class="fc-qv-overlay-top" id="fc-qv-backdrop" aria-label="Close quick view">
+    <button class="fc-qv-close" id="fc-qv-close-btn" aria-label="Close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Bottom panel (3/4) -->
+  <div class="fc-qv-panel" id="fc-qv-panel" role="document">
+
+    <!-- Image gallery -->
+    <div class="fc-qv-gallery">
+      <div class="fc-qv-gallery-track" id="fc-qv-gallery-track">
+        <!-- Images injected by JS -->
+      </div>
+      <!-- Arrows -->
+      <button class="fc-qv-arrow fc-qv-arrow-prev" id="fc-qv-prev" aria-label="Previous image">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="fc-qv-arrow fc-qv-arrow-next" id="fc-qv-next" aria-label="Next image">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <!-- Dot nav -->
+      <div class="fc-qv-dots" id="fc-qv-dots"></div>
+    </div>
+
+    <!-- Product details -->
+    <div class="fc-qv-info">
+
+      <a class="fc-qv-title font-body font-bold text-[#0a0a0a] text-[1.05rem] leading-tight block" id="fc-qv-title" href="#"></a>
+      <p class="fc-qv-sku font-body text-[0.7rem] tracking-[0.1em] uppercase text-[#999] mt-1" id="fc-qv-sku"></p>
+
+      <div class="flex items-center gap-3 mt-2 flex-wrap">
+        <span class="fc-qv-price font-body font-bold text-[1.1rem] text-[#0a0a0a]" id="fc-qv-price"></span>
+        <span class="fc-qv-compare font-body text-[0.88rem] text-[#999] line-through hidden" id="fc-qv-compare"></span>
+      </div>
+
+      <!-- Variant options (injected) -->
+      <div class="fc-qv-variants mt-4" id="fc-qv-variants"></div>
+
+      <!-- Quantity -->
+      <div class="fc-qv-qty-row hidden" id="fc-qv-qty-row">
+        <span class="font-body text-[0.68rem] uppercase tracking-[0.12em] text-[#666]">Qty</span>
+        <div class="fc-qv-qty-ctrl">
+          <button class="fc-qv-qty-btn" id="fc-qv-qty-dec" aria-label="Decrease">−</button>
+          <span class="fc-qv-qty-val" id="fc-qv-qty-val">1</span>
+          <button class="fc-qv-qty-btn" id="fc-qv-qty-inc" aria-label="Increase">+</button>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="fc-qv-btns mt-5">
+        <button class="fc-qv-atc font-body font-semibold uppercase tracking-[0.12em] text-[0.78rem]" id="fc-qv-atc">
+          Add to Cart
+        </button>
+        <button class="fc-qv-bin font-body font-semibold uppercase tracking-[0.12em] text-[0.78rem]" id="fc-qv-bin">
+          Buy it now
+        </button>
+      </div>
+
+    </div>
+    <!-- /Product details -->
+
+  </div>
+  <!-- /Bottom panel -->
+</div>
+
+<!-- Scroll-to-top -->
+<button id="fc-scroll-top" class="fc-scroll-top-btn" aria-label="Scroll to top" onclick="window.scrollTo({top:0,behavior:'smooth'});">
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
 
+<!-- ══════════════════════════════════════════════
+     STYLES
+══════════════════════════════════════════════ -->
+<style>
+/* ── Carousel track ── */
+#fc-track {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+#fc-track::-webkit-scrollbar { display: none; }
+
+/* ── Card sizing ── */
+.fc-card {
+  width: 68vw;
+  max-width: 300px;
+}
+@media (min-width: 640px) { .fc-card { width: 260px; } }
+@media (min-width: 1024px) { .fc-card { width: 280px; } }
+
+/* ── Card image zoom ── */
+.fc-img {
+  transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+  will-change: transform;
+}
+.fc-card-img-wrap:hover .fc-img { transform: scale(1.04); }
+
+/* ── Quick View trigger ── */
+.fc-qv-trigger {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: rgba(248,248,248,0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0a0a0a;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.26s ease, transform 0.26s ease;
+}
+.fc-card-img-wrap:hover .fc-qv-trigger,
+.fc-card-img-wrap:focus-within .fc-qv-trigger { opacity: 1; transform: translateY(0); }
+@media (hover: none) { .fc-qv-trigger { opacity: 1; transform: translateY(0); } }
+.fc-qv-trigger:hover { background: rgba(255,255,255,0.97); }
+.fc-qv-plus { font-size: 1.2rem; font-weight: 300; line-height: 1; }
+
+/* ── Variant swatches ── */
+.fc-swatch {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  background-color: #ddd;
+  transition: border-color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+.fc-swatch.active,
+.fc-swatch:hover { border-color: #0a0a0a; transform: scale(1.12); }
+.fc-swatch-more { line-height: 26px; }
+
+/* ── Quick View Modal ── */
+.fc-qv-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.32s ease;
+}
+.fc-qv-modal.fc-qv-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Top 1/4 — dark overlay with X */
+.fc-qv-overlay-top {
+  flex: 0 0 25%;
+  background: rgba(0,0,0,0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* X close */
+.fc-qv-close {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.35);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: background 0.2s;
+}
+.fc-qv-close:hover { background: rgba(255,255,255,0.28); }
+
+/* Bottom panel — slides from below */
+.fc-qv-panel {
+  flex: 0 0 75%;
+  background: #fff;
+  border-radius: 20px 20px 0 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateY(100%);
+  transition: transform 0.42s cubic-bezier(0.32,0.72,0,1);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.fc-qv-panel::-webkit-scrollbar { display: none; }
+.fc-qv-modal.fc-qv-open .fc-qv-panel { transform: translateY(0); }
+
+/* Gallery */
+.fc-qv-gallery {
+  position: relative;
+  overflow: hidden;
+  background: #f5f5f5;
+  width: 100%;
+  aspect-ratio: 4/3;
+  flex-shrink: 0;
+}
+.fc-qv-gallery-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.fc-qv-gallery-track img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Arrows */
+.fc-qv-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.65);
+  border: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.2s;
+}
+.fc-qv-arrow:hover { background: rgba(0,0,0,0.9); }
+.fc-qv-arrow-prev { left: 12px; }
+.fc-qv-arrow-next { right: 12px; }
+
+/* Dots */
+.fc-qv-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+.fc-qv-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  transition: background 0.2s, transform 0.2s;
+  border: none; cursor: pointer;
+}
+.fc-qv-dot.active { background: #fff; transform: scale(1.3); }
+
+/* Info section */
+.fc-qv-info {
+  padding: 20px 20px 40px;
+}
+
+/* Qty */
+.fc-qv-qty-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+.fc-qv-qty-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid #e0e0e0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.fc-qv-qty-btn {
+  width: 36px; height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #0a0a0a;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.fc-qv-qty-btn:hover { background: #f5f5f5; }
+.fc-qv-qty-val {
+  min-width: 32px;
+  text-align: center;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #0a0a0a;
+}
+
+/* Buttons */
+.fc-qv-btns { display: flex; flex-direction: column; gap: 10px; }
+.fc-qv-atc, .fc-qv-bin {
+  width: 100%;
+  padding: 15px 20px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.2s;
+}
+.fc-qv-atc { background: #0a0a0a; color: #fff; }
+.fc-qv-atc:hover { background: #333; }
+.fc-qv-atc:disabled { opacity: 0.5; cursor: not-allowed; }
+.fc-qv-bin { background: transparent; color: #0a0a0a; border: 1.5px solid #0a0a0a; }
+.fc-qv-bin:hover { background: #0a0a0a; color: #fff; }
+
+/* Variant buttons in modal */
+.fc-qv-variants { display: flex; flex-wrap: wrap; gap: 8px; }
+.fc-qv-v-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 5px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #0a0a0a;
+  transition: border-color 0.2s, background 0.2s;
+}
+.fc-qv-v-btn.active { border-color: #0a0a0a; background: #f8f8f8; }
+.fc-qv-v-btn.unavailable { opacity: 0.38; cursor: not-allowed; }
+.fc-qv-v-btn img { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }
+.fc-qv-v-btn .fc-qv-v-dot {
+  width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+}
+
+/* Scroll-to-top */
+.fc-scroll-top-btn {
+  position: fixed; bottom: 24px; right: 20px; z-index: 500;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: transparent; border: 1.5px solid #0a0a0a;
+  color: #0a0a0a; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: 0; pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.3s, transform 0.3s, background 0.2s, color 0.2s;
+}
+.fc-scroll-top-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+.fc-scroll-top-btn:hover { background: #0a0a0a; color: #fff; }
+</style>
+
+<!-- ══════════════════════════════════════════════
+     SCRIPT
+══════════════════════════════════════════════ -->
 <script>
-/* ─────────────────────────────────────────────────────
-   FEATURED COLLECTION — Web Component Logic
-───────────────────────────────────────────────────── */
 (function () {
   'use strict';
-
   if (customElements.get('featured-collection')) return;
 
-  class FeaturedCollection extends HTMLElement {
-    constructor() {
-      super();
-      this._dragState = null;
-      this._scrollTopBtn = null;
-      this._scrollHandler = null;
-      this._gsapCtx = null;
+  /* ──────────────────────────────────────────
+     State
+  ────────────────────────────────────────── */
+  let currentProduct   = null;
+  let currentVariantId = null;
+  let galleryIndex     = 0;
+  let galleryImages    = [];
+  let qty              = 1;
+
+  /* ──────────────────────────────────────────
+     DOM refs
+  ────────────────────────────────────────── */
+  const modal       = document.getElementById('fc-qv-modal');
+  const panel       = document.getElementById('fc-qv-panel');
+  const backdrop    = document.getElementById('fc-qv-backdrop');
+  const closeBtn    = document.getElementById('fc-qv-close-btn');
+  const galleryTrack= document.getElementById('fc-qv-gallery-track');
+  const dotsWrap    = document.getElementById('fc-qv-dots');
+  const prevBtn     = document.getElementById('fc-qv-prev');
+  const nextBtn     = document.getElementById('fc-qv-next');
+  const titleEl     = document.getElementById('fc-qv-title');
+  const skuEl       = document.getElementById('fc-qv-sku');
+  const priceEl     = document.getElementById('fc-qv-price');
+  const compareEl   = document.getElementById('fc-qv-compare');
+  const variantsEl  = document.getElementById('fc-qv-variants');
+  const atcBtn      = document.getElementById('fc-qv-atc');
+  const binBtn      = document.getElementById('fc-qv-bin');
+  const qtyRow      = document.getElementById('fc-qv-qty-row');
+  const qtyVal      = document.getElementById('fc-qv-qty-val');
+  const qtyDec      = document.getElementById('fc-qv-qty-dec');
+  const qtyInc      = document.getElementById('fc-qv-qty-inc');
+  const scrollTopBtn= document.getElementById('fc-scroll-top');
+
+  /* ──────────────────────────────────────────
+     Helpers
+  ────────────────────────────────────────── */
+  function formatMoney(cents) {
+    if (!cents || cents === 0) return '';
+    return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  function setGalleryIndex(i) {
+    const total = galleryImages.length;
+    if (total === 0) return;
+    galleryIndex = (i + total) % total;
+    galleryTrack.style.transform = `translateX(-${galleryIndex * 100}%)`;
+    document.querySelectorAll('.fc-qv-dot').forEach((d, idx) => {
+      d.classList.toggle('active', idx === galleryIndex);
+    });
+  }
+
+  function buildGallery(images) {
+    galleryImages = images || [];
+    galleryIndex = 0;
+    galleryTrack.innerHTML = '';
+    dotsWrap.innerHTML = '';
+
+    if (galleryImages.length === 0) {
+      galleryTrack.innerHTML = '<div style="width:100%;height:100%;background:#eee;"></div>';
+      return;
     }
 
+    galleryImages.forEach((src, i) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      img.loading = i === 0 ? 'eager' : 'lazy';
+      img.style.cssText = 'flex:0 0 100%;width:100%;height:100%;object-fit:cover;';
+      galleryTrack.appendChild(img);
+
+      if (galleryImages.length > 1) {
+        const dot = document.createElement('button');
+        dot.className = 'fc-qv-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Image ${i + 1}`);
+        dot.addEventListener('click', () => setGalleryIndex(i));
+        dotsWrap.appendChild(dot);
+      }
+    });
+
+    prevBtn.style.display = galleryImages.length > 1 ? 'flex' : 'none';
+    nextBtn.style.display = galleryImages.length > 1 ? 'flex' : 'none';
+  }
+
+  function buildVariants(variants) {
+    variantsEl.innerHTML = '';
+    if (!variants || variants.length <= 1) return;
+
+    variants.forEach((v, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'fc-qv-v-btn' + (i === 0 ? ' active' : '') + (v.available === false ? ' unavailable' : '');
+      btn.setAttribute('data-variant-id', v.id);
+      btn.setAttribute('aria-label', v.title);
+
+      if (v.swatch) {
+        const img = document.createElement('img');
+        img.src = v.swatch;
+        img.alt = v.option1 || '';
+        img.loading = 'lazy';
+        btn.appendChild(img);
+      } else if (v.option1) {
+        const dot = document.createElement('span');
+        dot.className = 'fc-qv-v-dot';
+        dot.style.background = '#ddd';
+        btn.appendChild(dot);
+      }
+
+      const label = document.createElement('span');
+      label.textContent = v.option1 || v.title;
+      btn.appendChild(label);
+
+      btn.addEventListener('click', () => selectVariant(v, btn));
+      variantsEl.appendChild(btn);
+    });
+  }
+
+  function selectVariant(v, clickedBtn) {
+    currentVariantId = v.id;
+
+    // Update active state
+    document.querySelectorAll('.fc-qv-v-btn').forEach(b => b.classList.remove('active'));
+    if (clickedBtn) clickedBtn.classList.add('active');
+
+    // Update price
+    priceEl.textContent = formatMoney(v.price);
+    if (v.compare && v.compare > v.price) {
+      compareEl.textContent = formatMoney(v.compare);
+      compareEl.classList.remove('hidden');
+    } else {
+      compareEl.classList.add('hidden');
+    }
+
+    // Switch gallery image if variant has its own image
+    if (v.img && galleryImages.includes(v.img)) {
+      setGalleryIndex(galleryImages.indexOf(v.img));
+    } else if (v.img && galleryImages.length > 0) {
+      setGalleryIndex(0);
+    }
+
+    // Update ATC
+    atcBtn.disabled = v.available === false;
+    atcBtn.textContent = v.available === false ? 'Sold Out' : 'Add to Cart';
+  }
+
+  function openModal(cardEl) {
+    if (!cardEl) return;
+    currentProduct = {
+      id:       cardEl.dataset.productId,
+      title:    cardEl.dataset.productTitle || '',
+      sku:      cardEl.dataset.productSku   || '',
+      url:      cardEl.dataset.productUrl   || '#',
+      money:    cardEl.dataset.productMoney || '',
+      compare:  cardEl.dataset.productCompareMoney || '',
+      variants: JSON.parse(cardEl.dataset.productVariants || '[]'),
+      images:   JSON.parse(cardEl.dataset.productImages   || '[]'),
+    };
+    qty = 1;
+    qtyVal.textContent = 1;
+
+    // Populate
+    titleEl.textContent = currentProduct.title;
+    titleEl.href        = currentProduct.url;
+    skuEl.textContent   = currentProduct.sku ? 'SKU: ' + currentProduct.sku : '';
+    priceEl.textContent = currentProduct.money;
+
+    if (currentProduct.compare && currentProduct.compare !== currentProduct.money && currentProduct.compare !== '$0.00') {
+      compareEl.textContent = currentProduct.compare;
+      compareEl.classList.remove('hidden');
+    } else {
+      compareEl.textContent = '';
+      compareEl.classList.add('hidden');
+    }
+
+    buildGallery(currentProduct.images);
+
+    if (currentProduct.variants.length > 0) {
+      currentVariantId = currentProduct.variants[0].id;
+      atcBtn.disabled  = currentProduct.variants[0].available === false;
+      atcBtn.textContent = currentProduct.variants[0].available === false ? 'Sold Out' : 'Add to Cart';
+      buildVariants(currentProduct.variants);
+      qtyRow.classList.remove('hidden');
+    } else {
+      currentVariantId = null;
+      variantsEl.innerHTML = '';
+      atcBtn.disabled = false;
+      atcBtn.textContent = 'Add to Cart';
+      qtyRow.classList.add('hidden');
+    }
+
+    modal.classList.add('fc-qv-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => closeBtn.focus(), 420);
+  }
+
+  function closeModal() {
+    modal.classList.remove('fc-qv-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  /* ──────────────────────────────────────────
+     Add to Cart (Shopify AJAX)
+  ────────────────────────────────────────── */
+  atcBtn && atcBtn.addEventListener('click', async () => {
+    if (!currentVariantId && (!currentProduct || !currentProduct.id)) {
+      closeModal();
+      return;
+    }
+    const variantId = currentVariantId || (currentProduct.variants[0] && currentProduct.variants[0].id);
+    if (!variantId) return;
+
+    atcBtn.textContent = 'Adding…';
+    atcBtn.disabled = true;
+
+    try {
+      const res = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: qty }),
+      });
+      if (res.ok) {
+        atcBtn.textContent = '✓ Added';
+        setTimeout(() => {
+          atcBtn.textContent = 'Add to Cart';
+          atcBtn.disabled = false;
+          // Update cart count if element exists
+          const cartCount = document.querySelector('[data-cart-count], .cart-count, .header-cart-count');
+          if (cartCount) {
+            fetch('/cart.js')
+              .then(r => r.json())
+              .then(c => { cartCount.textContent = c.item_count; })
+              .catch(() => {});
+          }
+          closeModal();
+        }, 1200);
+      } else {
+        throw new Error('Failed');
+      }
+    } catch {
+      atcBtn.textContent = 'Error — try again';
+      atcBtn.disabled = false;
+      setTimeout(() => { atcBtn.textContent = 'Add to Cart'; }, 1800);
+    }
+  });
+
+  /* Buy it now */
+  binBtn && binBtn.addEventListener('click', async () => {
+    const variantId = currentVariantId || (currentProduct && currentProduct.variants[0] && currentProduct.variants[0].id);
+    if (!variantId) return;
+    binBtn.textContent = 'Processing…';
+    try {
+      await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: variantId, quantity: qty }),
+      });
+      window.location.href = '/checkout';
+    } catch {
+      binBtn.textContent = 'Buy it now';
+    }
+  });
+
+  /* Qty controls */
+  qtyDec && qtyDec.addEventListener('click', () => {
+    if (qty > 1) { qty--; qtyVal.textContent = qty; }
+  });
+  qtyInc && qtyInc.addEventListener('click', () => {
+    qty++;
+    qtyVal.textContent = qty;
+  });
+
+  /* Gallery arrows */
+  prevBtn && prevBtn.addEventListener('click', () => setGalleryIndex(galleryIndex - 1));
+  nextBtn && nextBtn.addEventListener('click', () => setGalleryIndex(galleryIndex + 1));
+
+  /* Close */
+  backdrop && backdrop.addEventListener('click', closeModal);
+  closeBtn && closeBtn.addEventListener('click', e => { e.stopPropagation(); closeModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('fc-qv-open')) closeModal();
+    if (!modal.classList.contains('fc-qv-open')) return;
+    if (e.key === 'ArrowLeft') setGalleryIndex(galleryIndex - 1);
+    if (e.key === 'ArrowRight') setGalleryIndex(galleryIndex + 1);
+  });
+
+  /* Swipe on gallery */
+  let touchStartX = 0;
+  galleryTrack && galleryTrack.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+  galleryTrack && galleryTrack.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) setGalleryIndex(dx < 0 ? galleryIndex + 1 : galleryIndex - 1);
+  });
+
+  /* ──────────────────────────────────────────
+     Web Component
+  ────────────────────────────────────────── */
+  class FeaturedCollection extends HTMLElement {
     connectedCallback() {
       this._initCarousel();
-      this._initScrollTopBtn();
+      this._initCards();
+      this._initScrollTop();
       this._initGSAP();
     }
 
     disconnectedCallback() {
       const track = this.querySelector('#fc-track');
-      if (track && this._trackListeners) {
-        track.removeEventListener('mousedown', this._trackListeners.mousedown);
-        track.removeEventListener('mousemove', this._trackListeners.mousemove);
-        track.removeEventListener('mouseup',   this._trackListeners.mouseup);
-        track.removeEventListener('mouseleave', this._trackListeners.mouseleave);
+      if (track && this._trackHandlers) {
+        track.removeEventListener('mousedown',  this._trackHandlers.down);
+        track.removeEventListener('mousemove',  this._trackHandlers.move);
+        track.removeEventListener('mouseup',    this._trackHandlers.up);
+        track.removeEventListener('mouseleave', this._trackHandlers.leave);
       }
-      if (this._scrollHandler) {
-        window.removeEventListener('scroll', this._scrollHandler);
-      }
-      if (this._gsapCtx) {
-        this._gsapCtx.revert();
-      }
+      window.removeEventListener('scroll', this._scrollHandler);
+      if (this._gsapCtx) this._gsapCtx.revert();
     }
 
-    /* ── Drag-to-scroll carousel ── */
     _initCarousel() {
       const track = this.querySelector('#fc-track');
       if (!track) return;
-
-      let isDown = false;
-      let startX  = 0;
-      let scrollLeft = 0;
-
-      const onMouseDown = (e) => {
-        isDown = true;
-        track.classList.add('cursor-grabbing');
-        startX     = e.pageX - track.offsetLeft;
-        scrollLeft = track.scrollLeft;
-      };
-      const onMouseLeave = () => {
-        isDown = false;
-        track.classList.remove('cursor-grabbing');
-      };
-      const onMouseUp = () => {
-        isDown = false;
-        track.classList.remove('cursor-grabbing');
-      };
-      const onMouseMove = (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x    = e.pageX - track.offsetLeft;
-        const walk = (x - startX) * 1.4;
-        track.scrollLeft = scrollLeft - walk;
-      };
-
-      track.addEventListener('mousedown',  onMouseDown);
-      track.addEventListener('mouseleave', onMouseLeave);
-      track.addEventListener('mouseup',    onMouseUp);
-      track.addEventListener('mousemove',  onMouseMove);
-
-      this._trackListeners = {
-        mousedown: onMouseDown,
-        mousemove: onMouseMove,
-        mouseup:   onMouseUp,
-        mouseleave: onMouseLeave,
-      };
+      let isDown = false, startX = 0, scrollLeft = 0;
+      const down  = e => { isDown = true; track.classList.add('cursor-grabbing'); startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; };
+      const leave = () => { isDown = false; track.classList.remove('cursor-grabbing'); };
+      const up    = () => { isDown = false; track.classList.remove('cursor-grabbing'); };
+      const move  = e => { if (!isDown) return; e.preventDefault(); const x = e.pageX - track.offsetLeft; track.scrollLeft = scrollLeft - (x - startX) * 1.4; };
+      track.addEventListener('mousedown', down); track.addEventListener('mouseleave', leave);
+      track.addEventListener('mouseup', up); track.addEventListener('mousemove', move);
+      this._trackHandlers = { down, leave, up, move };
     }
 
-    /* ── Scroll-to-top button visibility ── */
-    _initScrollTopBtn() {
+    _initCards() {
+      this.querySelectorAll('.fc-qv-trigger').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault(); e.stopPropagation();
+          const card = btn.closest('[data-fc-card]');
+          openModal(card);
+        });
+      });
+
+      // Card-level swatch hover: update card image preview
+      this.querySelectorAll('.fc-swatch[data-variant-id]').forEach(sw => {
+        sw.addEventListener('click', () => {
+          const card   = sw.closest('[data-fc-card]');
+          if (!card) return;
+          const cardImg = card.querySelector('.fc-img');
+          if (!cardImg) return;
+          const variants = JSON.parse(card.dataset.productVariants || '[]');
+          const v = variants.find(x => String(x.id) === sw.dataset.variantId);
+          if (v && v.img) cardImg.src = v.img;
+          card.querySelectorAll('.fc-swatch').forEach(s => s.classList.remove('active'));
+          sw.classList.add('active');
+        });
+      });
+    }
+
+    _initScrollTop() {
       const btn = document.getElementById('fc-scroll-top');
       if (!btn) return;
-      this._scrollTopBtn = btn;
-
-      const updateVisibility = () => {
-        if (window.scrollY > 300) {
-          btn.classList.add('fc-scroll-top-btn--visible');
-        } else {
-          btn.classList.remove('fc-scroll-top-btn--visible');
-        }
-      };
-
-      this._scrollHandler = updateVisibility;
+      this._scrollHandler = () => btn.classList.toggle('visible', window.scrollY > 300);
       window.addEventListener('scroll', this._scrollHandler, { passive: true });
-      updateVisibility();
+      this._scrollHandler();
     }
 
-    /* ── GSAP: stagger cards in on scroll ── */
     _initGSAP() {
       if (typeof gsap === 'undefined') return;
       if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
-
       this._gsapCtx = gsap.context(() => {
-        /* Heading reveal */
         const heading = this.querySelector('h2');
         if (heading) {
-          gsap.from(heading, {
-            scrollTrigger: {
-              trigger: heading,
-              start: 'top 88%',
-              once: true,
-            },
-            opacity: 0,
-            y: 40,
-            duration: 0.9,
-            ease: 'power3.out',
-          });
+          gsap.from(heading, { scrollTrigger: { trigger: heading, start: 'top 88%', once: true }, opacity: 0, y: 36, duration: 0.85, ease: 'power3.out' });
         }
-
-        /* Cards stagger */
         const cards = this.querySelectorAll('[data-fc-card]');
         if (cards.length) {
           gsap.from(cards, {
-            scrollTrigger: {
-              trigger: this.querySelector('#fc-track'),
-              start: 'top 85%',
-              once: true,
-            },
-            opacity: 0,
-            x: 30,
-            duration: 0.75,
-            ease: 'power2.out',
-            stagger: 0.1,
+            scrollTrigger: { trigger: this.querySelector('#fc-track'), start: 'top 82%', once: true },
+            opacity: 0, x: 40, duration: 0.7, ease: 'power2.out', stagger: 0.09,
           });
         }
       }, this);
@@ -355,123 +1028,6 @@
   customElements.define('featured-collection', FeaturedCollection);
 })();
 </script>
-
-<style>
-/* ═══ Featured Collection — component styles ═══ */
-
-/* Hide scrollbar while keeping scroll functionality */
-#fc-track {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-#fc-track::-webkit-scrollbar {
-  display: none;
-}
-
-/* Product image: cover fill, smooth hover zoom */
-.fc-card-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-}
-.fc-card:hover .fc-card-img {
-  transform: scale(1.04);
-}
-
-/* Quick View button: sits at bottom of image card */
-.fc-quick-view-btn {
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  right: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 11px 16px;
-  background: rgba(245, 245, 245, 0.82);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  font-family: var(--font-body, 'Inter', sans-serif);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #0a0a0a;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.28s ease, transform 0.28s ease, background 0.2s ease;
-  white-space: nowrap;
-  width: calc(100% - 24px);
-}
-.fc-card:hover .fc-quick-view-btn,
-.fc-card:focus-within .fc-quick-view-btn {
-  opacity: 1;
-  transform: translateY(0);
-}
-.fc-quick-view-btn:hover {
-  background: rgba(255, 255, 255, 0.95);
-}
-.fc-quick-view-label {
-  flex: 1;
-  text-align: left;
-}
-.fc-quick-view-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  font-weight: 300;
-  line-height: 1;
-  color: #0a0a0a;
-}
-
-/* Mobile: always show Quick View (no hover on touch) */
-@media (hover: none) {
-  .fc-quick-view-btn {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ── Scroll-to-top fixed button ── */
-.fc-scroll-top-btn {
-  position: fixed;
-  bottom: 24px;
-  right: 20px;
-  z-index: 200;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: transparent;
-  border: 1.5px solid #0a0a0a;
-  color: #0a0a0a;
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(12px);
-  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease, color 0.2s ease;
-}
-.fc-scroll-top-btn--visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
-}
-.fc-scroll-top-btn:hover {
-  background: #0a0a0a;
-  color: #ffffff;
-}
-</style>
 
 {% schema %}
 {
@@ -496,6 +1052,18 @@
       "default": "#0a0a0a"
     },
     {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading Size",
+      "options": [
+        { "value": "clamp(2rem,8vw,5rem)",    "label": "Small" },
+        { "value": "clamp(2.8rem,11vw,7.5rem)", "label": "Default" },
+        { "value": "clamp(3.5rem,13vw,9rem)",  "label": "Large" },
+        { "value": "clamp(4rem,16vw,11rem)",   "label": "Extra Large" }
+      ],
+      "default": "clamp(2.8rem,11vw,7.5rem)"
+    },
+    {
       "type": "header",
       "content": "Collection"
     },
@@ -503,7 +1071,7 @@
       "type": "collection",
       "id": "collection",
       "label": "Collection",
-      "info": "Leave blank to show placeholder products in the editor."
+      "info": "Leave blank to show demo placeholder cards."
     },
     {
       "type": "range",
@@ -512,48 +1080,16 @@
       "max": 20,
       "step": 1,
       "default": 8,
-      "label": "Products to Show"
+      "label": "Number of Products"
     },
     {
       "type": "header",
-      "content": "Product Card Typography"
+      "content": "Card Typography"
     },
     {
       "type": "select",
       "id": "title_font_size",
-      "label": "Product Title Size",
-      "options": [
-        { "value": "0.75rem", "label": "Small (12px)" },
-        { "value": "0.82rem", "label": "Medium (13px)" },
-        { "value": "0.88rem", "label": "Default (14px)" },
-        { "value": "1rem",    "label": "Large (16px)" },
-        { "value": "1.1rem",  "label": "X-Large (17px)" }
-      ],
-      "default": "0.88rem"
-    },
-    {
-      "type": "color",
-      "id": "title_color",
-      "label": "Product Title Color",
-      "default": "#222222"
-    },
-    {
-      "type": "select",
-      "id": "title_font_weight",
-      "label": "Product Title Weight",
-      "options": [
-        { "value": "300", "label": "Light" },
-        { "value": "400", "label": "Regular" },
-        { "value": "500", "label": "Medium" },
-        { "value": "600", "label": "Semi-bold" },
-        { "value": "700", "label": "Bold" }
-      ],
-      "default": "400"
-    },
-    {
-      "type": "select",
-      "id": "price_font_size",
-      "label": "Price Size",
+      "label": "Product Name Size",
       "options": [
         { "value": "0.72rem", "label": "Small (11px)" },
         { "value": "0.82rem", "label": "Default (13px)" },
@@ -564,9 +1100,33 @@
     },
     {
       "type": "color",
+      "id": "title_color",
+      "label": "Name Color",
+      "default": "#111111"
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Name Weight",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "500"
+    },
+    {
+      "type": "color",
       "id": "price_color",
       "label": "Price Color",
-      "default": "#8A8A8A"
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "compare_color",
+      "label": "Compare-at (strikethrough) Color",
+      "default": "#999999"
     },
     {
       "type": "header",
