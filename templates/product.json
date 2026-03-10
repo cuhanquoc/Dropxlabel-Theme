@@ -11,13 +11,50 @@
   "sections": {
     "main": {
       "type": "main-product",
+      "blocks": {
+        "description_MXQQtL": {
+          "type": "description",
+          "settings": {
+            "heading": "DESCRIPTION"
+          }
+        },
+        "accordion_PcQNHV": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Accordion Heading",
+            "content": "<p>Áo phông World Cup Ghana 2026 được thiết kế dành cho những fan hâm mộ đam mê bóng đá và muốn thể hiện tinh thần ủng hộ đội tuyển quốc gia. Chất liệu cotton cao</p>"
+          }
+        },
+        "accordion_ywpek9": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Accordion",
+            "content": "<p>Áo phông World Cup Ghana 2026 được thiết kế dành cho những fan hâm mộ đam mê bóng đá và muốn thể hiện tinh thần ủng hộ đội tuyển quốc gia. Chất liệu cotton cao</p>"
+          }
+        },
+        "accordion_Qmk9yL": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Chưa nghi ra",
+            "content": "<p>Áo phông World Cup Ghana 2026 được thiết kế dành cho những fan hâm mộ đam mê bóng đá và muốn thể hiện tinh thần ủng hộ đội tuyển quốc gia. Chất liệu cotton cao</p>"
+          }
+        }
+      },
+      "block_order": [
+        "description_MXQQtL",
+        "accordion_PcQNHV",
+        "accordion_ywpek9",
+        "accordion_Qmk9yL"
+      ],
       "settings": {
         "gallery_gap": 2,
         "size_chart_text": "<p>S (Chest: 36\", Length: 28\")</p><p>M (Chest: 38\", Length: 29\")</p><p>L (Chest: 40\", Length: 30\")</p>",
         "pickup_title": "Pickup available at California Warehouse",
         "pickup_time": "Usually ready in 24 hours",
         "delivery_text": "Free delivery within 2 days",
-        "returns_text": "Free + easy returns"
+        "returns_text": "Free + easy returns",
+        "pairs_collection": "",
+        "pairs_heading": "PAIRS WELL WITH"
       }
     }
   },
