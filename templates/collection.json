@@ -1,11 +1,38 @@
 {
-    "sections": {
-        "main": {
-            "type": "main-collection",
-            "settings": {}
+  "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "msg_1": {
+          "type": "message",
+          "settings": {
+            "text": "🚀 Free shipping on orders over $50",
+            "link_text": "Shop now",
+            "link_url": "/collections/all"
+          }
         }
+      },
+      "block_order": ["msg_1"],
+      "settings": {}
     },
-    "order": [
-        "main"
-    ]
+    "main": {
+      "type": "main-collection",
+      "settings": {}
+    },
+    "marquee-ticker-upsell": {
+      "type": "marquee-ticker",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "heading": "TRENDING NOW",
+        "cta_text": "Shop All",
+        "cta_url": "/collections/all"
+      }
+    }
+  },
+  "order": [
+    "announcement-bar",
+    "main",
+    "marquee-ticker-upsell"
+  ]
 }

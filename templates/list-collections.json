@@ -1,12 +1,38 @@
 {
   "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "msg_1": {
+          "type": "message",
+          "settings": {
+            "text": "✨ New collections added weekly — explore them all!",
+            "link_text": "Explore",
+            "link_url": "/collections/all"
+          }
+        }
+      },
+      "block_order": ["msg_1"],
+      "settings": {}
+    },
     "main": {
       "type": "main-list-collections",
+      "settings": {}
+    },
+    "marquee-ticker-trending": {
+      "type": "marquee-ticker",
+      "blocks": {},
+      "block_order": [],
       "settings": {
+        "heading": "TRENDING THIS WEEK",
+        "cta_text": "Shop All",
+        "cta_url": "/collections/all"
       }
     }
   },
   "order": [
-    "main"
+    "announcement-bar",
+    "main",
+    "marquee-ticker-trending"
   ]
 }

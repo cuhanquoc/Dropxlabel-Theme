@@ -1,11 +1,20 @@
 {
-    "sections": {
-        "main": {
-            "type": "main-article",
-            "settings": {}
-        }
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "settings": {}
     },
-    "order": [
-        "main"
-    ]
+    "featured-collection-article": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Shop The Look",
+        "heading_color": "#2e2d2d",
+        "heading_size": "clamp(2rem,6vw,4rem)"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "featured-collection-article"
+  ]
 }

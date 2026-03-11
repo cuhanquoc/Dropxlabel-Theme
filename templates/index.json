@@ -1,14 +1,36 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
+    "announcement-bar": {
+      "type": "announcement-bar",
+      "blocks": {
+        "msg_1": {
+          "type": "message",
+          "settings": {
+            "text": "🚀 Free shipping on orders over $50 — Shop now!",
+            "link_text": "Shop now",
+            "link_url": "/collections/all"
+          }
+        },
+        "msg_2": {
+          "type": "message",
+          "settings": {
+            "text": "✨ New arrivals every week — Stay stylish!",
+            "link_text": "View all",
+            "link_url": "/collections/new-arrivals"
+          }
+        },
+        "msg_3": {
+          "type": "message",
+          "settings": {
+            "text": "💳 Buy 2 Get 3 — Limited time offer",
+            "link_text": "Explore",
+            "link_url": "/collections/all"
+          }
+        }
+      },
+      "block_order": ["msg_1", "msg_2", "msg_3"],
+      "settings": {}
+    },
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
@@ -117,6 +139,7 @@
         "title_align": "left",
         "title_color": "#0a0a0a",
         "bg_image": "{{ metaobjects[\"shopify--color-pattern\"].asphalt.image.value }}",
+        "bg_color": "#f2f0ec",
         "bg_color": "#f2f0ec"
       }
     },
@@ -206,6 +229,7 @@
     }
   },
   "order": [
+    "announcement-bar",
     "hero-banner",
     "featured-collection",
     "brand-story-bento",
