@@ -88,35 +88,6 @@
         "bg_color": "#f2f0ec"
       }
     },
-    "trending-accordion": {
-      "type": "trending-accordion",
-      "settings": {
-        "eyebrow": "New Arrivals",
-        "heading": "Trending<br>Styles You<br>Can't Miss.",
-        "description": "Each style is a statement — restrained, intentional, and made to outlast every passing season.",
-        "cta_text": "Shop Now",
-        "cta_url": "shopify://collections/all",
-        "mobile_heading": "Trending Styles",
-        "island_text": "Trending Now",
-        "island_badge": "LIVE",
-        "pin_label1": "Fall Capsule",
-        "pin_url1": "",
-        "pin_label2": "Editorial",
-        "pin_url2": "",
-        "pin_label3": "Street Style",
-        "pin_url3": "",
-        "pin_label4": "Minimalist",
-        "pin_url4": "",
-        "pin_label5": "Runway",
-        "pin_url5": "",
-        "pin_label6": "New Season",
-        "pin_url6": "",
-        "deco_url1": "",
-        "deco_url2": "",
-        "deco_url3": "",
-        "deco_url4": ""
-      }
-    },
     "marquee_ticker_6CKgye": {
       "type": "marquee-ticker",
       "blocks": {
@@ -205,7 +176,6 @@
     "hero-banner",
     "featured-collection",
     "brand-story-bento",
-    "trending-accordion",
     "marquee_ticker_6CKgye",
     "customer-help-center"
   ]
