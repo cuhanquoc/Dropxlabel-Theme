@@ -12,7 +12,6 @@
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
-        "background_video": "shopify://files/videos/hf_20260311_073759_4f7a9f9f-0d9a-4b40-9272-79cfef9c6dff.mp4",
         "eyebrow_text": "buy 2 get 3",
         "headline": "Small Pieces Of Art You Can Wear",
         "subheadline": "Summer is waitting you",
@@ -30,6 +29,8 @@
         "heading": "Trending Products",
         "heading_color": "#2e2d2d",
         "heading_size": "clamp(2.8rem,11vw,7.5rem)",
+        "collection": "",
+        "max_products": 12,
         "product_list": [
           "esme-bikini™-tie-side-triangle-bikini",
           "isolde-bikini™-metal-decor-bikini",
@@ -110,6 +111,10 @@
         "story_card_qPRTkN"
       ],
       "settings": {
+        "title": "Pick Your Vibe",
+        "subtitle": "",
+        "title_align": "left",
+        "title_color": "#0a0a0a",
         "bg_image": "{{ metaobjects[\"shopify--color-pattern\"].asphalt.image.value }}",
         "bg_color": "#f2f0ec"
       }
@@ -170,7 +175,8 @@
         "description_1": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers. Each piece is thoughtfully selected for its quality, comfort, and popularity, making it easy to stay stylish without compromising on ease.",
         "description_2": "From everyday essentials to standout statement looks, our bestsellers offer something for every wardrobe. Refresh your style with fashion that blends modern design and timeless appeal, and stay ahead of the curve with pieces that truly make an impact.",
         "cta_text": "SHOP NOW",
-        "cta_url": ""
+        "cta_url": "",
+        "bg_color": "#0a0a0a"
       }
     },
     "customer-help-center": {
