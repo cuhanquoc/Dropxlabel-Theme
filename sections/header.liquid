@@ -149,7 +149,7 @@
         </div>
 
         <!-- Close button -->
-        <button class="mega-close" onclick="this.closest('.mega-menu').style.pointerEvents='none'; this.closest('.mega-menu').style.clipPath='inset(0 0 100% 0)'; this.closest('.mega-menu').style.opacity='0';">
+        <button class="mega-close" data-action="mega-close" aria-label="Close menu">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 6 6 18M6 6l12 12"/>
           </svg>
@@ -184,7 +184,7 @@
   <div class="flex items-center gap-6 header-right-icons">
 
     <!-- Search Icon -->
-    <button class="icon-btn" aria-label="Search" onclick="PredictiveSearch.open()">
+    <button class="icon-btn" aria-label="Search" data-action="open-search">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/>
         <path d="m21 21-4.3-4.3"/>
@@ -200,7 +200,7 @@
     </a>
 
     <!-- Cart Icon -->
-    <button class="icon-btn relative" aria-label="Shopping Cart" onclick="CartDrawer.open()">
+    <button class="icon-btn relative" aria-label="Shopping Cart" data-action="open-cart">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
         <path d="M3 6h18"/>
@@ -217,29 +217,29 @@
 
 <!-- ═══ MOBILE MENU OVERLAY ═══ -->
 <div class="mobile-menu-overlay" id="mobile-menu">
-  <a href="{{ routes.root_url }}" class="mobile-nav-link" onclick="MobileMenu.close()">Home</a>
-  <a href="{{ routes.collections_url }}" class="mobile-nav-link" onclick="MobileMenu.close()">Catalog</a>
-  <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="mobile-nav-link" onclick="MobileMenu.close()">About</a>
-  <a href="{{ routes.blogs_url }}" class="mobile-nav-link" onclick="MobileMenu.close()">Blogs</a>
+  <a href="{{ routes.root_url }}" class="mobile-nav-link" data-action="close-mobile-menu">Home</a>
+  <a href="{{ routes.collections_url }}" class="mobile-nav-link" data-action="close-mobile-menu">Catalog</a>
+  <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="mobile-nav-link" data-action="close-mobile-menu">About</a>
+  <a href="{{ routes.blogs_url }}" class="mobile-nav-link" data-action="close-mobile-menu">Blogs</a>
 
   <div class="mobile-menu-divider"></div>
 
   <div class="mobile-menu-icons">
-    <button class="mobile-menu-icon-link" onclick="MobileMenu.close(); PredictiveSearch.open();" style="background:none;border:none;cursor:pointer;">
+    <button class="mobile-menu-icon-link" data-action="close-mobile-menu open-search" style="background:none;border:none;cursor:pointer;">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/>
         <path d="m21 21-4.3-4.3"/>
       </svg>
       Search
     </button>
-    <a href="{{ routes.account_url }}" class="mobile-menu-icon-link" onclick="MobileMenu.close()">
+    <a href="{{ routes.account_url }}" class="mobile-menu-icon-link" data-action="close-mobile-menu">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="8" r="4"/>
         <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
       </svg>
       Account
     </a>
-    <button class="mobile-menu-icon-link" onclick="MobileMenu.close(); CartDrawer.open();" style="background:none;border:none;cursor:pointer;">
+    <button class="mobile-menu-icon-link" data-action="close-mobile-menu open-cart" style="background:none;border:none;cursor:pointer;">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
         <path d="M3 6h18"/>
@@ -249,6 +249,30 @@
     </button>
   </div>
 </div>
+
+<script>
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    var actions = btn.dataset.action.split(' ');
+    actions.forEach(function(action) {
+      if (action === 'mega-close') {
+        var panel = btn.closest('.mega-menu');
+        if (panel) {
+          panel.style.pointerEvents = 'none';
+          panel.style.clipPath = 'inset(0 0 100% 0)';
+          panel.style.opacity = '0';
+        }
+      } else if (action === 'close-mobile-menu') {
+        if (typeof MobileMenu !== 'undefined') MobileMenu.close();
+      } else if (action === 'open-search') {
+        if (typeof PredictiveSearch !== 'undefined') PredictiveSearch.open();
+      } else if (action === 'open-cart') {
+        if (typeof CartDrawer !== 'undefined') CartDrawer.open();
+      }
+    });
+  });
+</script>
 
 {% schema %}
 {
