@@ -15,7 +15,7 @@
         "description_MXQQtL": {
           "type": "description",
           "settings": {
-            "heading": "DESCRIPTION"
+            "heading": "Description"
           }
         },
         "accordion_PcQNHV": {
@@ -24,27 +24,11 @@
             "heading": "Accordion Heading",
             "content": "<p>Áo phông World Cup Ghana 2026 được thiết kế dành cho những fan hâm mộ đam mê bóng đá và muốn thể hiện tinh thần ủng hộ đội tuyển quốc gia. Chất liệu cotton cao</p>"
           }
-        },
-        "accordion_ywpek9": {
-          "type": "accordion",
-          "settings": {
-            "heading": "Accordion",
-            "content": "<p>Áo phông World Cup Ghana 2026 được thiết kế dành cho những fan hâm mộ đam mê bóng đá và muốn thể hiện tinh thần ủng hộ đội tuyển quốc gia. Chất liệu cotton cao</p>"
-          }
-        },
-        "accordion_Qmk9yL": {
-          "type": "accordion",
-          "settings": {
-            "heading": "Chưa nghi ra",
-            "content": "<p>Áo phông World Cup Ghana 2026 được thiết kế dành cho những fan hâm mộ đam mê bóng đá và muốn thể hiện tinh thần ủng hộ đội tuyển quốc gia. Chất liệu cotton cao</p>"
-          }
         }
       },
       "block_order": [
         "description_MXQQtL",
-        "accordion_PcQNHV",
-        "accordion_ywpek9",
-        "accordion_Qmk9yL"
+        "accordion_PcQNHV"
       ],
       "settings": {
         "gallery_gap": 2,
