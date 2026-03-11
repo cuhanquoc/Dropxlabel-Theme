@@ -7,7 +7,8 @@
   ─────────────────────────────────────────
 {% endcomment %}
 
-{% if section.settings.show_bar %}
+{% assign hide_on_home = section.settings.hide_on_homepage | default: false %}
+{% if section.settings.show_bar and not (hide_on_home and request.page_type == 'index') %}
   <div
     class="announcement-bar"
     data-animation="{{ section.settings.animation }}"
@@ -90,6 +91,13 @@
       "id": "show_bar",
       "label": "Show Announcement Bar",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_on_homepage",
+      "label": "Hide on Homepage",
+      "default": true,
+      "info": "When enabled, the announcement bar is hidden on the homepage only."
     },
     {
       "type": "text",

@@ -230,6 +230,8 @@
   </section>
 </div>
 
+<canvas id="ta-fireworks-canvas" aria-hidden="true" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;display:none;"></canvas>
+
 <script>
   /* ─── Mobile: Tap-to-Expand ─── */
   (function () {
@@ -245,6 +247,116 @@
         if (isExpanded) window.location.href = this.getAttribute('href');
       });
     });
+  }());
+
+  /* ─── Fireworks when scrolling to Trending Styles ─── */
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var canvas = document.getElementById('ta-fireworks-canvas');
+    var section = document.getElementById('trending-accordion');
+    if (!canvas || !section) return;
+
+    var ctx = canvas.getContext('2d');
+    var particles = [];
+    var animFrame = null;
+    var triggered = false;
+
+    var COLORS = ['#F9A8D4','#FDE68A','#93C5FD','#86EFAC','#D8B4E2','#FDBA74','#6EE7B7','#FCA5A5','#C5A880','#fff'];
+
+    function resize() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function rand(min, max) { return min + Math.random() * (max - min); }
+
+    function createBurst(side) {
+      var x = side === 'left' ? 0 : canvas.width;
+      var y = canvas.height * 0.5;
+      var count = 40;
+      for (var i = 0; i < count; i++) {
+        var angle = rand(-Math.PI * 0.75, -Math.PI * 0.25); /* upward fan */
+        if (side === 'right') angle = Math.PI - angle;
+        var speed = rand(6, 18);
+        particles.push({
+          x: x,
+          y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          gravity: rand(0.25, 0.45),
+          life: 1,
+          decay: rand(0.012, 0.022),
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          size: rand(3, 7),
+          trail: []
+        });
+      }
+    }
+
+    function launchFireworks() {
+      canvas.style.display = 'block';
+      createBurst('left');
+      createBurst('right');
+      /* Second wave with slight delay */
+      setTimeout(function () { createBurst('left'); createBurst('right'); }, 200);
+      setTimeout(function () { createBurst('left'); createBurst('right'); }, 420);
+      animate();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(function (p) { return p.life > 0; });
+
+      particles.forEach(function (p) {
+        p.trail.push({ x: p.x, y: p.y, life: p.life });
+        if (p.trail.length > 5) p.trail.shift();
+
+        /* Draw trail */
+        p.trail.forEach(function (t, ti) {
+          ctx.beginPath();
+          ctx.arc(t.x, t.y, p.size * 0.4, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = t.life * (ti / p.trail.length) * 0.5;
+          ctx.fill();
+        });
+
+        /* Draw particle */
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+
+        p.x  += p.vx;
+        p.y  += p.vy;
+        p.vy += p.gravity;
+        p.vx *= 0.98;
+        p.life -= p.decay;
+      });
+
+      if (particles.length > 0) {
+        animFrame = requestAnimationFrame(animate);
+      } else {
+        canvas.style.display = 'none';
+        cancelAnimationFrame(animFrame);
+      }
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && !triggered) {
+          triggered = true;
+          launchFireworks();
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.25 });
+
+    observer.observe(section);
   }());
 </script>
 

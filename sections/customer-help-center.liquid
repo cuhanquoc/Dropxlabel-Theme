@@ -26,21 +26,19 @@
 
             {%- elsif block.type == "faq_item" -%}
               {%- if block.settings.question != blank -%}
-                <div class="hc-faq-item" {{ block.shopify_attributes }} style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease, border-radius 0.4s ease;">
+                <div class="hc-faq-item" {{ block.shopify_attributes }} style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease;">
                   <button class="hc-faq-btn" aria-expanded="false"
                           style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
                     <span class="hc-faq-question" style="font-family: var(--font-heading, 'Playfair Display', serif); font-weight: 700; font-size: 1.1rem; line-height: 1.3; color: #0a0a0a; transition: color 0.3s ease;">
                       {{ block.settings.question }}
                     </span>
                     <span class="hc-faq-icon" style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
-                      <svg class="hc-icon-plus" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="transition: transform 0.3s ease;">
-                        <line x1="8" y1="3" x2="8" y2="13"/>
-                        <line x1="3" y1="8" x2="13" y2="8"/>
-                      </svg>
-                      <svg class="hc-icon-close" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="display: none; transition: transform 0.3s ease;">
-                        <line x1="4" y1="4" x2="12" y2="12"/>
-                        <line x1="12" y1="4" x2="4" y2="12"/>
-                      </svg>
+                      <span class="hc-icon-spin" data-angle="0" style="display:flex;align-items:center;justify-content:center;">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+                          <line x1="7" y1="2" x2="7" y2="12"/>
+                          <line x1="2" y1="7" x2="12" y2="7"/>
+                        </svg>
+                      </span>
                     </span>
                   </button>
                   <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;">
@@ -63,7 +61,7 @@
             {%- assign question = section.settings[q_key] -%}
             {%- assign answer = section.settings[a_key] -%}
             {%- if question != blank -%}
-              <div class="hc-faq-item" style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease, border-radius 0.4s ease;">
+              <div class="hc-faq-item" style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease;">
 
                 <button class="hc-faq-btn" aria-expanded="false"
                         style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
@@ -71,16 +69,12 @@
                     {{ question }}
                   </span>
                   <span class="hc-faq-icon" style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
-                    <!-- Plus icon -->
-                    <svg class="hc-icon-plus" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="transition: transform 0.3s ease;">
-                      <line x1="8" y1="3" x2="8" y2="13"/>
-                      <line x1="3" y1="8" x2="13" y2="8"/>
-                    </svg>
-                    <!-- Close icon -->
-                    <svg class="hc-icon-close" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="display: none; transition: transform 0.3s ease;">
-                      <line x1="4" y1="4" x2="12" y2="12"/>
-                      <line x1="12" y1="4" x2="4" y2="12"/>
-                    </svg>
+                    <span class="hc-icon-spin" data-angle="0" style="display:flex;align-items:center;justify-content:center;">
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+                        <line x1="7" y1="2" x2="7" y2="12"/>
+                        <line x1="2" y1="7" x2="12" y2="7"/>
+                      </svg>
+                    </span>
                   </span>
                 </button>
 
@@ -126,58 +120,67 @@
         this._buttons = [];
       }
 
+      _spinIcon(spinEl, isOpen) {
+        const currentAngle = parseFloat(spinEl.dataset.angle || '0');
+        /* Opening: spin 360° then land at 45° (+ → ×). Closing: spin back 360° to 0° */
+        const targetAngle = isOpen
+          ? currentAngle + 360           /* closing: +360°, lands at multiple of 360 = + shape */
+          : currentAngle + 360 + 45;     /* opening: +360° + 45° = × shape */
+        spinEl.dataset.angle = targetAngle;
+        spinEl.animate(
+          [{ transform: `rotate(${currentAngle}deg)` }, { transform: `rotate(${targetAngle}deg)` }],
+          { duration: 280, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
+        );
+      }
+
+      _closeItem(btn) {
+        const item = btn.closest('.hc-faq-item');
+        const answer = item.querySelector('.hc-faq-answer');
+        const question = btn.querySelector('.hc-faq-question');
+        const icon = btn.querySelector('.hc-faq-icon');
+        const spinEl = btn.querySelector('.hc-icon-spin');
+        this._spinIcon(spinEl, true); /* currently open → spin to + */
+        answer.style.maxHeight = '0';
+        answer.style.opacity = '0';
+        item.style.backgroundColor = 'transparent';
+        item.style.marginLeft = '';
+        item.style.marginRight = '';
+        item.style.paddingLeft = '';
+        item.style.paddingRight = '';
+        question.style.color = '#0a0a0a';
+        icon.style.backgroundColor = '#0a0a0a';
+        btn.setAttribute('aria-expanded', 'false');
+      }
+
       toggle(btn) {
         const item = btn.closest('.hc-faq-item');
         const answer = item.querySelector('.hc-faq-answer');
         const question = btn.querySelector('.hc-faq-question');
         const icon = btn.querySelector('.hc-faq-icon');
-        const iconPlus = btn.querySelector('.hc-icon-plus');
-        const iconClose = btn.querySelector('.hc-icon-close');
+        const spinEl = btn.querySelector('.hc-icon-spin');
         const isOpen = btn.getAttribute('aria-expanded') === 'true';
 
         if (isOpen) {
-          /* ── Close ── */
-          answer.style.maxHeight = '0';
-          answer.style.opacity = '0';
-          item.style.backgroundColor = 'transparent';
-          item.style.borderRadius = '0';
-          item.style.padding = '0';
-          question.style.color = '#0a0a0a';
-          icon.style.backgroundColor = '#0a0a0a';
-          iconPlus.style.display = '';
-          iconClose.style.display = 'none';
-          btn.setAttribute('aria-expanded', 'false');
+          this._closeItem(btn);
         } else {
           /* ── Close all others first ── */
           this._buttons.forEach(otherBtn => {
             if (otherBtn !== btn && otherBtn.getAttribute('aria-expanded') === 'true') {
-              const otherItem = otherBtn.closest('.hc-faq-item');
-              const otherAnswer = otherItem.querySelector('.hc-faq-answer');
-              const otherQuestion = otherBtn.querySelector('.hc-faq-question');
-              const otherIcon = otherBtn.querySelector('.hc-faq-icon');
-              const otherPlus = otherBtn.querySelector('.hc-icon-plus');
-              const otherClose = otherBtn.querySelector('.hc-icon-close');
-              otherAnswer.style.maxHeight = '0';
-              otherAnswer.style.opacity = '0';
-              otherItem.style.backgroundColor = 'transparent';
-              otherItem.style.borderRadius = '0';
-              otherItem.style.padding = '0';
-              otherQuestion.style.color = '#0a0a0a';
-              otherIcon.style.backgroundColor = '#0a0a0a';
-              otherPlus.style.display = '';
-              otherClose.style.display = 'none';
-              otherBtn.setAttribute('aria-expanded', 'false');
+              this._closeItem(otherBtn);
             }
           });
 
-          /* ── Open ── */
+          /* ── Open: spin icon from + to × ── */
+          this._spinIcon(spinEl, false);
+
+          /* Edge-to-edge black: negative margins cancel parent padding (px-5 = 1.25rem) */
           item.style.backgroundColor = '#0a0a0a';
-          item.style.borderRadius = '12px';
-          item.style.padding = '0 0.25rem';
+          item.style.marginLeft = '-1.25rem';
+          item.style.marginRight = '-1.25rem';
+          item.style.paddingLeft = '1.25rem';
+          item.style.paddingRight = '1.25rem';
           question.style.color = '#ffffff';
           icon.style.backgroundColor = '#333333';
-          iconPlus.style.display = 'none';
-          iconClose.style.display = '';
           answer.style.maxHeight = answer.scrollHeight + 'px';
           answer.style.opacity = '1';
           btn.setAttribute('aria-expanded', 'true');

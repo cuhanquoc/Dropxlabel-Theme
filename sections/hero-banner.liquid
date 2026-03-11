@@ -10,7 +10,7 @@
         muted
         loop
         playsinline
-        preload="metadata"
+        preload="auto"
         poster="{% if section.settings.background_image != blank %}{{ section.settings.background_image | image_url: width: 1920 }}{% endif %}"
       >
         {% for source in section.settings.background_video.sources %}
