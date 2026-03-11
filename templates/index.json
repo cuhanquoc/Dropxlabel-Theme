@@ -102,52 +102,52 @@
     "marquee_ticker_6CKgye": {
       "type": "marquee-ticker",
       "blocks": {
-        "product_card_qF7t4D": {
+        "product_card_YqGwLD": {
           "type": "product_card",
           "settings": {
-            "product": "american-danish-flag-graphic-tee-usa-denmark-dual-flag-t-shirt-for-fashionalble-person",
+            "product": "jessey-dress™-camisole-sun-dress",
             "custom_title": "",
-            "card_color": "#f0e068"
+            "card_color": "#c6e4e3"
           }
         },
-        "card_2": {
+        "product_card_ceXyFx": {
           "type": "product_card",
           "settings": {
-            "product": "bruno-mars-the-romantic-tour-2026™-wash-t-shirt",
+            "product": "odessa-bikini™-polkadots-beach-resort-bikini",
             "custom_title": "",
-            "card_color": "#b8a8e8"
+            "card_color": "#e3cde9"
           }
         },
-        "card_3": {
+        "product_card_imJtbT": {
           "type": "product_card",
           "settings": {
-            "product": "candy-graphic-t-shirt-retro-sweets-tee",
+            "product": "esme-bikini™-tie-side-triangle-bikini",
             "custom_title": "",
-            "card_color": "#d88cc4"
+            "card_color": "#c2e4cc"
           }
         },
-        "card_4": {
+        "product_card_ndBeix": {
           "type": "product_card",
           "settings": {
-            "product": "candy-graphic-t-shirt-retro-sweets-tee",
+            "product": "isolde-bikini™-metal-decor-bikini",
             "custom_title": "",
-            "card_color": "#c8e040"
+            "card_color": "#e7e2bd"
           }
         },
         "card_5": {
           "type": "product_card",
           "settings": {
-            "product": "bruno-mars-the-romantic-tour-north-america-europe-uk™-wash-t-shirt",
+            "product": "aurelie-dress™-floral-printed-dress",
             "custom_title": "",
-            "card_color": "#e8a0b0"
+            "card_color": "#e2c9ce"
           }
         }
       },
       "block_order": [
-        "product_card_qF7t4D",
-        "card_2",
-        "card_3",
-        "card_4",
+        "product_card_YqGwLD",
+        "product_card_ceXyFx",
+        "product_card_imJtbT",
+        "product_card_ndBeix",
         "card_5"
       ],
       "settings": {
@@ -155,7 +155,7 @@
         "description_1": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers. Each piece is thoughtfully selected for its quality, comfort, and popularity, making it easy to stay stylish without compromising on ease.",
         "description_2": "From everyday essentials to standout statement looks, our bestsellers offer something for every wardrobe. Refresh your style with fashion that blends modern design and timeless appeal, and stay ahead of the curve with pieces that truly make an impact.",
         "cta_text": "SHOP NOW",
-        "cta_url": "shopify://products/american-danish-flag-graphic-tee-usa-denmark-dual-flag-t-shirt-for-fashionalble-person"
+        "cta_url": ""
       }
     },
     "customer-help-center": {
