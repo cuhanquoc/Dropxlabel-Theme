@@ -1,6 +1,6 @@
 {% comment %} TRENDING STYLES — Product Cards with Blocks {% endcomment %}
 
-<section class="relative overflow-hidden" style="background-color: {{ section.settings.bg_color | default: '#0a0a0a' }};">
+<section class="relative overflow-hidden trending-styles-section" id="trending-styles-section" style="background-color: {{ section.settings.bg_color | default: '#0a0a0a' }};">
 
   <div class="relative z-10 max-w-[640px] mx-auto px-4 md:px-8 pt-2 pb-16 md:pt-4 md:pb-24">
 
@@ -109,6 +109,100 @@
 
   </div>
 </section>
+
+<script>
+(function () {
+  'use strict';
+
+  var section = document.getElementById('trending-styles-section');
+  if (!section || typeof IntersectionObserver === 'undefined') return;
+
+  var fired = false;
+
+  var observer = new IntersectionObserver(function (entries) {
+    if (entries[0].isIntersecting && !fired) {
+      fired = true;
+      observer.disconnect();
+      launchFireworks();
+    }
+  }, { threshold: 0.25 });
+
+  observer.observe(section);
+
+  function launchFireworks() {
+    var canvas = document.createElement('canvas');
+    canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width;
+    var H = canvas.height;
+    var particles = [];
+    var colors = ['#C5A880', '#FFD700', '#ffffff', '#ff9ecd', '#87CEEB', '#a8e6cf', '#ffd3b6'];
+
+    function burst(x, y, count) {
+      for (var i = 0; i < count; i++) {
+        var angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+        var speed = 3 + Math.random() * 9;
+        particles.push({
+          x: x, y: y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed - 2,
+          life: 1,
+          decay: 0.011 + Math.random() * 0.012,
+          size: 2 + Math.random() * 3.5,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+    }
+
+    var launches = [
+      { x: W * 0.04, delay: 0 },
+      { x: W * 0.96, delay: 180 },
+      { x: W * 0.08, delay: 350 },
+      { x: W * 0.92, delay: 520 },
+      { x: W * 0.02, delay: 700 },
+      { x: W * 0.98, delay: 850 }
+    ];
+
+    launches.forEach(function (l) {
+      setTimeout(function () {
+        var y = H * (0.25 + Math.random() * 0.35);
+        burst(l.x, y, 65);
+      }, l.delay);
+    });
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.18;
+        p.vx *= 0.985;
+        p.life -= p.decay;
+        if (p.life <= 0) { particles.splice(i, 1); continue; }
+        ctx.save();
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+      if (particles.length > 0) {
+        requestAnimationFrame(draw);
+      } else {
+        canvas.remove();
+      }
+    }
+
+    setTimeout(draw, 50);
+  }
+})();
+</script>
 
 {% schema %}
 {

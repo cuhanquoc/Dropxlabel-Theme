@@ -543,23 +543,13 @@
                         <button
                           type="button"
                           class="size-btn {% if value == option.selected_value %}active{% endif %}"
-                          style="min-width: 64px; height: 48px; border: 1px solid #111; border-radius: 4px; font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; background: transparent; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;"
+                          style="min-width: 64px; height: 48px; border: 1px solid #111; border-radius: 4px; font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease; {% if value == option.selected_value %}background-color: #111111; color: #ffffff;{% else %}background: transparent; color: #0a0a0a;{% endif %}"
                           data-option-position="{{ option.position }}"
                           data-option-value="{{ value }}"
                           aria-label="{{ option.name }}: {{ value }}"
-
-                        >
-                          {{ value }}
-                        </button>
+                        >{{ value }}</button>
                       {% endfor %}
                     </div>
-                    <style>
-                      /* Force active size state */
-                      .size-btn.active {
-                        background-color: #111 !important;
-                        color: #fff !important;
-                      }
-                    </style>
                   {% endif %}
 
                 </div>
@@ -643,7 +633,32 @@
             </div>
           </div>
 
-          <!-- Add to Cart (Re-styled a bit) -->
+          <!-- Add to Cart -->
+          <style>
+            @keyframes atc-bubble {
+              0%   { transform: translateX(-200%) skewX(-12deg); opacity: 0; }
+              20%  { opacity: 0.45; }
+              80%  { opacity: 0.45; }
+              100% { transform: translateX(350%) skewX(-12deg); opacity: 0; }
+            }
+            .btn-add-to-cart {
+              position: relative;
+              overflow: hidden;
+            }
+            .btn-add-to-cart::after {
+              content: '';
+              position: absolute;
+              top: 0; bottom: 0; left: 0;
+              width: 35%;
+              background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+              animation: atc-bubble 2.2s ease-in-out infinite;
+              pointer-events: none;
+              border-radius: inherit;
+            }
+            .btn-add-to-cart:disabled::after {
+              display: none;
+            }
+          </style>
           <div class="mb-5 flex gap-3" style="max-width: 100%; box-sizing: border-box; flex-wrap: wrap; padding: 0 1rem;">
             <button
               type="submit"
@@ -714,7 +729,7 @@
             <div id="pairs-carousel-track" style="display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 0.5rem; width: 100%;">
               <style>#pairs-carousel-track::-webkit-scrollbar { display: none; }</style>
               {% for p in pairs_products limit: 6 %}
-              <div style="scroll-snap-align: start; flex: 0 0 calc(33.333% - 11px); min-width: 150px;">
+              <div style="scroll-snap-align: start; flex: 0 0 calc(40% - 11px); min-width: 130px;">
                 <a href="{{ p.url }}" style="text-decoration: none; color: inherit; display: block;">
                   <div style="background-color: #d1d5db; border-radius: 1.25rem; overflow: hidden; aspect-ratio: 1/1; position: relative; margin-bottom: 0.75rem;">
                     {% if p.featured_image %}
@@ -865,8 +880,24 @@
   /* ── Option select ── */
   function selectOption(el, optionName, value) {
     const group = el.closest('[role="radiogroup"]');
-    group.querySelectorAll('.size-btn, .color-swatch').forEach(b => b.classList.remove('active'));
+    group.querySelectorAll('.size-btn, .color-swatch').forEach(b => {
+      b.classList.remove('active');
+      if (b.classList.contains('size-btn')) {
+        b.style.backgroundColor = 'transparent';
+        b.style.color = '#0a0a0a';
+      }
+    });
     el.classList.add('active');
+    if (el.classList.contains('size-btn')) {
+      el.style.backgroundColor = '#111111';
+      el.style.color = '#ffffff';
+      /* Tap animation */
+      el.style.transform = 'scale(0.9)';
+      requestAnimationFrame(() => {
+        el.style.transform = 'scale(1.05)';
+        setTimeout(() => { el.style.transform = 'scale(1)'; }, 120);
+      });
+    }
 
     const label = document.getElementById('selected-' + optionName.toLowerCase().replace(/\s+/g, '-'));
     if (label) label.textContent = value.toUpperCase();
@@ -1048,10 +1079,36 @@
   function scrollPairsCarousel(dir) {
     const track = document.getElementById('pairs-carousel-track');
     if (!track) return;
-    const card = track.querySelector('a');
-    const scrollAmt = card ? card.offsetWidth + 16 : 200;
-    track.scrollBy({ left: dir * scrollAmt, behavior: 'smooth' });
+    const card = track.firstElementChild;
+    const cardWidth = card ? card.offsetWidth + 16 : 160;
+    track.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
+    setTimeout(updatePairsArrows, 400);
   }
+
+  function updatePairsArrows() {
+    const track = document.getElementById('pairs-carousel-track');
+    if (!track) return;
+    const btnLeft  = document.querySelector('[data-carousel-dir="-1"]');
+    const btnRight = document.querySelector('[data-carousel-dir="1"]');
+    const atStart  = track.scrollLeft <= 4;
+    const atEnd    = track.scrollLeft + track.offsetWidth >= track.scrollWidth - 4;
+    if (btnLeft)  { btnLeft.style.backgroundColor  = atStart ? '#bbbbbb' : '#000000'; btnLeft.style.cursor  = atStart ? 'default' : 'pointer'; }
+    if (btnRight) { btnRight.style.backgroundColor = atEnd   ? '#bbbbbb' : '#000000'; btnRight.style.cursor = atEnd   ? 'default' : 'pointer'; }
+  }
+
+  /* ── Touch swipe support for Pairs carousel ── */
+  (function () {
+    const track = document.getElementById('pairs-carousel-track');
+    if (!track) return;
+    let startX = 0;
+    track.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', function (e) {
+      const diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) scrollPairsCarousel(diff > 0 ? 1 : -1);
+    }, { passive: true });
+    track.addEventListener('scroll', updatePairsArrows, { passive: true });
+    updatePairsArrows();
+  })();
 
   /* ─────────────────────────────────────────────────
      EVENT DELEGATION — replaces all inline handlers
@@ -1141,17 +1198,19 @@
     if (btn) btn.style.opacity = '1';
   });
 
-  /* Hover background for text-option buttons */
+  /* Hover background for inactive size buttons */
   document.addEventListener('mouseover', function (e) {
     const btn = e.target.closest('[data-option-value]');
     if (btn && !btn.classList.contains('active') && btn.classList.contains('size-btn')) {
-      btn.style.backgroundColor = '#f5f5f5';
+      btn.style.backgroundColor = '#f0f0f0';
+      btn.style.color = '#0a0a0a';
     }
   });
   document.addEventListener('mouseout', function (e) {
     const btn = e.target.closest('[data-option-value]');
     if (btn && !btn.classList.contains('active') && btn.classList.contains('size-btn')) {
       btn.style.backgroundColor = 'transparent';
+      btn.style.color = '#0a0a0a';
     }
   });
 </script>

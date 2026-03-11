@@ -1,3 +1,37 @@
+<style>
+  @keyframes hc-spin-open {
+    0%   { transform: rotate(0deg); }
+    70%  { transform: rotate(1080deg); }
+    100% { transform: rotate(765deg); }
+  }
+  @keyframes hc-spin-close {
+    0%   { transform: rotate(765deg); }
+    30%  { transform: rotate(660deg); }
+    100% { transform: rotate(0deg); }
+  }
+  .hc-icon-spin {
+    display: block;
+    transform-origin: center;
+  }
+  .hc-faq-item.is-open {
+    background-color: #0a0a0a;
+    margin-left: -1.25rem;
+    margin-right: -1.25rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    border-radius: 0;
+    transition: background-color 0.3s ease, margin 0.3s ease;
+  }
+  @media (min-width: 768px) {
+    .hc-faq-item.is-open {
+      margin-left: -2rem;
+      margin-right: -2rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+</style>
+
 <help-center-section class="block">
   <!-- ── Section with white bg and generous padding ── -->
   <div style="background-color: {{ section.settings.bg_color | default: '#ffffff' }}; padding-top: 3.5rem; padding-bottom: 3.5rem;" class="md:py-20">
@@ -33,13 +67,9 @@
                       {{ block.settings.question }}
                     </span>
                     <span class="hc-faq-icon" style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
-                      <svg class="hc-icon-plus" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="transition: transform 0.3s ease;">
+                      <svg class="hc-icon-spin" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2.5">
                         <line x1="8" y1="3" x2="8" y2="13"/>
                         <line x1="3" y1="8" x2="13" y2="8"/>
-                      </svg>
-                      <svg class="hc-icon-close" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="display: none; transition: transform 0.3s ease;">
-                        <line x1="4" y1="4" x2="12" y2="12"/>
-                        <line x1="12" y1="4" x2="4" y2="12"/>
                       </svg>
                     </span>
                   </button>
@@ -71,15 +101,9 @@
                     {{ question }}
                   </span>
                   <span class="hc-faq-icon" style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
-                    <!-- Plus icon -->
-                    <svg class="hc-icon-plus" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="transition: transform 0.3s ease;">
+                    <svg class="hc-icon-spin" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2.5">
                       <line x1="8" y1="3" x2="8" y2="13"/>
                       <line x1="3" y1="8" x2="13" y2="8"/>
-                    </svg>
-                    <!-- Close icon -->
-                    <svg class="hc-icon-close" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="display: none; transition: transform 0.3s ease;">
-                      <line x1="4" y1="4" x2="12" y2="12"/>
-                      <line x1="12" y1="4" x2="4" y2="12"/>
                     </svg>
                   </span>
                 </button>
@@ -131,21 +155,17 @@
         const answer = item.querySelector('.hc-faq-answer');
         const question = btn.querySelector('.hc-faq-question');
         const icon = btn.querySelector('.hc-faq-icon');
-        const iconPlus = btn.querySelector('.hc-icon-plus');
-        const iconClose = btn.querySelector('.hc-icon-close');
+        const iconSpin = btn.querySelector('.hc-icon-spin');
         const isOpen = btn.getAttribute('aria-expanded') === 'true';
 
         if (isOpen) {
           /* ── Close ── */
           answer.style.maxHeight = '0';
           answer.style.opacity = '0';
-          item.style.backgroundColor = 'transparent';
-          item.style.borderRadius = '0';
-          item.style.padding = '0';
+          item.classList.remove('is-open');
           question.style.color = '#0a0a0a';
           icon.style.backgroundColor = '#0a0a0a';
-          iconPlus.style.display = '';
-          iconClose.style.display = 'none';
+          if (iconSpin) iconSpin.style.animation = 'hc-spin-close 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards';
           btn.setAttribute('aria-expanded', 'false');
         } else {
           /* ── Close all others first ── */
@@ -155,29 +175,22 @@
               const otherAnswer = otherItem.querySelector('.hc-faq-answer');
               const otherQuestion = otherBtn.querySelector('.hc-faq-question');
               const otherIcon = otherBtn.querySelector('.hc-faq-icon');
-              const otherPlus = otherBtn.querySelector('.hc-icon-plus');
-              const otherClose = otherBtn.querySelector('.hc-icon-close');
+              const otherSpin = otherBtn.querySelector('.hc-icon-spin');
               otherAnswer.style.maxHeight = '0';
               otherAnswer.style.opacity = '0';
-              otherItem.style.backgroundColor = 'transparent';
-              otherItem.style.borderRadius = '0';
-              otherItem.style.padding = '0';
+              otherItem.classList.remove('is-open');
               otherQuestion.style.color = '#0a0a0a';
               otherIcon.style.backgroundColor = '#0a0a0a';
-              otherPlus.style.display = '';
-              otherClose.style.display = 'none';
+              if (otherSpin) otherSpin.style.animation = 'hc-spin-close 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards';
               otherBtn.setAttribute('aria-expanded', 'false');
             }
           });
 
           /* ── Open ── */
-          item.style.backgroundColor = '#0a0a0a';
-          item.style.borderRadius = '12px';
-          item.style.padding = '0 0.25rem';
+          item.classList.add('is-open');
           question.style.color = '#ffffff';
           icon.style.backgroundColor = '#333333';
-          iconPlus.style.display = 'none';
-          iconClose.style.display = '';
+          if (iconSpin) iconSpin.style.animation = 'hc-spin-open 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards';
           answer.style.maxHeight = answer.scrollHeight + 'px';
           answer.style.opacity = '1';
           btn.setAttribute('aria-expanded', 'true');

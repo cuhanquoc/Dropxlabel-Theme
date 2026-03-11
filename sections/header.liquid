@@ -1,5 +1,4 @@
-{% comment %} HEADER — CSS → src/input.css {% endcomment %}
-
+{% comment %} HEADER — rebuilt for balanced mobile layout {% endcomment %}
 
 {%- liquid
   assign is_home = false
@@ -8,232 +7,181 @@
   endif
 -%}
 <style>
-  .site-header { position: sticky; top: 0; background-color: #ffffff; border-bottom: 1px solid #eaeaea; }
+  .site-header { position: sticky; top: 0; background-color: #ffffff; border-bottom: 1px solid #eaeaea; z-index: 40; }
   .site-header, .nav-link, .icon-btn, .mega-trigger { color: #0a0a0a !important; }
   .hamburger-line { background-color: #0a0a0a !important; }
   .site-header svg { stroke: #0a0a0a !important; }
-  /* Notice: Logo will invert if it's pure white. If the logo is already black, remove invert, but we keep it here to preserve original intent */
-  .header-logo-img { filter: invert(1); } 
+  .header-logo-img { filter: invert(1); }
 </style>
 
-<header class="site-header left-0 w-full z-40 py-4 md:py-6 transition-colors duration-300">
-  <div class="mx-auto max-w-screen-xl w-full flex justify-between items-center px-5 md:px-10">
+<header class="site-header w-full transition-colors duration-300">
+  <div class="relative mx-auto max-w-screen-xl w-full flex items-center justify-between px-4 md:px-10 py-3 md:py-5">
 
-  <!-- LEFT: Navigation Links -->
-  <!-- Hamburger Button (mobile only) -->
-  <button type="button" class="hamburger-btn" id="hamburger-btn"
-          aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-  </button>
+    <!-- LEFT: Hamburger (mobile) / Nav (desktop) -->
+    <div class="flex items-center gap-8 flex-1">
 
-  <nav class="hidden md:flex items-center gap-8">
-    <a href="{{ routes.root_url }}" class="nav-link">Home</a>
+      <!-- Hamburger — mobile only -->
+      <button type="button" class="hamburger-btn" id="hamburger-btn"
+              aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
 
-    <!-- Catalog with Mega Menu -->
-    <div class="mega-trigger">
-      <a href="{{ routes.collections_url }}" class="nav-link">
-        Catalog
-        <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m6 9 6 6 6-6"/>
+      <!-- Desktop nav -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="{{ routes.root_url }}" class="nav-link">Home</a>
+
+        <!-- Catalog with Mega Menu -->
+        <div class="mega-trigger">
+          <a href="{{ routes.collections_url }}" class="nav-link">
+            Catalog
+            <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </a>
+
+          <!-- MEGA MENU PANEL -->
+          <div class="mega-menu">
+            <div class="mega-images">
+              <a href="{{ section.settings.mega_image_link | default: routes.collections_url }}" class="mega-img-panel">
+                {% if section.settings.mega_image != blank %}
+                  <img src="{{ section.settings.mega_image | image_url: width: 800 }}" alt="{{ section.settings.mega_image_label | default: 'Fashion' }}" loading="lazy" />
+                {% else %}
+                  <div class="mega-img-placeholder" style="width:100%;height:100%;background:#1a1a1a;display:block;" role="img" aria-label="{{ section.settings.mega_image_label | default: "Women's Fashion" }}"></div>
+                {% endif %}
+                <div class="mega-img-label">
+                  <span class="mega-img-label-text">{{ section.settings.mega_image_label | default: "Women's Fashion" }}</span>
+                  <span class="mega-img-label-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+                </div>
+              </a>
+
+              <a href="{{ section.settings.mega_video_link | default: routes.collections_url }}" class="mega-video-panel">
+                {% if section.settings.mega_video != blank %}
+                  <video autoplay muted loop playsinline preload="metadata">
+                    {% for source in section.settings.mega_video.sources %}
+                      <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                    {% endfor %}
+                  </video>
+                {% else %}
+                  <div style="width:100%;height:100%;background:linear-gradient(160deg,#1a1a1a 0%,#2e2e2e 50%,#111 100%);display:flex;align-items:center;justify-content:center;" role="img" aria-label="{{ section.settings.mega_video_label | default: "Men's Fashion" }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  </div>
+                {% endif %}
+                <div class="mega-img-label">
+                  <span class="mega-img-label-text">{{ section.settings.mega_video_label | default: "Men's Fashion" }}</span>
+                  <span class="mega-img-label-arrow"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>
+                </div>
+              </a>
+            </div>
+
+            <div class="mega-cols">
+              {% for block in section.blocks %}
+                {% if block.type == 'mega_column' %}
+                  <div class="mega-col" {{ block.shopify_attributes }}>
+                    <p class="mega-col-title" style="font-size: {{ block.settings.title_font_size | default: 14 }}px; font-weight: {{ block.settings.title_font_weight | default: '700' }}; color: {{ block.settings.title_color | default: '#1a1a1a' }};">
+                      {{ block.settings.title | default: 'Collection' }}
+                    </p>
+                    <ul>
+                      {% if block.settings.link_1_label != blank %}<li><a href="{{ block.settings.link_1_url | default: routes.collections_url }}">{{ block.settings.link_1_label }}</a></li>{% endif %}
+                      {% if block.settings.link_2_label != blank %}<li><a href="{{ block.settings.link_2_url | default: routes.collections_url }}">{{ block.settings.link_2_label }}</a></li>{% endif %}
+                      {% if block.settings.link_3_label != blank %}<li><a href="{{ block.settings.link_3_url | default: routes.collections_url }}">{{ block.settings.link_3_label }}</a></li>{% endif %}
+                      {% if block.settings.link_4_label != blank %}<li><a href="{{ block.settings.link_4_url | default: routes.collections_url }}">{{ block.settings.link_4_label }}</a></li>{% endif %}
+                      {% if block.settings.link_5_label != blank %}<li><a href="{{ block.settings.link_5_url | default: routes.collections_url }}">{{ block.settings.link_5_label }}</a></li>{% endif %}
+                      {% if block.settings.link_6_label != blank %}<li><a href="{{ block.settings.link_6_url | default: routes.collections_url }}">{{ block.settings.link_6_label }}</a></li>{% endif %}
+                      {% if block.settings.link_7_label != blank %}<li><a href="{{ block.settings.link_7_url | default: routes.collections_url }}">{{ block.settings.link_7_label }}</a></li>{% endif %}
+                      {% if block.settings.link_8_label != blank %}<li><a href="{{ block.settings.link_8_url | default: routes.collections_url }}">{{ block.settings.link_8_label }}</a></li>{% endif %}
+                    </ul>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+            <button class="mega-close" data-action="mega-close" aria-label="Close menu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        {%- assign nav_link_blocks = section.blocks | where: 'type', 'nav_link' -%}
+        {%- if nav_link_blocks.size > 0 -%}
+          {%- for block in nav_link_blocks -%}
+            {%- if block.settings.label != blank -%}
+              <a href="{{ block.settings.url | default: '#' }}" class="nav-link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="nav-link">About</a>
+          <a href="{{ routes.blogs_url }}" class="nav-link">Blogs</a>
+        {%- endif -%}
+      </nav>
+    </div>
+
+    <!-- CENTER: Brand Logo (absolutely centered on all screens) -->
+    <a href="{{ routes.root_url }}" class="header-logo header-logo-wrap absolute left-1/2 -translate-x-1/2">
+      {% if section.settings.logo_image != blank %}
+        <img
+          src="{{ section.settings.logo_image | image_url: width: 400 }}"
+          alt="{{ shop.name }}"
+          class="header-logo-img"
+          style="max-width: {{ section.settings.logo_width | default: 120 }}px; height: auto;"
+          loading="eager"
+        />
+      {% else %}
+        {{ section.settings.logo_text | default: shop.name }}
+      {% endif %}
+    </a>
+
+    <!-- RIGHT: Action icons -->
+    <div class="flex items-center gap-3 md:gap-5 flex-1 justify-end header-right-icons">
+
+      <!-- Search — desktop only -->
+      <button class="icon-btn hidden md:flex" aria-label="Search" data-action="open-search">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+      </button>
+
+      <!-- Account — desktop only -->
+      <a href="{{ routes.account_url }}" class="icon-btn hidden md:flex" aria-label="My Account">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
         </svg>
       </a>
 
-      <!-- ═══ MEGA MENU PANEL ═══ -->
-      <div class="mega-menu">
+      <!-- Search — mobile only (small) -->
+      <button class="icon-btn flex md:hidden" aria-label="Search" data-action="open-search" style="width:36px;height:36px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+      </button>
 
-        <!-- Left: 2 Image Panels -->
-        <div class="mega-images">
-
-          <!-- Panel 1 -->
-          <a href="{{ section.settings.mega_image_link | default: routes.collections_url }}" class="mega-img-panel">
-            {% if section.settings.mega_image != blank %}
-              <img
-                src="{{ section.settings.mega_image | image_url: width: 800 }}"
-                alt="{{ section.settings.mega_image_label | default: 'Fashion' }}"
-                loading="lazy"
-              />
-            {% else %}
-              {%- comment -%}Shopify-hosted image not set — render CSS block to avoid third-party request{%- endcomment -%}
-              <div
-                class="mega-img-placeholder"
-                style="width:800px;height:600px;max-width:100%;background:#1a1a1a;display:block;"
-                role="img"
-                aria-label="{{ section.settings.mega_image_label | default: "Women's Fashion" }}"
-              ></div>
-            {% endif %}
-            <div class="mega-img-label">
-              <span class="mega-img-label-text">{{ section.settings.mega_image_label | default: "Women's Fashion" }}</span>
-              <span class="mega-img-label-arrow">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M7 17 17 7M7 7h10v10"/>
-                </svg>
-              </span>
-            </div>
-          </a>
-
-          <!-- Panel 2 — Video -->
-          <a href="{{ section.settings.mega_video_link | default: routes.collections_url }}" class="mega-video-panel">
-            {% if section.settings.mega_video != blank %}
-              <video
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="metadata"
-              >
-                {% for source in section.settings.mega_video.sources %}
-                  <source src="{{ source.url }}" type="{{ source.mime_type }}">
-                {% endfor %}
-              </video>
-            {% else %}
-              <!-- No video uploaded: render a styled placeholder to avoid external CDN dependency -->
-              <div
-                style="width:100%;height:100%;background:linear-gradient(160deg,#1a1a1a 0%,#2e2e2e 50%,#111 100%);display:flex;align-items:center;justify-content:center;"
-                role="img"
-                aria-label="{{ section.settings.mega_video_label | default: "Men's Fashion" }}"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <polygon points="5 3 19 12 5 21 5 3"/>
-                </svg>
-              </div>
-            {% endif %}
-            <div class="mega-img-label">
-              <span class="mega-img-label-text">{{ section.settings.mega_video_label | default: "Men's Fashion" }}</span>
-              <span class="mega-img-label-arrow">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M7 17 17 7M7 7h10v10"/>
-                </svg>
-              </span>
-            </div>
-          </a>
-
-        </div>
-
-        <!-- Right: Collection Columns (dynamic blocks) -->
-        <div class="mega-cols">
-          {% for block in section.blocks %}
-            {% if block.type == 'mega_column' %}
-              <div class="mega-col" {{ block.shopify_attributes }}>
-                <p class="mega-col-title" style="
-                  font-size: {{ block.settings.title_font_size | default: 14 }}px;
-                  font-weight: {{ block.settings.title_font_weight | default: '700' }};
-                  color: {{ block.settings.title_color | default: '#1a1a1a' }};
-                ">
-                  {{ block.settings.title | default: 'Collection' }}
-                </p>
-                <ul>
-                  {% if block.settings.link_1_label != blank %}
-                    <li><a href="{{ block.settings.link_1_url | default: routes.collections_url }}">{{ block.settings.link_1_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_2_label != blank %}
-                    <li><a href="{{ block.settings.link_2_url | default: routes.collections_url }}">{{ block.settings.link_2_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_3_label != blank %}
-                    <li><a href="{{ block.settings.link_3_url | default: routes.collections_url }}">{{ block.settings.link_3_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_4_label != blank %}
-                    <li><a href="{{ block.settings.link_4_url | default: routes.collections_url }}">{{ block.settings.link_4_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_5_label != blank %}
-                    <li><a href="{{ block.settings.link_5_url | default: routes.collections_url }}">{{ block.settings.link_5_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_6_label != blank %}
-                    <li><a href="{{ block.settings.link_6_url | default: routes.collections_url }}">{{ block.settings.link_6_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_7_label != blank %}
-                    <li><a href="{{ block.settings.link_7_url | default: routes.collections_url }}">{{ block.settings.link_7_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_8_label != blank %}
-                    <li><a href="{{ block.settings.link_8_url | default: routes.collections_url }}">{{ block.settings.link_8_label }}</a></li>
-                  {% endif %}
-                </ul>
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-
-        <!-- Close button -->
-        <button class="mega-close" data-action="mega-close" aria-label="Close menu">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 6 6 18M6 6l12 12"/>
-          </svg>
-        </button>
-
-      </div>
-      <!-- / MEGA MENU PANEL -->
+      <!-- Cart — all screens -->
+      <button class="icon-btn relative" aria-label="Shopping Cart" data-action="open-cart" style="width:36px;height:36px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+          <path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        {% if cart.item_count > 0 %}
+          <span class="cart-count">{{ cart.item_count }}</span>
+        {% endif %}
+      </button>
 
     </div>
-    <!-- / Catalog with Mega Menu -->
-
-    {%- comment -%} Dynamic nav links — add via Customizer > Header > Add block > Nav Link {%- endcomment -%}
-    {%- assign nav_link_blocks = section.blocks | where: 'type', 'nav_link' -%}
-    {%- if nav_link_blocks.size > 0 -%}
-      {%- for block in nav_link_blocks -%}
-        {%- if block.settings.label != blank -%}
-          <a href="{{ block.settings.url | default: '#' }}" class="nav-link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
-        {%- endif -%}
-      {%- endfor -%}
-    {%- else -%}
-      {%- comment -%} Fallback: hardcode defaults (shown when no nav_link blocks added yet) {%- endcomment -%}
-      <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="nav-link">About</a>
-      <a href="{{ routes.blogs_url }}" class="nav-link">Blogs</a>
-    {%- endif -%}
-  </nav>
-
-  <!-- CENTER: Brand Logo -->
-  <a href="{{ routes.root_url }}" class="header-logo header-logo-wrap">
-    {% if section.settings.logo_image != blank %}
-      <img
-        src="{{ section.settings.logo_image | image_url: width: 400 }}"
-        alt="{{ shop.name }}"
-        class="header-logo-img"
-        style="max-width: {{ section.settings.logo_width | default: 120 }}px; height: auto;"
-        loading="eager"
-      />
-    {% else %}
-      {{ section.settings.logo_text | default: shop.name }}
-    {% endif %}
-  </a>
-
-  <!-- RIGHT: Icon Actions -->
-  <div class="flex items-center gap-6 header-right-icons">
-
-    <!-- Search Icon -->
-    <button class="icon-btn" aria-label="Search" data-action="open-search">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/>
-        <path d="m21 21-4.3-4.3"/>
-      </svg>
-    </button>
-
-    <!-- Account Icon -->
-    <a href="{{ routes.account_url }}" class="icon-btn" aria-label="My Account">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="-1 0 26 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="8" r="4"/>
-        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-      </svg>
-    </a>
-
-    <!-- Cart Icon -->
-    <button class="icon-btn relative" aria-label="Shopping Cart" data-action="open-cart">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
-        <path d="M3 6h18"/>
-        <path d="M16 10a4 4 0 0 1-8 0"/>
-      </svg>
-      {% if cart.item_count > 0 %}
-        <span class="cart-count">{{ cart.item_count }}</span>
-      {% endif %}
-    </button>
-
-  </div>
   </div>
 </header>
 
-<!-- ═══ MOBILE MENU OVERLAY ═══ -->
-<div class="mobile-menu-overlay" id="mobile-menu">
+<!-- MOBILE MENU OVERLAY -->
+<div class="mobile-menu-overlay" id="mobile-menu" aria-hidden="true">
+
+  <!-- Close button top-right -->
+  <button class="mob-close-btn" data-action="close-mobile-menu" aria-label="Close menu">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 6 6 18M6 6l12 12"/>
+    </svg>
+  </button>
+
   <a href="{{ routes.root_url }}" class="mobile-nav-link" data-action="close-mobile-menu">Home</a>
   <a href="{{ routes.collections_url }}" class="mobile-nav-link" data-action="close-mobile-menu">Catalog</a>
   <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="mobile-nav-link" data-action="close-mobile-menu">About</a>
@@ -244,8 +192,7 @@
   <div class="mobile-menu-icons">
     <button class="mobile-menu-icon-link" data-action="close-mobile-menu open-search" style="background:none;border:none;cursor:pointer;">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/>
-        <path d="m21 21-4.3-4.3"/>
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
       </svg>
       Search
     </button>
@@ -259,8 +206,7 @@
     <button class="mobile-menu-icon-link" data-action="close-mobile-menu open-cart" style="background:none;border:none;cursor:pointer;">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
-        <path d="M3 6h18"/>
-        <path d="M16 10a4 4 0 0 1-8 0"/>
+        <path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
       </svg>
       Cart
     </button>
@@ -275,11 +221,7 @@
     actions.forEach(function(action) {
       if (action === 'mega-close') {
         var panel = btn.closest('.mega-menu');
-        if (panel) {
-          panel.style.pointerEvents = 'none';
-          panel.style.clipPath = 'inset(0 0 100% 0)';
-          panel.style.opacity = '0';
-        }
+        if (panel) { panel.style.pointerEvents = 'none'; panel.style.clipPath = 'inset(0 0 100% 0)'; panel.style.opacity = '0'; }
       } else if (action === 'close-mobile-menu') {
         if (typeof MobileMenu !== 'undefined') MobileMenu.close();
       } else if (action === 'open-search') {
@@ -296,76 +238,18 @@
   "name": "Header",
   "tag": "section",
   "settings": [
-    {
-      "type": "header",
-      "content": "Logo"
-    },
-    {
-      "type": "image_picker",
-      "id": "logo_image",
-      "label": "Logo Image",
-      "info": "Recommended: PNG with transparent background, max 400×100px. If set, replaces text logo."
-    },
-    {
-      "type": "range",
-      "id": "logo_width",
-      "min": 60,
-      "max": 300,
-      "step": 10,
-      "default": 120,
-      "unit": "px",
-      "label": "Logo Max Width",
-      "info": "Controls the maximum width of the logo image on desktop"
-    },
-    {
-      "type": "text",
-      "id": "logo_text",
-      "label": "Logo Text (fallback)",
-      "default": "Dropxlabel",
-      "info": "Shown when no logo image is uploaded"
-    },
-    {
-      "type": "header",
-      "content": "Mega Menu — Panel 1 (Image)"
-    },
-    {
-      "type": "image_picker",
-      "id": "mega_image",
-      "label": "Panel 1 Image",
-      "info": "Recommended: 600 × 800px (3:4 portrait). Left image in the Catalog dropdown."
-    },
-    {
-      "type": "text",
-      "id": "mega_image_label",
-      "label": "Panel 1 Label",
-      "default": "Women's Fashion"
-    },
-    {
-      "type": "url",
-      "id": "mega_image_link",
-      "label": "Panel 1 Link"
-    },
-    {
-      "type": "header",
-      "content": "Mega Menu — Panel 2 (Video)"
-    },
-    {
-      "type": "video",
-      "id": "mega_video",
-      "label": "Panel 2 Video",
-      "info": "Recommended: 600 × 800px (3:4 portrait), MP4, max 10s. Upload via Files > Videos."
-    },
-    {
-      "type": "text",
-      "id": "mega_video_label",
-      "label": "Panel 2 Label",
-      "default": "Men's Fashion"
-    },
-    {
-      "type": "url",
-      "id": "mega_video_link",
-      "label": "Panel 2 Link"
-    }
+    { "type": "header", "content": "Logo" },
+    { "type": "image_picker", "id": "logo_image", "label": "Logo Image", "info": "PNG with transparent background, max 400×100px." },
+    { "type": "range", "id": "logo_width", "min": 60, "max": 300, "step": 10, "default": 120, "unit": "px", "label": "Logo Max Width" },
+    { "type": "text", "id": "logo_text", "label": "Logo Text (fallback)", "default": "Dropxlabel" },
+    { "type": "header", "content": "Mega Menu — Panel 1 (Image)" },
+    { "type": "image_picker", "id": "mega_image", "label": "Panel 1 Image" },
+    { "type": "text", "id": "mega_image_label", "label": "Panel 1 Label", "default": "Women's Fashion" },
+    { "type": "url", "id": "mega_image_link", "label": "Panel 1 Link" },
+    { "type": "header", "content": "Mega Menu — Panel 2 (Video)" },
+    { "type": "video", "id": "mega_video", "label": "Panel 2 Video" },
+    { "type": "text", "id": "mega_video_label", "label": "Panel 2 Label", "default": "Men's Fashion" },
+    { "type": "url", "id": "mega_video_link", "label": "Panel 2 Link" }
   ],
   "max_blocks": 8,
   "blocks": [
@@ -373,79 +257,27 @@
       "type": "nav_link",
       "name": "Nav Link",
       "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Link Label",
-          "default": "Page",
-          "info": "Text shown in the desktop navigation bar"
-        },
-        {
-          "type": "url",
-          "id": "url",
-          "label": "Link URL"
-        }
+        { "type": "text", "id": "label", "label": "Link Label", "default": "Page" },
+        { "type": "url", "id": "url", "label": "Link URL" }
       ]
     },
     {
       "type": "mega_column",
       "name": "Collection Column",
       "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Column Title",
-          "default": "Summer Essentials"
-        },
-        {
-          "type": "range",
-          "id": "title_font_size",
-          "min": 10,
-          "max": 24,
-          "step": 1,
-          "default": 14,
-          "unit": "px",
-          "label": "Title Font Size"
-        },
-        {
-          "type": "select",
-          "id": "title_font_weight",
-          "label": "Title Font Weight",
-          "options": [
-            { "value": "400", "label": "Regular" },
-            { "value": "500", "label": "Medium" },
-            { "value": "600", "label": "Semi-Bold" },
-            { "value": "700", "label": "Bold" },
-            { "value": "800", "label": "Extra Bold" }
-          ],
-          "default": "700"
-        },
-        {
-          "type": "color",
-          "id": "title_color",
-          "label": "Title Color",
-          "default": "#1a1a1a"
-        },
-        {
-          "type": "header",
-          "content": "Links (leave label blank to hide)"
-        },
-        { "type": "text", "id": "link_1_label", "label": "Link 1 Label", "default": "Product 1" },
-        { "type": "url",  "id": "link_1_url",   "label": "Link 1 URL" },
-        { "type": "text", "id": "link_2_label", "label": "Link 2 Label", "default": "Product 2" },
-        { "type": "url",  "id": "link_2_url",   "label": "Link 2 URL" },
-        { "type": "text", "id": "link_3_label", "label": "Link 3 Label", "default": "Product 3" },
-        { "type": "url",  "id": "link_3_url",   "label": "Link 3 URL" },
-        { "type": "text", "id": "link_4_label", "label": "Link 4 Label" },
-        { "type": "url",  "id": "link_4_url",   "label": "Link 4 URL" },
-        { "type": "text", "id": "link_5_label", "label": "Link 5 Label" },
-        { "type": "url",  "id": "link_5_url",   "label": "Link 5 URL" },
-        { "type": "text", "id": "link_6_label", "label": "Link 6 Label" },
-        { "type": "url",  "id": "link_6_url",   "label": "Link 6 URL" },
-        { "type": "text", "id": "link_7_label", "label": "Link 7 Label" },
-        { "type": "url",  "id": "link_7_url",   "label": "Link 7 URL" },
-        { "type": "text", "id": "link_8_label", "label": "Link 8 Label" },
-        { "type": "url",  "id": "link_8_url",   "label": "Link 8 URL" }
+        { "type": "text", "id": "title", "label": "Column Title", "default": "Summer Essentials" },
+        { "type": "range", "id": "title_font_size", "min": 10, "max": 24, "step": 1, "default": 14, "unit": "px", "label": "Title Font Size" },
+        { "type": "select", "id": "title_font_weight", "label": "Title Font Weight", "options": [{ "value": "400", "label": "Regular" }, { "value": "500", "label": "Medium" }, { "value": "600", "label": "Semi-Bold" }, { "value": "700", "label": "Bold" }, { "value": "800", "label": "Extra Bold" }], "default": "700" },
+        { "type": "color", "id": "title_color", "label": "Title Color", "default": "#1a1a1a" },
+        { "type": "header", "content": "Links" },
+        { "type": "text", "id": "link_1_label", "label": "Link 1 Label", "default": "Product 1" }, { "type": "url", "id": "link_1_url", "label": "Link 1 URL" },
+        { "type": "text", "id": "link_2_label", "label": "Link 2 Label", "default": "Product 2" }, { "type": "url", "id": "link_2_url", "label": "Link 2 URL" },
+        { "type": "text", "id": "link_3_label", "label": "Link 3 Label", "default": "Product 3" }, { "type": "url", "id": "link_3_url", "label": "Link 3 URL" },
+        { "type": "text", "id": "link_4_label", "label": "Link 4 Label" }, { "type": "url", "id": "link_4_url", "label": "Link 4 URL" },
+        { "type": "text", "id": "link_5_label", "label": "Link 5 Label" }, { "type": "url", "id": "link_5_url", "label": "Link 5 URL" },
+        { "type": "text", "id": "link_6_label", "label": "Link 6 Label" }, { "type": "url", "id": "link_6_url", "label": "Link 6 URL" },
+        { "type": "text", "id": "link_7_label", "label": "Link 7 Label" }, { "type": "url", "id": "link_7_url", "label": "Link 7 URL" },
+        { "type": "text", "id": "link_8_label", "label": "Link 8 Label" }, { "type": "url", "id": "link_8_url", "label": "Link 8 URL" }
       ]
     }
   ],
@@ -453,47 +285,11 @@
     {
       "name": "Header",
       "blocks": [
-        {
-          "type": "nav_link",
-          "settings": {
-            "label": "About",
-            "url": "/pages/about"
-          }
-        },
-        {
-          "type": "nav_link",
-          "settings": {
-            "label": "Blogs",
-            "url": "/blogs/news"
-          }
-        },
-        {
-          "type": "mega_column",
-          "settings": {
-            "title": "Summer Essentials",
-            "link_1_label": "Chic Soft Teddy Coat",
-            "link_2_label": "Fitted Sleeveless Shirt",
-            "link_3_label": "Classic Zip Front Shirt"
-          }
-        },
-        {
-          "type": "mega_column",
-          "settings": {
-            "title": "Sportswear",
-            "link_1_label": "Long-Sleeve Sports Tee",
-            "link_2_label": "Polyester Gym Suit",
-            "link_3_label": "Racerback Sports Bra"
-          }
-        },
-        {
-          "type": "mega_column",
-          "settings": {
-            "title": "Winter Wardrobe",
-            "link_1_label": "Oversized Hoodie",
-            "link_2_label": "Warm and Soft Hoodie",
-            "link_3_label": "Winter Hoodie"
-          }
-        }
+        { "type": "nav_link", "settings": { "label": "About", "url": "/pages/about" } },
+        { "type": "nav_link", "settings": { "label": "Blogs", "url": "/blogs/news" } },
+        { "type": "mega_column", "settings": { "title": "Summer Essentials", "link_1_label": "Chic Soft Teddy Coat", "link_2_label": "Fitted Sleeveless Shirt", "link_3_label": "Classic Zip Front Shirt" } },
+        { "type": "mega_column", "settings": { "title": "Sportswear", "link_1_label": "Long-Sleeve Sports Tee", "link_2_label": "Polyester Gym Suit", "link_3_label": "Racerback Sports Bra" } },
+        { "type": "mega_column", "settings": { "title": "Winter Wardrobe", "link_1_label": "Oversized Hoodie", "link_2_label": "Warm and Soft Hoodie", "link_3_label": "Winter Hoodie" } }
       ]
     }
   ]

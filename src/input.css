@@ -1619,19 +1619,40 @@ textarea.ma-form-field {
 /* Mobile header */
 @media (max-width: 767px) {
     header.site-header {
-        padding: 1rem 1.25rem !important;
-        display: grid !important;
-        grid-template-columns: auto 1fr auto;
-        align-items: center;
+        padding: 0 !important;
     }
 
-    header.site-header .header-logo-wrap {
-        justify-self: center;
+    header.site-header > div {
+        padding-top: 0.8rem;
+        padding-bottom: 0.8rem;
     }
+}
 
-    header.site-header .header-right-icons {
-        justify-self: end;
-    }
+/* Mobile menu close button */
+.mob-close-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    cursor: pointer;
+    color: #fff;
+    transition: background 0.2s ease;
+    z-index: 10;
+}
+
+.mob-close-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.mob-close-btn svg {
+    stroke: #fff !important;
 }
 
 /* Hamburger */

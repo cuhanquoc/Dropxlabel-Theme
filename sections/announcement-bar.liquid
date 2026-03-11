@@ -7,7 +7,7 @@
   ─────────────────────────────────────────
 {% endcomment %}
 
-{% if section.settings.show_bar %}
+{% if section.settings.show_bar and request.page_type != 'index' %}
   <div
     class="announcement-bar"
     data-animation="{{ section.settings.animation }}"
