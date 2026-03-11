@@ -87,7 +87,7 @@
             {% if section.settings.deco_img1 != blank %}
               <img src="{{ section.settings.deco_img1 | image_url: width: 300 }}" alt="Deco" loading="lazy" />
             {% else %}
-              <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+              <div class="ta-img-placeholder" style="width:300px;height:400px;max-width:100%;background:#1a1a1a;display:block;"></div>
             {% endif %}
           </a>
 
@@ -96,7 +96,7 @@
             {% if section.settings.deco_img2 != blank %}
               <img src="{{ section.settings.deco_img2 | image_url: width: 300 }}" alt="Deco" loading="lazy" />
             {% else %}
-              <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=300&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+              <div class="ta-img-placeholder" style="width:300px;height:400px;max-width:100%;background:#1a1a1a;display:block;"></div>
             {% endif %}
           </a>
 
@@ -105,7 +105,7 @@
             {% if section.settings.deco_img3 != blank %}
               <img src="{{ section.settings.deco_img3 | image_url: width: 300 }}" alt="Deco" loading="lazy" />
             {% else %}
-              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+              <div class="ta-img-placeholder" style="width:300px;height:400px;max-width:100%;background:#1a1a1a;display:block;"></div>
             {% endif %}
           </a>
 
@@ -114,7 +114,7 @@
             {% if section.settings.deco_img4 != blank %}
               <img src="{{ section.settings.deco_img4 | image_url: width: 300 }}" alt="Deco" loading="lazy" />
             {% else %}
-              <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=300&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+              <div class="ta-img-placeholder" style="width:300px;height:400px;max-width:100%;background:#1a1a1a;display:block;"></div>
             {% endif %}
           </a>
 
@@ -123,7 +123,7 @@
             {% if section.settings.pin_img1 != blank %}
               <img src="{{ section.settings.pin_img1 | image_url: width: 500 }}" alt="{{ section.settings.pin_label1 | default: 'Style' }}" loading="lazy" />
             {% else %}
-              <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+              <div class="ta-img-placeholder" style="width:500px;height:640px;max-width:100%;background:#1a1a1a;display:block;"></div>
             {% endif %}
             {% if section.settings.pin_label1 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label1 }}</div>
@@ -135,7 +135,7 @@
             {% if section.settings.pin_img2 != blank %}
               <img src="{{ section.settings.pin_img2 | image_url: width: 500 }}" alt="{{ section.settings.pin_label2 | default: 'Style' }}" loading="lazy" />
             {% else %}
-              <img src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=500&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+              <div class="ta-img-placeholder" style="width:500px;height:640px;max-width:100%;background:#1a1a1a;display:block;"></div>
             {% endif %}
             {% if section.settings.pin_label2 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label2 }}</div>
@@ -147,7 +147,7 @@
             {% if section.settings.pin_img3 != blank %}
               <img src="{{ section.settings.pin_img3 | image_url: width: 400 }}" alt="{{ section.settings.pin_label3 | default: 'Style' }}" loading="lazy" />
             {% else %}
-              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+              <div class="ta-img-placeholder" style="width:400px;height:520px;max-width:100%;background:#1a1a1a;display:block;"></div>
             {% endif %}
             {% if section.settings.pin_label3 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label3 }}</div>
@@ -159,7 +159,7 @@
             {% if section.settings.pin_img4 != blank %}
               <img src="{{ section.settings.pin_img4 | image_url: width: 500 }}" alt="{{ section.settings.pin_label4 | default: 'Style' }}" loading="lazy" />
             {% else %}
-              <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+              <div class="ta-img-placeholder" style="width:500px;height:640px;max-width:100%;background:#1a1a1a;display:block;"></div>
             {% endif %}
             {% if section.settings.pin_label4 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label4 }}</div>
@@ -171,7 +171,7 @@
             {% if section.settings.pin_img5 != blank %}
               <img src="{{ section.settings.pin_img5 | image_url: width: 400 }}" alt="{{ section.settings.pin_label5 | default: 'Style' }}" loading="lazy" />
             {% else %}
-              <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+              <div class="ta-img-placeholder" style="width:400px;height:520px;max-width:100%;background:#1a1a1a;display:block;"></div>
             {% endif %}
             {% if section.settings.pin_label5 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label5 }}</div>
@@ -183,7 +183,7 @@
             {% if section.settings.pin_img6 != blank %}
               <img src="{{ section.settings.pin_img6 | image_url: width: 400 }}" alt="{{ section.settings.pin_label6 | default: 'Style' }}" loading="lazy" />
             {% else %}
-              <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&q=80&auto=format&fit=crop" alt="Fashion" loading="lazy" />
+              <div class="ta-img-placeholder" style="width:400px;height:520px;max-width:100%;background:#1a1a1a;display:block;"></div>
             {% endif %}
             {% if section.settings.pin_label6 != blank %}
               <div class="ta-collage-label">{{ section.settings.pin_label6 }}</div>
@@ -210,7 +210,7 @@
                   {% if block.settings.image != blank %}
                     <img src="{{ block.settings.image | image_url: width: 300 }}" alt="{{ block.settings.name }}" class="accordion-img" loading="lazy" width="100" height="130" />
                   {% else %}
-                    <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&q=80&auto=format&fit=crop" alt="{{ block.settings.name }}" class="accordion-img" loading="lazy" width="100" height="130" />
+                    <div class="accordion-img" style="width:100px;height:130px;background:#1a1a1a;border-radius:4px;display:block;" aria-hidden="true"></div>
                   {% endif %}
                   <p class="accordion-name">{{ block.settings.name }}</p>
                   <span class="accordion-arrow" aria-hidden="true">

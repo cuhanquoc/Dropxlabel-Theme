@@ -114,7 +114,7 @@
         priceEl.classList.remove('has-sale');
       }
 
-      document.getElementById('qv-stock-text').textContent = available ? '{{ section.settings.stock_text | default: "30 in stock" }}' : 'Out of stock';
+      document.getElementById('qv-stock-text').textContent = available ? '{{ section.settings.stock_text | default: "In stock" }}' : 'Out of stock';
 
       /* Images */
       try { imgs = JSON.parse(btn.getAttribute('data-product-images')); } catch (e) { imgs = []; }
@@ -143,7 +143,7 @@
       try {
         var options = JSON.parse(btn.getAttribute('data-product-options'));
         var variants = JSON.parse(btn.getAttribute('data-product-variants'));
-        allVariants = variants;
+        allVariants = variants;    // assigned to module-scope vars below
         selectedOptions = {};
 
         /* Pre-select first value of each option */
@@ -308,8 +308,8 @@
     }
 
     /* Track selected variant */
-    var selectedOptions = {};
-    var allVariants = [];
+    var selectedOptions = {};  // module-scope — updated in open()
+    var allVariants = [];       // module-scope — updated in open()
 
     function getSelectedVariantId() {
       var opts = Object.values(selectedOptions);
@@ -335,7 +335,7 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items: [{ id: variantId, quantity: qtyVal }] })
       })
-      .then(function(r) { return r.json(); })
+      .then(function(r) { if (!r.ok) return Promise.reject(r); return r.json(); })
       .then(function() {
         cartBtn.textContent = '✓ Added!';
         setTimeout(function() {
@@ -355,7 +355,7 @@
     function buyNow() {
       var variantId = getSelectedVariantId();
       if (!variantId) { alert('Please select options'); return; }
-      window.location.href = '/cart/clear?return_to=/checkout?line_items[][variant_id]=' + variantId + '%26line_items[][quantity]=' + qtyVal;
+      window.location.href = '/cart/' + variantId + ':' + qtyVal + '?action=purchase';
     }
 
     return { open: open, close: close, prevImg: prevImg, nextImg: nextImg, qty: qty, addToCart: addToCart, buyNow: buyNow };
