@@ -15,6 +15,7 @@ class HeroBanner extends HTMLElement {
 
   initAnimations() {
     if (typeof gsap === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const heading = this.querySelector('.hero-headline');
     if (!heading) return;
@@ -149,8 +150,14 @@ document.addEventListener('DOMContentLoaded', function () {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
   gsap.registerPlugin(ScrollTrigger);
 
-  // Respect prefers-reduced-motion: skip all scroll animations
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReduced) {
+    document.querySelectorAll('.hero-line, .about-fade-in, .bsb-card, #bsb-text, #site-footer [data-footer-col], .ft-brand-name, .accordion-item').forEach(function (el) {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    });
+    return;
+  }
 
 
   /* ── Brand Story Bento ── */

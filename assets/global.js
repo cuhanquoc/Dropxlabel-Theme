@@ -51,6 +51,7 @@ window.MobileMenu = (function () {
 (function () {
   if (typeof gsap === 'undefined') return;
   if (!window.matchMedia('(pointer: fine)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var cursor = document.getElementById('custom-cursor');
   if (!cursor) return;
@@ -84,6 +85,7 @@ window.MobileMenu = (function () {
   'use strict';
   if (typeof gsap === 'undefined') return;
   if (!window.matchMedia('(hover: hover)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var PRESETS = {
     soft:   { move: 0.15, enter: 0.35, leave: 0.65 },

@@ -20,12 +20,13 @@
   <div class="mx-auto max-w-screen-xl w-full flex justify-between items-center px-5 md:px-10">
 
   <!-- LEFT: Navigation Links -->
-  <!-- Hamburger Button (mobile only) — links directly to Catalog -->
-  <a href="{{ routes.collections_url }}" class="hamburger-btn" id="hamburger-btn" aria-label="Catalog">
+  <!-- Hamburger Button (mobile only) -->
+  <button type="button" class="hamburger-btn" id="hamburger-btn"
+          aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
-  </a>
+  </button>
 
   <nav class="hidden md:flex items-center gap-8">
     <a href="{{ routes.root_url }}" class="nav-link">Home</a>
@@ -76,22 +77,27 @@
           <a href="{{ section.settings.mega_video_link | default: routes.collections_url }}" class="mega-video-panel">
             {% if section.settings.mega_video != blank %}
               <video
-                src="{{ section.settings.mega_video.sources[1].url }}"
                 autoplay
                 muted
                 loop
                 playsinline
                 preload="metadata"
-              ></video>
+              >
+                {% for source in section.settings.mega_video.sources %}
+                  <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                {% endfor %}
+              </video>
             {% else %}
-              <video
-                src="https://cdn.shopify.com/videos/c/o/v/bf5b2a3f95c84e6fbb94b32d06a85f42.mp4"
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="metadata"
-              ></video>
+              <!-- No video uploaded: render a styled placeholder to avoid external CDN dependency -->
+              <div
+                style="width:100%;height:100%;background:linear-gradient(160deg,#1a1a1a 0%,#2e2e2e 50%,#111 100%);display:flex;align-items:center;justify-content:center;"
+                role="img"
+                aria-label="{{ section.settings.mega_video_label | default: "Men's Fashion" }}"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+              </div>
             {% endif %}
             <div class="mega-img-label">
               <span class="mega-img-label-text">{{ section.settings.mega_video_label | default: "Men's Fashion" }}</span>

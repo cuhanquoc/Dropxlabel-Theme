@@ -66,10 +66,16 @@
       <div class="mc-filter-panel" id="mc-filter-panel">
         <div class="py-5 flex flex-wrap gap-2 items-center">
           <span style="font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); margin-right: 0.5rem;">Sort by</span>
-          <button class="mc-filter-tag active" data-filter>Featured</button>
-          <button class="mc-filter-tag" data-filter>Newest</button>
-          <button class="mc-filter-tag" data-filter>Price: Low to High</button>
-          <button class="mc-filter-tag" data-filter>Price: High to Low</button>
+          {%- assign sort_options = 'manual,Featured|date-descending,Newest|price-ascending,Price: Low to High|price-descending,Price: High to Low|title-ascending,A–Z|title-descending,Z–A' | split: '|' -%}
+          {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+          {%- for opt in sort_options -%}
+            {%- assign opt_parts = opt | split: ',' -%}
+            {%- assign opt_value = opt_parts[0] -%}
+            {%- assign opt_label = opt_parts[1] -%}
+            <a href="{{ collection.url }}?sort_by={{ opt_value }}"
+               class="mc-filter-tag {% if current_sort == opt_value %}active{% endif %}"
+               data-filter>{{ opt_label }}</a>
+          {%- endfor -%}
         </div>
       </div>
 
@@ -293,14 +299,6 @@
       } else {
         grid.classList.add('grid-cols-2', 'md:grid-cols-4');
       }
-    });
-
-    /* ── Filter tag (delegation) ── */
-    document.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-filter]');
-      if (!btn) return;
-      document.querySelectorAll('.mc-filter-tag').forEach(function (t) { t.classList.remove('active'); });
-      btn.classList.add('active');
     });
 
     /* ── Filter panel toggle (delegation) ── */

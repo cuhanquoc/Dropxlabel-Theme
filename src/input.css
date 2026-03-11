@@ -213,8 +213,8 @@ body {
     z-index: 2;
 }
 
-/* ─── Disable scale on mobile (touch / coarse pointer — no hover) ─── */
-@media (hover: none), (pointer: coarse) {
+/* ─── Disable scale on mobile (touch has no hover) ─── */
+@media (hover: none) {
 
     .joly-btn:hover,
     .bsb-cta-btn:hover,
@@ -378,7 +378,6 @@ body {
     color: #0a0a0a;
     text-align: center;
     max-width: 900px;
-    will-change: transform, opacity;
 }
 
 .sr-sub-light {
@@ -388,7 +387,6 @@ body {
     text-transform: uppercase;
     color: rgba(10, 10, 10, 0.5);
     margin-top: 1.5rem;
-    will-change: transform, opacity;
 }
 
 .sr-dark-overlay {
@@ -414,7 +412,6 @@ body {
     color: #ffffff;
     text-align: center;
     max-width: 900px;
-    will-change: transform, opacity;
 }
 
 .sr-sub-dark {
@@ -424,14 +421,12 @@ body {
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.45);
     margin-top: 1.5rem;
-    will-change: transform, opacity;
 }
 
 .sr-accent-line {
     width: 48px;
     height: 1px;
     margin-bottom: 2rem;
-    will-change: transform, opacity;
 }
 
 .sr-accent-line--light {
@@ -1023,6 +1018,12 @@ body {
     letter-spacing: 0.02em;
 }
 
+.ma-form-field:focus-visible {
+    border-bottom-color: var(--color-text);
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+}
+
 .ma-form-field::placeholder {
     color: #9ca3af;
     letter-spacing: 0.02em;
@@ -1272,7 +1273,7 @@ textarea.ma-form-field {
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.14);
     opacity: 0;
     transform: translateY(50px);
-    will-change: transform, opacity;
+    /* will-change set by GSAP at animation time, cleared on complete */
 }
 
 .at-float-card-tag {
@@ -2677,38 +2678,17 @@ textarea.ma-form-field {
     width: auto;
 }
 
-/* ─── Main Article — Tag Pills ─── */
-.ma-tag-pill {
-    font-family: var(--font-body);
-    font-size: 0.62rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.35rem 0.9rem;
-    border: 1px solid var(--color-border);
-    border-radius: 9999px;
-    color: var(--color-muted);
-    text-decoration: none;
-    transition: border-color 200ms, color 200ms;
-}
-
-.ma-tag-pill:hover {
-    color: var(--color-text);
-    border-color: var(--color-text);
-}
-
 /* ═══════════════════════════════════════════════════════
-   ACCESSIBILITY — Reduced Motion
-   Disable non-essential animations for users who prefer
-   reduced motion (vestibular disorders, epilepsy, etc.)
+   REDUCED MOTION — tắt tất cả animation cho người dùng
+   đã bật "Reduce Motion" trong OS Accessibility settings
    ═══════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
-    /* ── Ken Burns hero image ── */
+    /* Tắt Ken Burns + hero text entrances */
     .hero-image,
     .hero-video {
         animation: none;
     }
 
-    /* ── Hero text entrance animations ── */
     .hero-eyebrow,
     .hero-copy,
     .hero-cta {
@@ -2717,24 +2697,64 @@ textarea.ma-form-field {
         transform: none;
     }
 
-    /* ── Marquee: freeze in place ── */
-    .marquee-track {
+    /* Tắt marquee scrolling */
+    .marquee-track,
+    .mt-track,
+    .ft-marquee-track,
+    .ab-marquee-track {
+        animation: none;
+        transform: none;
+    }
+
+    /* Tắt collage floating animations */
+    .ta-collage-item--1,
+    .ta-collage-item--2,
+    .ta-collage-item--3,
+    .ta-collage-item--4,
+    .ta-collage-item--5,
+    .ta-collage-item--6,
+    .ta-deco--l1,
+    .ta-deco--l2,
+    .ta-deco--r1,
+    .ta-deco--r2 {
         animation: none;
     }
 
-    /* ── Character-morph: show first word, skip cycle ── */
-    .character-morph-word {
+    /* Tắt dynamic island pulse + dot blink */
+    .ta-dynamic-island {
         animation: none;
     }
 
-    /* ── Joly button transform transitions ── */
-    .joly-btn,
-    .bsb-cta-btn,
-    .bsb-cta-icon,
-    .bsb-card-link,
-    .hero-cta,
-    [data-joly-btn] {
+    .ta-island-dot {
+        animation: none;
+    }
+
+    /* Tắt GSAP will-change stubs — đảm bảo element visible */
+    .hero-line {
+        transform: none;
+        opacity: 1;
+    }
+
+    .at-float-card {
+        opacity: 1;
+        transform: none;
+    }
+
+    /* Tắt transition trên mobile menu overlay + nav links */
+    .mobile-menu-overlay,
+    .mobile-nav-link,
+    .mobile-menu-icons,
+    .mobile-menu-divider {
         transition: none;
-        will-change: auto;
+    }
+
+    /* Giảm tất cả transition duration còn 0 */
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
     }
 }

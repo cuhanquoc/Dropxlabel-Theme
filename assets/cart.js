@@ -9,13 +9,15 @@
     const OVERLAY = document.getElementById('cart-overlay');
     let   isOpen  = false;
 
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     function open() {
       if (isOpen) return;
       isOpen = true;
       document.body.style.overflow = 'hidden';
       OVERLAY.classList.add('open');
 
-      if (typeof gsap !== 'undefined') {
+      if (typeof gsap !== 'undefined' && !reducedMotion) {
         gsap.fromTo(DRAWER,
           { x: '100%' },
           { x: '0%', duration: 0.6, ease: 'power4.out' }
@@ -31,7 +33,7 @@
       document.body.style.overflow = '';
       OVERLAY.classList.remove('open');
 
-      if (typeof gsap !== 'undefined') {
+      if (typeof gsap !== 'undefined' && !reducedMotion) {
         gsap.to(DRAWER, {
           x: '100%',
           duration: 0.45,
@@ -48,45 +50,87 @@
 
     /* Remove item via Shopify AJAX Cart API */
     function removeItem(key) {
+      setLoading(true);
       fetch('/cart/change.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: key, quantity: 0 })
       })
       .then(r => r.json())
-      .then(refreshDrawer)
-      .catch(console.error);
+      .then(() => refreshDrawerSection())
+      .catch(() => setLoading(false));
     }
 
     /* Update quantity via AJAX */
     function updateQty(key, qty) {
       if (qty < 0) return;
+      setLoading(true);
       fetch('/cart/change.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: key, quantity: qty })
       })
       .then(r => r.json())
-      .then(refreshDrawer)
-      .catch(console.error);
+      .then(() => refreshDrawerSection())
+      .catch(() => setLoading(false));
     }
 
-    /* Refresh visible subtotal + count without page reload */
-    function refreshDrawer(cart) {
-      const subtotalEl = document.getElementById('cd-subtotal');
-      const countEl    = document.getElementById('cd-count');
+    /* Loading state: dim items area during AJAX */
+    function setLoading(on) {
+      const wrap = document.getElementById('cd-items-wrap');
+      if (wrap) wrap.style.opacity = on ? '0.5' : '1';
+    }
 
-      if (subtotalEl) {
-        subtotalEl.textContent = (cart.total_price / 100).toLocaleString('vi-VN') + '₫';
-      }
-      if (countEl) {
-        const n = cart.item_count;
-        countEl.textContent = n + (n === 1 ? ' item' : ' items');
-      }
+    /* Re-render cart drawer HTML via Shopify Section Rendering API.
+       No full page reload — only the cart-drawer snippet content updates. */
+    function refreshDrawerSection() {
+      fetch('/?sections=cart-drawer')
+        .then(r => r.json())
+        .then(data => {
+          const html = data['cart-drawer'];
+          if (!html) { setLoading(false); return; }
 
-      /* Full re-render via page reload on item removal for simplicity;
-         replace with Liquid template fetch for SPA behaviour */
-      window.location.reload();
+          /* Parse the returned section HTML */
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+
+          /* Replace items list */
+          const newItems = doc.getElementById('cd-items-wrap');
+          const curItems = document.getElementById('cd-items-wrap');
+          if (newItems && curItems) curItems.replaceWith(newItems);
+
+          /* Replace footer (subtotal + checkout) */
+          const newFooter = doc.querySelector('.cd-footer');
+          const curFooter = document.querySelector('#cart-drawer .cd-footer');
+          if (newFooter && curFooter) curFooter.replaceWith(newFooter);
+          else if (newFooter && !curFooter) document.getElementById('cart-drawer').appendChild(newFooter);
+          else if (!newFooter && curFooter) curFooter.remove();
+
+          /* Update header count */
+          const newCount = doc.getElementById('cd-count');
+          const curCount = document.getElementById('cd-count');
+          if (newCount && curCount) curCount.textContent = newCount.textContent;
+
+          /* Sync header cart badge */
+          const cartCount = document.querySelector('.cart-count');
+          const mobBadge  = document.getElementById('mob-nav-badge');
+          fetch('/cart.js')
+            .then(r => r.json())
+            .then(cart => {
+              const n = cart.item_count;
+              if (cartCount) {
+                cartCount.textContent = n;
+                cartCount.style.display = n > 0 ? '' : 'none';
+              }
+              if (mobBadge) {
+                mobBadge.textContent = n;
+                mobBadge.style.display = n > 0 ? '' : 'none';
+              }
+            });
+
+          setLoading(false);
+        })
+        .catch(() => setLoading(false));
     }
 
     /* ESC key support */

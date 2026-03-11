@@ -30,10 +30,11 @@
           <input type="email"
                  name="contact[email]"
                  placeholder="Email"
+                 autocomplete="email"
                  required
-                 class="flex-1 bg-transparent px-5 py-3 text-[0.85rem] text-white placeholder-white/30 outline-none font-body">
+                 class="flex-1 bg-transparent px-5 py-3 text-[0.85rem] text-white placeholder-white/30 font-body focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/50 focus:outline-none rounded-l-full">
           <button type="submit"
-                  class="bg-white text-[#1a1a1a] font-body font-semibold text-[0.82rem] tracking-[0.02em] px-5 py-2.5 rounded-full mr-1.5 transition-all duration-300 hover:bg-white/90 active:scale-95 shrink-0">
+                  class="bg-white text-[#1a1a1a] font-body font-semibold text-[0.82rem] tracking-[0.02em] px-5 py-2.5 rounded-full mr-1.5 transition-[background-color,opacity,transform] duration-300 hover:bg-white/90 active:scale-95 shrink-0">
             Subscribe
           </button>
         </form>
@@ -294,6 +295,70 @@
           </div>
 
         {%- endif -%}
+
+        <!-- ── Follow us on (Col 4 / Social) ── -->
+        <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
+          <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
+                  aria-expanded="false">
+            <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
+              {{ section.settings.col4_title | default: 'Follow us on' }}
+            </span>
+            <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
+              <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
+              <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
+            </span>
+          </button>
+          <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
+               style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
+            <ul class="pb-5 md:pb-0 flex flex-col gap-3">
+              {%- if section.settings.social_instagram != blank -%}
+                <li>
+                  <a href="{{ section.settings.social_instagram }}" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                    Instagram
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if section.settings.social_twitter != blank -%}
+                <li>
+                  <a href="{{ section.settings.social_twitter }}" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                    X (Twitter)
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if section.settings.social_youtube != blank -%}
+                <li>
+                  <a href="{{ section.settings.social_youtube }}" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                    YouTube
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if section.settings.social_tiktok != blank -%}
+                <li>
+                  <a href="{{ section.settings.social_tiktok }}" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                    TikTok
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+              {%- if section.settings.social_facebook != blank -%}
+                <li>
+                  <a href="{{ section.settings.social_facebook }}" target="_blank" rel="noopener"
+                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                    Facebook
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                  </a>
+                </li>
+              {%- endif -%}
+            </ul>
+          </div>
+        </div>
 
       </div>
     </div>

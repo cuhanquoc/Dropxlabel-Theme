@@ -122,16 +122,26 @@
       galleryImgs.forEach(function (el) { el.remove(); });
       thumbsWrap.innerHTML = '';
 
+      var productTitle = document.getElementById('qv-title').textContent || 'Product';
       imgs.forEach(function (src, i) {
         var img = document.createElement('img');
         img.src = src;
+        img.alt = productTitle + (i > 0 ? ' — view ' + (i + 1) : '');
+        img.width = 600;
+        img.height = 800;
         img.className = 'qv-main-img' + (i === 0 ? ' is-active' : '');
-        img.loading = 'lazy';
+        img.loading = i === 0 ? 'eager' : 'lazy';
         gallery.insertBefore(img, thumbsWrap);
 
         var thumb = document.createElement('span');
         thumb.className = 'qv-thumb' + (i === 0 ? ' is-active' : '');
-        thumb.innerHTML = '<img src="' + src + '" loading="lazy" />';
+        var thumbImg = document.createElement('img');
+        thumbImg.src = src;
+        thumbImg.alt = productTitle + ' — thumbnail ' + (i + 1);
+        thumbImg.width = 80;
+        thumbImg.height = 107;
+        thumbImg.loading = 'lazy';
+        thumb.appendChild(thumbImg);
         thumb.onclick = function () { goTo(i); };
         thumbsWrap.appendChild(thumb);
       });

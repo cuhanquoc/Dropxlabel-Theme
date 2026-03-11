@@ -1,1 +1,157 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Dropxlabel Theme",
+    "theme_version": "1.0.0",
+    "theme_author": "Dropxlabel",
+    "theme_documentation_url": "https://github.com/cuhanquoc/Dropxlabel-Theme",
+    "theme_support_url": "https://github.com/cuhanquoc/Dropxlabel-Theme/issues"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand Colors"
+      },
+      {
+        "type": "color",
+        "id": "colors_background",
+        "label": "Background",
+        "default": "#F9F8F6",
+        "info": "Page background — warm white (Quiet Luxury)"
+      },
+      {
+        "type": "color",
+        "id": "colors_text",
+        "label": "Body Text",
+        "default": "#222222"
+      },
+      {
+        "type": "color",
+        "id": "colors_accent",
+        "label": "Accent (Gold)",
+        "default": "#C5A880",
+        "info": "Primary accent — buttons, links, highlights"
+      },
+      {
+        "type": "color",
+        "id": "colors_muted",
+        "label": "Muted Text",
+        "default": "#8A8A8A"
+      },
+      {
+        "type": "color",
+        "id": "colors_surface",
+        "label": "Surface / Card Background",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "colors_border",
+        "label": "Border",
+        "default": "#E8E5DF"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Fonts"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Heading Font",
+        "default": "playfair_display_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body Font",
+        "default": "inter_n4"
+      },
+      {
+        "type": "range",
+        "id": "type_base_size",
+        "label": "Base Font Size",
+        "min": 14,
+        "max": 18,
+        "step": 1,
+        "default": 16,
+        "unit": "px"
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social Links"
+      },
+      {
+        "type": "url",
+        "id": "social_instagram_url",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok_url",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_url",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "url",
+        "id": "social_twitter_url",
+        "label": "X (Twitter) URL"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest_url",
+        "label": "Pinterest URL"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_url",
+        "label": "YouTube URL"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon Image",
+        "info": "16×16px or 32×32px .ico / .png"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Cart Behaviour"
+      },
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart Type",
+        "options": [
+          { "value": "drawer", "label": "Slide-in Drawer (default)" },
+          { "value": "page", "label": "Cart Page" }
+        ],
+        "default": "drawer"
+      }
+    ]
+  }
+]

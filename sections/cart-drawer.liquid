@@ -1,0 +1,19 @@
+{% comment %}
+  ─────────────────────────────────────────
+  CART DRAWER SECTION WRAPPER
+  Exists so Shopify Section Rendering API can serve:
+    fetch('/?sections=cart-drawer')
+  The actual markup lives in snippets/cart-drawer.liquid.
+  In layout/theme.liquid use:
+    {% section 'cart-drawer' %}
+  ─────────────────────────────────────────
+{% endcomment %}
+
+{% render 'cart-drawer' %}
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "tag": "div"
+}
+{% endschema %}
