@@ -8,6 +8,9 @@
 
 <featured-collection class="block relative w-full overflow-hidden bg-white">
 
+  <!-- ── Firework Canvas (triggered on scroll) ── -->
+  <canvas id="fc-fireworks" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10;"></canvas>
+
   <!-- ── Section Header ── -->
   <div class="pt-14 pb-6 px-5 md:px-10 text-center" style="max-width: 100%; overflow: hidden;">
     <h2
@@ -994,6 +997,77 @@
   }
 
   customElements.define('featured-collection', FeaturedCollection);
+})();
+
+/* ── Firework burst on scroll into view ── */
+(function() {
+  var canvas = document.getElementById('fc-fireworks');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var fired = false;
+  var COLORS = ['#C5A880','#E8C97E','#F5E6CC','#FFD700','#FFF8E1','#D4AF37','#E6BE8A'];
+
+  function resize() {
+    var section = canvas.closest('featured-collection');
+    if (!section) return;
+    canvas.width = section.offsetWidth;
+    canvas.height = section.offsetHeight;
+  }
+
+  function Particle(x, y) {
+    this.x = x; this.y = y;
+    this.vx = (Math.random() - 0.5) * 8;
+    this.vy = -Math.random() * 10 - 4;
+    this.gravity = 0.18;
+    this.alpha = 1;
+    this.decay = 0.012 + Math.random() * 0.015;
+    this.size = 2 + Math.random() * 3;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+  }
+
+  function burst(x, y, count) {
+    for (var i = 0; i < count; i++) particles.push(new Particle(x, y));
+  }
+
+  function fire() {
+    if (fired) return;
+    fired = true;
+    resize();
+    var h = canvas.height * 0.35;
+    burst(0, h, 35); burst(canvas.width, h, 35);
+    setTimeout(function() { burst(0, h * 0.6, 25); burst(canvas.width, h * 0.6, 25); }, 200);
+    setTimeout(function() { burst(0, h * 1.1, 20); burst(canvas.width, h * 1.1, 20); }, 400);
+    animate();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var alive = false;
+    for (var i = particles.length - 1; i >= 0; i--) {
+      var p = particles[i];
+      p.vy += p.gravity; p.x += p.vx; p.y += p.vy; p.alpha -= p.decay;
+      if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+      alive = true;
+      ctx.globalAlpha = p.alpha;
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    if (alive) requestAnimationFrame(animate);
+  }
+
+  if (typeof IntersectionObserver !== 'undefined') {
+    var section = canvas.closest('featured-collection');
+    if (section) {
+      new IntersectionObserver(function(entries, obs) {
+        if (entries[0].isIntersecting) { fire(); obs.disconnect(); }
+      }, { threshold: 0.25 }).observe(section);
+    }
+  }
+  window.addEventListener('resize', resize);
 })();
 </script>
 

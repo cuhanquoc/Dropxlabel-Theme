@@ -12,7 +12,7 @@ body {
    HERO BANNER — Keyframes & Component Styles
    ═══════════════════════════════════════════════════════ */
 
-/* ─── Ken Burns Effect ─── */
+/* ─── Ken Burns Effect (no blur — instant sharp) ─── */
 @keyframes kenBurns {
     0% {
         transform: scale(1) translateX(0) translateY(0);
