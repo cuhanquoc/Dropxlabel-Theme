@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "sections": {
@@ -113,34 +122,34 @@
           "marquee_heading": "Your Favorite Styles at Unmissable Prices",
           "marquee_speed": 20,
           "newsletter_text": "Whether you're looking for chic essentials, statement outfits, or casual staples, we've got something to suit every style. Browse our fresh arrivals and update your wardrobe with the season's hottest looks today!",
-          "col2_title": "Quick links",
-          "c2_link1_label": "HOME",
-          "c2_link1_url": "shopify://blogs/news/more-than-just-a-t-shirt",
-          "c2_link2_label": "SEARCH",
-          "c2_link2_url": "shopify://blogs/news/more-than-just-a-t-shirt",
-          "c2_link3_label": "COLLECTIONS",
-          "c2_link3_url": "shopify://policies/shipping-policy",
-          "c2_link4_label": "ABOUT US",
-          "c2_link4_url": "shopify://policies/privacy-policy",
-          "c2_link5_label": "NEWS",
-          "c2_link5_url": "/blogs/news",
-          "c2_link6_label": "KHONG CO",
-          "c2_link6_url": "shopify://blogs/news/more-than-just-a-t-shirt",
-          "col3_title": "Support",
-          "c3_link1_label": "PRIVACY POLICY",
-          "c3_link1_url": "/policies/privacy-policy",
-          "c3_link2_label": "REFUND POLICY",
-          "c3_link2_url": "/policies/refund-policy",
-          "c3_link3_label": "SHIPPING POLICY",
-          "c3_link3_url": "/policies/shipping-policy",
-          "c3_link4_label": "CONTACT",
+          "col2_title": "FAQ",
+          "c2_link1_label": "",
+          "c2_link1_url": "",
+          "c2_link2_label": "",
+          "c2_link2_url": "",
+          "c2_link3_label": "",
+          "c2_link3_url": "",
+          "c2_link4_label": "",
+          "c2_link4_url": "",
+          "c2_link5_label": "",
+          "c2_link5_url": "",
+          "c2_link6_label": "",
+          "c2_link6_url": "",
+          "col3_title": "About Us",
+          "c3_link1_label": "REFUND POLICY",
+          "c3_link1_url": "shopify://policies/refund-policy",
+          "c3_link2_label": "SHIPPING POLICY",
+          "c3_link2_url": "shopify://policies/shipping-policy",
+          "c3_link3_label": "TERM OF SERVICE",
+          "c3_link3_url": "shopify://policies/terms-of-service",
+          "c3_link4_label": "",
           "c3_link4_url": "/pages/contact",
-          "c3_link5_label": "FAQ",
-          "c3_link5_url": "/pages/faq",
-          "c3_link6_label": "Chua co",
+          "c3_link5_label": "",
+          "c3_link5_url": "",
+          "c3_link6_label": "",
           "c3_link6_url": "shopify://policies/shipping-policy",
-          "col4_title": "Shop",
-          "social_facebook": "",
+          "col4_title": "Social Media",
+          "social_facebook": "https://facebook.com",
           "social_twitter": "https://x.com",
           "social_instagram": "https://instagram.com",
           "social_youtube": "https://youtube.com",
