@@ -54,6 +54,7 @@
         "story_card_cRWndc": {
           "type": "story_card",
           "settings": {
+            "image": "shopify://shop_images/hf_20260311_095352_987f3c9a-85c6-46e5-8755-597eaa8ea1f2.jpg",
             "tag_text": "Pastoral in 90s",
             "title": "Cottage core",
             "button_text": "SHOP NOW",
@@ -63,6 +64,7 @@
         "story_card_8JMVJR": {
           "type": "story_card",
           "settings": {
+            "image": "shopify://shop_images/hf_20260311_100419_65d7a47c-20b0-4b7f-aebd-031ab6808911.jpg",
             "tag_text": "Polish with clean",
             "title": "Elegant Lady",
             "button_text": "SHOP NOW",
@@ -72,6 +74,7 @@
         "story_card_FUXThE": {
           "type": "story_card",
           "settings": {
+            "image": "shopify://shop_images/hf_20260311_101414_57bdb0f5-94d3-4716-b7e1-3ae2f957ab55.png",
             "tag_text": "Quiet luxury",
             "title": "Old Money Vibes",
             "button_text": "SHOP NOW",
