@@ -17,7 +17,7 @@
         "headline": "Small Pieces Of Art You Can Wear",
         "subheadline": "Summer is waitting you",
         "cta_text": "Explore Now",
-        "cta_url": "shopify://collections/short",
+        "cta_url": "shopify://products/aurelie-dress™-floral-printed-dress",
         "marquee_text": "ORIGINAL",
         "marquee_color": "#ffffff99",
         "marquee_speed": 19,
@@ -51,15 +51,6 @@
     "brand-story-bento": {
       "type": "brand-story-bento",
       "blocks": {
-        "story_card_qPRTkN": {
-          "type": "story_card",
-          "settings": {
-            "tag_text": "Enchanting",
-            "title": "Séxy",
-            "button_text": "SHOP NOW",
-            "link_url": ""
-          }
-        },
         "story_card_cRWndc": {
           "type": "story_card",
           "settings": {
@@ -99,14 +90,24 @@
             "button_text": "SHOP NOW",
             "link_url": "shopify://collections/minimalism"
           }
+        },
+        "story_card_qPRTkN": {
+          "type": "story_card",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260311_110313_725fd38d-030b-4e1d-bdc8-ac664c70b866.jpg",
+            "tag_text": "Enchanting",
+            "title": "Séxy",
+            "button_text": "SHOP NOW",
+            "link_url": "shopify://collections/sexy"
+          }
         }
       },
       "block_order": [
-        "story_card_qPRTkN",
         "story_card_cRWndc",
         "story_card_8JMVJR",
         "story_card_FUXThE",
-        "story_card_fGjqjM"
+        "story_card_fGjqjM",
+        "story_card_qPRTkN"
       ],
       "settings": {
         "bg_image": "{{ metaobjects[\"shopify--color-pattern\"].asphalt.image.value }}",
