@@ -465,11 +465,11 @@
             <div style="display: flex; flex-direction: column; gap: 8px;">
               <div style="display: flex; items-baseline: center; gap: 12px; font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 700;">
                 <span class="product-price" id="product-price">
-                  {{ product.selected_or_first_available_variant.price | money }} {% if shop.currency %}{{ shop.currency }}{% endif %}
+                  {{ product.selected_or_first_available_variant.price | money_with_currency }}
                 </span>
                 {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
                   <span class="product-price-compare" style="text-decoration: line-through; color: var(--color-muted); font-weight: 400; font-size: 1.2rem;">
-                    {{ product.selected_or_first_available_variant.compare_at_price | money }}
+                    {{ product.selected_or_first_available_variant.compare_at_price | money_with_currency }}
                   </span>
                 {% endif %}
               </div>
@@ -547,13 +547,7 @@
                         </button>
                       {% endfor %}
                     </div>
-                    <style>
-                      /* Force active size state */
-                      .size-btn.active {
-                        background-color: #111 !important;
-                        color: #fff !important;
-                      }
-                    </style>
+                    {{- '' -}}
                   {% endif %}
 
                 </div>
@@ -577,7 +571,8 @@
                 name="quantity"
                 value="1"
                 min="1"
-                style="flex: 1; min-width: 0; text-align: center; border: none; font-family: var(--font-body); font-size: 1.1rem; color: var(--color-text); background: transparent; outline: none; appearance: textfield;"
+                max="99"
+                style="flex: 1; min-width: 0; text-align: center; border: none; font-family: var(--font-body); font-size: 1.1rem; color: var(--color-text); background: transparent; outline: none; appearance: textfield; -moz-appearance: textfield;"
               />
               <button
                 type="button"
@@ -606,9 +601,10 @@
           </div>
 
           <!-- ── Pickup Availability ── -->
+          {% if section.settings.show_pickup %}
           <div style="padding: 0 1rem; width: 100%; box-sizing: border-box; margin-bottom: 2rem;">
             <div style="background-color: #eefbf1; border: 1px solid #d4ebd9; border-radius: 6px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-top: 2px;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-top: 2px;" aria-hidden="true">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                 <circle cx="12" cy="10" r="3" />
               </svg>
@@ -623,6 +619,7 @@
               </div>
             </div>
           </div>
+          {% endif %}
 
           <!-- ── Trust Badges ── -->
           <div style="display: flex; gap: 1rem; justify-content: space-between; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1.5rem 1rem; margin-bottom: 3rem; width: 100%; box-sizing: border-box;">
@@ -868,6 +865,19 @@
     updateSelectedVariant();
   }
 
+  /* ── Helper: format Shopify price (in cents) to display string ── */
+  function formatMoney(cents) {
+    /* Mirror Shopify money_format template variable */
+    const moneyFmt = {{ shop.money_format | json }};
+    if (moneyFmt) {
+      return moneyFmt
+        .replace(/\{\{amount\}\}/g,                 (cents / 100).toFixed(2))
+        .replace(/\{\{amount_no_decimals\}\}/g,     Math.round(cents / 100).toString())
+        .replace(/\{\{amount_with_comma_separator\}\}/g, (cents / 100).toFixed(2).replace('.', ','));
+    }
+    return (cents / 100).toFixed(2) + ' {{ shop.currency }}';
+  }
+
   function updateSelectedVariant() {
     /* Collect current selections */
     const selected = {};
@@ -885,14 +895,14 @@
     if (match) {
       document.getElementById('selected-variant-id').value = match.id;
       
-      /* Update price */
+      /* ── Update price ── */
       const priceEl = document.getElementById('product-price');
-      if (priceEl) priceEl.innerHTML = (match.price / 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' {{ shop.currency }}';
+      if (priceEl) priceEl.textContent = formatMoney(match.price);
       
       /* Update compare at price if exists */
       const compareEl = document.querySelector('.product-price-compare');
       if (compareEl && match.compare_at_price) {
-        compareEl.innerHTML = (match.compare_at_price / 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' {{ shop.currency }}';
+        compareEl.textContent = formatMoney(match.compare_at_price);
         compareEl.style.display = 'inline';
       } else if (compareEl) {
         compareEl.style.display = 'none';
@@ -909,12 +919,15 @@
       const stockEl = document.getElementById('variant-stock-display');
       const stockIcon = document.getElementById('variant-stock-icon');
       if (stockEl && stockIcon) {
-        if (match.inventory_management && match.inventory_quantity > 0) {
-          stockEl.textContent = match.inventory_quantity + ' in stock';
+        const isTracked = match.inventory_management === 'shopify';
+        const qty = match.inventory_quantity;
+        if (isTracked && qty > 0) {
+          stockEl.textContent = qty + ' in stock';
           stockIcon.setAttribute('fill', '#00a82d');
           stockIcon.style.color = '#00a82d';
           stockEl.style.color = '#111';
         } else if (match.available) {
+          /* Available but not tracked — show generic "In stock" */
           stockEl.textContent = 'In stock';
           stockIcon.setAttribute('fill', '#00a82d');
           stockIcon.style.color = '#00a82d';
@@ -1070,17 +1083,17 @@
     /* Option buttons (swatches & text) */
     const optBtn = e.target.closest('[data-option-position][data-option-value]');
     if (optBtn) {
-      const optionName = optBtn.getAttribute('aria-label')
-        ? null
-        : null; /* resolved via dataset below */
-      const pos   = optBtn.dataset.optionPosition;
       const value = optBtn.dataset.optionValue;
-      /* derive option name from the nearest radiogroup legend / label span */
+      /* Derive option name from the nearest radiogroup's label element (id starts with "selected-") */
       const group = optBtn.closest('[role="radiogroup"]');
       let oName = '';
       if (group) {
-        const nameEl = group.parentElement.querySelector('[id^="selected-"]');
-        if (nameEl) oName = nameEl.id.replace('selected-', '').replace(/-/g, ' ');
+        /* The label span is a sibling in the parent container, not inside radiogroup */
+        const container = group.closest('.mb-7');
+        if (container) {
+          const nameEl = container.querySelector('[id^="selected-"]');
+          if (nameEl) oName = nameEl.id.replace('selected-', '').replace(/-/g, ' ');
+        }
       }
       selectOption(optBtn, oName, value);
       return;
@@ -1180,6 +1193,12 @@
       "id": "size_chart_text",
       "label": "Size Chart Content",
       "default": "<p>S (Chest: 36\", Length: 28\")</p><p>M (Chest: 38\", Length: 29\")</p><p>L (Chest: 40\", Length: 30\")</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pickup",
+      "label": "Show Pickup Availability",
+      "default": true
     },
     {
       "type": "text",
