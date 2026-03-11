@@ -12,7 +12,7 @@
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
-        "background_image": "shopify://shop_images/hf_20260311_063831_a3ba6aeb-254b-4237-b118-da4b74340486.png",
+        "background_video": "shopify://files/videos/hf_20260311_073759_4f7a9f9f-0d9a-4b40-9272-79cfef9c6dff.mp4",
         "eyebrow_text": "buy 2 get 3",
         "headline": "Small Pieces Of Art You Can Wear",
         "subheadline": "Summer is waitting you",
@@ -74,7 +74,7 @@
         "story_card_FUXThE": {
           "type": "story_card",
           "settings": {
-            "image": "shopify://shop_images/hf_20260311_101414_57bdb0f5-94d3-4716-b7e1-3ae2f957ab55.png",
+            "image": "shopify://shop_images/hf_20260311_101944_0c73bec8-cd9a-4f47-9eec-2447338c164b.png",
             "tag_text": "Quiet luxury",
             "title": "Old Money Vibes",
             "button_text": "SHOP NOW",
