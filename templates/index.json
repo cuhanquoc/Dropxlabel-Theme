@@ -28,8 +28,8 @@
       "type": "featured-collection",
       "settings": {
         "heading": "Trending Products",
-        "heading_color": "#0a0a0a",
-        "heading_size": "clamp(4rem,16vw,11rem)",
+        "heading_color": "#2e2d2d",
+        "heading_size": "clamp(2.8rem,11vw,7.5rem)",
         "product_list": [
           "esme-bikini™-tie-side-triangle-bikini",
           "isolde-bikini™-metal-decor-bikini",
