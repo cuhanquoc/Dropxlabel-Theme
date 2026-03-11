@@ -154,7 +154,7 @@
       <!-- Copy link -->
       <button
         class="ma-share-btn"
-        onclick="navigator.clipboard.writeText(window.location.href);this.textContent='✓ Copied!';"
+        data-copy-link
         aria-label="Copy link"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -327,5 +327,17 @@
       });
     });
 
+  });
+
+  /* ─────────────────────────────────────────────────────
+     Copy-link button delegation
+  ───────────────────────────────────────────────────── */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-copy-link]');
+    if (!btn) return;
+    navigator.clipboard.writeText(window.location.href).then(function () {
+      btn.textContent = '✓ Copied!';
+      setTimeout(function () { btn.textContent = 'Copy link'; }, 2000);
+    });
   });
 </script>

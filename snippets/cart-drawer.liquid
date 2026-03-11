@@ -331,7 +331,7 @@
 </style>
 
 <!-- ── Overlay ── -->
-<div id="cart-overlay" role="dialog" aria-modal="true" aria-label="Shopping Bag" onclick="CartDrawer.close()"></div>
+<div id="cart-overlay" role="dialog" aria-modal="true" aria-label="Shopping Bag" data-cd-overlay></div>
 
 <!-- ── Drawer Panel ── -->
 <div id="cart-drawer">
@@ -344,7 +344,7 @@
         {{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}
       </p>
     </div>
-    <button class="cd-close-btn" onclick="CartDrawer.close()" aria-label="Close shopping bag">
+    <button class="cd-close-btn" data-cd-close aria-label="Close shopping bag">
       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M18 6 6 18M6 6l12 12"/>
       </svg>
@@ -392,13 +392,17 @@
                 <button
                   class="cd-qty-btn"
                   aria-label="Decrease quantity"
-                  onclick="CartDrawer.updateQty('{{ item.key }}', {{ item.quantity | minus: 1 }})"
+                  data-cd-qty
+                  data-key="{{ item.key }}"
+                  data-qty="{{ item.quantity | minus: 1 }}"
                 >−</button>
                 <span class="cd-qty-val">{{ item.quantity }}</span>
                 <button
                   class="cd-qty-btn"
                   aria-label="Increase quantity"
-                  onclick="CartDrawer.updateQty('{{ item.key }}', {{ item.quantity | plus: 1 }})"
+                  data-cd-qty
+                  data-key="{{ item.key }}"
+                  data-qty="{{ item.quantity | plus: 1 }}"
                 >+</button>
               </div>
 
@@ -410,7 +414,8 @@
           <button
             class="cd-remove-btn"
             aria-label="Remove {{ item.title | escape }}"
-            onclick="CartDrawer.removeItem('{{ item.key }}')"
+            data-cd-remove
+            data-key="{{ item.key }}"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M18 6 6 18M6 6l12 12"/>
@@ -456,7 +461,7 @@
         Checkout
       </a>
 
-      <button class="btn-continue" onclick="CartDrawer.close()">Continue Shopping</button>
+      <button class="btn-continue" data-cd-close>Continue Shopping</button>
 
     </div>
   {% endif %}

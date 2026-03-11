@@ -62,10 +62,10 @@
       <div class="mc-filter-panel" id="mc-filter-panel">
         <div class="py-5 flex flex-wrap gap-2 items-center">
           <span style="font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); margin-right: 0.5rem;">Sort by</span>
-          <button class="mc-filter-tag active" onclick="setFilter(this)">Featured</button>
-          <button class="mc-filter-tag" onclick="setFilter(this)">Newest</button>
-          <button class="mc-filter-tag" onclick="setFilter(this)">Price: Low to High</button>
-          <button class="mc-filter-tag" onclick="setFilter(this)">Price: High to Low</button>
+          <button class="mc-filter-tag active" data-filter>Featured</button>
+          <button class="mc-filter-tag" data-filter>Newest</button>
+          <button class="mc-filter-tag" data-filter>Price: Low to High</button>
+          <button class="mc-filter-tag" data-filter>Price: High to Low</button>
         </div>
       </div>
 
@@ -76,7 +76,7 @@
         <div class="flex items-center gap-5">
           <button
             class="mc-toolbar-btn"
-            onclick="document.getElementById('mc-filter-panel').classList.toggle('open')"
+            data-toggle-filter
             aria-expanded="false"
             aria-controls="mc-filter-panel"
           >
@@ -97,7 +97,7 @@
           <button
             class="mc-grid-btn"
             aria-label="2 column grid"
-            onclick="toggleGrid(this, 2)"
+            data-grid-cols="2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3"  y="3"  width="8" height="18" rx="1"/>
@@ -108,7 +108,7 @@
           <button
             class="mc-grid-btn active"
             aria-label="4 column grid"
-            onclick="toggleGrid(this, 4)"
+            data-grid-cols="4"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3"  y="3"  width="4" height="10" rx="1"/>
@@ -196,7 +196,7 @@
                 class="mc-quick-view"
                 aria-label="Quick view {{ product.title | escape }}"
                 data-product-handle="{{ product.handle }}"
-                onclick="event.preventDefault(); event.stopPropagation(); if(window.QuickView) QuickView.open('{{ product.handle }}');"
+                data-quick-view
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
@@ -270,32 +270,49 @@
       );
     }
 
-    /* ── Grid column toggle ── */
-    window.toggleGrid = function (btn, cols) {
-      const grid    = document.getElementById('mc-grid');
-      const allBtns = document.querySelectorAll('.mc-grid-btn');
-
-      allBtns.forEach(b => b.classList.remove('active'));
+    /* ── Grid column toggle (delegation) ── */
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-grid-cols]');
+      if (!btn) return;
+      var cols = Number(btn.dataset.gridCols);
+      var grid = document.getElementById('mc-grid');
+      var allBtns = document.querySelectorAll('.mc-grid-btn');
+      allBtns.forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
-
-      /* Remove existing col classes */
-      grid.classList.remove(
-        'grid-cols-1', 'grid-cols-2', 'grid-cols-4',
-        'md:grid-cols-2', 'md:grid-cols-4'
-      );
-
+      grid.classList.remove('grid-cols-1', 'grid-cols-2', 'grid-cols-4', 'md:grid-cols-2', 'md:grid-cols-4');
       if (cols === 2) {
         grid.classList.add('grid-cols-1', 'md:grid-cols-2');
       } else {
         grid.classList.add('grid-cols-2', 'md:grid-cols-4');
       }
-    };
+    });
 
-    /* ── Filter tag toggle ── */
-    window.setFilter = function (el) {
-      document.querySelectorAll('.mc-filter-tag').forEach(t => t.classList.remove('active'));
-      el.classList.add('active');
-    };
+    /* ── Filter tag (delegation) ── */
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-filter]');
+      if (!btn) return;
+      document.querySelectorAll('.mc-filter-tag').forEach(function (t) { t.classList.remove('active'); });
+      btn.classList.add('active');
+    });
+
+    /* ── Filter panel toggle (delegation) ── */
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-toggle-filter]');
+      if (!btn) return;
+      var panel = document.getElementById('mc-filter-panel');
+      if (!panel) return;
+      panel.classList.toggle('open');
+      btn.setAttribute('aria-expanded', panel.classList.contains('open'));
+    });
+
+    /* ── Quick View (delegation) ── */
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-quick-view]');
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      if (window.QuickView) QuickView.open(btn.dataset.productHandle);
+    });
 
   });
 </script>

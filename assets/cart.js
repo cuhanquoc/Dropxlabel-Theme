@@ -97,3 +97,25 @@
     return { open, close, toggle, removeItem, updateQty };
 
   }());
+
+  /* ── Delegation ── */
+  document.addEventListener('click', function (e) {
+    /* Overlay or close/continue-shopping button */
+    if (e.target.matches('[data-cd-overlay]') || e.target.closest('[data-cd-close]')) {
+      window.CartDrawer.close();
+      return;
+    }
+    /* Qty +/− buttons */
+    const qtyBtn = e.target.closest('[data-cd-qty]');
+    if (qtyBtn) {
+      const key = qtyBtn.dataset.key;
+      const qty = parseInt(qtyBtn.dataset.qty, 10);
+      window.CartDrawer.updateQty(key, qty);
+      return;
+    }
+    /* Remove item button */
+    const removeBtn = e.target.closest('[data-cd-remove]');
+    if (removeBtn) {
+      window.CartDrawer.removeItem(removeBtn.dataset.key);
+    }
+  });

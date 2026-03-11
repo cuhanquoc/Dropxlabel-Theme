@@ -120,10 +120,10 @@
 
         <!-- Scroll arrows -->
         <div class="hidden md:flex gap-3" style="flex-shrink: 0;">
-          <button class="at-scroll-arrow" onclick="scrollReviews(-1)" aria-label="Previous reviews">
+          <button class="at-scroll-arrow" data-scroll-dir="-1" aria-label="Previous reviews">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           </button>
-          <button class="at-scroll-arrow" onclick="scrollReviews(1)" aria-label="Next reviews">
+          <button class="at-scroll-arrow" data-scroll-dir="1" aria-label="Next reviews">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
         </div>
@@ -177,6 +177,22 @@
 </div>
 <!-- / #about-page -->
 
+<script>
+  (function () {
+    function scrollReviews(dir) {
+      var strip = document.getElementById('at-reviews-strip');
+      if (!strip) return;
+      strip.scrollBy({ left: dir * 320, behavior: 'smooth' });
+    }
+
+    /* Event delegation — scroll arrows */
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-scroll-dir]');
+      if (!btn) return;
+      scrollReviews(Number(btn.dataset.scrollDir));
+    });
+  })();
+</script>
 
 {% schema %}
 {

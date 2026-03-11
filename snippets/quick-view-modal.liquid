@@ -7,10 +7,10 @@
 {% endcomment %}
 
 <!-- ═══ Quick View Modal ═══ -->
-<div class="qv-overlay" id="qv-overlay" onclick="if(event.target===this)QuickView.close();">
+<div class="qv-overlay" id="qv-overlay" data-qv-overlay>
   <div class="qv-modal">
 
-    <button class="qv-close" onclick="QuickView.close();">
+    <button class="qv-close" data-qv-close aria-label="Close quick view">
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
 
@@ -18,10 +18,10 @@
     <div class="qv-gallery" id="qv-gallery">
       <!-- Images injected by JS -->
       <div class="qv-gallery-thumbs" id="qv-gallery-thumbs"></div>
-      <button class="qv-arrow qv-arrow--prev" onclick="QuickView.prevImg();">
+      <button class="qv-arrow qv-arrow--prev" data-qv-prev aria-label="Previous image">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
       </button>
-      <button class="qv-arrow qv-arrow--next" onclick="QuickView.nextImg();">
+      <button class="qv-arrow qv-arrow--next" data-qv-next aria-label="Next image">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
       </button>
     </div>
@@ -44,9 +44,9 @@
       <div>
         <p class="qv-option-label">Quantity</p>
         <div class="qv-qty">
-          <button onclick="QuickView.qty(-1);">−</button>
+          <button data-qv-qty="-1" aria-label="Decrease quantity">−</button>
           <span class="qv-qty-value" id="qv-qty">1</span>
-          <button onclick="QuickView.qty(1);">+</button>
+          <button data-qv-qty="1" aria-label="Increase quantity">+</button>
         </div>
       </div>
 
@@ -73,8 +73,8 @@
 
       <!-- Actions -->
       <div class="qv-actions">
-        <button class="qv-btn qv-btn--cart" id="qv-add-cart" onclick="QuickView.addToCart();">Add to cart</button>
-        <button class="qv-btn qv-btn--buy" onclick="QuickView.buyNow();">Buy it now</button>
+        <button class="qv-btn qv-btn--cart" id="qv-add-cart" data-qv-add-cart>Add to cart</button>
+        <button class="qv-btn qv-btn--buy" data-qv-buy-now>Buy it now</button>
       </div>
     </div>
 
@@ -360,4 +360,28 @@
 
     return { open: open, close: close, prevImg: prevImg, nextImg: nextImg, qty: qty, addToCart: addToCart, buyNow: buyNow };
   }());
+
+  /* ── Delegation: all quick-view modal interactions ── */
+  document.addEventListener('click', function (e) {
+    /* Close via X button */
+    if (e.target.closest('[data-qv-close]')) { QuickView.close(); return; }
+
+    /* Close via overlay backdrop */
+    var overlay = document.getElementById('qv-overlay');
+    if (overlay && e.target === overlay) { QuickView.close(); return; }
+
+    /* Gallery arrows */
+    if (e.target.closest('[data-qv-prev]')) { QuickView.prevImg(); return; }
+    if (e.target.closest('[data-qv-next]')) { QuickView.nextImg(); return; }
+
+    /* Quantity +/- */
+    var qtyBtn = e.target.closest('[data-qv-qty]');
+    if (qtyBtn) { QuickView.qty(Number(qtyBtn.dataset.qvQty)); return; }
+
+    /* Add to cart */
+    if (e.target.closest('[data-qv-add-cart]')) { QuickView.addToCart(); return; }
+
+    /* Buy it now */
+    if (e.target.closest('[data-qv-buy-now]')) { QuickView.buyNow(); return; }
+  });
 </script>
