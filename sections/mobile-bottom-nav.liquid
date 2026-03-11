@@ -1,43 +1,41 @@
+{%- liquid
+  assign nav_bg    = section.settings.bg_color     | default: '#ffffff'
+  assign icon_col  = section.settings.icon_color   | default: '#1a1a1a'
+  assign act_col   = section.settings.active_color | default: '#000000'
+  assign icon_px   = section.settings.icon_size    | default: 24
+  assign label_px  = section.settings.label_size   | default: 10
+  assign badge_bg  = section.settings.badge_bg     | default: '#0a0a0a'
+  assign badge_col = section.settings.badge_color  | default: '#ffffff'
+-%}
+
 <style>
   /* ═══════════════════════════════════════
      MOBILE BOTTOM NAV — Sticky Tab Bar
   ═══════════════════════════════════════ */
 
-  /* Hide completely on desktop */
-  .mob-nav {
-    display: none;
-  }
+  .mob-nav { display: none; }
 
   @media (max-width: 767px) {
     .mob-nav {
       display: block;
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
+      bottom: 0; left: 0; right: 0;
       width: 100%;
-      max-width: 100vw;
-      overflow: hidden;
       z-index: 999;
-      background: #ffffff;
+      background: {{ nav_bg }};
       border-top: 1px solid rgba(0,0,0,0.08);
       box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
       transform: translateY(100%);
       transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
       padding-bottom: env(safe-area-inset-bottom, 0px);
     }
-
-    .mob-nav.mob-nav--visible {
-      transform: translateY(0);
-    }
+    .mob-nav.mob-nav--visible { transform: translateY(0); }
 
     .mob-nav-track {
       display: flex;
       align-items: center;
       justify-content: space-around;
       padding: 0.5rem 0 0.25rem;
-      overflow: hidden;
-      width: 100%;
     }
 
     .mob-nav-item {
@@ -47,33 +45,43 @@
       justify-content: center;
       gap: 0.25rem;
       text-decoration: none;
-      color: {{ section.settings.icon_color | default: '#1a1a1a' }};
+      color: {{ icon_col }};
       flex: 1;
       min-width: 0;
       padding: 0.25rem 0;
       position: relative;
-      transition: color 0.25s ease, transform 0.2s ease;
+      transition: color 0.2s ease, transform 0.18s ease;
       -webkit-tap-highlight-color: transparent;
     }
+    .mob-nav-item:active { transform: scale(0.9); }
+    .mob-nav-item.is-active { color: {{ act_col }}; }
 
-    .mob-nav-item:active {
-      transform: scale(0.92);
-    }
-
+    /* icon: SVG stroke */
     .mob-nav-item svg {
-      width: {{ section.settings.icon_size | default: 24 }}px;
-      height: {{ section.settings.icon_size | default: 24 }}px;
+      width: {{ icon_px }}px;
+      height: {{ icon_px }}px;
       stroke-width: 1.5;
       flex-shrink: 0;
+      display: block;
+    }
+
+    /* icon: custom image */
+    .mob-nav-item .mob-nav-img {
+      width: {{ icon_px }}px;
+      height: {{ icon_px }}px;
+      object-fit: contain;
+      display: block;
     }
 
     .mob-nav-label {
-      font-family: var(--font-body);
-      font-size: {{ section.settings.label_size | default: 10 }}px;
+      font-family: var(--font-body, sans-serif);
+      font-size: {{ label_px }}px;
       font-weight: 500;
       letter-spacing: 0.02em;
       line-height: 1;
       white-space: nowrap;
+      overflow: hidden;
+      max-width: 100%;
     }
 
     /* Cart badge */
@@ -81,12 +89,12 @@
       position: absolute;
       top: -2px;
       right: 50%;
-      margin-right: -16px;
+      margin-right: -14px;
       min-width: 16px;
       height: 16px;
       border-radius: 9999px;
-      background: {{ section.settings.badge_bg | default: '#0a0a0a' }};
-      color: {{ section.settings.badge_color | default: '#ffffff' }};
+      background: {{ badge_bg }};
+      color: {{ badge_col }};
       font-size: 9px;
       font-weight: 700;
       display: flex;
@@ -96,258 +104,445 @@
       line-height: 1;
     }
 
-    /* Add bottom padding to body so content doesn't hide behind nav */
-    body {
-      padding-bottom: 64px;
-    }
+    body { padding-bottom: 64px; }
   }
 </style>
 
-<mobile-bottom-nav class="mob-nav" id="mob-bottom-nav" aria-label="Mobile navigation" role="navigation">
+<mobile-bottom-nav
+  class="mob-nav"
+  id="mob-bottom-nav"
+  aria-label="Điều hướng"
+  role="navigation"
+>
   <div class="mob-nav-track">
 
-    {%- comment -%} ── HOME ── {%- endcomment -%}
-    <a href="{{ section.settings.home_url | default: '/' }}" class="mob-nav-item" onclick="event.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); setTimeout(function(){ window.location.href='{{ section.settings.home_url | default: '/' }}'; }, 300);">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/>
-      </svg>
-      <span class="mob-nav-label">{{ section.settings.home_label | default: 'Home' }}</span>
-    </a>
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign btype  = block.type
+        assign b_url  = block.settings.url   | default: '/'
+        assign b_lbl  = block.settings.label | default: btype
+        assign b_img  = block.settings.custom_icon
+        assign is_cart = false
+        if btype == 'cart'
+          assign is_cart = true
+        endif
+      -%}
 
-    {%- comment -%} ── MENU ── {%- endcomment -%}
-    <a href="{{ section.settings.menu_url | default: '/collections' }}" class="mob-nav-item">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="7" rx="1"/>
-        <rect x="14" y="3" width="7" height="7" rx="1"/>
-        <rect x="3" y="14" width="7" height="7" rx="1"/>
-        <rect x="14" y="14" width="7" height="7" rx="1"/>
-      </svg>
-      <span class="mob-nav-label">{{ section.settings.menu_label | default: 'Menu' }}</span>
-    </a>
+      <a
+        href="{{ b_url }}"
+        class="mob-nav-item{% if request.path == b_url %} is-active{% endif %}"
+        aria-label="{{ b_lbl }}"
+        data-nav-type="{{ btype }}"
+        {{ block.shopify_attributes }}
+      >
 
-    {%- comment -%} ── SEARCH ── {%- endcomment -%}
-    <a href="{{ section.settings.search_url | default: '/search' }}" class="mob-nav-item">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/>
-        <path d="M21 21l-4.35-4.35"/>
-      </svg>
-      <span class="mob-nav-label">{{ section.settings.search_label | default: 'Search' }}</span>
-    </a>
+        {%- comment -%} — Custom image icon (overrides SVG) — {%- endcomment -%}
+        {%- if b_img != blank -%}
+          <img
+            src="{{ b_img | img_url: '64x64' }}"
+            alt="{{ b_lbl }}"
+            width="{{ icon_px }}"
+            height="{{ icon_px }}"
+            class="mob-nav-img"
+            loading="lazy"
+          >
 
-    {%- comment -%} ── SHOP ── {%- endcomment -%}
-    <a href="{{ section.settings.shop_url | default: routes.collections_url }}" class="mob-nav-item">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <line x1="3" y1="12" x2="21" y2="12"/>
-        <line x1="3" y1="18" x2="21" y2="18"/>
-        <circle cx="7" cy="6" r="1.5" fill="currentColor"/>
-        <circle cx="7" cy="12" r="1.5" fill="currentColor"/>
-        <circle cx="7" cy="18" r="1.5" fill="currentColor"/>
-      </svg>
-      <span class="mob-nav-label">{{ section.settings.shop_label | default: 'Shop' }}</span>
-    </a>
+        {%- else -%}
+          {%- comment -%} — Built-in SVG presets — {%- endcomment -%}
+          {%- case btype -%}
 
-    {%- comment -%} ── ACCOUNT ── {%- endcomment -%}
-    <a href="{{ section.settings.account_url | default: '/account' }}" class="mob-nav-item">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="8" r="4"/>
-        <path d="M4 21v-1a5 5 0 0110 0v1"/>
-        <path d="M20 21v-1a5 5 0 00-4-4.9"/>
-      </svg>
-      <span class="mob-nav-label">{{ section.settings.account_label | default: 'Account' }}</span>
-    </a>
+            {%- when 'home' -%}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/>
+            </svg>
 
-    {%- comment -%} ── CART ── {%- endcomment -%}
-    <a href="{{ section.settings.cart_url | default: '/cart' }}" class="mob-nav-item" id="mob-nav-cart">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <path d="M16 10a4 4 0 01-8 0"/>
-      </svg>
-      {% if cart.item_count > 0 %}
-        <span class="mob-nav-badge" id="mob-nav-badge">{{ cart.item_count }}</span>
-      {% endif %}
-      <span class="mob-nav-label">{{ section.settings.cart_label | default: 'Cart' }}</span>
-    </a>
+            {%- when 'menu' -%}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+
+            {%- when 'search' -%}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+
+            {%- when 'cart' -%}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+
+            {%- when 'account' -%}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M4 21v-1a8 8 0 0116 0v1"/>
+            </svg>
+
+            {%- when 'shop' -%}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l1-7h16l1 7"/>
+              <path d="M3 9a5 5 0 0010 0 5 5 0 0010 0"/>
+              <path d="M5 21V9m14 0v12M5 21h14"/>
+            </svg>
+
+            {%- when 'wishlist' -%}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            </svg>
+
+            {%- when 'blog' -%}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+            </svg>
+
+            {%- when 'custom' -%}
+            {%- comment -%} no built-in SVG — falls back to label only {%- endcomment -%}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="2"/>
+              <circle cx="12" cy="5" r="1"/>
+              <circle cx="12" cy="19" r="1"/>
+            </svg>
+
+          {%- endcase -%}
+        {%- endif -%}
+
+        {%- comment -%} Cart badge {%- endcomment -%}
+        {%- if is_cart and cart.item_count > 0 -%}
+          <span class="mob-nav-badge" id="mob-nav-badge" aria-hidden="true">
+            {{ cart.item_count }}
+          </span>
+        {%- endif -%}
+
+        {%- if b_lbl != blank -%}
+          <span class="mob-nav-label">{{ b_lbl }}</span>
+        {%- endif -%}
+      </a>
+    {%- endfor -%}
 
   </div>
 </mobile-bottom-nav>
 
 <script>
-  customElements.define('mobile-bottom-nav', class extends HTMLElement {
-    connectedCallback() {
-      this._lastY = window.scrollY;
-      this._threshold = 10;
-      this._ticking = false;
-      this._onScroll = this._onScroll.bind(this);
-      this._handleScroll = this._handleScroll.bind(this);
-
-      window.addEventListener('scroll', this._handleScroll, { passive: true });
-
-      /* Show if already scrolled down on page load */
-      if (window.scrollY > 100) this.classList.add('mob-nav--visible');
-    }
-
-    disconnectedCallback() {
-      window.removeEventListener('scroll', this._handleScroll);
-    }
-
-    _handleScroll() {
-      if (!this._ticking) {
-        requestAnimationFrame(this._onScroll);
-        this._ticking = true;
-      }
-    }
-
-    _onScroll() {
-      var y = window.scrollY;
-      var delta = y - this._lastY;
-
-      if (delta > this._threshold) {
+  (function () {
+    if (customElements.get('mobile-bottom-nav')) return;
+    customElements.define('mobile-bottom-nav', class extends HTMLElement {
+      connectedCallback() {
+        this._lastY     = window.scrollY;
+        this._threshold = 10;
+        this._ticking   = false;
+        this._bound     = this._onScroll.bind(this);
+        this._raf       = this._raf_fn.bind(this);
+        window.addEventListener('scroll', this._bound, { passive: true });
+        // Always show on load; auto-hide on scroll-down
         this.classList.add('mob-nav--visible');
-      } else if (delta < -this._threshold) {
-        this.classList.remove('mob-nav--visible');
       }
-
-      this._lastY = y;
-      this._ticking = false;
-    }
-  });
+      disconnectedCallback() {
+        window.removeEventListener('scroll', this._bound);
+      }
+      _onScroll() {
+        if (!this._ticking) {
+          requestAnimationFrame(this._raf);
+          this._ticking = true;
+        }
+      }
+      _raf_fn() {
+        var y     = window.scrollY;
+        var delta = y - this._lastY;
+        if (delta > this._threshold) {
+          // scrolling DOWN — hide nav
+          this.classList.remove('mob-nav--visible');
+        } else if (delta < -this._threshold) {
+          // scrolling UP — show nav
+          this.classList.add('mob-nav--visible');
+        }
+        this._lastY   = y;
+        this._ticking = false;
+      }
+    });
+  })();
 </script>
 
 {% schema %}
 {
   "name": "Mobile Bottom Nav",
+  "tag": "section",
+  "max_blocks": 6,
   "settings": [
     {
       "type": "header",
-      "content": "── Appearance ──"
+      "content": "── Màu sắc & Hiển thị ──"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Nền thanh nav",
+      "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "icon_color",
-      "label": "Icon & Text Color",
+      "label": "Màu icon & chữ",
       "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "active_color",
+      "label": "Màu icon active",
+      "default": "#000000"
     },
     {
       "type": "range",
       "id": "icon_size",
+      "label": "Kích thước icon (px)",
       "min": 18,
       "max": 32,
       "step": 2,
-      "default": 24,
-      "label": "Icon Size (px)"
+      "default": 24
     },
     {
       "type": "range",
       "id": "label_size",
+      "label": "Cỡ chữ nhãn (px)",
       "min": 8,
       "max": 14,
       "step": 1,
-      "default": 10,
-      "label": "Label Font Size (px)"
+      "default": 10
     },
     {
       "type": "color",
       "id": "badge_bg",
-      "label": "Cart Badge Background",
+      "label": "Nền badge giỏ hàng",
       "default": "#0a0a0a"
     },
     {
       "type": "color",
       "id": "badge_color",
-      "label": "Cart Badge Text Color",
+      "label": "Chữ badge giỏ hàng",
       "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "home",
+      "name": "🏠 Home",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nhãn",
+          "default": "Home"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Liên kết",
+          "default": "/"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Icon tuỳ chỉnh (ghi đè SVG mặc định)"
+        }
+      ]
     },
     {
-      "type": "header",
-      "content": "── Home ──"
+      "type": "menu",
+      "name": "☰ Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nhãn",
+          "default": "Menu"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Liên kết",
+          "default": "/collections"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Icon tuỳ chỉnh (ghi đè SVG mặc định)"
+        }
+      ]
     },
     {
-      "type": "text",
-      "id": "home_label",
-      "label": "Home Label",
-      "default": "Home"
+      "type": "search",
+      "name": "🔍 Search",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nhãn",
+          "default": "Tìm kiếm"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Liên kết",
+          "default": "/search"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Icon tuỳ chỉnh (ghi đè SVG mặc định)"
+        }
+      ]
     },
     {
-      "type": "url",
-      "id": "home_url",
-      "label": "Home URL"
+      "type": "cart",
+      "name": "🛒 Giỏ hàng",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nhãn",
+          "default": "Giỏ hàng"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Liên kết",
+          "default": "/cart"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Icon tuỳ chỉnh (ghi đè SVG mặc định)"
+        }
+      ]
     },
     {
-      "type": "header",
-      "content": "── Menu ──"
+      "type": "account",
+      "name": "👤 Tài khoản",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nhãn",
+          "default": "Tài khoản"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Liên kết",
+          "default": "/account"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Icon tuỳ chỉnh (ghi đè SVG mặc định)"
+        }
+      ]
     },
     {
-      "type": "text",
-      "id": "menu_label",
-      "label": "Menu Label",
-      "default": "Menu"
+      "type": "shop",
+      "name": "🛍 Shop",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nhãn",
+          "default": "Shop"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Liên kết",
+          "default": "/collections"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Icon tuỳ chỉnh (ghi đè SVG mặc định)"
+        }
+      ]
     },
     {
-      "type": "url",
-      "id": "menu_url",
-      "label": "Menu URL"
+      "type": "wishlist",
+      "name": "♡ Yêu thích",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nhãn",
+          "default": "Yêu thích"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Liên kết",
+          "default": "/pages/wishlist"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Icon tuỳ chỉnh (ghi đè SVG mặc định)"
+        }
+      ]
     },
     {
-      "type": "header",
-      "content": "── Search ──"
+      "type": "blog",
+      "name": "📖 Blog",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nhãn",
+          "default": "Blog"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Liên kết",
+          "default": "/blogs/news"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Icon tuỳ chỉnh (ghi đè SVG mặc định)"
+        }
+      ]
     },
     {
-      "type": "text",
-      "id": "search_label",
-      "label": "Search Label",
-      "default": "Search"
-    },
+      "type": "custom",
+      "name": "✦ Tuỳ chỉnh",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nhãn"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Liên kết"
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_icon",
+          "label": "Icon (bắt buộc cho loại này)"
+        }
+      ]
+    }
+  ],
+  "presets": [
     {
-      "type": "url",
-      "id": "search_url",
-      "label": "Search URL"
-    },
-    {
-      "type": "header",
-      "content": "── Shop ──"
-    },
-    {
-      "type": "text",
-      "id": "shop_label",
-      "label": "Shop Label",
-      "default": "Shop"
-    },
-    {
-      "type": "url",
-      "id": "shop_url",
-      "label": "Shop URL"
-    },
-    {
-      "type": "header",
-      "content": "── Account ──"
-    },
-    {
-      "type": "text",
-      "id": "account_label",
-      "label": "Account Label",
-      "default": "Account"
-    },
-    {
-      "type": "url",
-      "id": "account_url",
-      "label": "Account URL"
-    },
-    {
-      "type": "header",
-      "content": "── Cart ──"
-    },
-    {
-      "type": "text",
-      "id": "cart_label",
-      "label": "Cart Label",
-      "default": "Cart"
-    },
-    {
-      "type": "url",
-      "id": "cart_url",
-      "label": "Cart URL"
+      "name": "Mobile Bottom Nav",
+      "blocks": [
+        { "type": "home" },
+        { "type": "menu" },
+        { "type": "search" },
+        { "type": "cart" },
+        { "type": "account" }
+      ]
     }
   ]
 }
