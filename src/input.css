@@ -213,8 +213,8 @@ body {
     z-index: 2;
 }
 
-/* ─── Disable scale on mobile (touch has no hover) ─── */
-@media (hover: none) {
+/* ─── Disable scale on mobile (touch / coarse pointer — no hover) ─── */
+@media (hover: none), (pointer: coarse) {
 
     .joly-btn:hover,
     .bsb-cta-btn:hover,
@@ -2694,4 +2694,47 @@ textarea.ma-form-field {
 .ma-tag-pill:hover {
     color: var(--color-text);
     border-color: var(--color-text);
+}
+
+/* ═══════════════════════════════════════════════════════
+   ACCESSIBILITY — Reduced Motion
+   Disable non-essential animations for users who prefer
+   reduced motion (vestibular disorders, epilepsy, etc.)
+   ═══════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+    /* ── Ken Burns hero image ── */
+    .hero-image,
+    .hero-video {
+        animation: none;
+    }
+
+    /* ── Hero text entrance animations ── */
+    .hero-eyebrow,
+    .hero-copy,
+    .hero-cta {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    /* ── Marquee: freeze in place ── */
+    .marquee-track {
+        animation: none;
+    }
+
+    /* ── Character-morph: show first word, skip cycle ── */
+    .character-morph-word {
+        animation: none;
+    }
+
+    /* ── Joly button transform transitions ── */
+    .joly-btn,
+    .bsb-cta-btn,
+    .bsb-cta-icon,
+    .bsb-card-link,
+    .hero-cta,
+    [data-joly-btn] {
+        transition: none;
+        will-change: auto;
+    }
 }
