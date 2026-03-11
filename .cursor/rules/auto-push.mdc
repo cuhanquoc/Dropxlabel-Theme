@@ -1,0 +1,17 @@
+---
+description: Auto commit & push to GitHub after every code change
+globs:
+alwaysApply: true
+---
+
+# Auto Push to GitHub
+
+After completing any code edit or task, ALWAYS:
+
+1. `git add -A` to stage all changes
+2. `git commit` with a clear, descriptive commit message following conventional commits (feat/fix/chore/refactor/docs)
+3. `git push origin main` to push to remote
+
+Do NOT ask for permission — the user has granted full authority to commit and push automatically.
+
+If there are merge conflicts, resolve them first, then commit and push.

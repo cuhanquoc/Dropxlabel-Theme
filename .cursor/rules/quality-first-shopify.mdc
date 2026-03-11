@@ -1,0 +1,80 @@
+---
+description: Quality-first workflow for Shopify theme — use skills, audit, avoid regressions
+globs:
+alwaysApply: true
+---
+
+# Quality-First Shopify Theme Development
+
+When designing or editing this Shopify theme, ALWAYS follow this workflow to minimize bugs.
+
+---
+
+## 1. Use Available Skills
+
+Before and during design/code changes, apply these skills as relevant:
+
+| Task | Skill to use |
+|------|--------------|
+| Any theme code change | **shopify-2026-standards** — mandatory for all edits |
+| Sections, Liquid, Tailwind, GSAP, Web Components | **shopify-os2-architecture** |
+| UI components, pages, visual design | **frontend-design** |
+| Review UI, accessibility, best practices | **web-design-guidelines** |
+| Animations, micro-interactions | **animate** |
+| Before every push | **pre-push-audit** — 8 groups, no FAIL allowed |
+
+---
+
+## 2. Avoid "Fix One, Break Another"
+
+When adding or modifying code:
+
+- **Impact check**: Identify files/sections that reference or depend on what you're changing
+- **Cross-reference**: After editing a section/snippet, grep for `render`, `section`, `include`, asset URLs that might be affected
+- **Test related flows**: If you change cart-drawer, verify header badge, product add-to-cart, quick-view all still work
+- **Schema changes**: If you change section schema (add/remove/rename settings), check `templates/*.json` and `config/settings_data.json` for orphan references
+
+---
+
+## 3. Pre-Push Audit (Mandatory)
+
+Before `git push`, run **pre-push-audit** skill:
+
+- [1] Liquid syntax
+- [2] CSS conflicts
+- [3] JS errors
+- [4] Schema integrity
+- [5] Broken references
+- [6] Accessibility basics
+- [7] Performance flags
+- [8] Git hygiene
+
+**Do NOT push if any FAIL.** Fix all FAILs first, then re-audit.
+
+---
+
+## 4. Regression Checklist
+
+Before committing, verify:
+
+- [ ] Changed sections still render correctly in theme editor
+- [ ] No new console errors in DevTools
+- [ ] Cart add/remove/update works (if cart-related changes)
+- [ ] Responsive: test mobile viewport (≤375px)
+- [ ] No merge conflict markers (`<<<<<<<`, `=======`, `>>>>>>>`) left in files
+
+---
+
+## 5. Order of Operations
+
+```
+1. Read relevant skills (shopify-2026-standards, shopify-os2-architecture, frontend-design)
+2. Make edits with impact awareness
+3. Run pre-push-audit
+4. Fix any FAILs
+5. Commit + push (per auto-push rule)
+```
+
+---
+
+**Goal**: Minimize bugs. Use skills. Audit always. Avoid regressions.
