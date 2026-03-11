@@ -12,6 +12,7 @@
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
+        "background_video": "shopify://files/videos/hf_20260311_073759_4f7a9f9f-0d9a-4b40-9272-79cfef9c6dff.mp4",
         "eyebrow_text": "buy 2 get 3",
         "headline": "Small Pieces Of Art You Can Wear",
         "subheadline": "Summer is waitting you",
