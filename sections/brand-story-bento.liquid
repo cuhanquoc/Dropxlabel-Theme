@@ -2,6 +2,17 @@
 
 <section class="bsb-section" id="brand-story-bento" style="background-color: {{ section.settings.bg_color | default: '#f2f0ec' }}; {% if section.settings.bg_image != blank %}background-image: url('{{ section.settings.bg_image | image_url: width: 1920 }}'); background-size: cover; background-position: center;{% else %}background-image: url('{{ 'paper-texture-bg.png' | asset_url }}'); background-size: cover; background-position: center;{% endif %}">
 
+  {%- if section.settings.title != blank -%}
+    <div style="padding: 2.5rem 1.5rem 0; text-align: {{ section.settings.title_align | default: 'left' }};">
+      <h2 style="font-family: var(--font-heading); font-size: clamp(1.8rem,6vw,3rem); font-weight: 800; color: {{ section.settings.title_color | default: '#0a0a0a' }}; letter-spacing: -0.02em; line-height: 1.1; margin: 0;">
+        {{ section.settings.title }}
+      </h2>
+      {%- if section.settings.subtitle != blank -%}
+        <p style="font-family: var(--font-body); font-size: 0.95rem; color: {{ section.settings.title_color | default: '#0a0a0a' }}; opacity: 0.6; margin-top: 0.5rem;">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
   <div class="bsb-carousel-wrap" style="overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 3rem 1.5rem 2rem; scroll-snap-type: x mandatory;" id="bsb-carousel">
     <div class="flex gap-4 md:gap-8" style="width: max-content;">
 
@@ -93,6 +104,38 @@
   "settings": [
     {
       "type": "header",
+      "content": "Section Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Our Story"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle (optional)"
+    },
+    {
+      "type": "select",
+      "id": "title_align",
+      "label": "Title Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "header",
       "content": "Appearance"
     },
     {
@@ -108,6 +151,7 @@
       "default": "#f2f0ec"
     }
   ],
+  "max_blocks": 10,
   "blocks": [
     {
       "type": "story_card",

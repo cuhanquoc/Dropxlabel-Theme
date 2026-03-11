@@ -637,6 +637,7 @@
           {% endunless %}
 
           <!-- ── Quantity ── -->
+          {% if section.settings.show_quantity %}
           <div style="margin-bottom: 2rem; padding: 0 1rem; width: 100%; box-sizing: border-box;">
             <p style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.75rem;">Quantity</p>
             <div style="display: inline-flex; border: 1px solid var(--color-text); border-radius: 6px; overflow: hidden; width: 140px; height: 50px;">
@@ -663,8 +664,10 @@
               >+</button>
             </div>
           </div>
+          {% endif %}
 
           <!-- ── Stock Indicator (Dynamic) ── -->
+          {% if section.settings.show_stock %}
           <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; font-size: 1.05rem; padding: 0 1rem; width: 100%; box-sizing: border-box;">
             <svg id="variant-stock-icon" width="20" height="20" viewBox="0 0 24 24" fill="#00a82d" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="currentColor"/>
@@ -680,6 +683,7 @@
               {% endif %}
             </span>
           </div>
+          {% endif %}
 
           <!-- ── Pickup Availability ── -->
           {% if section.settings.show_pickup %}
@@ -703,6 +707,32 @@
           {% endif %}
 
           <!-- ── Trust Badges ── -->
+          {% assign trust_badge_blocks = section.blocks | where: 'type', 'trust_badge' %}
+          {% if trust_badge_blocks.size > 0 %}
+          <div style="display: flex; gap: 1rem; justify-content: space-between; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1.5rem 1rem; margin-bottom: 3rem; width: 100%; box-sizing: border-box; flex-wrap: wrap;">
+            {% for block in trust_badge_blocks %}
+              {% unless forloop.first %}
+              <div style="width: 1px; height: 24px; background-color: #eee;"></div>
+              {% endunless %}
+              <div style="display: flex; align-items: center; gap: 10px;" {{ block.shopify_attributes }}>
+                {% case block.settings.icon %}
+                  {% when 'truck' %}
+                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {% when 'return' %}
+                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m3 9a9 9 0 1 0 5-6.5l-3 2"/><path d="m2 2v6h6"/><path d="m9 11v6l3-1.5 3 1.5v-6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {% when 'shield' %}
+                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {% when 'star' %}
+                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {% when 'leaf' %}
+                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 21c0-3 1.85-5.96 5-8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                {% endcase %}
+                <span style="font-size: 0.95rem;">{{ block.settings.text }}</span>
+              </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <!-- Fallback: hiển thị khi chưa có trust_badge block nào được thêm vào -->
           <div style="display: flex; gap: 1rem; justify-content: space-between; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1.5rem 1rem; margin-bottom: 3rem; width: 100%; box-sizing: border-box;">
             <div style="display: flex; align-items: center; gap: 10px;">
                <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -714,6 +744,7 @@
                <span style="font-size: 0.95rem; padding: 2px 4px; border-radius: 4px;">{{ section.settings.returns_text | default: 'Free + easy returns' }}</span>
             </div>
           </div>
+          {% endif %}
 
           <!-- Add to Cart (Re-styled a bit) -->
           <div class="mb-5 flex gap-3" style="max-width: 100%; box-sizing: border-box; flex-wrap: wrap; padding: 0 1rem;">
@@ -731,6 +762,7 @@
                 Sold Out
               {% endif %}
             </button>
+            {% if section.settings.show_wishlist %}
             <button
               type="button"
               class="btn-wishlist"
@@ -742,9 +774,11 @@
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
               </svg>
             </button>
+            {% endif %}
           </div>
 
           <!-- Dynamic Checkout -->
+          {% if section.settings.show_dynamic_checkout %}
           <div class="mt-3" style="max-width: 100%; overflow: hidden; padding: 0 1rem; box-sizing: border-box;">
             <style>
               .shopify-payment-button__button {
@@ -759,8 +793,10 @@
             </style>
             {{ form | payment_button }}
           </div>
+          {% endif %}
 
           <!-- ── PAIRS WELL WITH Carousel ── -->
+          {% if section.settings.show_pairs_with %}
           {% assign pairs_col = section.settings.pairs_collection %}
           {% assign pairs_products = pairs_col.products %}
           {% if pairs_products == blank or pairs_products.size == 0 %}
@@ -820,6 +856,7 @@
             </div>
           </div>
           {% endif %}
+          {% endif %} <!-- /show_pairs_with -->
 
 
 
@@ -1298,6 +1335,7 @@
 {% schema %}
 {
   "name": "Product Layout",
+  "max_blocks": 30,
   "settings": [
     {
       "type": "header",
@@ -1355,7 +1393,41 @@
     },
     {
       "type": "header",
+      "content": "Add to Cart Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quantity",
+      "label": "Show Quantity Selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stock",
+      "label": "Show Stock Indicator",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist",
+      "label": "Show Wishlist Button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Show Dynamic Checkout Button (Buy Now)",
+      "default": true
+    },
+    {
+      "type": "header",
       "content": "Pairs Well With"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pairs_with",
+      "label": "Show Pairs Well With Section",
+      "default": true
     },
     {
       "type": "collection",
@@ -1370,6 +1442,32 @@
     }
   ],
   "blocks": [
+    {
+      "type": "trust_badge",
+      "name": "Trust Badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "🚛 Truck (Shipping)" },
+            { "value": "return", "label": "🔄 Return Arrow" },
+            { "value": "shield", "label": "🛡️ Shield (Secure)" },
+            { "value": "star", "label": "⭐ Star" },
+            { "value": "leaf", "label": "🌿 Leaf (Eco)" },
+            { "value": "none", "label": "No Icon" }
+          ],
+          "default": "truck"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Badge Text",
+          "default": "Free Delivery"
+        }
+      ]
+    },
     {
       "type": "social_icon",
       "name": "Social Icon",
@@ -1423,6 +1521,20 @@
     {
       "name": "Product Layout",
       "blocks": [
+        {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "truck",
+            "text": "Free delivery within 2 days"
+          }
+        },
+        {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "return",
+            "text": "Free + easy returns"
+          }
+        },
         {
           "type": "social_icon",
           "settings": {

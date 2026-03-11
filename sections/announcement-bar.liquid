@@ -163,6 +163,7 @@
       "info": "Choose how the bar appears on page load"
     }
   ],
+  "max_blocks": 8,
   "blocks": [
     {
       "type": "message",
@@ -190,7 +191,12 @@
   ],
   "presets": [
     {
-      "name": "Announcement Bar"
+      "name": "Announcement Bar",
+      "blocks": [
+        { "type": "message", "settings": { "text": "Free shipping on orders over $150 🚚", "badge": "FREE SHIP" } },
+        { "type": "message", "settings": { "text": "30-day hassle-free returns ↩" } },
+        { "type": "message", "settings": { "text": "New arrivals every week — Shop now ✨", "badge": "NEW" } }
+      ]
     }
   ]
 }

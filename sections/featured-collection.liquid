@@ -29,8 +29,15 @@
       aria-label="Trending products"
     >
 
-      {%- if section.settings.product_list != blank -%}
-        {%- for product in section.settings.product_list -%}
+      {%- comment -%} Data source: product_list (individual picks) OR collection picker {%- endcomment -%}
+      {%- assign fc_source = section.settings.product_list -%}
+      {%- assign fc_limit   = section.settings.max_products | default: 12 -%}
+      {%- if fc_source == blank and section.settings.collection != blank -%}
+        {%- assign fc_source = section.settings.collection.products -%}
+      {%- endif -%}
+
+      {%- if fc_source != blank -%}
+        {%- for product in fc_source limit: fc_limit -%}
 
           {%- comment -%} Build variant JSON for JS {%- endcomment -%}
           {%- assign v_json = '[' -%}
@@ -1026,14 +1033,29 @@
     },
     {
       "type": "header",
-      "content": "Selected Products"
+      "content": "Products Source"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Show from Collection",
+      "info": "Auto-populates from a collection. Overridden if Chosen Products below are set."
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Max Products to Show",
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "default": 12
     },
     {
       "type": "product_list",
       "id": "product_list",
-      "label": "Choose Products",
-      "limit": 12,
-      "info": "Select specific products to display."
+      "label": "Hand-pick Products (overrides collection)",
+      "limit": 24,
+      "info": "Select specific products to feature. Takes priority over Collection picker above."
     },
     {
       "type": "header",
