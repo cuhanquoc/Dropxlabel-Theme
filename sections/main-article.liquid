@@ -47,6 +47,7 @@
     </h1>
 
     <!-- Reading time estimate -->
+    {% if section.settings.show_reading_time %}
     {%- assign words    = article.content | strip_html | split: ' ' -%}
     {%- assign word_cnt = words | size -%}
     {%- assign read_min = word_cnt | divided_by: 200 | plus: 1 -%}
@@ -57,6 +58,7 @@
       color: var(--color-muted);
       margin-top: 1.25rem;
     ">{{ read_min }} min read</p>
+    {% endif %}
 
   </header>
   <!-- / Article Header -->
@@ -95,7 +97,7 @@
     </div>
 
     <!-- Tags -->
-    {% if article.tags.size > 0 %}
+    {% if section.settings.show_tags and article.tags.size > 0 %}
       <div style="margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
         {% for tag in article.tags %}
           <a
@@ -107,6 +109,7 @@
     {% endif %}
 
     <!-- ── Share Bar ── -->
+    {% if section.settings.show_share %}
     <div class="ma-share-bar">
       <span class="ma-share-label">Share</span>
 
@@ -151,8 +154,10 @@
         Copy Link
       </button>
     </div>
+    {% endif %}
 
     <!-- ── Author Card ── -->
+    {% if section.settings.show_author %}
     <div class="ma-author-card">
       {% if article.user.image %}
         <img
@@ -167,12 +172,13 @@
         <div class="ma-author-avatar" style="background: linear-gradient(135deg, var(--color-accent), #b8975a);"></div>
       {% endif %}
       <div>
-        <p class="ma-author-name">By {{ article.author | default: 'The Dropxlabel Team' }}</p>
+        <p class="ma-author-name">By {{ article.author | default: section.settings.author_name_fallback }}</p>
         <p class="ma-author-bio">
-          {{ article.user.bio | default: 'A storyteller at the intersection of craft and culture — writing about fashion as a form of personal language.' }}
+          {{ article.user.bio | default: section.settings.author_bio_fallback }}
         </p>
       </div>
     </div>
+    {% endif %}
 
   </div>
   <!-- / Article Body -->
@@ -180,7 +186,7 @@
   <!-- ══════════════════════════════════════
        4. COMMENTS SECTION
   ══════════════════════════════════════ -->
-  {% if blog.comments_enabled? %}
+  {% if blog.comments_enabled? and section.settings.show_comments %}
     <div class="max-w-3xl mx-auto px-6 pb-24">
 
       <!-- Existing Comments -->
@@ -195,7 +201,7 @@
             margin-bottom: 1.5rem;
           ">{{ article.comments_count }} {{ article.comments_count | pluralize: 'Comment', 'Comments' }}</p>
 
-          {% paginate article.comments by 10 %}
+          {% paginate article.comments by section.settings.comments_per_page %}
             {% for comment in article.comments %}
               <div class="ma-comment">
                 <p class="ma-comment-author">{{ comment.author }}</p>
@@ -213,7 +219,7 @@
       {% endif %}
 
       <!-- Comment Form -->
-      <h2 class="ma-comment-section-title">Leave a Comment</h2>
+      <h2 class="ma-comment-section-title">{{ section.settings.comment_form_heading | default: 'Leave a Comment' }}</h2>
 
       {% form 'new_comment', article, id: 'article-comment-form' %}
         {{ form.errors | default_errors }}
@@ -328,3 +334,94 @@
     });
   });
 </script>
+
+{% schema %}
+{
+  "name": "Article",
+  "tag": "section",
+  "class": "main-article-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Article Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reading_time",
+      "label": "Show reading time",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Content Options"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show article tags",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share",
+      "label": "Show share bar",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Author Card"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author card",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "author_name_fallback",
+      "label": "Author name fallback",
+      "default": "The Dropxlabel Team",
+      "info": "Shown when article has no author set"
+    },
+    {
+      "type": "textarea",
+      "id": "author_bio_fallback",
+      "label": "Author bio fallback",
+      "default": "A storyteller at the intersection of craft and culture — writing about fashion as a form of personal language.",
+      "info": "Shown when author has no bio in Shopify Admin"
+    },
+    {
+      "type": "header",
+      "content": "Comments"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_comments",
+      "label": "Show comments section",
+      "default": true,
+      "info": "Only appears if Comments are enabled in Blog settings"
+    },
+    {
+      "type": "text",
+      "id": "comment_form_heading",
+      "label": "Comment form heading",
+      "default": "Leave a Comment"
+    },
+    {
+      "type": "range",
+      "id": "comments_per_page",
+      "label": "Comments per page",
+      "min": 5,
+      "max": 50,
+      "step": 5,
+      "default": 10
+    }
+  ],
+  "presets": [
+    {
+      "name": "Article"
+    }
+  ]
+}
+{% endschema %}

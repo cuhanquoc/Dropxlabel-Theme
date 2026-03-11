@@ -42,135 +42,258 @@
       <!-- ── Col 2-4: Navigation Columns ── -->
       <div class="flex-1 flex flex-col md:flex-row md:justify-between md:gap-8 lg:gap-12">
 
-        <!-- ── Quick Links (Col 2) ── -->
-        <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
-          <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
-                  aria-expanded="false">
-            <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
-              {{ section.settings.col2_title | default: 'Quick links' }}
-            </span>
-            <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
-              <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
-              <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
-            </span>
-          </button>
-          <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
-               style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
-            <ul class="pb-5 md:pb-0 flex flex-col gap-3">
-              {%- for i in (1..6) -%}
-                {%- assign label_key = 'c2_link' | append: i | append: '_label' -%}
-                {%- assign url_key = 'c2_link' | append: i | append: '_url' -%}
-                {%- assign label = section.settings[label_key] -%}
-                {%- assign url = section.settings[url_key] -%}
-                {%- if label != blank and url != blank -%}
+        {%- if section.blocks.size > 0 -%}
+          {%- comment -%} Block-based rendering — each link_column block is one accordion column {%- endcomment -%}
+          {%- assign current_column = nil -%}
+          {%- for block in section.blocks -%}
+
+            {%- if block.type == "link_column" -%}
+              {%- unless current_column == nil -%}
+                    </ul>
+                  </div>
+                </div>
+              {%- endunless -%}
+              {%- assign current_column = block -%}
+              <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0" {{ block.shopify_attributes }}>
+                <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
+                        aria-expanded="false">
+                  <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
+                    {{ block.settings.title | default: 'Links' }}
+                  </span>
+                  <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
+                    <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
+                    <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
+                  </span>
+                </button>
+                <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
+                     style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
+                  <ul class="pb-5 md:pb-0 flex flex-col gap-3">
+
+            {%- elsif block.type == "link_item" and current_column != nil -%}
+              {%- if block.settings.label != blank and block.settings.url != blank -%}
+                    <li {{ block.shopify_attributes }}>
+                      <a href="{{ block.settings.url }}"
+                         class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
+                        {{ block.settings.label }}
+                      </a>
+                    </li>
+              {%- endif -%}
+
+            {%- elsif block.type == "social_links" -%}
+              {%- unless current_column == nil -%}
+                    </ul>
+                  </div>
+                </div>
+              {%- endunless -%}
+              {%- assign current_column = block -%}
+              <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0" {{ block.shopify_attributes }}>
+                <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
+                        aria-expanded="false">
+                  <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
+                    {{ block.settings.title | default: 'Follow us on' }}
+                  </span>
+                  <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
+                    <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
+                    <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
+                  </span>
+                </button>
+                <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
+                     style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
+                  <ul class="pb-5 md:pb-0 flex flex-col gap-3">
+                    {%- if block.settings.instagram != blank -%}
+                      <li>
+                        <a href="{{ block.settings.instagram }}" target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                          Instagram
+                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                        </a>
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.twitter != blank -%}
+                      <li>
+                        <a href="{{ block.settings.twitter }}" target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                          X (Twitter)
+                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                        </a>
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.youtube != blank -%}
+                      <li>
+                        <a href="{{ block.settings.youtube }}" target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                          YouTube
+                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                        </a>
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.tiktok != blank -%}
+                      <li>
+                        <a href="{{ block.settings.tiktok }}" target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                          TikTok / Pinterest
+                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                        </a>
+                      </li>
+                    {%- endif -%}
+                    {%- if block.settings.facebook != blank -%}
+                      <li>
+                        <a href="{{ block.settings.facebook }}" target="_blank" rel="noopener"
+                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                          Facebook
+                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                        </a>
+                      </li>
+                    {%- endif -%}
+                  </ul>
+                </div>
+              </div>
+              {%- assign current_column = nil -%}
+            {%- endif -%}
+
+          {%- endfor -%}
+
+          {%- comment -%} Close last link_column if open {%- endcomment -%}
+          {%- unless current_column == nil or current_column.type == "social_links" -%}
+                  </ul>
+                </div>
+              </div>
+          {%- endunless -%}
+
+        {%- else -%}
+          {%- comment -%} Legacy fallback — settings c2/c3 columns + social settings {%- endcomment -%}
+
+          <!-- ── Quick Links (Col 2) ── -->
+          <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
+            <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
+                    aria-expanded="false">
+              <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
+                {{ section.settings.col2_title | default: 'Quick links' }}
+              </span>
+              <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
+                <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
+                <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
+              </span>
+            </button>
+            <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
+                 style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
+              <ul class="pb-5 md:pb-0 flex flex-col gap-3">
+                {%- for i in (1..6) -%}
+                  {%- assign label_key = 'c2_link' | append: i | append: '_label' -%}
+                  {%- assign url_key = 'c2_link' | append: i | append: '_url' -%}
+                  {%- assign label = section.settings[label_key] -%}
+                  {%- assign url = section.settings[url_key] -%}
+                  {%- if label != blank and url != blank -%}
+                    <li>
+                      <a href="{{ url }}"
+                         class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
+                        {{ label }}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          </div>
+
+          <!-- ── Support (Col 3) ── -->
+          <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
+            <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
+                    aria-expanded="false">
+              <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
+                {{ section.settings.col3_title | default: 'Support' }}
+              </span>
+              <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
+                <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
+                <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
+              </span>
+            </button>
+            <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
+                 style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
+              <ul class="pb-5 md:pb-0 flex flex-col gap-3">
+                {%- for i in (1..6) -%}
+                  {%- assign label_key = 'c3_link' | append: i | append: '_label' -%}
+                  {%- assign url_key = 'c3_link' | append: i | append: '_url' -%}
+                  {%- assign label = section.settings[label_key] -%}
+                  {%- assign url = section.settings[url_key] -%}
+                  {%- if label != blank and url != blank -%}
+                    <li>
+                      <a href="{{ url }}"
+                         class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
+                        {{ label }}
+                      </a>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          </div>
+
+          <!-- ── Follow us on (Col 4 / Social) ── -->
+          <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
+            <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
+                    aria-expanded="false">
+              <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
+                {{ section.settings.col4_title | default: 'Follow us on' }}
+              </span>
+              <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
+                <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
+                <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
+              </span>
+            </button>
+            <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
+                 style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
+              <ul class="pb-5 md:pb-0 flex flex-col gap-3">
+                {%- if section.settings.social_instagram != blank -%}
                   <li>
-                    <a href="{{ url }}"
-                       class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
-                      {{ label }}
+                    <a href="{{ section.settings.social_instagram }}" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                      Instagram
+                      <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
                     </a>
                   </li>
                 {%- endif -%}
-              {%- endfor -%}
-            </ul>
-          </div>
-        </div>
-
-        <!-- ── Support (Col 3) ── -->
-        <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
-          <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
-                  aria-expanded="false">
-            <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
-              {{ section.settings.col3_title | default: 'Support' }}
-            </span>
-            <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
-              <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
-              <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
-            </span>
-          </button>
-          <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
-               style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
-            <ul class="pb-5 md:pb-0 flex flex-col gap-3">
-              {%- for i in (1..6) -%}
-                {%- assign label_key = 'c3_link' | append: i | append: '_label' -%}
-                {%- assign url_key = 'c3_link' | append: i | append: '_url' -%}
-                {%- assign label = section.settings[label_key] -%}
-                {%- assign url = section.settings[url_key] -%}
-                {%- if label != blank and url != blank -%}
+                {%- if section.settings.social_twitter != blank -%}
                   <li>
-                    <a href="{{ url }}"
-                       class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
-                      {{ label }}
+                    <a href="{{ section.settings.social_twitter }}" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                      X (Twitter)
+                      <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
                     </a>
                   </li>
                 {%- endif -%}
-              {%- endfor -%}
-            </ul>
+                {%- if section.settings.social_youtube != blank -%}
+                  <li>
+                    <a href="{{ section.settings.social_youtube }}" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                      YouTube
+                      <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                    </a>
+                  </li>
+                {%- endif -%}
+                {%- if section.settings.social_tiktok != blank -%}
+                  <li>
+                    <a href="{{ section.settings.social_tiktok }}" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                      Pinterest
+                      <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                    </a>
+                  </li>
+                {%- endif -%}
+                {%- if section.settings.social_facebook != blank -%}
+                  <li>
+                    <a href="{{ section.settings.social_facebook }}" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
+                      Facebook
+                      <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
+                    </a>
+                  </li>
+                {%- endif -%}
+              </ul>
+            </div>
           </div>
-        </div>
 
-        <!-- ── Follow us on (Col 4 / Social) ── -->
-        <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
-          <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
-                  aria-expanded="false">
-            <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
-              {{ section.settings.col4_title | default: 'Follow us on' }}
-            </span>
-            <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
-              <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
-              <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
-            </span>
-          </button>
-          <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
-               style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
-            <ul class="pb-5 md:pb-0 flex flex-col gap-3">
-              {%- if section.settings.social_instagram != blank -%}
-                <li>
-                  <a href="{{ section.settings.social_instagram }}" target="_blank" rel="noopener"
-                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                    Instagram
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                  </a>
-                </li>
-              {%- endif -%}
-              {%- if section.settings.social_twitter != blank -%}
-                <li>
-                  <a href="{{ section.settings.social_twitter }}" target="_blank" rel="noopener"
-                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                    X (Twitter)
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                  </a>
-                </li>
-              {%- endif -%}
-              {%- if section.settings.social_youtube != blank -%}
-                <li>
-                  <a href="{{ section.settings.social_youtube }}" target="_blank" rel="noopener"
-                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                    YouTube
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                  </a>
-                </li>
-              {%- endif -%}
-              {%- if section.settings.social_tiktok != blank -%}
-                <li>
-                  <a href="{{ section.settings.social_tiktok }}" target="_blank" rel="noopener"
-                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                    Pinterest
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                  </a>
-                </li>
-              {%- endif -%}
-              {%- if section.settings.social_facebook != blank -%}
-                <li>
-                  <a href="{{ section.settings.social_facebook }}" target="_blank" rel="noopener"
-                     class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                    Facebook
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                  </a>
-                </li>
-              {%- endif -%}
-            </ul>
-          </div>
-        </div>
+        {%- endif -%}
 
       </div>
     </div>
@@ -297,7 +420,7 @@
     },
     {
       "type": "header",
-      "content": "Column 2 — Quick Links"
+      "content": "Legacy: Column 2 — Quick Links (used when no blocks exist)"
     },
     {
       "type": "text",
@@ -367,7 +490,7 @@
     },
     {
       "type": "header",
-      "content": "Column 3 — Support"
+      "content": "Legacy: Column 3 — Support"
     },
     {
       "type": "text",
@@ -437,7 +560,7 @@
     },
     {
       "type": "header",
-      "content": "Column 4 — Follow Us"
+      "content": "Legacy: Column 4 — Follow Us"
     },
     {
       "type": "text",
@@ -489,6 +612,110 @@
       "type": "url",
       "id": "social_vimeo",
       "label": "Vimeo URL"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_column",
+      "name": "Link Column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Column Title",
+          "default": "Quick Links"
+        }
+      ]
+    },
+    {
+      "type": "link_item",
+      "name": "Link Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Shop All"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        }
+      ]
+    },
+    {
+      "type": "social_links",
+      "name": "Social Links Column",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Column Title",
+          "default": "Follow us on"
+        },
+        {
+          "type": "url",
+          "id": "instagram",
+          "label": "Instagram URL"
+        },
+        {
+          "type": "url",
+          "id": "twitter",
+          "label": "X (Twitter) URL"
+        },
+        {
+          "type": "url",
+          "id": "youtube",
+          "label": "YouTube URL"
+        },
+        {
+          "type": "url",
+          "id": "tiktok",
+          "label": "TikTok / Pinterest URL"
+        },
+        {
+          "type": "url",
+          "id": "facebook",
+          "label": "Facebook URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        {
+          "type": "link_column",
+          "settings": { "title": "Quick Links" }
+        },
+        {
+          "type": "link_item",
+          "settings": { "label": "Shop All", "url": "/collections/all" }
+        },
+        {
+          "type": "link_item",
+          "settings": { "label": "New Arrivals", "url": "/collections/new-arrivals" }
+        },
+        {
+          "type": "link_column",
+          "settings": { "title": "Support" }
+        },
+        {
+          "type": "link_item",
+          "settings": { "label": "Contact Us", "url": "/pages/contact" }
+        },
+        {
+          "type": "link_item",
+          "settings": { "label": "FAQ", "url": "/pages/faq" }
+        },
+        {
+          "type": "social_links",
+          "settings": { "title": "Follow us on" }
+        }
+      ]
     }
   ]
 }
