@@ -25,6 +25,7 @@
       "settings": {
         "gallery_gap": 2,
         "size_chart_text": "<p>S (Chest: 36\", Length: 28\")</p><p>M (Chest: 38\", Length: 29\")</p><p>L (Chest: 40\", Length: 30\")</p>",
+        "show_pickup": true,
         "pickup_title": "Pickup available at California Warehouse",
         "pickup_time": "Usually ready in 24 hours",
         "delivery_text": "Free delivery within 2 days",
@@ -32,9 +33,25 @@
         "pairs_collection": "",
         "pairs_heading": "PAIRS WELL WITH"
       }
+    },
+    "1773227294fecbe10f": {
+      "type": "apps",
+      "blocks": {
+        "trustwill_trustoo_review_widget_yJJyKt": {
+          "type": "shopify://apps/trustwill-trustoo/blocks/review-widget/c8f15077-6475-4e86-ad06-b66038d5ba2c",
+          "settings": {
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "trustwill_trustoo_review_widget_yJJyKt"
+      ],
+      "settings": {}
     }
   },
   "order": [
-    "main"
+    "main",
+    "1773227294fecbe10f"
   ]
 }
