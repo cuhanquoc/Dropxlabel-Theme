@@ -34,7 +34,35 @@
           "isolde-bikini™-metal-decor-bikini",
           "odessa-bikini™-polkadots-beach-resort-bikini",
           "vivienne-bikini™-stripe-sexy-bikini",
-          "jessey-dress™-camisole-sun-dress"
+          "jessey-dress™-camisole-sun-dress",
+          "american-danish-flag-graphic-tee-usa-denmark-dual-flag-t-shirt-for-fashionalble-person",
+          "acid-wash-tee-bigfoot-alien-heart-graphic-shirt",
+          "bruno-mars-the-romantic-tour-2026™-wash-t-shirt",
+          "bruno-mars-the-romantic-tour-north-america-europe-uk™-wash-t-shirt"
+        ],
+        "title_font_size": "1.2rem",
+        "title_color": "#999999",
+        "title_font_weight": "500",
+        "price_color": "#111111",
+        "compare_color": "#999999"
+      }
+    },
+    "featured_collection_crzLpL": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Trending Products",
+        "heading_color": "#0a0a0a",
+        "heading_size": "clamp(4rem,16vw,11rem)",
+        "product_list": [
+          "esme-bikini™-tie-side-triangle-bikini",
+          "isolde-bikini™-metal-decor-bikini",
+          "odessa-bikini™-polkadots-beach-resort-bikini",
+          "vivienne-bikini™-stripe-sexy-bikini",
+          "jessey-dress™-camisole-sun-dress",
+          "american-danish-flag-graphic-tee-usa-denmark-dual-flag-t-shirt-for-fashionalble-person",
+          "acid-wash-tee-bigfoot-alien-heart-graphic-shirt",
+          "bruno-mars-the-romantic-tour-2026™-wash-t-shirt",
+          "bruno-mars-the-romantic-tour-north-america-europe-uk™-wash-t-shirt"
         ],
         "title_font_size": "1.2rem",
         "title_color": "#999999",
@@ -200,6 +228,7 @@
   "order": [
     "hero-banner",
     "featured-collection",
+    "featured_collection_crzLpL",
     "brand-story-bento",
     "trending-accordion",
     "marquee_ticker_6CKgye",
