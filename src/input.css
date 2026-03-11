@@ -1616,8 +1616,9 @@ textarea.ma-form-field {
     }
 }
 
-/* Mobile header */
+/* Mobile header — handled via .hdr-inner scoped styles in header.liquid */
 @media (max-width: 767px) {
+    /* Ensure old .site-header grid fallback is removed — new .hdr-inner handles layout */
     header.site-header {
         padding: 0 !important;
     }
@@ -1673,9 +1674,9 @@ textarea.ma-form-field {
 
 .hamburger-line {
     display: block;
-    width: 20px;
+    width: 22px;
     height: 1.5px;
-    background-color: #ffffff;
+    background-color: #0a0a0a;
     border-radius: 2px;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, width 0.3s ease;
     transform-origin: center;

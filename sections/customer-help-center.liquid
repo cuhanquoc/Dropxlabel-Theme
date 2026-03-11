@@ -60,7 +60,7 @@
 
             {%- elsif block.type == "faq_item" -%}
               {%- if block.settings.question != blank -%}
-                <div class="hc-faq-item" {{ block.shopify_attributes }} style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease, border-radius 0.4s ease;">
+                <div class="hc-faq-item" {{ block.shopify_attributes }} style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease;">
                   <button class="hc-faq-btn" aria-expanded="false"
                           style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
                     <span class="hc-faq-question" style="font-family: var(--font-heading, 'Playfair Display', serif); font-weight: 700; font-size: 1.1rem; line-height: 1.3; color: #0a0a0a; transition: color 0.3s ease;">
@@ -93,7 +93,7 @@
             {%- assign question = section.settings[q_key] -%}
             {%- assign answer = section.settings[a_key] -%}
             {%- if question != blank -%}
-              <div class="hc-faq-item" style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease, border-radius 0.4s ease;">
+              <div class="hc-faq-item" style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease;">
 
                 <button class="hc-faq-btn" aria-expanded="false"
                         style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
@@ -148,6 +148,38 @@
           btn.removeEventListener('click', btn._handler);
         });
         this._buttons = [];
+      }
+
+      _spinIcon(spinEl, isOpen) {
+        const currentAngle = parseFloat(spinEl.dataset.angle || '0');
+        /* Opening: spin 360° then land at 45° (+ → ×). Closing: spin back 360° to 0° */
+        const targetAngle = isOpen
+          ? currentAngle + 360           /* closing: +360°, lands at multiple of 360 = + shape */
+          : currentAngle + 360 + 45;     /* opening: +360° + 45° = × shape */
+        spinEl.dataset.angle = targetAngle;
+        spinEl.animate(
+          [{ transform: `rotate(${currentAngle}deg)` }, { transform: `rotate(${targetAngle}deg)` }],
+          { duration: 280, easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'forwards' }
+        );
+      }
+
+      _closeItem(btn) {
+        const item = btn.closest('.hc-faq-item');
+        const answer = item.querySelector('.hc-faq-answer');
+        const question = btn.querySelector('.hc-faq-question');
+        const icon = btn.querySelector('.hc-faq-icon');
+        const spinEl = btn.querySelector('.hc-icon-spin');
+        this._spinIcon(spinEl, true); /* currently open → spin to + */
+        answer.style.maxHeight = '0';
+        answer.style.opacity = '0';
+        item.style.backgroundColor = 'transparent';
+        item.style.marginLeft = '';
+        item.style.marginRight = '';
+        item.style.paddingLeft = '';
+        item.style.paddingRight = '';
+        question.style.color = '#0a0a0a';
+        icon.style.backgroundColor = '#0a0a0a';
+        btn.setAttribute('aria-expanded', 'false');
       }
 
       toggle(btn) {
