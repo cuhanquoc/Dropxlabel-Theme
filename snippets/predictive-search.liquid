@@ -1,322 +1,631 @@
 {%- comment -%}
   ─────────────────────────────────────────
-  PREDICTIVE SEARCH SNIPPET
-  Include in layout/theme.liquid via:
-    {% render 'predictive-search' %}
-  Open via: PredictiveSearch.open()
+  PREDICTIVE SEARCH — Mobile Full-Screen Overlay
+  Slides DOWN from top of viewport
+  Open:  PredictiveSearch.open()
+  Close: PredictiveSearch.close()
   ─────────────────────────────────────────
 {%- endcomment -%}
 
 <style>
-  /* ─── Predictive Search Overlay ─── */
+  /* ════════════════════════════════════════
+     SEARCH OVERLAY — Slide from top
+  ════════════════════════════════════════ */
 
   #search-overlay {
     position: fixed;
     inset: 0;
-    z-index: 300;
-    background-color: #ffffff;
+    z-index: 1100;
+    background: #fff;
     display: flex;
     flex-direction: column;
-    opacity: 0;
+    transform: translateY(-100%);
+    transition: none; /* GSAP handles it */
     pointer-events: none;
-    /* GSAP controls visibility */
+    overflow: hidden;
   }
 
   #search-overlay.is-open {
     pointer-events: all;
   }
 
-  /* Top bar: input + close */
-  .ps-top {
+  /* ── Search bar (sticky top) ── */
+  .mps-topbar {
     flex-shrink: 0;
-    padding: 5rem 2.5rem 2.5rem;
-    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px 14px 20px;
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .mps-icon {
+    flex-shrink: 0;
+    color: #555;
+    display: flex;
+    align-items: center;
+  }
+
+  .mps-input-wrap {
+    flex: 1;
     position: relative;
   }
 
-  @media (min-width: 768px) {
-    .ps-top { padding: 5rem 8rem 2.5rem; }
-  }
-
-  /* Giant input */
-  .ps-input {
+  .mps-input {
     width: 100%;
-    background: transparent;
     border: none;
-    border-bottom: 1px solid #d1d5db; /* gray-300 */
     outline: none;
-    font-family: var(--font-heading);
-    font-size: clamp(2rem, 5vw, 4rem);
-    color: var(--color-text);
-    line-height: 1.2;
-    padding: 0.5rem 0 1rem;
-    letter-spacing: -0.01em;
-    caret-color: var(--color-accent);
-    transition: border-color 300ms ease;
-  }
-
-  .ps-input::placeholder {
-    color: #d1d5db;
-  }
-
-  .ps-input:focus {
-    border-bottom-color: var(--color-text);
-  }
-
-  /* Close button */
-  .ps-close {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.75rem;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 1px solid var(--color-border);
     background: transparent;
+    font-family: var(--font-body, sans-serif);
+    font-size: 1.05rem;
+    font-weight: 400;
+    color: #111;
+    padding: 0;
+    line-height: 1.4;
+    caret-color: #111;
+  }
+
+  .mps-input::placeholder { color: #aaa; }
+
+  .mps-close-btn {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f2f2f2;
+    border: none;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    color: var(--color-text);
-    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+    color: #333;
+    transition: background 0.2s;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .ps-close:hover {
-    background-color: var(--color-text);
-    border-color: var(--color-text);
-    color: #ffffff;
-  }
+  .mps-close-btn:hover { background: #e5e5e5; }
 
-  /* Results area */
-  .ps-results {
+  /* ── Scrollable body ── */
+  .mps-body {
     flex: 1;
     overflow-y: auto;
-    padding: 2.5rem 2.5rem 5rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-border) transparent;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    padding-bottom: 80px; /* space above bottom nav */
   }
 
-  @media (min-width: 768px) {
-    .ps-results { padding: 3rem 8rem 5rem; }
+  .mps-body::-webkit-scrollbar { display: none; }
+
+  .mps-section {
+    padding: 20px 20px 0;
   }
 
-  /* Results label */
-  .ps-results-label {
-    font-family: var(--font-body);
-    font-size: 0.6rem;
-    letter-spacing: 0.22em;
+  /* ── Section headings ── */
+  .mps-heading {
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-muted);
-    margin-bottom: 2rem;
+    color: #888;
+    margin-bottom: 14px;
   }
 
-  /* Product card — image + name only */
-  .ps-card {
-    display: block;
+  /* ── Recent Searches ── */
+  .mps-recent-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mps-recent-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 11px 0;
+    border-bottom: 1px solid #f5f5f5;
+  }
+
+  .mps-recent-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     text-decoration: none;
+    color: #1a1a1a;
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.95rem;
+    font-weight: 400;
+    flex: 1;
+    min-width: 0;
     cursor: pointer;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 0;
   }
 
-  .ps-card-img {
-    aspect-ratio: 3/4;
+  .mps-recent-arrow {
+    color: #bbb;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+
+  .mps-recent-link:hover .mps-recent-arrow { color: #555; }
+
+  /* ── Divider ── */
+  .mps-divider {
+    height: 1px;
+    background: #f2f2f2;
+    margin: 22px 0 0;
+  }
+
+  /* ── Horizontal product scroll ── */
+  .mps-products-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+    margin-top: 2px;
+  }
+
+  .mps-products-scroll::-webkit-scrollbar { display: none; }
+
+  .mps-product-card {
+    flex: 0 0 140px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .mps-product-img {
+    width: 140px;
+    height: 175px;
+    border-radius: 10px;
     overflow: hidden;
-    border-radius: 8px;
-    background-color: #f5f4f1;
-    margin-bottom: 0.9rem;
+    background: #f5f4f1;
+    margin-bottom: 8px;
+    position: relative;
   }
 
-  .ps-card-img img {
+  .mps-product-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
   }
 
-  .ps-card:hover .ps-card-img img {
+  .mps-product-card:active .mps-product-img img {
     transform: scale(1.04);
   }
 
-  .ps-card-name {
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    font-weight: 400;
-    color: var(--color-text);
-    line-height: 1.4;
-    transition: color 200ms ease;
+  .mps-product-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #111;
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 4px;
   }
 
-  .ps-card:hover .ps-card-name {
-    color: var(--color-accent);
+  .mps-product-name {
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: #111;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  /* Empty / idle state */
-  .ps-empty {
+  .mps-product-price {
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.72rem;
+    color: #555;
+    margin-top: 2px;
+  }
+
+  .mps-product-compare {
+    text-decoration: line-through;
+    color: #aaa;
+    margin-left: 4px;
+  }
+
+  /* ── Popular Collections ── */
+  .mps-collections-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mps-collection-item {
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .mps-collection-link {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    text-decoration: none;
+    color: #1a1a1a;
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .mps-collection-arrow {
+    width: 28px;
+    height: 28px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    display: flex;
     align-items: center;
     justify-content: center;
-    height: 240px;
-    gap: 1rem;
-    color: #9ca3af; /* gray-400 */
-    text-align: center;
+    flex-shrink: 0;
+    color: #555;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
   }
 
-  .ps-empty p {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    letter-spacing: 0.04em;
+  .mps-collection-link:active .mps-collection-arrow {
+    background: #111;
+    border-color: #111;
+    color: #fff;
   }
 
-  /* Skeleton shimmer for loading */
-  @keyframes shimmer {
-    0%   { background-position: -600px 0; }
-    100% { background-position:  600px 0; }
+  /* ── Live results ── */
+  #mps-live-results {
+    display: none;
+    padding: 20px;
   }
 
-  .ps-skeleton {
-    background: linear-gradient(90deg, #f0efed 25%, #e8e6e3 50%, #f0efed 75%);
-    background-size: 600px 100%;
-    animation: shimmer 1.2s ease-in-out infinite;
-    border-radius: 8px;
+  .mps-live-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
 
-  /* Trending tags (shown before typing) */
-  .ps-tag {
-    display: inline-block;
-    padding: 0.45rem 1.1rem;
-    border: 1px solid var(--color-border);
-    border-radius: 9999px;
-    font-family: var(--font-body);
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    color: var(--color-text);
+  .mps-live-card {
     text-decoration: none;
-    transition: background-color 250ms ease, border-color 250ms ease, color 250ms ease;
-    margin: 0.3rem;
+    color: inherit;
+    display: block;
   }
 
-  .ps-tag:hover {
-    background-color: var(--color-text);
-    border-color: var(--color-text);
-    color: var(--color-bg);
+  .mps-live-img {
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f5f4f1;
+    aspect-ratio: 3/4;
+    margin-bottom: 8px;
+  }
+
+  .mps-live-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  .mps-live-card:active .mps-live-img img { transform: scale(1.03); }
+
+  .mps-live-name {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #111;
+    line-height: 1.3;
+  }
+
+  .mps-live-price {
+    font-size: 0.75rem;
+    color: #555;
+    margin-top: 2px;
+  }
+
+  /* ── Empty / skeleton ── */
+  #mps-empty-state {
+    display: none;
+    padding: 60px 20px;
+    text-align: center;
+    color: #bbb;
+    font-family: var(--font-body, sans-serif);
+    font-size: 0.9rem;
+  }
+
+  @keyframes mps-shimmer {
+    0%   { background-position: -400px 0; }
+    100% { background-position:  400px 0; }
+  }
+
+  .mps-skeleton {
+    background: linear-gradient(90deg, #f0efed 25%, #e8e6e3 50%, #f0efed 75%);
+    background-size: 400px 100%;
+    animation: mps-shimmer 1.1s ease-in-out infinite;
+    border-radius: 6px;
+  }
+
+  #mps-loading {
+    display: none;
+    padding: 20px;
+  }
+
+  /* ── Overlay backdrop ── */
+  #search-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1099;
+    background: rgba(0,0,0,0.25);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+
+  #search-backdrop.is-active {
     opacity: 1;
+    pointer-events: all;
   }
 </style>
+
+<!-- ── Backdrop ── -->
+<div id="search-backdrop" aria-hidden="true"></div>
 
 <!-- ── Search Overlay ── -->
 <div id="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
 
-  <!-- Top: Giant Input -->
-  <div class="ps-top">
-    <button
-      class="ps-close"
-      data-ps-close
-      aria-label="Close search"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <!-- Top search bar -->
+  <div class="mps-topbar">
+    <span class="mps-icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+    </span>
+    <div class="mps-input-wrap">
+      <label for="mps-input" class="sr-only">Search</label>
+      <input
+        id="mps-input"
+        type="search"
+        class="mps-input"
+        placeholder="Search…"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+        aria-label="Search products"
+      />
+    </div>
+    <button class="mps-close-btn" data-mps-close aria-label="Close search">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M18 6 6 18M6 6l12 12"/>
       </svg>
     </button>
-
-    <label for="ps-input" class="sr-only">Search products</label>
-    <input
-      id="ps-input"
-      type="search"
-      class="ps-input"
-      placeholder="Search..."
-      autocomplete="off"
-      autocorrect="off"
-      spellcheck="false"
-      aria-label="Search products"
-    />
   </div>
 
-  <!-- Results Area -->
-  <div class="ps-results" id="ps-results-area">
+  <!-- Scrollable body -->
+  <div class="mps-body">
 
-    <!-- Default (before typing): Trending suggestions -->
-    <div id="ps-default-state">
-      <p class="ps-results-label">Trending</p>
-      <div>
-        <a href="{{ routes.collections_url }}/linen" class="ps-tag">Linen</a>
-        <a href="{{ routes.collections_url }}/silk" class="ps-tag">Silk</a>
-        <a href="{{ routes.collections_url }}/coats" class="ps-tag">Coats</a>
-        <a href="{{ routes.collections_url }}/sets" class="ps-tag">Co-ord Sets</a>
-        <a href="{{ routes.collections_url }}/minimal" class="ps-tag">Minimal</a>
-        <a href="{{ routes.collections_url }}/eveningwear" class="ps-tag">Eveningwear</a>
+    <!-- DEFAULT STATE (before typing) -->
+    <div id="mps-default-state">
+
+      <!-- Recent Searches -->
+      <div class="mps-section" id="mps-recent-section" style="display:none;">
+        <p class="mps-heading">Recent search</p>
+        <ul class="mps-recent-list" id="mps-recent-list"></ul>
+        <div class="mps-divider"></div>
       </div>
-    </div>
 
-    <!-- Loading skeletons (hidden by default) -->
-    <div id="ps-loading-state" style="display:none;">
-      <p class="ps-results-label">Searching...</p>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <!-- You May Also Like (featured products) -->
+      <div class="mps-section">
+        <p class="mps-heading">You may also like</p>
+        <div class="mps-products-scroll" id="mps-featured-products">
+          {%- assign featured_products = collections.all.products | limit: 8 -%}
+          {%- for product in featured_products -%}
+            <a href="{{ product.url }}" class="mps-product-card">
+              <div class="mps-product-img">
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="mps-product-badge">Sale</span>
+                {%- endif -%}
+                {%- if product.featured_image -%}
+                  <img
+                    src="{{ product.featured_image | img_url: '300x400', crop: 'center' }}"
+                    alt="{{ product.title | escape }}"
+                    width="140"
+                    height="175"
+                    loading="lazy"
+                  />
+                {%- else -%}
+                  <div style="width:100%;height:100%;background:#eee;"></div>
+                {%- endif -%}
+              </div>
+              <p class="mps-product-name">{{ product.title | truncate: 28 }}</p>
+              <p class="mps-product-price">
+                {{ product.price | money }}
+                {%- if product.compare_at_price > product.price -%}
+                  <span class="mps-product-compare">{{ product.compare_at_price | money }}</span>
+                {%- endif -%}
+              </p>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="mps-divider" style="margin-top: 24px;"></div>
+
+      <!-- Popular Collections -->
+      <div class="mps-section" style="margin-top: 22px;">
+        <p class="mps-heading">Popular collections</p>
+        <ul class="mps-collections-list">
+          {%- for collection in collections limit: 8 -%}
+            {%- unless collection.handle == 'frontpage' or collection.handle == 'all' -%}
+              <li class="mps-collection-item">
+                <a href="{{ collection.url }}" class="mps-collection-link">
+                  <span class="mps-collection-arrow" aria-hidden="true">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M7 17L17 7M7 7h10v10"/>
+                    </svg>
+                  </span>
+                  {{ collection.title | upcase }}
+                </a>
+              </li>
+            {%- endunless -%}
+          {%- endfor -%}
+        </ul>
+      </div>
+
+    </div>
+    <!-- / DEFAULT STATE -->
+
+    <!-- LOADING STATE -->
+    <div id="mps-loading">
+      <p class="mps-heading" style="padding: 0 0 14px;">Searching…</p>
+      <div class="mps-live-grid">
         {% for i in (1..4) %}
           <div>
-            <div class="ps-skeleton" style="aspect-ratio: 3/4; margin-bottom: 0.9rem;"></div>
-            <div class="ps-skeleton" style="height: 14px; width: 70%; border-radius: 4px;"></div>
+            <div class="mps-skeleton" style="aspect-ratio:3/4;margin-bottom:8px;border-radius:8px;"></div>
+            <div class="mps-skeleton" style="height:12px;width:75%;margin-bottom:5px;border-radius:4px;"></div>
+            <div class="mps-skeleton" style="height:11px;width:45%;border-radius:4px;"></div>
           </div>
         {% endfor %}
       </div>
     </div>
 
-    <!-- Empty state (no results) -->
-    <div id="ps-empty-state" style="display:none;" class="ps-empty">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-border);" aria-hidden="true">
-        <circle cx="11" cy="11" r="8"/>
-        <path d="m21 21-4.3-4.3"/>
-      </svg>
-      <p>No results found.</p>
+    <!-- LIVE RESULTS -->
+    <div id="mps-live-results">
+      <p class="mps-heading" id="mps-results-label">Results</p>
+      <div class="mps-live-grid" id="mps-live-grid"></div>
     </div>
 
-    <!-- Live results grid (populated by JS) -->
-    <div id="ps-results-grid" style="display:none;">
-      <p class="ps-results-label" id="ps-results-label">Results</p>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8" id="ps-grid"></div>
+    <!-- EMPTY STATE -->
+    <div id="mps-empty-state">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+      </svg>
+      <p style="margin-top:12px;">No results found.</p>
     </div>
 
   </div>
-  <!-- / Results Area -->
+  <!-- / mps-body -->
 
 </div>
 <!-- / Search Overlay -->
 
-
 <script>
-  /* ─────────────────────────────────────────────────────
-     PredictiveSearch — GSAP-powered full-screen overlay
+  /* ════════════════════════════════════════════════════════
+     Mobile Predictive Search — Slide-from-top, GSAP-powered
+     + localStorage recent searches
      + Shopify Predictive Search API
-     Requires: gsap.min.js (loaded in theme.liquid)
-  ───────────────────────────────────────────────────── */
+  ════════════════════════════════════════════════════════ */
   window.PredictiveSearch = (function () {
 
-    const OVERLAY    = document.getElementById('search-overlay');
-    const INPUT      = document.getElementById('ps-input');
-    const DEFAULT    = document.getElementById('ps-default-state');
-    const LOADING    = document.getElementById('ps-loading-state');
-    const EMPTY      = document.getElementById('ps-empty-state');
-    const GRID_WRAP  = document.getElementById('ps-results-grid');
-    const GRID       = document.getElementById('ps-grid');
-    const LABEL      = document.getElementById('ps-results-label');
-    let   isOpen     = false;
-    let   debounceId = null;
+    const OVERLAY     = document.getElementById('search-overlay');
+    const BACKDROP    = document.getElementById('search-backdrop');
+    const INPUT       = document.getElementById('mps-input');
+    const DEFAULT     = document.getElementById('mps-default-state');
+    const LOADING     = document.getElementById('mps-loading');
+    const LIVE        = document.getElementById('mps-live-results');
+    const LIVE_GRID   = document.getElementById('mps-live-grid');
+    const LIVE_LABEL  = document.getElementById('mps-results-label');
+    const EMPTY       = document.getElementById('mps-empty-state');
+    const RECENT_SEC  = document.getElementById('mps-recent-section');
+    const RECENT_LIST = document.getElementById('mps-recent-list');
+
+    let isOpen     = false;
+    let debounceId = null;
+    const STORAGE_KEY = 'mps_recent_v1';
+    const MAX_RECENT  = 5;
+
+    /* ── Recent Searches (localStorage) ── */
+    function getRecent() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+      catch (e) { return []; }
+    }
+    function saveRecent(terms) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(terms.slice(0, MAX_RECENT))); }
+      catch (e) {}
+    }
+    function addRecent(term) {
+      if (!term) return;
+      let terms = getRecent().filter(t => t.toLowerCase() !== term.toLowerCase());
+      terms.unshift(term);
+      saveRecent(terms);
+    }
+    function renderRecent() {
+      const terms = getRecent();
+      if (!terms.length) { RECENT_SEC.style.display = 'none'; return; }
+      RECENT_SEC.style.display = '';
+      RECENT_LIST.innerHTML = terms.map(t => `
+        <li class="mps-recent-item">
+          <button class="mps-recent-link" data-recent-term="${escHtml(t)}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            ${escHtml(t)}
+          </button>
+          <svg class="mps-recent-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 17L17 7M7 7h10v10"/>
+          </svg>
+        </li>
+      `).join('');
+    }
+
+    /* ── State helpers ── */
+    function showDefault()  {
+      DEFAULT.style.display = '';
+      LOADING.style.display = 'none';
+      LIVE.style.display    = 'none';
+      EMPTY.style.display   = 'none';
+      renderRecent();
+    }
+    function showLoading()  {
+      DEFAULT.style.display = 'none';
+      LOADING.style.display = '';
+      LIVE.style.display    = 'none';
+      EMPTY.style.display   = 'none';
+    }
+    function showLive()     {
+      DEFAULT.style.display = 'none';
+      LOADING.style.display = 'none';
+      LIVE.style.display    = '';
+      EMPTY.style.display   = 'none';
+    }
+    function showEmpty()    {
+      DEFAULT.style.display = 'none';
+      LOADING.style.display = 'none';
+      LIVE.style.display    = 'none';
+      EMPTY.style.display   = '';
+    }
 
     /* ── Open ── */
     function open() {
       if (isOpen) return;
       isOpen = true;
       OVERLAY.classList.add('is-open');
+      BACKDROP.classList.add('is-active');
       document.body.style.overflow = 'hidden';
+      showDefault();
 
       if (typeof gsap !== 'undefined') {
         gsap.fromTo(OVERLAY,
-          { opacity: 0, y: '-6%' },
-          { opacity: 1, y: '0%', duration: 0.6, ease: 'power3.out',
-            onComplete: () => INPUT.focus() }
+          { y: '-100%' },
+          {
+            y: '0%',
+            duration: 0.55,
+            ease: 'power4.out',
+            onComplete: () => INPUT.focus()
+          }
         );
       } else {
-        OVERLAY.style.opacity = 1;
+        OVERLAY.style.transform = 'translateY(0)';
         INPUT.focus();
       }
     }
@@ -327,38 +636,30 @@
 
       if (typeof gsap !== 'undefined') {
         gsap.to(OVERLAY, {
-          opacity: 0,
-          y: '-4%',
+          y: '-100%',
           duration: 0.4,
-          ease: 'power3.in',
-          onComplete: () => {
-            isOpen = false;
-            OVERLAY.classList.remove('is-open');
-            document.body.style.overflow = '';
-            INPUT.value = '';
-            showDefault();
-          }
+          ease: 'power4.in',
+          onComplete: finishClose
         });
       } else {
-        isOpen = false;
-        OVERLAY.style.opacity = 0;
-        OVERLAY.classList.remove('is-open');
-        document.body.style.overflow = '';
-        INPUT.value = '';
-        showDefault();
+        OVERLAY.style.transform = 'translateY(-100%)';
+        finishClose();
       }
+      BACKDROP.classList.remove('is-active');
     }
 
-    /* ── State helpers ── */
-    function showDefault()  { DEFAULT.style.display=''; LOADING.style.display='none'; EMPTY.style.display='none'; GRID_WRAP.style.display='none'; }
-    function showLoading()  { DEFAULT.style.display='none'; LOADING.style.display=''; EMPTY.style.display='none'; GRID_WRAP.style.display='none'; }
-    function showEmpty()    { DEFAULT.style.display='none'; LOADING.style.display='none'; EMPTY.style.display=''; GRID_WRAP.style.display='none'; }
-    function showResults()  { DEFAULT.style.display='none'; LOADING.style.display='none'; EMPTY.style.display='none'; GRID_WRAP.style.display=''; }
+    function finishClose() {
+      isOpen = false;
+      OVERLAY.classList.remove('is-open');
+      document.body.style.overflow = '';
+      INPUT.value = '';
+      showDefault();
+    }
 
     /* ── Shopify Predictive Search API ── */
-    function fetchResults(query) {
-      const url = '/search/suggest.json?q=' + encodeURIComponent(query)
-               + '&resources[type]=product&resources[limit]=8&resources[options][fields]=title,product_type,variants.title';
+    function fetchResults(q) {
+      const url = '/search/suggest.json?q=' + encodeURIComponent(q)
+        + '&resources[type]=product&resources[limit]=6&resources[options][fields]=title,product_type,variants.title';
 
       fetch(url)
         .then(r => r.json())
@@ -366,31 +667,33 @@
           const items = data?.resources?.results?.products || [];
           if (!items.length) { showEmpty(); return; }
 
-          LABEL.textContent = items.length + (items.length === 1 ? ' Result' : ' Results');
-          GRID.innerHTML = items.map(product => `
-            <a href="${product.url}" class="ps-card">
-              <div class="ps-card-img">
-                ${product.featured_image?.url
-                  ? `<img src="${product.featured_image.url}&width=400" alt="${escHtml(product.title)}" loading="lazy" width="400" height="533"/>`
-                  : `<div style="width:100%;height:100%;background:var(--color-border);"></div>`
-                }
+          LIVE_LABEL.textContent = items.length + (items.length === 1 ? ' result' : ' results');
+          LIVE_GRID.innerHTML = items.map(p => `
+            <a href="${p.url}" class="mps-live-card" data-search-result="${escHtml(p.title)}">
+              <div class="mps-live-img">
+                ${p.featured_image?.url
+                  ? `<img src="${p.featured_image.url}&width=300" alt="${escHtml(p.title)}" loading="lazy" width="150" height="200"/>`
+                  : `<div style="width:100%;height:100%;background:#eee;"></div>`}
               </div>
-              <p class="ps-card-name">${escHtml(product.title)}</p>
+              <p class="mps-live-name">${escHtml(p.title)}</p>
+              <p class="mps-live-price">${formatMoney(p.price)}</p>
             </a>
           `).join('');
 
-          showResults();
-
-          /* Stagger product cards in */
+          showLive();
           if (typeof gsap !== 'undefined') {
-            gsap.from(GRID.querySelectorAll('.ps-card'), {
-              opacity: 0, y: 24,
-              duration: 0.5, ease: 'power3.out',
-              stagger: 0.07
+            gsap.from(LIVE_GRID.querySelectorAll('.mps-live-card'), {
+              opacity: 0, y: 18, duration: 0.4, ease: 'power3.out', stagger: 0.06
             });
           }
         })
         .catch(() => showEmpty());
+    }
+
+    /* ── Money formatter (Shopify cents → display) ── */
+    function formatMoney(cents) {
+      if (cents == null) return '';
+      return (cents / 100).toLocaleString('en-US', { style: 'currency', currency: (window.Shopify?.currency?.active || 'USD') });
     }
 
     function escHtml(str) {
@@ -401,15 +704,41 @@
         .replace(/"/g, '&quot;');
     }
 
-    /* ── Input handler with 300ms debounce ── */
+    /* ── Input handler ── */
     INPUT.addEventListener('input', () => {
       const q = INPUT.value.trim();
       clearTimeout(debounceId);
-
       if (!q) { showDefault(); return; }
-
       showLoading();
-      debounceId = setTimeout(() => fetchResults(q), 300);
+      debounceId = setTimeout(() => fetchResults(q), 320);
+    });
+
+    /* ── Search submit: save recent ── */
+    INPUT.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && INPUT.value.trim()) {
+        const q = INPUT.value.trim();
+        addRecent(q);
+        window.location.href = '/search?q=' + encodeURIComponent(q) + '&type=product';
+      }
+    });
+
+    /* ── Click on result card: save recent ── */
+    document.addEventListener('click', e => {
+      const card = e.target.closest('[data-search-result]');
+      if (card) {
+        const q = INPUT.value.trim();
+        if (q) addRecent(q);
+      }
+    });
+
+    /* ── Click recent term ── */
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('[data-recent-term]');
+      if (!btn) return;
+      const term = btn.dataset.recentTerm;
+      INPUT.value = term;
+      showLoading();
+      fetchResults(term);
     });
 
     /* ── ESC key ── */
@@ -417,12 +746,17 @@
       if (e.key === 'Escape' && isOpen) close();
     });
 
+    /* ── Backdrop click ── */
+    BACKDROP.addEventListener('click', close);
+
     return { open, close };
 
   }());
 
-  /* ── Delegation: close button ── */
+  /* ── Delegation: close buttons ── */
   document.addEventListener('click', function (e) {
-    if (e.target.closest('[data-ps-close]')) { PredictiveSearch.close(); }
+    if (e.target.closest('[data-ps-close], [data-mps-close]')) {
+      PredictiveSearch.close();
+    }
   });
 </script>

@@ -241,6 +241,16 @@
         window.addEventListener('scroll', this._bound, { passive: true });
         // Always show on load; auto-hide on scroll-down
         this.classList.add('mob-nav--visible');
+
+        /* ── Intercept search tab → open overlay ── */
+        this.addEventListener('click', function (e) {
+          var item = e.target.closest('[data-nav-type="search"]');
+          if (!item) return;
+          e.preventDefault();
+          if (window.PredictiveSearch) {
+            window.PredictiveSearch.open();
+          }
+        });
       }
       disconnectedCallback() {
         window.removeEventListener('scroll', this._bound);
