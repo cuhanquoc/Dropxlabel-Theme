@@ -51,6 +51,15 @@
     "brand-story-bento": {
       "type": "brand-story-bento",
       "blocks": {
+        "story_card_qPRTkN": {
+          "type": "story_card",
+          "settings": {
+            "tag_text": "Grace, Glamour, Style, Confidence",
+            "title": "Séxy",
+            "button_text": "SHOP NOW",
+            "link_url": ""
+          }
+        },
         "story_card_cRWndc": {
           "type": "story_card",
           "settings": {
@@ -84,6 +93,7 @@
         "story_card_fGjqjM": {
           "type": "story_card",
           "settings": {
+            "image": "shopify://shop_images/hf_20260311_103644_a5e13b80-4924-431f-8e52-33b014c3f6c6.jpg",
             "tag_text": "But not boring",
             "title": "Basic for Life",
             "button_text": "SHOP NOW",
@@ -92,6 +102,7 @@
         }
       },
       "block_order": [
+        "story_card_qPRTkN",
         "story_card_cRWndc",
         "story_card_8JMVJR",
         "story_card_FUXThE",
