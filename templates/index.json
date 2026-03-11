@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-banner": {
@@ -42,35 +51,45 @@
     "brand-story-bento": {
       "type": "brand-story-bento",
       "blocks": {
+        "story_card_cRWndc": {
+          "type": "story_card",
+          "settings": {
+            "tag_text": "Pastoral in 90s",
+            "title": "Cottage core",
+            "button_text": "SHOP NOW",
+            "link_url": ""
+          }
+        },
         "story_card_8JMVJR": {
           "type": "story_card",
           "settings": {
-            "tag_text": "Grace, Glamour, Style, Confidence",
-            "title": "Elegant Evening Wear",
+            "tag_text": "Polish with clean",
+            "title": "Elegant Lady",
             "button_text": "SHOP NOW",
-            "link_url": ""
+            "link_url": "shopify://collections/elegant"
           }
         },
         "story_card_FUXThE": {
           "type": "story_card",
           "settings": {
-            "tag_text": "Grace, Glamour, Style, Confidence",
-            "title": "Elegant Evening Wear",
+            "tag_text": "Quiet luxury",
+            "title": "Old Money Vibes",
             "button_text": "SHOP NOW",
-            "link_url": ""
+            "link_url": "shopify://collections/old-money"
           }
         },
         "story_card_fGjqjM": {
           "type": "story_card",
           "settings": {
-            "tag_text": "Grace, Glamour, Style, Confidence",
-            "title": "Elegant Evening Wear",
+            "tag_text": "But not boring",
+            "title": "Basic for Life",
             "button_text": "SHOP NOW",
-            "link_url": ""
+            "link_url": "shopify://collections/minimalism"
           }
         }
       },
       "block_order": [
+        "story_card_cRWndc",
         "story_card_8JMVJR",
         "story_card_FUXThE",
         "story_card_fGjqjM"
