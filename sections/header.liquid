@@ -161,8 +161,19 @@
     </div>
     <!-- / Catalog with Mega Menu -->
 
-    <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="nav-link">About</a>
-    <a href="{{ routes.blogs_url }}" class="nav-link">Blogs</a>
+    {%- comment -%} Dynamic nav links — add via Customizer > Header > Add block > Nav Link {%- endcomment -%}
+    {%- assign nav_link_blocks = section.blocks | where: 'type', 'nav_link' -%}
+    {%- if nav_link_blocks.size > 0 -%}
+      {%- for block in nav_link_blocks -%}
+        {%- if block.settings.label != blank -%}
+          <a href="{{ block.settings.url | default: '#' }}" class="nav-link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    {%- else -%}
+      {%- comment -%} Fallback: hardcode defaults (shown when no nav_link blocks added yet) {%- endcomment -%}
+      <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="nav-link">About</a>
+      <a href="{{ routes.blogs_url }}" class="nav-link">Blogs</a>
+    {%- endif -%}
   </nav>
 
   <!-- CENTER: Brand Logo -->
@@ -350,7 +361,26 @@
       "label": "Panel 2 Link"
     }
   ],
+  "max_blocks": 8,
   "blocks": [
+    {
+      "type": "nav_link",
+      "name": "Nav Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Link Label",
+          "default": "Page",
+          "info": "Text shown in the desktop navigation bar"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link URL"
+        }
+      ]
+    },
     {
       "type": "mega_column",
       "name": "Collection Column",
@@ -417,6 +447,20 @@
     {
       "name": "Header",
       "blocks": [
+        {
+          "type": "nav_link",
+          "settings": {
+            "label": "About",
+            "url": "/pages/about"
+          }
+        },
+        {
+          "type": "nav_link",
+          "settings": {
+            "label": "Blogs",
+            "url": "/blogs/news"
+          }
+        },
         {
           "type": "mega_column",
           "settings": {

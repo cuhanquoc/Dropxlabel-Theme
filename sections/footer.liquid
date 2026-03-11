@@ -300,9 +300,45 @@
 
     <!-- ── Bottom bar ── -->
     <div class="mt-10 pt-6 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4">
-      <p class="font-body text-[0.65rem] tracking-[0.1em] uppercase text-white/30">
-        © {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
-      </p>
+      <div class="flex flex-col items-center md:items-start gap-1">
+        <p class="font-body text-[0.65rem] tracking-[0.1em] uppercase text-white/30">
+          {%- if section.settings.copyright_text != blank -%}
+            {{ section.settings.copyright_text }}
+          {%- else -%}
+            &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+          {%- endif -%}
+        </p>
+        {%- if section.settings.hotline != blank -%}
+          <p class="font-body text-[0.65rem] tracking-[0.1em] uppercase text-white/30">{{ section.settings.hotline }}</p>
+        {%- endif -%}
+        {%- assign has_legal = false -%}
+        {%- for i in (1..4) -%}
+          {%- liquid
+            assign legal_label_key = 'legal_' | append: i | append: '_label'
+            assign legal_url_key   = 'legal_' | append: i | append: '_url'
+            assign legal_label     = section.settings[legal_label_key]
+            assign legal_url       = section.settings[legal_url_key]
+          -%}
+          {%- if legal_label != blank -%}
+            {%- assign has_legal = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if has_legal -%}
+          <nav class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1" aria-label="Legal links">
+            {%- for i in (1..4) -%}
+              {%- liquid
+                assign legal_label_key = 'legal_' | append: i | append: '_label'
+                assign legal_url_key   = 'legal_' | append: i | append: '_url'
+                assign legal_label     = section.settings[legal_label_key]
+                assign legal_url       = section.settings[legal_url_key]
+              -%}
+              {%- if legal_label != blank -%}
+                <a href="{{ legal_url | default: '#' }}" class="font-body text-[0.6rem] tracking-[0.08em] uppercase text-white/20 hover:text-white/50 transition-colors">{{ legal_label }}</a>
+              {%- endif -%}
+            {%- endfor -%}
+          </nav>
+        {%- endif -%}
+      </div>
       <div class="flex items-center gap-3 opacity-40">
         {%- for type in shop.enabled_payment_types -%}
           <span class="h-6">{{ type | payment_type_svg_tag }}</span>
@@ -612,8 +648,69 @@
       "type": "url",
       "id": "social_vimeo",
       "label": "Vimeo URL"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Bar"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Copyright Text",
+      "info": "Leave blank to auto-generate: \u00a9 YEAR Shopname. All rights reserved."
+    },
+    {
+      "type": "text",
+      "id": "hotline",
+      "label": "Hotline / Contact Line",
+      "info": "Optional. Shown below copyright. E.g. Hotline: 1800-123-456"
+    },
+    {
+      "type": "header",
+      "content": "Legal Links (up to 4)"
+    },
+    {
+      "type": "text",
+      "id": "legal_1_label",
+      "label": "Legal Link 1 Label"
+    },
+    {
+      "type": "url",
+      "id": "legal_1_url",
+      "label": "Legal Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "legal_2_label",
+      "label": "Legal Link 2 Label"
+    },
+    {
+      "type": "url",
+      "id": "legal_2_url",
+      "label": "Legal Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "legal_3_label",
+      "label": "Legal Link 3 Label"
+    },
+    {
+      "type": "url",
+      "id": "legal_3_url",
+      "label": "Legal Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "legal_4_label",
+      "label": "Legal Link 4 Label"
+    },
+    {
+      "type": "url",
+      "id": "legal_4_url",
+      "label": "Legal Link 4 URL"
     }
   ],
+  "max_blocks": 20,
   "blocks": [
     {
       "type": "link_column",
