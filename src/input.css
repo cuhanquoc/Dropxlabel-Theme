@@ -16,26 +16,18 @@ body {
 @keyframes kenBurns {
     0% {
         transform: scale(1) translateX(0) translateY(0);
-        filter: blur(10px);
-    }
-
-    15% {
-        filter: blur(0px);
     }
 
     33% {
         transform: scale(1.05) translateX(-1%) translateY(-0.5%);
-        filter: blur(0px);
     }
 
     66% {
         transform: scale(1.10) translateX(1%) translateY(-1%);
-        filter: blur(0px);
     }
 
     100% {
         transform: scale(1.15) translateX(-0.5%) translateY(-1.5%);
-        filter: blur(0px);
     }
 }
 
@@ -1616,44 +1608,22 @@ textarea.ma-form-field {
     }
 }
 
-/* Mobile header — handled via .hdr-inner scoped styles in header.liquid */
+/* Mobile header */
 @media (max-width: 767px) {
-    /* Ensure old .site-header grid fallback is removed — new .hdr-inner handles layout */
     header.site-header {
-        padding: 0 !important;
+        padding: 1rem 1.25rem !important;
+        display: grid !important;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
     }
 
-    header.site-header > div {
-        padding-top: 0.8rem;
-        padding-bottom: 0.8rem;
+    header.site-header .header-logo-wrap {
+        justify-self: center;
     }
-}
 
-/* Mobile menu close button */
-.mob-close-btn {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 50%;
-    cursor: pointer;
-    color: #fff;
-    transition: background 0.2s ease;
-    z-index: 10;
-}
-
-.mob-close-btn:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.mob-close-btn svg {
-    stroke: #fff !important;
+    header.site-header .header-right-icons {
+        justify-self: end;
+    }
 }
 
 /* Hamburger */
@@ -1674,9 +1644,9 @@ textarea.ma-form-field {
 
 .hamburger-line {
     display: block;
-    width: 22px;
+    width: 20px;
     height: 1.5px;
-    background-color: #0a0a0a;
+    background-color: #ffffff;
     border-radius: 2px;
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, width 0.3s ease;
     transform-origin: center;
