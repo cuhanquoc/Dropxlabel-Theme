@@ -97,6 +97,15 @@
     "brand-story-bento": {
       "type": "brand-story-bento",
       "blocks": {
+        "story_card_ibHREV": {
+          "type": "story_card",
+          "settings": {
+            "tag_text": "Your Paris is here",
+            "title": "Parisian Chic",
+            "button_text": "SHOP NOW",
+            "link_url": ""
+          }
+        },
         "story_card_cRWndc": {
           "type": "story_card",
           "settings": {
@@ -159,6 +168,7 @@
         }
       },
       "block_order": [
+        "story_card_ibHREV",
         "story_card_cRWndc",
         "story_card_8JMVJR",
         "story_card_FUXThE",
