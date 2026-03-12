@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "sections": {
@@ -118,18 +127,14 @@
           "icon_size": 24,
           "label_size": 10,
           "home_label": "Home",
-          "menu_label": "Menu",
-          "shop_label": "Shop",
+          "menu_label": "Collections",
+          "shop_label": "All Products",
           "account_label": "Account",
           "cart_label": "Cart",
-          "home_url": "",
-          "menu_url": "",
-          "shop_url": ""
+          "home_url": "https://dearnest.co/",
+          "menu_url": "https://dearnest.co/collections",
+          "shop_url": "https://dearnest.co/collections/all"
         }
-      },
-      "footer": {
-        "type": "footer",
-        "settings": {}
       },
       "cart-drawer": {
         "type": "cart-drawer",
