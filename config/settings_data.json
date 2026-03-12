@@ -1,4 +1,12 @@
-
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "sections": {
@@ -108,70 +116,29 @@
           "mega_video_link": ""
         }
       },
-      "footer": {
-        "type": "footer",
-        "settings": {
-          "marquee_heading": "Your Favorite Styles at Unmissable Prices",
-          "marquee_speed": 20,
-          "newsletter_text": "Whether you're looking for chic essentials, statement outfits, or casual staples, we've got something to suit every style. Browse our fresh arrivals and update your wardrobe with the season's hottest looks today!",
-          "col2_title": "Quick Links",
-          "c2_link1_label": "Home",
-          "c2_link1_url": "https://dearnest.co/",
-          "c2_link2_label": "Collections",
-          "c2_link2_url": "shopify://collections",
-          "c2_link3_label": "Best Sellers",
-          "c2_link3_url": "shopify://collections/best-sellers",
-          "c2_link4_label": "",
-          "c2_link4_url": "",
-          "c2_link5_label": "",
-          "c2_link5_url": "",
-          "c2_link6_label": "",
-          "c2_link6_url": "",
-          "col3_title": "About Us",
-          "c3_link1_label": "REFUND POLICY",
-          "c3_link1_url": "shopify://policies/refund-policy",
-          "c3_link2_label": "SHIPPING POLICY",
-          "c3_link2_url": "shopify://policies/shipping-policy",
-          "c3_link3_label": "TERM OF SERVICE",
-          "c3_link3_url": "shopify://policies/terms-of-service",
-          "c3_link4_label": "",
-          "c3_link4_url": "/pages/contact",
-          "c3_link5_label": "",
-          "c3_link5_url": "",
-          "c3_link6_label": "",
-          "c3_link6_url": "shopify://policies/shipping-policy",
-          "col4_title": "Social Media",
-          "social_facebook": "https://facebook.com",
-          "social_twitter": "https://x.com",
-          "social_instagram": "https://instagram.com",
-          "social_youtube": "https://youtube.com",
-          "social_tiktok": "https://pinterest.com",
-          "brand_name": "dropxlabel",
-          "brand_desc": "Dropxlabel is a premium official Shopify theme designed by DigiFist.",
-          "social_vimeo": "shopify://policies/terms-of-service"
-        }
-      },
       "mobile-bottom-nav": {
         "type": "mobile-bottom-nav",
         "settings": {
+          "bg_color": "#ffffff",
           "icon_color": "#1a1a1a",
-          "icon_size": 24,
-          "label_size": 10,
+          "active_color": "#111111",
           "badge_bg": "#0a0a0a",
           "badge_color": "#ffffff",
+          "icon_size": 24,
+          "label_size": 10,
           "home_label": "Home",
-          "home_url": "",
           "menu_label": "Menu",
-          "menu_url": "",
-          "search_label": "Search",
-          "search_url": "",
           "shop_label": "Shop",
-          "shop_url": "",
           "account_label": "Account",
-          "account_url": "",
           "cart_label": "Cart",
-          "cart_url": ""
+          "home_url": "",
+          "menu_url": "",
+          "shop_url": ""
         }
+      },
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {}
       }
     },
     "content_for_index": []
