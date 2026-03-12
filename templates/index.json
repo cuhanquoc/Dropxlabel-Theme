@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "announcement-bar": {
@@ -7,29 +16,42 @@
           "type": "message",
           "settings": {
             "text": "🚀 Free shipping on orders over $50 — Shop now!",
-            "link_text": "Shop now",
-            "link_url": "/collections/all"
+            "link": "",
+            "badge": ""
           }
         },
         "msg_2": {
           "type": "message",
           "settings": {
             "text": "✨ New arrivals every week — Stay stylish!",
-            "link_text": "View all",
-            "link_url": "/collections/new-arrivals"
+            "link": "",
+            "badge": ""
           }
         },
         "msg_3": {
           "type": "message",
           "settings": {
             "text": "💳 Buy 2 Get 3 — Limited time offer",
-            "link_text": "Explore",
-            "link_url": "/collections/all"
+            "link": "",
+            "badge": ""
           }
         }
       },
-      "block_order": ["msg_1", "msg_2", "msg_3"],
-      "settings": {}
+      "block_order": [
+        "msg_1",
+        "msg_2",
+        "msg_3"
+      ],
+      "settings": {
+        "show_bar": true,
+        "text": "Free Domestic Shipping over $150 and 30 Day Returns",
+        "link": "",
+        "font_size": 11,
+        "padding": 10,
+        "bg_color": "#1a1a1a",
+        "text_color": "#d4c8b0",
+        "animation": "fade_in"
+      }
     },
     "hero-banner": {
       "type": "hero-banner",
@@ -149,7 +171,7 @@
           "type": "product_card",
           "settings": {
             "product": "jessey-dress™-camisole-sun-dress",
-            "custom_title": "",
+            "custom_title": "JESSEY DRESS™",
             "card_color": "#c6e4e3"
           }
         },
@@ -157,7 +179,7 @@
           "type": "product_card",
           "settings": {
             "product": "odessa-bikini™-polkadots-beach-resort-bikini",
-            "custom_title": "",
+            "custom_title": "ODESSA BIKINI™",
             "card_color": "#e3cde9"
           }
         },
@@ -165,7 +187,7 @@
           "type": "product_card",
           "settings": {
             "product": "esme-bikini™-tie-side-triangle-bikini",
-            "custom_title": "",
+            "custom_title": "ESME BIKINI™",
             "card_color": "#c2e4cc"
           }
         },
@@ -173,7 +195,7 @@
           "type": "product_card",
           "settings": {
             "product": "isolde-bikini™-metal-decor-bikini",
-            "custom_title": "",
+            "custom_title": "ISODE BIKINI™",
             "card_color": "#e7e2bd"
           }
         },
@@ -181,7 +203,7 @@
           "type": "product_card",
           "settings": {
             "product": "aurelie-dress™-floral-printed-dress",
-            "custom_title": "",
+            "custom_title": "AURELIE DRESS™",
             "card_color": "#e2c9ce"
           }
         }
@@ -196,7 +218,7 @@
       "settings": {
         "heading": "TRENDING STYLES YOU CAN'T MISS!",
         "description_1": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers.",
-        "description_2": "Each piece is thoughtfully selected for its quality, comfort, and popularity, making it easy to stay stylish without compromising on ease.",
+        "description_2": "",
         "cta_text": "SHOP NOW",
         "cta_url": "",
         "bg_color": "#0a0a0a"
