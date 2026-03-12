@@ -117,6 +117,16 @@
             "link_url": "shopify://collections/elegant"
           }
         },
+        "story_card_nFBUF7": {
+          "type": "story_card",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260312_032954_126ffbc9-cfdd-43db-a310-8e048622901e.jpg",
+            "tag_text": "Summer is waiting",
+            "title": "Beach Vibes",
+            "button_text": "SHOP NOW",
+            "link_url": "shopify://collections/beach-vibes"
+          }
+        },
         "story_card_FUXThE": {
           "type": "story_card",
           "settings": {
@@ -154,7 +164,7 @@
             "tag_text": "Bring Europian Vibes",
             "title": "Dark/Light Academia",
             "button_text": "SHOP NOW",
-            "link_url": ""
+            "link_url": "shopify://collections/dark-light-academia"
           }
         },
         "story_card_ibHREV": {
@@ -164,13 +174,14 @@
             "tag_text": "Your Paris is here",
             "title": "Parisian Chic",
             "button_text": "SHOP NOW",
-            "link_url": ""
+            "link_url": "shopify://collections/parisian-chic"
           }
         }
       },
       "block_order": [
         "story_card_cRWndc",
         "story_card_8JMVJR",
+        "story_card_nFBUF7",
         "story_card_FUXThE",
         "story_card_fGjqjM",
         "story_card_qPRTkN",
@@ -182,7 +193,7 @@
         "subtitle": "",
         "title_align": "left",
         "title_color": "#0a0a0a",
-        "bg_image": "",
+        "bg_image": "{{ metaobjects[\"shopify--color-pattern\"].asphalt.image.value }}",
         "bg_color": "#f2f0ec"
       }
     },
