@@ -996,7 +996,9 @@
     }
   }
 
-  customElements.define('featured-collection', FeaturedCollection);
+  if (!customElements.get('featured-collection')) {
+    customElements.define('featured-collection', FeaturedCollection);
+  }
 })();
 
 /* ── Firework burst on scroll into view ── */

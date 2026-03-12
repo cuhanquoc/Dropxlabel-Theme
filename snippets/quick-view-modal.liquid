@@ -114,7 +114,7 @@
         priceEl.classList.remove('has-sale');
       }
 
-      document.getElementById('qv-stock-text').textContent = available ? '{{ section.settings.stock_text | default: "In stock" }}' : 'Out of stock';
+      document.getElementById('qv-stock-text').textContent = available ? {{ section.settings.stock_text | default: 'In stock' | json }} : 'Out of stock';
 
       /* Images */
       try { imgs = JSON.parse(btn.getAttribute('data-product-images')); } catch (e) { imgs = []; }

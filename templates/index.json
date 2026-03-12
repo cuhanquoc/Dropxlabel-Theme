@@ -182,7 +182,7 @@
         "subtitle": "",
         "title_align": "left",
         "title_color": "#0a0a0a",
-        "bg_image": "{{ metaobjects[\"shopify--color-pattern\"].asphalt.image.value }}",
+        "bg_image": "",
         "bg_color": "#f2f0ec"
       }
     },
