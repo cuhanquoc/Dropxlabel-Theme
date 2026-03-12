@@ -1,0 +1,269 @@
+/* ==========================================================
+   footer-accordion.css  —  Dropxlabel Premium Mobile Footer
+   ========================================================== */
+
+/* ── Root tokens ───────────────────────────────────────── */
+.fac-root {
+  --fac-bg:           #f3f3f3;
+  --fac-divider:      #e2e2e2;
+  --fac-text:         #111111;
+  --fac-text-muted:   #888888;
+  --fac-icon-size:    20px;
+  --fac-row-padding:  22px 20px;
+  --fac-transition:   280ms ease;
+  --fac-chat-size:    54px;
+  --fac-chat-bg:      #ffffff;
+  --fac-chat-shadow:  0 4px 20px rgba(0,0,0,.14);
+  --fac-font:         -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  background:         var(--fac-bg);
+  font-family:        var(--fac-font);
+  color:              var(--fac-text);
+  position:           relative;
+}
+
+/* ── Accordion list ────────────────────────────────────── */
+.fac-list {
+  list-style: none;
+  margin:  0;
+  padding: 0;
+  border-top: 1px solid var(--fac-divider);
+}
+
+.fac-item {
+  border-bottom: 1px solid var(--fac-divider);
+}
+
+/* ── Trigger button ─────────────────────────────────────── */
+.fac-trigger {
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  width:           100%;
+  padding:         var(--fac-row-padding);
+  background:      none;
+  border:          none;
+  cursor:          pointer;
+  text-align:      left;
+  color:           var(--fac-text);
+  gap:             12px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fac-trigger-label {
+  font-size:   16px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+}
+
+/* ── Plus / X icon ─────────────────────────────────────── */
+.fac-icon {
+  flex-shrink:  0;
+  width:        var(--fac-icon-size);
+  height:       var(--fac-icon-size);
+  position:     relative;
+  transition:   transform var(--fac-transition);
+}
+
+.fac-icon::before,
+.fac-icon::after {
+  content:    '';
+  position:   absolute;
+  background: var(--fac-text);
+  border-radius: 1px;
+  transition: transform var(--fac-transition), opacity var(--fac-transition);
+}
+
+/* horizontal bar */
+.fac-icon::before {
+  width:  100%;
+  height: 1.5px;
+  top:    50%;
+  left:   0;
+  transform: translateY(-50%);
+}
+
+/* vertical bar */
+.fac-icon::after {
+  width:  1.5px;
+  height: 100%;
+  left:   50%;
+  top:    0;
+  transform: translateX(-50%);
+}
+
+/* open state → rotate vertical bar so + becomes × */
+.fac-trigger[aria-expanded="true"] .fac-icon::after {
+  transform: translateX(-50%) rotate(90deg);
+  opacity: 0;
+}
+
+/* ── Panel (collapsible) ────────────────────────────────── */
+.fac-panel {
+  overflow:   hidden;
+  max-height: 0;
+  opacity:    0;
+  transition: max-height var(--fac-transition),
+              opacity    var(--fac-transition);
+}
+
+.fac-panel.is-open {
+  max-height: 600px;      /* large enough for any link list */
+  opacity:    1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fac-panel,
+  .fac-icon::before,
+  .fac-icon::after {
+    transition: none;
+  }
+}
+
+.fac-panel-inner {
+  padding: 4px 20px 20px;
+}
+
+/* Panel links */
+.fac-links {
+  list-style: none;
+  margin:  0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fac-links a {
+  font-size:   14px;
+  color:       var(--fac-text-muted);
+  text-decoration: none;
+  transition:  color var(--fac-transition);
+  display:     block;
+}
+
+.fac-links a:hover {
+  color: var(--fac-text);
+}
+
+/* ── Social row ─────────────────────────────────────────── */
+.fac-social {
+  display:         flex;
+  justify-content: center;
+  align-items:     center;
+  gap:             28px;
+  padding:         28px 20px;
+  border-bottom:   1px solid var(--fac-divider);
+}
+
+.fac-social-link {
+  display:  flex;
+  color:    var(--fac-text);
+  opacity:  1;
+  transition: opacity var(--fac-transition), transform var(--fac-transition);
+  line-height: 0;
+}
+
+.fac-social-link:hover {
+  opacity:   0.6;
+  transform: translateY(-2px);
+}
+
+.fac-social-link svg {
+  width:  22px;
+  height: 22px;
+  display: block;
+}
+
+/* ── Bottom address ─────────────────────────────────────── */
+.fac-address {
+  text-align:      center;
+  padding:         22px 20px 28px;
+  font-size:       10px;
+  font-weight:     500;
+  letter-spacing:  .12em;
+  text-transform:  uppercase;
+  color:           var(--fac-text-muted);
+  line-height:     1.6;
+}
+
+/* ── Floating chat button ───────────────────────────────── */
+.fac-chat-btn {
+  position:   fixed;
+  bottom:     24px;
+  right:      20px;
+  z-index:    9000;
+  width:      var(--fac-chat-size);
+  height:     var(--fac-chat-size);
+  border-radius: 50%;
+  background: var(--fac-chat-bg);
+  border:     none;
+  cursor:     pointer;
+  box-shadow: var(--fac-chat-shadow);
+  display:    flex;
+  align-items: center;
+  justify-content: center;
+  color:      var(--fac-text);
+  transition: transform var(--fac-transition), box-shadow var(--fac-transition);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.fac-chat-btn:hover {
+  transform:  translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0,0,0,.18);
+}
+
+.fac-chat-btn svg {
+  width:  22px;
+  height: 22px;
+}
+
+/* ── Tablet / Desktop overrides ─────────────────────────── */
+@media (min-width: 768px) {
+  /* On md+: show four columns instead of accordion */
+  .fac-list {
+    display:               grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:                   0;
+    border-top:            none;
+  }
+
+  .fac-item {
+    border-bottom: none;
+    border-right:  1px solid var(--fac-divider);
+    padding:       0;
+  }
+
+  .fac-item:last-child {
+    border-right: none;
+  }
+
+  .fac-trigger {
+    padding: 32px 28px 16px;
+    pointer-events: none;   /* no click on desktop */
+    cursor: default;
+  }
+
+  .fac-trigger .fac-icon {
+    display: none;            /* hide +/– icon on desktop */
+  }
+
+  /* Always open on desktop */
+  .fac-panel {
+    max-height: none !important;
+    opacity:    1   !important;
+    transition: none;
+  }
+
+  .fac-panel-inner {
+    padding: 0 28px 32px;
+  }
+
+  .fac-root {
+    padding-top: 8px;
+  }
+
+  .fac-address {
+    font-size: 11px;
+  }
+}
