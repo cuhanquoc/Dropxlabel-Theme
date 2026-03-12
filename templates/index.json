@@ -146,6 +146,16 @@
             "button_text": "SHOP NOW",
             "link_url": "shopify://collections/sexy"
           }
+        },
+        "story_card_NUhMUp": {
+          "type": "story_card",
+          "settings": {
+            "image": "shopify://shop_images/Thi_t_k_ch_a_co_ten_10_25d6cfe9-1939-4bf6-9888-579e96174597.png",
+            "tag_text": "Bring Europian Vibes",
+            "title": "Dark/Light Academia",
+            "button_text": "SHOP NOW",
+            "link_url": ""
+          }
         }
       },
       "block_order": [
@@ -153,7 +163,8 @@
         "story_card_8JMVJR",
         "story_card_FUXThE",
         "story_card_fGjqjM",
-        "story_card_qPRTkN"
+        "story_card_qPRTkN",
+        "story_card_NUhMUp"
       ],
       "settings": {
         "title": "Pick Your Vibe",
