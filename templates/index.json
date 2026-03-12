@@ -97,15 +97,6 @@
     "brand-story-bento": {
       "type": "brand-story-bento",
       "blocks": {
-        "story_card_ibHREV": {
-          "type": "story_card",
-          "settings": {
-            "tag_text": "Your Paris is here",
-            "title": "Parisian Chic",
-            "button_text": "SHOP NOW",
-            "link_url": ""
-          }
-        },
         "story_card_cRWndc": {
           "type": "story_card",
           "settings": {
@@ -165,16 +156,26 @@
             "button_text": "SHOP NOW",
             "link_url": ""
           }
+        },
+        "story_card_ibHREV": {
+          "type": "story_card",
+          "settings": {
+            "image": "shopify://shop_images/hf_20260312_032400_b666412f-43f9-4e4f-8977-1d6e289ddaa0.jpg",
+            "tag_text": "Your Paris is here",
+            "title": "Parisian Chic",
+            "button_text": "SHOP NOW",
+            "link_url": ""
+          }
         }
       },
       "block_order": [
-        "story_card_ibHREV",
         "story_card_cRWndc",
         "story_card_8JMVJR",
         "story_card_FUXThE",
         "story_card_fGjqjM",
         "story_card_qPRTkN",
-        "story_card_NUhMUp"
+        "story_card_NUhMUp",
+        "story_card_ibHREV"
       ],
       "settings": {
         "title": "Pick Your Vibe",
