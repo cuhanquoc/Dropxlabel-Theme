@@ -48,12 +48,18 @@
             {%- assign v_img_url = '' -%}
             {%- if v.featured_image != blank -%}
               {%- assign v_img_url = v.featured_image | image_url: width: 900 -%}
+            {%- elsif product.images[forloop.index0] != blank -%}
+              {%- assign v_img_url = product.images[forloop.index0] | image_url: width: 900 -%}
             {%- elsif product.featured_image != blank -%}
               {%- assign v_img_url = product.featured_image | image_url: width: 900 -%}
             {%- endif -%}
             {%- assign v_swatch_url = '' -%}
             {%- if v.featured_image != blank -%}
               {%- assign v_swatch_url = v.featured_image | image_url: width: 120 -%}
+            {%- elsif product.images[forloop.index0] != blank -%}
+              {%- assign v_swatch_url = product.images[forloop.index0] | image_url: width: 120 -%}
+            {%- elsif product.featured_image != blank -%}
+              {%- assign v_swatch_url = product.featured_image | image_url: width: 120 -%}
             {%- endif -%}
             {%- assign v_compare = v.compare_at_price | default: 0 -%}
             {%- capture v_entry -%}{"id":{{ v.id }},"title":{{ v.title | json }},"price":{{ v.price }},"compare":{{ v_compare }},"available":{{ v.available }},"img":{{ v_img_url | json }},"swatch":{{ v_swatch_url | json }},"option1":{{ v.option1 | json }},"option2":{{ v.option2 | json }},"option3":{{ v.option3 | json }}}{%- endcapture -%}
@@ -154,6 +160,10 @@
                     {%- assign sw_img = '' -%}
                     {%- if variant.featured_image != blank -%}
                       {%- assign sw_img = variant.featured_image | image_url: width: 120 -%}
+                    {%- elsif product.images[forloop.index0] != blank -%}
+                      {%- assign sw_img = product.images[forloop.index0] | image_url: width: 120 -%}
+                    {%- elsif product.featured_image != blank -%}
+                      {%- assign sw_img = product.featured_image | image_url: width: 120 -%}
                     {%- endif -%}
                     <button
                       class="fc-swatch{% if forloop.first %} active{% endif %}"
