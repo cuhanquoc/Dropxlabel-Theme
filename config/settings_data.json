@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "sections": {
@@ -126,98 +135,6 @@
           "menu_url": "",
           "shop_url": ""
         }
-      },
-      "footer": {
-        "type": "footer",
-        "settings": {
-          "marquee_heading": "Your Favorite Styles at Unmissable Prices",
-          "marquee_speed": 20,
-          "newsletter_text": "Whether you're looking for chic essentials, statement outfits, or casual staples, we've got something to suit every style. Browse our fresh arrivals and update your wardrobe with the season's hottest looks today!",
-          "legal_1_label": "Privacy Policy",
-          "legal_1_url": "/policies/privacy-policy",
-          "legal_2_label": "Terms of Service",
-          "legal_2_url": "/policies/terms-of-service",
-          "legal_3_label": "Refund Policy",
-          "legal_3_url": "/policies/refund-policy"
-        },
-        "blocks": {
-          "footer-col-quicklinks": {
-            "type": "link_column",
-            "settings": {
-              "title": "Quick Links"
-            }
-          },
-          "footer-item-shop": {
-            "type": "link_item",
-            "settings": {
-              "label": "Shop All",
-              "url": "/collections/all"
-            }
-          },
-          "footer-item-new": {
-            "type": "link_item",
-            "settings": {
-              "label": "New Arrivals",
-              "url": "/collections/new-arrivals"
-            }
-          },
-          "footer-item-sale": {
-            "type": "link_item",
-            "settings": {
-              "label": "Sale",
-              "url": "/collections/sale"
-            }
-          },
-          "footer-col-support": {
-            "type": "link_column",
-            "settings": {
-              "title": "Support"
-            }
-          },
-          "footer-item-contact": {
-            "type": "link_item",
-            "settings": {
-              "label": "Contact Us",
-              "url": "/pages/contact"
-            }
-          },
-          "footer-item-faq": {
-            "type": "link_item",
-            "settings": {
-              "label": "FAQ",
-              "url": "/pages/faq"
-            }
-          },
-          "footer-item-track": {
-            "type": "link_item",
-            "settings": {
-              "label": "Track Order",
-              "url": "/pages/track-order"
-            }
-          },
-          "footer-social": {
-            "type": "social_links",
-            "settings": {
-              "title": "Follow us on",
-              "instagram": "",
-              "twitter": "",
-              "youtube": "",
-              "tiktok": "",
-              "facebook": ""
-            }
-          }
-        },
-        "block_order": [
-          "footer-col-quicklinks",
-          "footer-item-shop",
-          "footer-item-new",
-          "footer-item-sale",
-          "footer-col-support",
-          "footer-item-contact",
-          "footer-item-faq",
-          "footer-item-track",
-          "footer-social"
-        ]
       },
       "cart-drawer": {
         "type": "cart-drawer",

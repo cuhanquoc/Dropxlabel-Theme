@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -16,7 +25,6 @@
       "settings": {
         "gallery_gap": 2,
         "size_chart_text": "<p>S (Chest: 36\", Length: 28\")</p><p>M (Chest: 38\", Length: 29\")</p><p>L (Chest: 40\", Length: 30\")</p>",
-        "show_pickup": true,
         "pickup_title": "Pickup available at California Warehouse",
         "pickup_time": "Usually ready in 24 hours",
         "delivery_text": "Free delivery within 2 days",
@@ -27,20 +35,60 @@
     },
     "trending-accordion": {
       "type": "trending-accordion",
-      "settings": {}
+      "settings": {
+        "eyebrow": "New Arrivals",
+        "heading": "Trending<br>Styles You<br>Can't Miss.",
+        "description": "Each style is a statement — restrained, intentional, and made to outlast every passing season.",
+        "cta_text": "Shop Now",
+        "cta_url": "shopify://collections/all",
+        "mobile_heading": "Trending Styles",
+        "island_text": "Trending Now",
+        "island_badge": "LIVE",
+        "pin_label1": "Fall Capsule",
+        "pin_url1": "",
+        "pin_label2": "Editorial",
+        "pin_url2": "",
+        "pin_label3": "Street Style",
+        "pin_url3": "",
+        "pin_label4": "Minimalist",
+        "pin_url4": "",
+        "pin_label5": "Runway",
+        "pin_url5": "",
+        "pin_label6": "New Season",
+        "pin_url6": "",
+        "deco_url1": "",
+        "deco_url2": "",
+        "deco_url3": "",
+        "deco_url4": ""
+      }
     },
     "marquee-ticker-related": {
       "type": "marquee-ticker",
-      "blocks": {},
-      "block_order": [],
       "settings": {
         "heading": "YOU MAY ALSO LIKE",
+        "description_1": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers. Each piece is thoughtfully selected for its quality, comfort, and popularity, making it easy to stay stylish without compromising on ease.",
+        "description_2": "From everyday essentials to standout statement looks, our bestsellers offer something for every wardrobe. Refresh your style with fashion that blends modern design and timeless appeal, and stay ahead of the curve with pieces that truly make an impact.",
         "cta_text": "View All",
-        "cta_url": "/collections/all"
+        "cta_url": "/collections/all",
+        "bg_color": "#0a0a0a"
       }
     },
     "apps": {
       "type": "apps",
+      "blocks": {
+        "dropxlabel_reviews_reviews_rQ8NXd": {
+          "type": "shopify://apps/dropxlabel-reviews/blocks/reviews/019ce16d-8025-7287-8a67-3e94a24b9de9",
+          "settings": {
+            "title": "Customer Reviews",
+            "max_reviews": 12,
+            "empty_text": "No reviews yet.",
+            "star_color": "#111111"
+          }
+        }
+      },
+      "block_order": [
+        "dropxlabel_reviews_reviews_rQ8NXd"
+      ],
       "settings": {}
     }
   },
