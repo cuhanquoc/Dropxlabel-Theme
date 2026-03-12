@@ -35,6 +35,7 @@
     },
     "trending-accordion": {
       "type": "trending-accordion",
+      "disabled": true,
       "settings": {
         "eyebrow": "New Arrivals",
         "heading": "Trending<br>Styles You<br>Can't Miss.",
@@ -64,6 +65,7 @@
     },
     "marquee-ticker-related": {
       "type": "marquee-ticker",
+      "disabled": true,
       "settings": {
         "heading": "YOU MAY ALSO LIKE",
         "description_1": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers. Each piece is thoughtfully selected for its quality, comfort, and popularity, making it easy to stay stylish without compromising on ease.",
@@ -80,9 +82,8 @@
           "type": "shopify://apps/dropxlabel-reviews/blocks/reviews/019ce16d-8025-7287-8a67-3e94a24b9de9",
           "settings": {
             "title": "Customer Reviews",
-            "max_reviews": 12,
             "empty_text": "No reviews yet.",
-            "star_color": "#111111"
+            "star_color": "#f7b200"
           }
         }
       },
