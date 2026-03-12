@@ -127,18 +127,59 @@
           "icon_size": 24,
           "label_size": 10,
           "home_label": "Home",
-          "menu_label": "Menu",
-          "shop_label": "Shop",
+          "menu_label": "Collections",
+          "shop_label": "All Product",
           "account_label": "Account",
           "cart_label": "Cart",
-          "home_url": "",
-          "menu_url": "",
-          "shop_url": ""
+          "home_url": "https://dearnest.co/",
+          "menu_url": "https://dearnest.co/collections",
+          "shop_url": "https://dearnest.co/collections/all"
         }
       },
       "cart-drawer": {
         "type": "cart-drawer",
         "settings": {}
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "footer-0": {
+            "type": "link_list",
+            "settings": {
+              "title": "Shop",
+              "menu": "main-menu"
+            }
+          },
+          "footer-1": {
+            "type": "link_list",
+            "settings": {
+              "title": "Support",
+              "menu": "footer"
+            }
+          },
+          "footer-2": {
+            "type": "link_list",
+            "settings": {
+              "title": "Company",
+              "menu": "footer"
+            }
+          }
+        },
+        "block_order": [
+          "footer-0",
+          "footer-1",
+          "footer-2"
+        ],
+        "settings": {
+          "brand_description": "Premium fashion for the modern lifestyle.",
+          "show_newsletter": true,
+          "newsletter_heading": "Stay in the loop",
+          "newsletter_subtext": "Get early access to new drops, exclusive offers, and style inspiration.",
+          "newsletter_placeholder": "Enter your email",
+          "newsletter_button": "Subscribe",
+          "copyright_text": "All rights reserved.",
+          "show_payment_icons": true
+        }
       }
     },
     "content_for_index": []
