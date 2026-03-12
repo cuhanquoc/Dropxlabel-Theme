@@ -9,53 +9,6 @@
  */
 {
   "sections": {
-    "announcement-bar": {
-      "type": "announcement-bar",
-      "blocks": {
-        "msg_1": {
-          "type": "message",
-          "disabled": true,
-          "settings": {
-            "text": "🚀 Free shipping on orders over $50 — Shop now!",
-            "link": "",
-            "badge": ""
-          }
-        },
-        "msg_2": {
-          "type": "message",
-          "disabled": true,
-          "settings": {
-            "text": "✨ New arrivals every week — Stay stylish!",
-            "link": "",
-            "badge": ""
-          }
-        },
-        "msg_3": {
-          "type": "message",
-          "disabled": true,
-          "settings": {
-            "text": "💳 Buy 2 Get 3 — Limited time offer",
-            "link": "",
-            "badge": ""
-          }
-        }
-      },
-      "block_order": [
-        "msg_1",
-        "msg_2",
-        "msg_3"
-      ],
-      "settings": {
-        "show_bar": true,
-        "text": "Free Domestic Shipping over $150 and 30 Day Returns",
-        "link": "",
-        "font_size": 11,
-        "padding": 10,
-        "bg_color": "#1a1a1a",
-        "text_color": "#d4c8b0",
-        "animation": "fade_in"
-      }
-    },
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
@@ -283,7 +236,6 @@
     }
   },
   "order": [
-    "announcement-bar",
     "hero-banner",
     "featured-collection",
     "brand-story-bento",
