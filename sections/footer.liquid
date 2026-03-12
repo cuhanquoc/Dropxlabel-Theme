@@ -1,820 +1,259 @@
-<footer-section class="block bg-[#1a1a1a] text-white overflow-hidden">
-  <!-- ═══ Marquee Headline ═══ -->
-  <div class="overflow-hidden pt-10 pb-6 md:pt-16 md:pb-10">
-    <div class="ft-marquee-track flex w-max select-none"
-         style="animation: ft-drift {{ section.settings.marquee_speed | default: 20 }}s linear infinite;">
-      {% for i in (1..6) %}
-        <span class="ft-marquee-word whitespace-nowrap pr-4 font-heading font-bold uppercase text-[clamp(2.8rem,8vw,5.5rem)] leading-none tracking-[-0.02em]">
-          {{ section.settings.marquee_heading | default: 'Your Favorite Styles at Unmissable Prices' }}
-        </span>
-      {% endfor %}
-    </div>
-  </div>
+<footer-section class="block bg-[#0A0A0A] text-white">
 
-  <!-- ═══ Main Content ═══ -->
-  <div class="max-w-[1280px] mx-auto px-5 md:px-10 pb-10 md:pb-16">
-    <div class="flex flex-col md:flex-row md:gap-12 lg:gap-16">
-
-      <!-- ── Col 1: Description + Email ── -->
-      <div class="md:w-[38%] lg:w-[35%] mb-10 md:mb-0">
-        <p class="font-body text-[0.85rem] md:text-[0.82rem] leading-[1.7] text-white/60 mb-6 max-w-[400px]">
-          {{ section.settings.newsletter_text }}
-        </p>
-
-        <!-- Email Subscribe -->
-        <form class="ft-subscribe-form flex items-center rounded-full border border-white/[0.12] bg-white/[0.05] overflow-hidden max-w-[400px]"
-              action="/contact#contact_form" method="post">
-          <input type="hidden" name="form_type" value="customer">
-          <input type="hidden" name="utf8" value="✓">
-          <input type="hidden" name="contact[tags]" value="newsletter">
-          <input type="email"
-                 name="contact[email]"
-                 placeholder="Email"
-                 autocomplete="email"
-                 required
-                 class="flex-1 bg-transparent px-5 py-3 text-[0.85rem] text-white placeholder-white/30 font-body focus-visible:outline focus-visible:outline-2 focus-visible:outline-white/50 focus:outline-none rounded-l-full">
-          <button type="submit"
-                  class="bg-white text-[#1a1a1a] font-body font-semibold text-[0.82rem] tracking-[0.02em] px-5 py-2.5 rounded-full mr-1.5 transition-[background-color,opacity,transform] duration-300 hover:bg-white/90 active:scale-95 shrink-0">
-            Subscribe
-          </button>
-        </form>
-      </div>
-
-      <!-- ── Col 2-4: Navigation Columns ── -->
-      <div class="flex-1 flex flex-col md:flex-row md:justify-between md:gap-8 lg:gap-12">
-
-        {%- if section.blocks.size > 0 -%}
-          {%- comment -%} Block-based rendering — each link_column block is one accordion column {%- endcomment -%}
-          {%- assign current_column = nil -%}
-          {%- for block in section.blocks -%}
-
-            {%- if block.type == "link_column" -%}
-              {%- unless current_column == nil -%}
-                    </ul>
-                  </div>
-                </div>
-              {%- endunless -%}
-              {%- assign current_column = block -%}
-              <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0" {{ block.shopify_attributes }}>
-                <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
-                        aria-expanded="false">
-                  <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
-                    {{ block.settings.title | default: 'Links' }}
-                  </span>
-                  <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
-                    <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
-                    <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
-                  </span>
-                </button>
-                <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
-                     style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
-                  <ul class="pb-5 md:pb-0 flex flex-col gap-3">
-
-            {%- elsif block.type == "link_item" and current_column != nil -%}
-              {%- if block.settings.label != blank and block.settings.url != blank -%}
-                    <li {{ block.shopify_attributes }}>
-                      <a href="{{ block.settings.url }}"
-                         class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
-                        {{ block.settings.label }}
-                      </a>
-                    </li>
-              {%- endif -%}
-
-            {%- elsif block.type == "social_links" -%}
-              {%- unless current_column == nil -%}
-                    </ul>
-                  </div>
-                </div>
-              {%- endunless -%}
-              {%- assign current_column = block -%}
-              <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0" {{ block.shopify_attributes }}>
-                <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
-                        aria-expanded="false">
-                  <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
-                    {{ block.settings.title | default: 'Follow us on' }}
-                  </span>
-                  <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
-                    <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
-                    <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
-                  </span>
-                </button>
-                <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
-                     style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
-                  <ul class="pb-5 md:pb-0 flex flex-col gap-3">
-                    {%- if block.settings.instagram != blank -%}
-                      <li>
-                        <a href="{{ block.settings.instagram }}" target="_blank" rel="noopener"
-                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                          Instagram
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                        </a>
-                      </li>
-                    {%- endif -%}
-                    {%- if block.settings.twitter != blank -%}
-                      <li>
-                        <a href="{{ block.settings.twitter }}" target="_blank" rel="noopener"
-                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                          X (Twitter)
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                        </a>
-                      </li>
-                    {%- endif -%}
-                    {%- if block.settings.youtube != blank -%}
-                      <li>
-                        <a href="{{ block.settings.youtube }}" target="_blank" rel="noopener"
-                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                          YouTube
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                        </a>
-                      </li>
-                    {%- endif -%}
-                    {%- if block.settings.tiktok != blank -%}
-                      <li>
-                        <a href="{{ block.settings.tiktok }}" target="_blank" rel="noopener"
-                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                          TikTok / Pinterest
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                        </a>
-                      </li>
-                    {%- endif -%}
-                    {%- if block.settings.facebook != blank -%}
-                      <li>
-                        <a href="{{ block.settings.facebook }}" target="_blank" rel="noopener"
-                           class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                          Facebook
-                          <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                        </a>
-                      </li>
-                    {%- endif -%}
-                  </ul>
-                </div>
-              </div>
-              {%- assign current_column = nil -%}
-            {%- endif -%}
-
-          {%- endfor -%}
-
-          {%- comment -%} Close last link_column if open {%- endcomment -%}
-          {%- unless current_column == nil or current_column.type == "social_links" -%}
-                  </ul>
-                </div>
-              </div>
-          {%- endunless -%}
-
+  {%- if section.settings.show_newsletter -%}
+  <div class="border-b border-white/10 py-14 px-6 md:px-10 lg:px-14">
+    <div class="max-w-2xl mx-auto text-center">
+      {%- if section.settings.newsletter_heading != blank -%}
+        <h2 class="font-heading text-2xl md:text-3xl font-semibold mb-3 text-white">
+          {{ section.settings.newsletter_heading }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.newsletter_subtext != blank -%}
+        <p class="text-white/60 font-body text-sm mb-6">{{ section.settings.newsletter_subtext }}</p>
+      {%- endif -%}
+      {% form 'customer', id: 'footer-newsletter-form' %}
+        {%- if form.posted_successfully? -%}
+          <p class="text-green-400 text-sm">{{ 'footer.newsletter.success' | t }}</p>
         {%- else -%}
-          {%- comment -%} Legacy fallback — settings c2/c3 columns + social settings {%- endcomment -%}
-
-          <!-- ── Quick Links (Col 2) ── -->
-          <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
-            <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
-                    aria-expanded="false">
-              <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
-                {{ section.settings.col2_title | default: 'Quick links' }}
-              </span>
-              <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
-                <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
-                <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
-              </span>
+          <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <input
+              type="email"
+              name="contact[email]"
+              id="footer-email"
+              placeholder="{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}"
+              required
+              autocomplete="email"
+              class="flex-1 max-w-xs bg-white/5 border border-white/20 rounded px-4 py-3 text-sm text-white placeholder-white/40 font-body focus:outline-none focus:border-white/50 transition-colors"
+            >
+            <button
+              type="submit"
+              class="px-6 py-3 bg-white text-black text-sm font-semibold font-body rounded hover:bg-white/90 transition-colors cursor-pointer"
+            >
+              {{ section.settings.newsletter_button | default: 'Subscribe' }}
             </button>
-            <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
-                 style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
-              <ul class="pb-5 md:pb-0 flex flex-col gap-3">
-                {%- for i in (1..6) -%}
-                  {%- assign label_key = 'c2_link' | append: i | append: '_label' -%}
-                  {%- assign url_key = 'c2_link' | append: i | append: '_url' -%}
-                  {%- assign label = section.settings[label_key] -%}
-                  {%- assign url = section.settings[url_key] -%}
-                  {%- if label != blank and url != blank -%}
-                    <li>
-                      <a href="{{ url }}"
-                         class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
-                        {{ label }}
-                      </a>
-                    </li>
-                  {%- endif -%}
-                {%- endfor -%}
-              </ul>
-            </div>
           </div>
-
-          <!-- ── Support (Col 3) ── -->
-          <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
-            <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
-                    aria-expanded="false">
-              <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
-                {{ section.settings.col3_title | default: 'Support' }}
-              </span>
-              <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
-                <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
-                <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
-              </span>
-            </button>
-            <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
-                 style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
-              <ul class="pb-5 md:pb-0 flex flex-col gap-3">
-                {%- for i in (1..6) -%}
-                  {%- assign label_key = 'c3_link' | append: i | append: '_label' -%}
-                  {%- assign url_key = 'c3_link' | append: i | append: '_url' -%}
-                  {%- assign label = section.settings[label_key] -%}
-                  {%- assign url = section.settings[url_key] -%}
-                  {%- if label != blank and url != blank -%}
-                    <li>
-                      <a href="{{ url }}"
-                         class="font-body text-[0.72rem] tracking-[0.14em] uppercase text-white/50 hover:text-white transition-colors duration-300">
-                        {{ label }}
-                      </a>
-                    </li>
-                  {%- endif -%}
-                {%- endfor -%}
-              </ul>
-            </div>
-          </div>
-
-          <!-- ── Follow us on (Col 4 / Social) ── -->
-          <div class="ft-accordion-group border-t border-white/[0.08] md:border-t-0">
-            <button class="ft-accordion-btn w-full flex items-center justify-between py-4 md:py-0 md:pointer-events-none md:cursor-default"
-                    aria-expanded="false">
-              <span class="font-heading font-bold text-[1.1rem] md:text-[0.95rem] text-white leading-tight">
-                {{ section.settings.col4_title | default: 'Follow us on' }}
-              </span>
-              <span class="ft-accordion-icon md:hidden w-5 h-5 relative flex items-center justify-center">
-                <span class="block w-[18px] h-[2px] bg-white/60 rounded-full transition-transform duration-300"></span>
-                <span class="ft-icon-vertical block w-[18px] h-[2px] bg-white/60 rounded-full absolute transition-transform duration-300 rotate-90"></span>
-              </span>
-            </button>
-            <div class="ft-accordion-panel overflow-hidden md:!max-h-none md:!opacity-100 md:!mt-4"
-                 style="max-height: 0; opacity: 0; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, margin 0.3s ease;">
-              <ul class="pb-5 md:pb-0 flex flex-col gap-3">
-                {%- if section.settings.social_instagram != blank -%}
-                  <li>
-                    <a href="{{ section.settings.social_instagram }}" target="_blank" rel="noopener"
-                       class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                      Instagram
-                      <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                    </a>
-                  </li>
-                {%- endif -%}
-                {%- if section.settings.social_twitter != blank -%}
-                  <li>
-                    <a href="{{ section.settings.social_twitter }}" target="_blank" rel="noopener"
-                       class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                      X (Twitter)
-                      <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                    </a>
-                  </li>
-                {%- endif -%}
-                {%- if section.settings.social_youtube != blank -%}
-                  <li>
-                    <a href="{{ section.settings.social_youtube }}" target="_blank" rel="noopener"
-                       class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                      YouTube
-                      <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                    </a>
-                  </li>
-                {%- endif -%}
-                {%- if section.settings.social_tiktok != blank -%}
-                  <li>
-                    <a href="{{ section.settings.social_tiktok }}" target="_blank" rel="noopener"
-                       class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                      Pinterest
-                      <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                    </a>
-                  </li>
-                {%- endif -%}
-                {%- if section.settings.social_facebook != blank -%}
-                  <li>
-                    <a href="{{ section.settings.social_facebook }}" target="_blank" rel="noopener"
-                       class="inline-flex items-center gap-2 font-body text-[0.8rem] tracking-[0.04em] text-white/50 hover:text-white transition-colors duration-300">
-                      Facebook
-                      <svg class="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/></svg>
-                    </a>
-                  </li>
-                {%- endif -%}
-              </ul>
-            </div>
-          </div>
-
         {%- endif -%}
-
-      </div>
-    </div>
-
-    <!-- ── Bottom bar ── -->
-    <div class="mt-10 pt-6 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex flex-col items-center md:items-start gap-1">
-        <p class="font-body text-[0.65rem] tracking-[0.1em] uppercase text-white/30">
-          {%- if section.settings.copyright_text != blank -%}
-            {{ section.settings.copyright_text }}
-          {%- else -%}
-            &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
-          {%- endif -%}
-        </p>
-        {%- if section.settings.hotline != blank -%}
-          <p class="font-body text-[0.65rem] tracking-[0.1em] uppercase text-white/30">{{ section.settings.hotline }}</p>
-        {%- endif -%}
-        {%- assign has_legal = false -%}
-        {%- for i in (1..4) -%}
-          {%- liquid
-            assign legal_label_key = 'legal_' | append: i | append: '_label'
-            assign legal_url_key   = 'legal_' | append: i | append: '_url'
-            assign legal_label     = section.settings[legal_label_key]
-            assign legal_url       = section.settings[legal_url_key]
-          -%}
-          {%- if legal_label != blank -%}
-            {%- assign has_legal = true -%}
-          {%- endif -%}
-        {%- endfor -%}
-        {%- if has_legal -%}
-          <nav class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1" aria-label="Legal links">
-            {%- for i in (1..4) -%}
-              {%- liquid
-                assign legal_label_key = 'legal_' | append: i | append: '_label'
-                assign legal_url_key   = 'legal_' | append: i | append: '_url'
-                assign legal_label     = section.settings[legal_label_key]
-                assign legal_url       = section.settings[legal_url_key]
-              -%}
-              {%- if legal_label != blank -%}
-                <a href="{{ legal_url | default: '#' }}" class="font-body text-[0.6rem] tracking-[0.08em] uppercase text-white/20 hover:text-white/50 transition-colors">{{ legal_label }}</a>
-              {%- endif -%}
-            {%- endfor -%}
-          </nav>
-        {%- endif -%}
-      </div>
-      <div class="flex items-center gap-3 opacity-40">
-        {%- for type in shop.enabled_payment_types -%}
-          <span class="h-6">{{ type | payment_type_svg_tag }}</span>
-        {%- endfor -%}
-      </div>
+      {% endform %}
     </div>
   </div>
+  {%- endif -%}
+
+  <div class="max-w-screen-xl mx-auto px-6 md:px-10 lg:px-14 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+
+      <!-- Col 1: Brand -->
+      <div class="lg:col-span-1">
+        {%- if section.settings.logo != blank -%}
+          <a href="{{ routes.root_url }}" class="inline-block mb-5">
+            {{- section.settings.logo | image_url: width: 160 | image_tag:
+                alt: shop.name,
+                loading: 'lazy',
+                class: 'h-8 w-auto object-contain brightness-0 invert'
+            -}}
+          </a>
+        {%- else -%}
+          <a href="{{ routes.root_url }}" class="inline-block mb-5">
+            <span class="font-heading text-xl font-bold tracking-wide text-white">{{ shop.name }}</span>
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.brand_description != blank -%}
+          <p class="text-white/50 text-sm font-body leading-relaxed mb-6">{{ section.settings.brand_description }}</p>
+        {%- endif -%}
+
+        <!-- Social icons -->
+        <div class="flex items-center gap-4">
+          {%- if settings.social_instagram_url != blank -%}
+            <a href="{{ settings.social_instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram" class="text-white/50 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_tiktok_url != blank -%}
+            <a href="{{ settings.social_tiktok_url }}" target="_blank" rel="noopener" aria-label="TikTok" class="text-white/50 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.37 6.37 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.15 8.15 0 004.78 1.52V6.77a4.85 4.85 0 01-1.01-.08z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_facebook_url != blank -%}
+            <a href="{{ settings.social_facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook" class="text-white/50 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073C24 5.404 18.627 0 12 0 5.383 0 0 5.404 0 12.073 0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_pinterest_url != blank -%}
+            <a href="{{ settings.social_pinterest_url }}" target="_blank" rel="noopener" aria-label="Pinterest" class="text-white/50 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+            </a>
+          {%- endif -%}
+          {%- if settings.social_youtube_url != blank -%}
+            <a href="{{ settings.social_youtube_url }}" target="_blank" rel="noopener" aria-label="YouTube" class="text-white/50 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Col 2 & 3 & 4: Link blocks (from blocks) -->
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'link_list' -%}
+          <div {{ block.shopify_attributes }}>
+            {%- if block.settings.title != blank -%}
+              <h3 class="font-body text-xs font-semibold uppercase tracking-widest text-white/40 mb-5">{{ block.settings.title }}</h3>
+            {%- endif -%}
+            {%- if block.settings.menu != blank -%}
+              <ul class="flex flex-col gap-3" role="list">
+                {%- for link in block.settings.menu.links -%}
+                  <li>
+                    <a href="{{ link.url }}" class="text-white/60 hover:text-white text-sm font-body transition-colors">{{ link.title }}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="border-t border-white/10 py-6 px-6 md:px-10 lg:px-14">
+    <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <p class="text-white/30 text-xs font-body">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}.
+        {%- if section.settings.copyright_text != blank -%}
+          {{ section.settings.copyright_text }}
+        {%- else -%}
+          All rights reserved.
+        {%- endif -%}
+      </p>
+      <!-- Payment icons -->
+      {%- if section.settings.show_payment_icons -%}
+        <div class="flex items-center gap-2 flex-wrap justify-center md:justify-end">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'h-6 w-auto opacity-40' }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
 </footer-section>
-
-<script>
-  /* ═══ Footer Accordion — Web Component ═══ */
-  if (!customElements.get('footer-section')) {
-    class FooterSection extends HTMLElement {
-      constructor() {
-        super();
-        this._buttons = [];
-      }
-
-      connectedCallback() {
-        this.initAccordion();
-      }
-
-      disconnectedCallback() {
-        this._buttons.forEach(btn => {
-          btn.removeEventListener('click', btn._handler);
-        });
-        this._buttons = [];
-      }
-
-      initAccordion() {
-        this._buttons = [...this.querySelectorAll('.ft-accordion-btn')];
-
-        this._buttons.forEach(btn => {
-          btn._handler = () => this.toggle(btn);
-          btn.addEventListener('click', btn._handler);
-        });
-      }
-
-      toggle(btn) {
-        if (window.innerWidth >= 768) return;
-
-        const group = btn.closest('.ft-accordion-group');
-        const panel = group.querySelector('.ft-accordion-panel');
-        const iconVertical = btn.querySelector('.ft-icon-vertical');
-        const isOpen = btn.getAttribute('aria-expanded') === 'true';
-
-        if (isOpen) {
-          panel.style.maxHeight = '0';
-          panel.style.opacity = '0';
-          panel.style.marginTop = '0';
-          btn.setAttribute('aria-expanded', 'false');
-          if (iconVertical) iconVertical.style.transform = 'rotate(90deg)';
-        } else {
-          /* Close all others first */
-          this._buttons.forEach(otherBtn => {
-            if (otherBtn !== btn && otherBtn.getAttribute('aria-expanded') === 'true') {
-              const otherGroup = otherBtn.closest('.ft-accordion-group');
-              const otherPanel = otherGroup.querySelector('.ft-accordion-panel');
-              const otherIcon = otherBtn.querySelector('.ft-icon-vertical');
-              otherPanel.style.maxHeight = '0';
-              otherPanel.style.opacity = '0';
-              otherPanel.style.marginTop = '0';
-              otherBtn.setAttribute('aria-expanded', 'false');
-              if (otherIcon) otherIcon.style.transform = 'rotate(90deg)';
-            }
-          });
-
-          panel.style.maxHeight = panel.scrollHeight + 'px';
-          panel.style.opacity = '1';
-          panel.style.marginTop = '0.5rem';
-          btn.setAttribute('aria-expanded', 'true');
-          if (iconVertical) iconVertical.style.transform = 'rotate(0deg)';
-        }
-      }
-    }
-
-    customElements.define('footer-section', FooterSection);
-  }
-</script>
 
 {% schema %}
 {
   "name": "Footer",
   "tag": "section",
-  "class": "footer-section",
+  "class": "site-footer",
   "settings": [
     {
       "type": "header",
-      "content": "Marquee"
+      "content": "Brand"
     },
     {
-      "type": "text",
-      "id": "marquee_heading",
-      "label": "Marquee Heading",
-      "default": "Your Favorite Styles at Unmissable Prices"
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
     },
     {
-      "type": "range",
-      "id": "marquee_speed",
-      "label": "Marquee Speed (seconds)",
-      "min": 5,
-      "max": 60,
-      "step": 1,
-      "default": 20
+      "type": "textarea",
+      "id": "brand_description",
+      "label": "Brand description",
+      "default": "Premium fashion for the modern lifestyle."
     },
     {
       "type": "header",
       "content": "Newsletter"
     },
     {
-      "type": "textarea",
-      "id": "newsletter_text",
-      "label": "Newsletter Description",
-      "default": "Whether you're looking for chic essentials, statement outfits, or casual staples, we've got something to suit every style. Browse our fresh arrivals and update your wardrobe with the season's hottest looks today!"
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter signup",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Stay in the loop"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_subtext",
+      "label": "Newsletter subtext",
+      "default": "Get early access to new drops, exclusive offers, and style inspiration."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Email placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_button",
+      "label": "Button label",
+      "default": "Subscribe"
     },
     {
       "type": "header",
-      "content": "Legacy: Column 2 — Quick Links (used when no blocks exist)"
-    },
-    {
-      "type": "text",
-      "id": "col2_title",
-      "label": "Column 2 Title",
-      "default": "Quick links"
-    },
-    {
-      "type": "text",
-      "id": "c2_link1_label",
-      "label": "Link 1 Label"
-    },
-    {
-      "type": "url",
-      "id": "c2_link1_url",
-      "label": "Link 1 URL"
-    },
-    {
-      "type": "text",
-      "id": "c2_link2_label",
-      "label": "Link 2 Label"
-    },
-    {
-      "type": "url",
-      "id": "c2_link2_url",
-      "label": "Link 2 URL"
-    },
-    {
-      "type": "text",
-      "id": "c2_link3_label",
-      "label": "Link 3 Label"
-    },
-    {
-      "type": "url",
-      "id": "c2_link3_url",
-      "label": "Link 3 URL"
-    },
-    {
-      "type": "text",
-      "id": "c2_link4_label",
-      "label": "Link 4 Label"
-    },
-    {
-      "type": "url",
-      "id": "c2_link4_url",
-      "label": "Link 4 URL"
-    },
-    {
-      "type": "text",
-      "id": "c2_link5_label",
-      "label": "Link 5 Label"
-    },
-    {
-      "type": "url",
-      "id": "c2_link5_url",
-      "label": "Link 5 URL"
-    },
-    {
-      "type": "text",
-      "id": "c2_link6_label",
-      "label": "Link 6 Label"
-    },
-    {
-      "type": "url",
-      "id": "c2_link6_url",
-      "label": "Link 6 URL"
-    },
-    {
-      "type": "header",
-      "content": "Legacy: Column 3 — Support"
-    },
-    {
-      "type": "text",
-      "id": "col3_title",
-      "label": "Column 3 Title",
-      "default": "Support"
-    },
-    {
-      "type": "text",
-      "id": "c3_link1_label",
-      "label": "Link 1 Label"
-    },
-    {
-      "type": "url",
-      "id": "c3_link1_url",
-      "label": "Link 1 URL"
-    },
-    {
-      "type": "text",
-      "id": "c3_link2_label",
-      "label": "Link 2 Label"
-    },
-    {
-      "type": "url",
-      "id": "c3_link2_url",
-      "label": "Link 2 URL"
-    },
-    {
-      "type": "text",
-      "id": "c3_link3_label",
-      "label": "Link 3 Label"
-    },
-    {
-      "type": "url",
-      "id": "c3_link3_url",
-      "label": "Link 3 URL"
-    },
-    {
-      "type": "text",
-      "id": "c3_link4_label",
-      "label": "Link 4 Label"
-    },
-    {
-      "type": "url",
-      "id": "c3_link4_url",
-      "label": "Link 4 URL"
-    },
-    {
-      "type": "text",
-      "id": "c3_link5_label",
-      "label": "Link 5 Label"
-    },
-    {
-      "type": "url",
-      "id": "c3_link5_url",
-      "label": "Link 5 URL"
-    },
-    {
-      "type": "text",
-      "id": "c3_link6_label",
-      "label": "Link 6 Label"
-    },
-    {
-      "type": "url",
-      "id": "c3_link6_url",
-      "label": "Link 6 URL"
-    },
-    {
-      "type": "header",
-      "content": "Legacy: Column 4 — Follow Us"
-    },
-    {
-      "type": "text",
-      "id": "col4_title",
-      "label": "Column 4 Title",
-      "default": "Follow us on"
-    },
-    {
-      "type": "url",
-      "id": "social_facebook",
-      "label": "Facebook URL"
-    },
-    {
-      "type": "url",
-      "id": "social_twitter",
-      "label": "X (Twitter) URL"
-    },
-    {
-      "type": "url",
-      "id": "social_instagram",
-      "label": "Instagram URL"
-    },
-    {
-      "type": "url",
-      "id": "social_youtube",
-      "label": "YouTube URL"
-    },
-    {
-      "type": "url",
-      "id": "social_tiktok",
-      "label": "Pinterest / TikTok URL"
-    },
-    {
-      "type": "header",
-      "content": "Brand Info (legacy)"
-    },
-    {
-      "type": "text",
-      "id": "brand_name",
-      "label": "Brand Name",
-      "default": "dropxlabel"
-    },
-    {
-      "type": "textarea",
-      "id": "brand_desc",
-      "label": "Brand Description"
-    },
-    {
-      "type": "url",
-      "id": "social_vimeo",
-      "label": "Vimeo URL"
-    },
-    {
-      "type": "header",
-      "content": "Bottom Bar"
+      "content": "Bottom bar"
     },
     {
       "type": "text",
       "id": "copyright_text",
-      "label": "Copyright Text",
-      "info": "Leave blank to auto-generate: \u00a9 YEAR Shopname. All rights reserved."
+      "label": "Copyright text",
+      "default": "All rights reserved."
     },
     {
-      "type": "text",
-      "id": "hotline",
-      "label": "Hotline / Contact Line",
-      "info": "Optional. Shown below copyright. E.g. Hotline: 1800-123-456"
-    },
-    {
-      "type": "header",
-      "content": "Legal Links (up to 4)"
-    },
-    {
-      "type": "text",
-      "id": "legal_1_label",
-      "label": "Legal Link 1 Label"
-    },
-    {
-      "type": "url",
-      "id": "legal_1_url",
-      "label": "Legal Link 1 URL"
-    },
-    {
-      "type": "text",
-      "id": "legal_2_label",
-      "label": "Legal Link 2 Label"
-    },
-    {
-      "type": "url",
-      "id": "legal_2_url",
-      "label": "Legal Link 2 URL"
-    },
-    {
-      "type": "text",
-      "id": "legal_3_label",
-      "label": "Legal Link 3 Label"
-    },
-    {
-      "type": "url",
-      "id": "legal_3_url",
-      "label": "Legal Link 3 URL"
-    },
-    {
-      "type": "text",
-      "id": "legal_4_label",
-      "label": "Legal Link 4 Label"
-    },
-    {
-      "type": "url",
-      "id": "legal_4_url",
-      "label": "Legal Link 4 URL"
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true
     }
   ],
-  "max_blocks": 20,
   "blocks": [
     {
-      "type": "link_column",
-      "name": "Link Column",
+      "type": "link_list",
+      "name": "Menu",
       "settings": [
         {
           "type": "text",
           "id": "title",
-          "label": "Column Title",
+          "label": "Heading",
           "default": "Quick Links"
-        }
-      ]
-    },
-    {
-      "type": "link_item",
-      "name": "Link Item",
-      "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Label",
-          "default": "Shop All"
         },
         {
-          "type": "url",
-          "id": "url",
-          "label": "URL"
-        }
-      ]
-    },
-    {
-      "type": "social_links",
-      "name": "Social Links Column",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Column Title",
-          "default": "Follow us on"
-        },
-        {
-          "type": "url",
-          "id": "instagram",
-          "label": "Instagram URL"
-        },
-        {
-          "type": "url",
-          "id": "twitter",
-          "label": "X (Twitter) URL"
-        },
-        {
-          "type": "url",
-          "id": "youtube",
-          "label": "YouTube URL"
-        },
-        {
-          "type": "url",
-          "id": "tiktok",
-          "label": "TikTok / Pinterest URL"
-        },
-        {
-          "type": "url",
-          "id": "facebook",
-          "label": "Facebook URL"
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "footer"
         }
       ]
     }
   ],
-  "presets": [
-    {
-      "name": "Footer",
-      "blocks": [
-        {
-          "type": "link_column",
-          "settings": { "title": "Quick Links" }
-        },
-        {
-          "type": "link_item",
-          "settings": { "label": "Shop All", "url": "/collections/all" }
-        },
-        {
-          "type": "link_item",
-          "settings": { "label": "New Arrivals", "url": "/collections/new-arrivals" }
-        },
-        {
-          "type": "link_column",
-          "settings": { "title": "Support" }
-        },
-        {
-          "type": "link_item",
-          "settings": { "label": "Contact Us", "url": "/pages/contact" }
-        },
-        {
-          "type": "link_item",
-          "settings": { "label": "FAQ", "url": "/pages/faq" }
-        },
-        {
-          "type": "social_links",
-          "settings": { "title": "Follow us on" }
+  "default": {
+    "blocks": [
+      {
+        "type": "link_list",
+        "settings": {
+          "title": "Shop",
+          "menu": "main-menu"
         }
-      ]
-    }
-  ]
+      },
+      {
+        "type": "link_list",
+        "settings": {
+          "title": "Support",
+          "menu": "footer"
+        }
+      },
+      {
+        "type": "link_list",
+        "settings": {
+          "title": "Company",
+          "menu": "footer"
+        }
+      }
+    ]
+  }
 }
 {% endschema %}
