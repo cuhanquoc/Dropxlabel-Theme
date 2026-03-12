@@ -1,0 +1,21 @@
+{%- comment -%}
+  Renders 5 star icons. Pass `rating` (1–5 integer).
+  Filled stars use --color-accent; empty stars use --color-border.
+  Usage: {% render 'star-rating', rating: 4 %}
+{%- endcomment -%}
+
+{%- assign filled = rating | default: 0 | plus: 0 -%}
+
+<span class="review-stars" aria-label="{{ filled }} out of 5 stars">
+  {%- for i in (1..5) -%}
+    {%- if i <= filled -%}
+      <svg class="star star--filled" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+    {%- else -%}
+      <svg class="star star--empty" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+    {%- endif -%}
+  {%- endfor -%}
+</span>

@@ -1,0 +1,169 @@
+{%- comment -%}
+  Product Reviews Section
+  Reads product.metafields.custom.dropxlabel_reviews (list.metaobject_reference)
+  and renders only approved reviews.
+
+  Usage: {% render 'product-reviews', product: product %}
+{%- endcomment -%}
+
+{%- assign all_reviews = product.metafields.custom.dropxlabel_reviews.value -%}
+
+{%- if all_reviews == blank -%}
+  {%- break -%}
+{%- endif -%}
+
+{%- comment -%} Filter to approved reviews only {%- endcomment -%}
+{%- assign approved_reviews = '' | split: '' -%}
+{%- assign total_rating = 0 -%}
+{%- assign star_counts = '0,0,0,0,0' | split: ',' -%}
+
+{%- for review in all_reviews -%}
+  {%- assign review_status = review.status.value | default: review.status -%}
+  {%- if review_status == 'approved' -%}
+    {%- assign approved_reviews = approved_reviews | push: review -%}
+    {%- assign r = review.rating.value | default: review.rating | plus: 0 -%}
+    {%- assign total_rating = total_rating | plus: r -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- assign review_count = approved_reviews.size -%}
+
+{%- if review_count == 0 -%}
+  {%- break -%}
+{%- endif -%}
+
+{%- assign avg_rating_x10 = total_rating | times: 10 | divided_by: review_count -%}
+{%- assign avg_whole = avg_rating_x10 | divided_by: 10 -%}
+{%- assign avg_decimal = avg_rating_x10 | modulo: 10 -%}
+
+{%- comment -%} Count per star level {%- endcomment -%}
+{%- assign count_5 = 0 -%}
+{%- assign count_4 = 0 -%}
+{%- assign count_3 = 0 -%}
+{%- assign count_2 = 0 -%}
+{%- assign count_1 = 0 -%}
+{%- for review in approved_reviews -%}
+  {%- assign r = review.rating.value | default: review.rating | plus: 0 -%}
+  {%- case r -%}
+    {%- when 5 -%}{%- assign count_5 = count_5 | plus: 1 -%}
+    {%- when 4 -%}{%- assign count_4 = count_4 | plus: 1 -%}
+    {%- when 3 -%}{%- assign count_3 = count_3 | plus: 1 -%}
+    {%- when 2 -%}{%- assign count_2 = count_2 | plus: 1 -%}
+    {%- when 1 -%}{%- assign count_1 = count_1 | plus: 1 -%}
+  {%- endcase -%}
+{%- endfor -%}
+
+<section class="reviews-section" id="product-reviews">
+  <div class="reviews-container">
+
+    {%- comment -%} ── Section Header ── {%- endcomment -%}
+    <div class="reviews-header">
+      <h2 class="reviews-heading">Customer Reviews</h2>
+      <p class="reviews-subtitle">{{ review_count }} {{ review_count | pluralize: 'review', 'reviews' }}</p>
+    </div>
+
+    {%- comment -%} ── Summary Bar ── {%- endcomment -%}
+    <div class="reviews-summary">
+      <div class="reviews-summary__score">
+        <span class="reviews-summary__number">{{ avg_whole }}.{{ avg_decimal }}</span>
+        <div class="reviews-summary__stars">
+          {%- render 'star-rating', rating: avg_whole -%}
+        </div>
+        <span class="reviews-summary__count">Based on {{ review_count }} {{ review_count | pluralize: 'review', 'reviews' }}</span>
+      </div>
+
+      <div class="reviews-summary__bars">
+        {%- assign star_levels = '5,4,3,2,1' | split: ',' -%}
+        {%- for level in star_levels -%}
+          {%- case level -%}
+            {%- when '5' -%}{%- assign bar_count = count_5 -%}
+            {%- when '4' -%}{%- assign bar_count = count_4 -%}
+            {%- when '3' -%}{%- assign bar_count = count_3 -%}
+            {%- when '2' -%}{%- assign bar_count = count_2 -%}
+            {%- when '1' -%}{%- assign bar_count = count_1 -%}
+          {%- endcase -%}
+          {%- if review_count > 0 -%}
+            {%- assign bar_pct = bar_count | times: 100 | divided_by: review_count -%}
+          {%- else -%}
+            {%- assign bar_pct = 0 -%}
+          {%- endif -%}
+          <div class="rating-bar">
+            <span class="rating-bar__label">{{ level }} ★</span>
+            <div class="rating-bar__track">
+              <div class="rating-bar__fill" style="width: {{ bar_pct }}%"></div>
+            </div>
+            <span class="rating-bar__count">{{ bar_count }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+
+    {%- comment -%} ── Review Cards ── {%- endcomment -%}
+    <div class="reviews-list">
+      {%- for review in approved_reviews -%}
+        {%- assign reviewer_name = review.reviewer_name.value | default: review.reviewer_name -%}
+        {%- assign r = review.rating.value | default: review.rating | plus: 0 -%}
+        {%- assign text = review.review_text.value | default: review.review_text -%}
+        {%- assign verified = review.verified.value | default: review.verified -%}
+        {%- assign location = review.location.value | default: review.location -%}
+        {%- assign initial = reviewer_name | slice: 0 | upcase -%}
+
+        <article class="review-card">
+          <div class="review-card__header">
+            {%- comment -%} Avatar / initial circle {%- endcomment -%}
+            {%- if review.avatar.value -%}
+              <img
+                class="review-avatar review-avatar--img"
+                src="{{ review.avatar.value | image_url: width: 80 }}"
+                alt="{{ reviewer_name }}"
+                width="40"
+                height="40"
+                loading="lazy"
+              >
+            {%- else -%}
+              <span class="review-avatar review-avatar--initial">{{ initial }}</span>
+            {%- endif -%}
+
+            <div class="review-card__meta">
+              <div class="review-card__name-row">
+                <span class="review-card__name">{{ reviewer_name }}</span>
+                {%- if verified == 'true' or verified == true -%}
+                  <span class="review-badge" title="Verified Buyer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                    </svg>
+                    Verified
+                  </span>
+                {%- endif -%}
+              </div>
+              {%- if location != blank -%}
+                <span class="review-card__location">{{ location }}</span>
+              {%- endif -%}
+            </div>
+
+            <div class="review-card__rating">
+              {%- render 'star-rating', rating: r -%}
+            </div>
+          </div>
+
+          <div class="review-card__body">
+            <p>{{ text }}</p>
+          </div>
+
+          {%- comment -%} Optional media image {%- endcomment -%}
+          {%- if review.media_image.value -%}
+            <div class="review-card__media">
+              <img
+                src="{{ review.media_image.value | image_url: width: 400 }}"
+                alt="Review photo by {{ reviewer_name }}"
+                loading="lazy"
+                class="review-media-img"
+              >
+            </div>
+          {%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+
+  </div>
+</section>
