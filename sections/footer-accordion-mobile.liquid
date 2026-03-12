@@ -1,0 +1,346 @@
+{{- 'footer-accordion-mobile.css' | asset_url | stylesheet_tag -}}
+
+<div class="fam-root" data-section-id="{{ section.id }}">
+
+  {%- comment -%}──────────────────────────────────────────────
+    ACCORDION LIST
+    data-fam-multi controls single vs multi open mode
+  ──────────────────────────────────────────────{%- endcomment -%}
+
+  <ul
+    class="fam-list"
+    role="list"
+    data-fam-multi="{{ section.settings.multi_open }}"
+  >
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'menu_group' -%}
+        {%- assign panel_id  = 'fam-panel-' | append: block.id -%}
+        {%- assign btn_id    = 'fam-btn-'   | append: block.id -%}
+        <li class="fam-item" {{ block.shopify_attributes }}>
+
+          <button
+            class="fam-trigger"
+            id="{{ btn_id }}"
+            type="button"
+            aria-expanded="false"
+            aria-controls="{{ panel_id }}"
+          >
+            <span class="fam-label">
+              {{- block.settings.title | default: 'Links' -}}
+            </span>
+            <span class="fam-icon" aria-hidden="true"></span>
+          </button>
+
+          <div
+            class="fam-panel"
+            id="{{ panel_id }}"
+            role="region"
+            aria-labelledby="{{ btn_id }}"
+            style="max-height:0"
+          >
+            <div class="fam-panel-inner">
+              {%- if block.settings.menu != blank -%}
+                <ul class="fam-links" role="list">
+                  {%- for link in block.settings.menu.links -%}
+                    <li>
+                      <a href="{{ link.url }}">{{- link.title -}}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- else -%}
+                <p style="font-size:13px;color:#999;margin:0;">
+                  {{ 'sections.footer.select_a_menu' | t | default: 'Select a menu in the Theme Editor.' }}
+                </p>
+              {%- endif -%}
+            </div>
+          </div>
+
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+
+  {%- comment -%}──────────────────────────────────────────────
+    SOCIAL ICONS ROW
+  ──────────────────────────────────────────────{%- endcomment -%}
+
+  {%- assign show_social = false -%}
+  {%- if section.settings.social_facebook != blank
+      or section.settings.social_x != blank
+      or section.settings.social_instagram != blank
+      or section.settings.social_youtube != blank
+      or section.settings.social_tiktok != blank -%}
+    {%- assign show_social = true -%}
+  {%- endif -%}
+
+  {%- if show_social -%}
+    <div class="fam-social" role="list" aria-label="{{ 'general.social.social_media' | t | default: 'Social media' }}">
+
+      {%- if section.settings.social_facebook != blank -%}
+        <a
+          class="fam-social-link"
+          href="{{ section.settings.social_facebook }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Facebook"
+          role="listitem"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M24 12.073C24 5.404 18.627 0 12 0 5.383 0 0 5.404 0 12.073 0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+          </svg>
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.social_x != blank -%}
+        <a
+          class="fam-social-link"
+          href="{{ section.settings.social_x }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="X (Twitter)"
+          role="listitem"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.social_instagram != blank -%}
+        <a
+          class="fam-social-link"
+          href="{{ section.settings.social_instagram }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Instagram"
+          role="listitem"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <circle cx="12" cy="12" r="4.5"/>
+            <circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/>
+          </svg>
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.social_youtube != blank -%}
+        <a
+          class="fam-social-link"
+          href="{{ section.settings.social_youtube }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="YouTube"
+          role="listitem"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+          </svg>
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.social_tiktok != blank -%}
+        <a
+          class="fam-social-link"
+          href="{{ section.settings.social_tiktok }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="TikTok"
+          role="listitem"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.37 6.37 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.15 8.15 0 004.78 1.52V6.77a4.85 4.85 0 01-1.01-.08z"/>
+          </svg>
+        </a>
+      {%- endif -%}
+
+    </div>
+  {%- endif -%}
+
+  {%- comment -%}──────────────────────────────────────────────
+    ADDRESS BAR
+  ──────────────────────────────────────────────{%- endcomment -%}
+
+  {%- if section.settings.address_text != blank -%}
+    <p class="fam-address">{{ section.settings.address_text }}</p>
+  {%- endif -%}
+
+</div><!-- /.fam-root -->
+
+{%- comment -%}──────────────────────────────────────────────
+  FLOATING CHAT BUTTON (outside fam-root — fixed position)
+──────────────────────────────────────────────{%- endcomment -%}
+
+{%- if section.settings.show_chat_btn -%}
+  <button
+    class="fam-chat"
+    type="button"
+    aria-label="{{ section.settings.chat_aria_label | default: 'Open chat' }}"
+    id="fam-chat-{{ section.id }}"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+    </svg>
+  </button>
+
+  {%- if section.settings.chat_onclick != blank -%}
+    <script>
+      (function () {
+        var btn = document.getElementById('fam-chat-{{ section.id }}');
+        if (btn) {
+          btn.addEventListener('click', function () {
+            try { {{ section.settings.chat_onclick }} } catch(e) {}
+          });
+        }
+      })();
+    </script>
+  {%- endif -%}
+{%- endif -%}
+
+{%- comment -%} Load JS the safe way — defer, once per page {%- endcomment -%}
+<script>
+  (function () {
+    if (window.__famLoaded) return;
+    window.__famLoaded = true;
+    var s = document.createElement('script');
+    s.src     = {{ 'footer-accordion-mobile.js' | asset_url | json }};
+    s.defer   = true;
+    document.head.appendChild(s);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Footer Accordion Mobile",
+  "tag": "section",
+  "class": "fam-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Accordion behaviour"
+    },
+    {
+      "type": "checkbox",
+      "id": "multi_open",
+      "label": "Allow multiple panels open simultaneously",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Social links"
+    },
+    {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "social_x",
+      "label": "X (Twitter) URL"
+    },
+    {
+      "type": "url",
+      "id": "social_instagram",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "social_youtube",
+      "label": "YouTube URL"
+    },
+    {
+      "type": "url",
+      "id": "social_tiktok",
+      "label": "TikTok URL"
+    },
+    {
+      "type": "header",
+      "content": "Address bar"
+    },
+    {
+      "type": "text",
+      "id": "address_text",
+      "label": "Address line",
+      "default": "DROPXLABEL INC. 350 5TH AVENUE, 41ST FL – NY, NY 10118"
+    },
+    {
+      "type": "header",
+      "content": "Floating chat button"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_chat_btn",
+      "label": "Show floating chat button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "chat_aria_label",
+      "label": "Button aria-label",
+      "default": "Open chat"
+    },
+    {
+      "type": "text",
+      "id": "chat_onclick",
+      "label": "onclick JavaScript (optional)",
+      "info": "Example: tidioChatApi.open() or $crisp.push(['do','chat:open'])"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu_group",
+      "name": "Accordion group",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Customer service"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Navigation menu",
+          "info": "Link list managed in Online Store → Navigation"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "settings": {
+      "multi_open": false,
+      "address_text": "DROPXLABEL INC. 350 5TH AVENUE, 41ST FL – NY, NY 10118",
+      "show_chat_btn": true,
+      "social_facebook":  "https://facebook.com",
+      "social_x":         "https://x.com",
+      "social_instagram": "https://instagram.com",
+      "social_youtube":   "https://youtube.com",
+      "social_tiktok":    "https://tiktok.com"
+    },
+    "blocks": [
+      {
+        "type": "menu_group",
+        "settings": { "title": "Customer service", "menu": "footer" }
+      },
+      {
+        "type": "menu_group",
+        "settings": { "title": "Product guide", "menu": "footer" }
+      },
+      {
+        "type": "menu_group",
+        "settings": { "title": "About us", "menu": "footer" }
+      },
+      {
+        "type": "menu_group",
+        "settings": { "title": "Legal area", "menu": "footer" }
+      }
+    ]
+  },
+  "presets": [
+    {
+      "name": "Footer Accordion Mobile"
+    }
+  ]
+}
+{% endschema %}
