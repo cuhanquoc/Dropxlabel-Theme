@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "sections": {
@@ -178,11 +187,31 @@
           "newsletter_wjFd7h": {
             "type": "newsletter",
             "settings": {
-              "nl_heading": "Đăng ký nhận tin",
-              "nl_subtext": "Ưu đãi & xu hướng thời trang mới nhất thẳng vào hộp thư của bạn.",
-              "nl_placeholder": "Email của bạn",
-              "nl_btn_label": "Đăng ký",
-              "nl_success": "Cảm ơn bạn đã đăng ký!"
+              "nl_marquee_enabled": true,
+              "nl_marquee_text": "Your Favorite Styles at Unmissable Prices!",
+              "nl_marquee_size_mobile": 43,
+              "nl_marquee_size_desktop": 57,
+              "nl_marquee_weight": "800",
+              "nl_marquee_spacing": 6,
+              "nl_marquee_speed": 65,
+              "nl_marquee_direction": "left",
+              "nl_marquee_pause_hover": false,
+              "nl_subcopy_enabled": true,
+              "nl_subtext": "Whether you're looking for chic essentials, statement outfits, or casual staples, we’ve got something to suit every style. Browse our fresh arrivals and update your wardrobe with the season's hottest looks today!",
+              "nl_subcopy_size": 13,
+              "nl_subcopy_weight": "400",
+              "nl_form_enabled": true,
+              "nl_heading": "Subscribe",
+              "nl_placeholder": "Your email",
+              "nl_btn_label": "Subscribe",
+              "nl_success": "Cảm ơn bạn đã đăng ký!",
+              "nl_bg_color": "#111111",
+              "nl_text_color": "#ffffff",
+              "nl_border_color": "#333333",
+              "nl_btn_bg": "#ffffff",
+              "nl_btn_text": "#0a0a0a",
+              "nl_padding_top": 32,
+              "nl_padding_bottom": 32
             }
           },
           "accordion_group_4mYeHG": {
@@ -408,7 +437,6 @@
           "bar_show_locale": true,
           "bar_show_powered": true,
           "bar_show_payments": true,
-          "bar_bg_color": "#060606",
           "bar_text_color": "#888888",
           "bar_icon_radius": 4,
           "bar_spacing": 6,
