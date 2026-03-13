@@ -1,242 +1,401 @@
-{{- 'footer-accordion-mobile.css' | asset_url | stylesheet_tag -}}
+{{ 'fam2.css' | asset_url | stylesheet_tag }}
 
-<div class="fam-root" data-section-id="{{ section.id }}">
+<footer-accordion-mobile
+  class="fam2 block md:hidden"
+  style="
+    --fam2-bg: {{ section.settings.bg_color }};
+    --fam2-text: {{ section.settings.text_color }};
+    --fam2-icon: {{ section.settings.icon_color }};
+    --fam2-divider: {{ section.settings.divider_color }};
+    --fam2-title-size: {{ section.settings.title_size }}px;
+    --fam2-title-weight: {{ section.settings.title_weight }};
+    --fam2-title-spacing: {{ section.settings.title_spacing | divided_by: 1000.0 }}em;
+    --fam2-link-size: {{ section.settings.link_size }}px;
+    --fam2-link-weight: {{ section.settings.link_weight }};
+    --fam2-link-spacing: {{ section.settings.link_spacing | divided_by: 1000.0 }}em;
+    --fam2-legal-size: {{ section.settings.legal_size }}px;
+    --fam2-legal-weight: {{ section.settings.legal_weight }};
+    --fam2-legal-spacing: {{ section.settings.legal_spacing | divided_by: 1000.0 }}em;
+  "
+>
 
-  {%- comment -%}──────────────────────────────────────────────
-    ACCORDION LIST
-    data-fam-multi controls single vs multi open mode
-  ──────────────────────────────────────────────{%- endcomment -%}
+  {%- comment -%} Background image {%- endcomment -%}
+  {%- if section.settings.bg_image != blank -%}
+    <div
+      class="fam2__bg"
+      style="background-image: url('{{ section.settings.bg_image | image_url: width: 800 }}');"
+      role="presentation"
+      aria-hidden="true"
+    ></div>
+  {%- endif -%}
 
-  <ul
-    class="fam-list"
-    role="list"
-    data-fam-multi="{{ section.settings.multi_open }}"
-  >
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'menu_group' -%}
-        {%- assign panel_id  = 'fam-panel-' | append: block.id -%}
-        {%- assign btn_id    = 'fam-btn-'   | append: block.id -%}
-        <li class="fam-item" {{ block.shopify_attributes }}>
+  {%- comment -%} Overlay {%- endcomment -%}
+  {%- if section.settings.overlay_opacity > 0 -%}
+    <div
+      class="fam2__overlay"
+      style="background-color: {{ section.settings.bg_color }}; opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+      role="presentation"
+      aria-hidden="true"
+    ></div>
+  {%- endif -%}
 
-          <button
-            class="fam-trigger"
-            id="{{ btn_id }}"
-            type="button"
-            aria-expanded="false"
-            aria-controls="{{ panel_id }}"
+  <div class="fam2__inner">
+
+    {%- comment -%} ── Accordion Groups ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <ul class="fam2__list" role="list">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'link_group' -%}
+            {%- assign panel_id = 'fam2-panel-' | append: block.id -%}
+            {%- assign trigger_id = 'fam2-trigger-' | append: block.id -%}
+
+            <li class="fam2__item" {{ block.shopify_attributes }}>
+
+              <button
+                id="{{ trigger_id }}"
+                class="fam2__trigger"
+                type="button"
+                aria-expanded="false"
+                aria-controls="{{ panel_id }}"
+              >
+                <span class="fam2__title">
+                  {{- block.settings.group_title | escape -}}
+                </span>
+
+                {%- comment -%} Plus/Minus icon {%- endcomment -%}
+                <span class="fam2__icon" aria-hidden="true">
+                  <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    {%- comment -%} Horizontal bar — always visible {%- endcomment -%}
+                    <line
+                      class="fam2__bar fam2__bar--h"
+                      x1="2" y1="9" x2="16" y2="9"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
+                    {%- comment -%} Vertical bar — hidden when open {%- endcomment -%}
+                    <line
+                      class="fam2__bar fam2__bar--v"
+                      x1="9" y1="2" x2="9" y2="16"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </span>
+              </button>
+
+              <div
+                id="{{ panel_id }}"
+                class="fam2__panel"
+                role="region"
+                aria-labelledby="{{ trigger_id }}"
+              >
+                {%- assign has_links = false -%}
+
+                {%- if block.settings.link_1_label != blank and block.settings.link_1_url != blank -%}
+                  {%- assign has_links = true -%}
+                {%- endif -%}
+
+                {%- if has_links -%}
+                  <ul class="fam2__links" role="list">
+
+                    {%- for i in (1..8) -%}
+                      {%- assign lbl_key = 'link_' | append: i | append: '_label' -%}
+                      {%- assign url_key = 'link_' | append: i | append: '_url' -%}
+                      {%- assign lbl = block.settings[lbl_key] -%}
+                      {%- assign url = block.settings[url_key] -%}
+                      {%- if lbl != blank and url != blank -%}
+                        <li class="fam2__link-item">
+                          <a class="fam2__link" href="{{ url }}">
+                            {{- lbl | escape -}}
+                          </a>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+
+                  </ul>
+                {%- else -%}
+                  <p class="fam2__empty">
+                    {{- 'sections.footer_accordion_mobile.no_links' | t | default: 'Chưa có liên kết.' -}}
+                  </p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- comment -%} ── Social Icons ── {%- endcomment -%}
+    {%- assign has_social = false -%}
+    {%- if section.settings.social_instagram != blank
+      or section.settings.social_tiktok != blank
+      or section.settings.social_facebook != blank
+      or section.settings.social_pinterest != blank
+      or section.settings.social_youtube != blank -%}
+      {%- assign has_social = true -%}
+    {%- endif -%}
+
+    {%- if has_social -%}
+      <div class="fam2__social" role="list">
+
+        {%- if section.settings.social_instagram != blank -%}
+          <a
+            class="fam2__social-link"
+            href="{{ section.settings.social_instagram }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="{{ 'general.social.instagram' | t | default: 'Instagram' }}"
+            role="listitem"
           >
-            <span class="fam-label">
-              {{- block.settings.title | default: 'Links' -}}
-            </span>
-            <span class="fam-icon" aria-hidden="true"></span>
-          </button>
+            {%- comment -%} Instagram icon {%- endcomment -%}
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+          </a>
+        {%- endif -%}
 
-          <div
-            class="fam-panel"
-            id="{{ panel_id }}"
-            role="region"
-            aria-labelledby="{{ btn_id }}"
-            style="max-height:0"
+        {%- if section.settings.social_tiktok != blank -%}
+          <a
+            class="fam2__social-link"
+            href="{{ section.settings.social_tiktok }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="{{ 'general.social.tiktok' | t | default: 'TikTok' }}"
+            role="listitem"
           >
-            <div class="fam-panel-inner">
-              {%- if block.settings.menu != blank -%}
-                <ul class="fam-links" role="list">
-                  {%- for link in block.settings.menu.links -%}
-                    <li>
-                      <a href="{{ link.url }}">{{- link.title -}}</a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              {%- else -%}
-                <p style="font-size:13px;color:#999;margin:0;">
-                  {{ 'sections.footer.select_a_menu' | t | default: 'Select a menu in the Theme Editor.' }}
-                </p>
-              {%- endif -%}
-            </div>
-          </div>
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.16 8.16 0 004.77 1.52V6.75a4.84 4.84 0 01-1-.06z"/>
+            </svg>
+          </a>
+        {%- endif -%}
 
-        </li>
-      {%- endif -%}
-    {%- endfor -%}
-  </ul>
+        {%- if section.settings.social_facebook != blank -%}
+          <a
+            class="fam2__social-link"
+            href="{{ section.settings.social_facebook }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="{{ 'general.social.facebook' | t | default: 'Facebook' }}"
+            role="listitem"
+          >
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+        {%- endif -%}
 
-  {%- comment -%}──────────────────────────────────────────────
-    SOCIAL ICONS ROW
-  ──────────────────────────────────────────────{%- endcomment -%}
+        {%- if section.settings.social_pinterest != blank -%}
+          <a
+            class="fam2__social-link"
+            href="{{ section.settings.social_pinterest }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="{{ 'general.social.pinterest' | t | default: 'Pinterest' }}"
+            role="listitem"
+          >
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641 0 12.017 0z"/>
+            </svg>
+          </a>
+        {%- endif -%}
 
-  {%- assign show_social = false -%}
-  {%- if section.settings.social_facebook != blank
-      or section.settings.social_x != blank
-      or section.settings.social_instagram != blank
-      or section.settings.social_youtube != blank
-      or section.settings.social_tiktok != blank -%}
-    {%- assign show_social = true -%}
+        {%- if section.settings.social_youtube != blank -%}
+          <a
+            class="fam2__social-link"
+            href="{{ section.settings.social_youtube }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="{{ 'general.social.youtube' | t | default: 'YouTube' }}"
+            role="listitem"
+          >
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Legal / Copyright ── {%- endcomment -%}
+    {%- if section.settings.legal_text != blank -%}
+      <p class="fam2__legal">
+        {{- section.settings.legal_text -}}
+      </p>
+    {%- endif -%}
+
+  </div>{%- comment -%} /.fam2__inner {%- endcomment -%}
+
+  {%- comment -%} ── Floating Chat Button ── {%- endcomment -%}
+  {%- if section.settings.chat_url != blank -%}
+    <a
+      class="fam2__chat"
+      href="{{ section.settings.chat_url }}"
+      aria-label="{{ section.settings.chat_label | default: 'Liên hệ hỗ trợ' | escape }}"
+    >
+      {%- comment -%} Chat bubble icon {%- endcomment -%}
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+      </svg>
+    </a>
   {%- endif -%}
 
-  {%- if show_social -%}
-    <div class="fam-social" role="list" aria-label="{{ 'general.social.social_media' | t | default: 'Social media' }}">
+</footer-accordion-mobile>
 
-      {%- if section.settings.social_facebook != blank -%}
-        <a
-          class="fam-social-link"
-          href="{{ section.settings.social_facebook }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Facebook"
-          role="listitem"
-        >
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M24 12.073C24 5.404 18.627 0 12 0 5.383 0 0 5.404 0 12.073 0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
-          </svg>
-        </a>
-      {%- endif -%}
-
-      {%- if section.settings.social_x != blank -%}
-        <a
-          class="fam-social-link"
-          href="{{ section.settings.social_x }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="X (Twitter)"
-          role="listitem"
-        >
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-          </svg>
-        </a>
-      {%- endif -%}
-
-      {%- if section.settings.social_instagram != blank -%}
-        <a
-          class="fam-social-link"
-          href="{{ section.settings.social_instagram }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Instagram"
-          role="listitem"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-            <circle cx="12" cy="12" r="4.5"/>
-            <circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/>
-          </svg>
-        </a>
-      {%- endif -%}
-
-      {%- if section.settings.social_youtube != blank -%}
-        <a
-          class="fam-social-link"
-          href="{{ section.settings.social_youtube }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="YouTube"
-          role="listitem"
-        >
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/>
-          </svg>
-        </a>
-      {%- endif -%}
-
-      {%- if section.settings.social_tiktok != blank -%}
-        <a
-          class="fam-social-link"
-          href="{{ section.settings.social_tiktok }}"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="TikTok"
-          role="listitem"
-        >
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.37 6.37 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.15 8.15 0 004.78 1.52V6.77a4.85 4.85 0 01-1.01-.08z"/>
-          </svg>
-        </a>
-      {%- endif -%}
-
-    </div>
-  {%- endif -%}
-
-  {%- comment -%}──────────────────────────────────────────────
-    ADDRESS BAR
-  ──────────────────────────────────────────────{%- endcomment -%}
-
-  {%- if section.settings.address_text != blank -%}
-    <p class="fam-address">{{ section.settings.address_text }}</p>
-  {%- endif -%}
-
-</div><!-- /.fam-root -->
-
-{%- comment -%}──────────────────────────────────────────────
-  FLOATING CHAT BUTTON (outside fam-root — fixed position)
-──────────────────────────────────────────────{%- endcomment -%}
-
-{%- if section.settings.show_chat_btn -%}
-  <button
-    class="fam-chat"
-    type="button"
-    aria-label="{{ section.settings.chat_aria_label | default: 'Open chat' }}"
-    id="fam-chat-{{ section.id }}"
-  >
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-    </svg>
-  </button>
-
-  {%- if section.settings.chat_onclick != blank -%}
-    <script>
-      (function () {
-        var btn = document.getElementById('fam-chat-{{ section.id }}');
-        if (btn) {
-          btn.addEventListener('click', function () {
-            try { {{ section.settings.chat_onclick }} } catch(e) {}
-          });
-        }
-      })();
-    </script>
-  {%- endif -%}
-{%- endif -%}
-
-{%- comment -%} Load JS the safe way — defer, once per page {%- endcomment -%}
-<script>
-  (function () {
-    if (window.__famLoaded) return;
-    window.__famLoaded = true;
-    var s = document.createElement('script');
-    s.src     = {{ 'footer-accordion-mobile.js' | asset_url | json }};
-    s.defer   = true;
-    document.head.appendChild(s);
-  })();
-</script>
+<script src="{{ 'fam2.js' | asset_url }}" defer></script>
 
 {% schema %}
 {
   "name": "Footer Accordion Mobile",
   "tag": "section",
-  "class": "fam-section",
+  "class": "footer-accordion-mobile-section",
   "settings": [
     {
       "type": "header",
-      "content": "Accordion behaviour"
+      "content": "Màu sắc & Nền"
     },
     {
-      "type": "checkbox",
-      "id": "multi_open",
-      "label": "Allow multiple panels open simultaneously",
-      "default": false
+      "type": "color",
+      "id": "bg_color",
+      "label": "Màu nền",
+      "default": "#0a0a0a"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Ảnh nền (tuỳ chọn)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Độ phủ overlay (%)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 60
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Màu chữ",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Màu icon",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Màu đường kẻ phân cách",
+      "default": "#ffffff"
     },
     {
       "type": "header",
-      "content": "Social links"
+      "content": "Typography — Tiêu đề nhóm"
     },
     {
-      "type": "url",
-      "id": "social_facebook",
-      "label": "Facebook URL"
+      "type": "range",
+      "id": "title_size",
+      "label": "Cỡ chữ (px)",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "default": 13
     },
     {
-      "type": "url",
-      "id": "social_x",
-      "label": "X (Twitter) URL"
+      "type": "select",
+      "id": "title_weight",
+      "label": "Độ đậm",
+      "options": [
+        { "value": "400", "label": "Regular 400" },
+        { "value": "500", "label": "Medium 500" },
+        { "value": "600", "label": "SemiBold 600" },
+        { "value": "700", "label": "Bold 700" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "title_spacing",
+      "label": "Letter-spacing tiêu đề (× 1000 em — mặc định 80 = 0.08em)",
+      "min": 0,
+      "max": 300,
+      "step": 5,
+      "default": 80
+    },
+    {
+      "type": "header",
+      "content": "Typography — Link"
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "label": "Cỡ chữ link (px)",
+      "min": 10,
+      "max": 18,
+      "step": 1,
+      "default": 13
+    },
+    {
+      "type": "select",
+      "id": "link_weight",
+      "label": "Độ đậm link",
+      "options": [
+        { "value": "300", "label": "Light 300" },
+        { "value": "400", "label": "Regular 400" },
+        { "value": "500", "label": "Medium 500" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "link_spacing",
+      "label": "Letter-spacing link (× 1000 em — mặc định 20 = 0.02em)",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Typography — Legal"
+    },
+    {
+      "type": "range",
+      "id": "legal_size",
+      "label": "Cỡ chữ legal (px)",
+      "min": 9,
+      "max": 14,
+      "step": 1,
+      "default": 11
+    },
+    {
+      "type": "select",
+      "id": "legal_weight",
+      "label": "Độ đậm legal",
+      "options": [
+        { "value": "300", "label": "Light 300" },
+        { "value": "400", "label": "Regular 400" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "legal_spacing",
+      "label": "Letter-spacing legal (em × 100)",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Mạng xã hội"
     },
     {
       "type": "url",
@@ -245,98 +404,201 @@
     },
     {
       "type": "url",
-      "id": "social_youtube",
-      "label": "YouTube URL"
-    },
-    {
-      "type": "url",
       "id": "social_tiktok",
       "label": "TikTok URL"
     },
     {
+      "type": "url",
+      "id": "social_facebook",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "social_pinterest",
+      "label": "Pinterest URL"
+    },
+    {
+      "type": "url",
+      "id": "social_youtube",
+      "label": "YouTube URL"
+    },
+    {
       "type": "header",
-      "content": "Address bar"
+      "content": "Copyright & Legal"
     },
     {
-      "type": "text",
-      "id": "address_text",
-      "label": "Address line",
-      "default": "DROPXLABEL INC. 350 5TH AVENUE, 41ST FL – NY, NY 10118"
+      "type": "richtext",
+      "id": "legal_text",
+      "label": "Nội dung legal / copyright",
+      "default": "<p>© 2025 Dropxlabel. All rights reserved.</p>"
     },
     {
       "type": "header",
-      "content": "Floating chat button"
+      "content": "Nút Chat nổi"
     },
     {
-      "type": "checkbox",
-      "id": "show_chat_btn",
-      "label": "Show floating chat button",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "chat_aria_label",
-      "label": "Button aria-label",
-      "default": "Open chat"
+      "type": "url",
+      "id": "chat_url",
+      "label": "Chat URL (để trống để ẩn)"
     },
     {
       "type": "text",
-      "id": "chat_onclick",
-      "label": "onclick JavaScript (optional)",
-      "info": "Example: tidioChatApi.open() or $crisp.push(['do','chat:open'])"
+      "id": "chat_label",
+      "label": "Aria-label cho nút chat",
+      "default": "Liên hệ hỗ trợ"
     }
   ],
   "blocks": [
     {
-      "type": "menu_group",
-      "name": "Accordion group",
+      "type": "link_group",
+      "name": "Nhóm liên kết",
       "limit": 6,
       "settings": [
         {
           "type": "text",
-          "id": "title",
-          "label": "Heading",
-          "default": "Customer service"
+          "id": "group_title",
+          "label": "Tiêu đề nhóm",
+          "default": "Thông tin"
         },
         {
-          "type": "link_list",
-          "id": "menu",
-          "label": "Navigation menu",
-          "info": "Link list managed in Online Store → Navigation"
+          "type": "header",
+          "content": "Link 1"
+        },
+        {
+          "type": "text",
+          "id": "link_1_label",
+          "label": "Nhãn link 1"
+        },
+        {
+          "type": "url",
+          "id": "link_1_url",
+          "label": "URL link 1"
+        },
+        {
+          "type": "header",
+          "content": "Link 2"
+        },
+        {
+          "type": "text",
+          "id": "link_2_label",
+          "label": "Nhãn link 2"
+        },
+        {
+          "type": "url",
+          "id": "link_2_url",
+          "label": "URL link 2"
+        },
+        {
+          "type": "header",
+          "content": "Link 3"
+        },
+        {
+          "type": "text",
+          "id": "link_3_label",
+          "label": "Nhãn link 3"
+        },
+        {
+          "type": "url",
+          "id": "link_3_url",
+          "label": "URL link 3"
+        },
+        {
+          "type": "header",
+          "content": "Link 4"
+        },
+        {
+          "type": "text",
+          "id": "link_4_label",
+          "label": "Nhãn link 4"
+        },
+        {
+          "type": "url",
+          "id": "link_4_url",
+          "label": "URL link 4"
+        },
+        {
+          "type": "header",
+          "content": "Link 5"
+        },
+        {
+          "type": "text",
+          "id": "link_5_label",
+          "label": "Nhãn link 5"
+        },
+        {
+          "type": "url",
+          "id": "link_5_url",
+          "label": "URL link 5"
+        },
+        {
+          "type": "header",
+          "content": "Link 6"
+        },
+        {
+          "type": "text",
+          "id": "link_6_label",
+          "label": "Nhãn link 6"
+        },
+        {
+          "type": "url",
+          "id": "link_6_url",
+          "label": "URL link 6"
+        },
+        {
+          "type": "header",
+          "content": "Link 7"
+        },
+        {
+          "type": "text",
+          "id": "link_7_label",
+          "label": "Nhãn link 7"
+        },
+        {
+          "type": "url",
+          "id": "link_7_url",
+          "label": "URL link 7"
+        },
+        {
+          "type": "header",
+          "content": "Link 8"
+        },
+        {
+          "type": "text",
+          "id": "link_8_label",
+          "label": "Nhãn link 8"
+        },
+        {
+          "type": "url",
+          "id": "link_8_url",
+          "label": "URL link 8"
         }
       ]
     }
   ],
-  "default": {
-    "settings": {
-      "multi_open": false,
-      "address_text": "DROPXLABEL INC. 350 5TH AVENUE, 41ST FL – NY, NY 10118",
-      "show_chat_btn": true,
-      "social_facebook":  "https://facebook.com",
-      "social_x":         "https://x.com",
-      "social_instagram": "https://instagram.com",
-      "social_youtube":   "https://youtube.com",
-      "social_tiktok":    "https://tiktok.com"
-    },
-    "blocks": [
-      {
-        "type": "menu_group",
-        "settings": { "title": "Customer service", "menu": "footer" }
-      },
-      {
-        "type": "menu_group",
-        "settings": { "title": "Product guide", "menu": "footer" }
-      },
-      {
-        "type": "menu_group",
-        "settings": { "title": "About us", "menu": "footer" }
-      },
-      {
-        "type": "menu_group",
-        "settings": { "title": "Legal area", "menu": "footer" }
-      }
-    ]
-  }
-
+  "presets": [
+    {
+      "name": "Footer Accordion Mobile",
+      "blocks": [
+        {
+          "type": "link_group",
+          "settings": {
+            "group_title": "Chính sách",
+            "link_1_label": "Chính sách đổi trả",
+            "link_2_label": "Chính sách bảo mật",
+            "link_3_label": "Điều khoản sử dụng"
+          }
+        },
+        {
+          "type": "link_group",
+          "settings": {
+            "group_title": "Hỗ trợ",
+            "link_1_label": "Liên hệ",
+            "link_2_label": "FAQ",
+            "link_3_label": "Theo dõi đơn hàng"
+          }
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}

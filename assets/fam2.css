@@ -1,0 +1,273 @@
+/* ================================================================
+   Footer Accordion Mobile v2 — fam2.css
+   Scoped prefix: fam2-
+   No jQuery · No external libs · Web Component ready
+   ================================================================ */
+
+/* ── Root wrapper ── */
+.fam2 {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ── Background image overlay ── */
+.fam2__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.fam2__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* ── Inner content above bg ── */
+.fam2__inner {
+  position: relative;
+  z-index: 2;
+  padding: 40px 20px 32px;
+  max-width: 100%;
+}
+
+/* ── Accordion list ── */
+.fam2__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Single accordion item ── */
+.fam2__item {
+  border-bottom: 1px solid var(--fam2-divider, rgba(255,255,255,0.15));
+}
+
+.fam2__item:first-child {
+  border-top: 1px solid var(--fam2-divider, rgba(255,255,255,0.15));
+}
+
+/* ── Trigger button ── */
+.fam2__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  gap: 12px;
+
+  /* Typography fallback — overridden by CSS vars */
+  font-size: var(--fam2-title-size, 14px);
+  font-weight: var(--fam2-title-weight, 600);
+  letter-spacing: var(--fam2-title-spacing, 0.06em);
+  color: var(--fam2-text, #ffffff);
+  text-transform: uppercase;
+}
+
+.fam2__trigger:focus-visible {
+  outline: 2px solid var(--fam2-text, #ffffff);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ── Icon (plus / minus) ── */
+.fam2__icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  position: relative;
+  color: var(--fam2-icon, #ffffff);
+}
+
+.fam2__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.2s ease;
+}
+
+/* Horizontal bar always visible */
+.fam2__icon .fam2__bar--h {
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Vertical bar: rotate 90° → becomes minus when open */
+.fam2__icon .fam2__bar--v {
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.fam2__trigger[aria-expanded="true"] .fam2__bar--v {
+  opacity: 0;
+  transform: rotate(90deg);
+}
+
+/* ── Panel (collapsible) ── */
+.fam2__panel {
+  overflow: hidden;
+
+  /* Height animation via JS setMaxHeight */
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity   0.25s ease;
+}
+
+.fam2__panel.is-open {
+  opacity: 1;
+  /* max-height set by JS */
+}
+
+/* ── Link list inside panel ── */
+.fam2__links {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 18px;
+}
+
+.fam2__link-item {
+  margin: 0;
+}
+
+.fam2__link {
+  display: block;
+  padding: 9px 0;
+  font-size: var(--fam2-link-size, 13px);
+  font-weight: var(--fam2-link-weight, 400);
+  letter-spacing: var(--fam2-link-spacing, 0.02em);
+  color: var(--fam2-text, #ffffff);
+  opacity: 0.78;
+  text-decoration: none;
+  transition: opacity 0.18s ease;
+}
+
+.fam2__link:hover,
+.fam2__link:focus-visible {
+  opacity: 1;
+  text-decoration: underline;
+  outline: none;
+}
+
+/* ── Placeholder when group has no links ── */
+.fam2__empty {
+  padding: 8px 0 18px;
+  font-size: var(--fam2-link-size, 13px);
+  color: var(--fam2-text, #ffffff);
+  opacity: 0.45;
+  font-style: italic;
+}
+
+/* ── Social row ── */
+.fam2__social {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.fam2__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--fam2-icon, #ffffff);
+  opacity: 0.85;
+  text-decoration: none;
+  border-radius: 50%;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.fam2__social-link:hover,
+.fam2__social-link:focus-visible {
+  opacity: 1;
+  transform: scale(1.12);
+  outline: 2px solid var(--fam2-text, #ffffff);
+  outline-offset: 2px;
+}
+
+.fam2__social-link svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  fill: currentColor;
+}
+
+/* ── Legal text ── */
+.fam2__legal {
+  margin-top: 24px;
+  font-size: var(--fam2-legal-size, 11px);
+  font-weight: var(--fam2-legal-weight, 400);
+  letter-spacing: var(--fam2-legal-spacing, 0.03em);
+  color: var(--fam2-text, #ffffff);
+  opacity: 0.5;
+  line-height: 1.6;
+}
+
+/* ── Floating chat button ── */
+.fam2__chat {
+  position: fixed;
+  bottom: 24px;
+  right: 20px;
+  z-index: 9999;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--fam2-text, #ffffff);
+  color: var(--fam2-bg, #000000);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  text-decoration: none;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.fam2__chat:hover,
+.fam2__chat:focus-visible {
+  transform: scale(1.08);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.35);
+  outline: 2px solid var(--fam2-text, #ffffff);
+  outline-offset: 3px;
+}
+
+.fam2__chat svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  fill: currentColor;
+}
+
+/* ── Desktop: hide section (accordion is mobile-only) ── */
+@media (min-width: 768px) {
+  .fam2 {
+    display: none;
+  }
+}
+
+/* ── Reduced-motion: skip transitions ── */
+@media (prefers-reduced-motion: reduce) {
+  .fam2__panel,
+  .fam2__icon .fam2__bar--v,
+  .fam2__icon .fam2__bar--h,
+  .fam2__link,
+  .fam2__social-link,
+  .fam2__chat {
+    transition: none !important;
+  }
+}
