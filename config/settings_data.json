@@ -196,6 +196,7 @@
           },
           "accordion_group_4mYeHG": {
             "type": "accordion_group",
+            "name": "Quick links",
             "settings": {
               "group_key": "nhom-1",
               "heading": "QUIck links",
@@ -211,16 +212,104 @@
               "open_in_new_tab": false
             }
           },
+          "accordion_link_zqjtHw": {
+            "type": "accordion_link",
+            "settings": {
+              "parent_group_key": "nhom-1",
+              "label": "Search",
+              "url": "",
+              "open_in_new_tab": false
+            }
+          },
+          "accordion_link_GHEdai": {
+            "type": "accordion_link",
+            "settings": {
+              "parent_group_key": "nhom-1",
+              "label": "Collections",
+              "url": "",
+              "open_in_new_tab": false
+            }
+          },
+          "accordion_link_bggGEh": {
+            "type": "accordion_link",
+            "settings": {
+              "parent_group_key": "nhom-1",
+              "label": "About us",
+              "url": "",
+              "open_in_new_tab": false
+            }
+          },
+          "accordion_link_QYnwG8": {
+            "type": "accordion_link",
+            "settings": {
+              "parent_group_key": "nhom-1",
+              "label": "News",
+              "url": "",
+              "open_in_new_tab": false
+            }
+          },
           "accordion_group_PQNKhF": {
             "type": "accordion_group",
+            "name": "SUPPORT",
             "settings": {
               "group_key": "nhom-1",
               "heading": "Support",
               "default_open": false
             }
           },
+          "accordion_link_LfjmYg": {
+            "type": "accordion_link",
+            "name": "PRIVACY POLICY",
+            "settings": {
+              "parent_group_key": "nhom-1",
+              "label": "PRIVACY POLICY",
+              "url": "",
+              "open_in_new_tab": false
+            }
+          },
+          "accordion_link_KAMkhn": {
+            "type": "accordion_link",
+            "name": "REFUND POLICY",
+            "settings": {
+              "parent_group_key": "nhom-1",
+              "label": "REFUND POLICY",
+              "url": "",
+              "open_in_new_tab": false
+            }
+          },
+          "accordion_link_QeMQLd": {
+            "type": "accordion_link",
+            "name": "SHIPPING POLICY",
+            "settings": {
+              "parent_group_key": "nhom-1",
+              "label": "SHIPPING POLICY",
+              "url": "",
+              "open_in_new_tab": false
+            }
+          },
+          "accordion_link_chnGTt": {
+            "type": "accordion_link",
+            "name": "CONTACT",
+            "settings": {
+              "parent_group_key": "nhom-1",
+              "label": "CONTACT",
+              "url": "",
+              "open_in_new_tab": false
+            }
+          },
+          "accordion_link_UDTFna": {
+            "type": "accordion_link",
+            "name": "FAQ",
+            "settings": {
+              "parent_group_key": "nhom-1",
+              "label": "FAQ",
+              "url": "",
+              "open_in_new_tab": false
+            }
+          },
           "accordion_group_8nxtRk": {
             "type": "accordion_group",
+            "name": "FLOW US ON",
             "settings": {
               "group_key": "nhom-1",
               "heading": "Follow us On",
@@ -232,7 +321,16 @@
           "newsletter_wjFd7h",
           "accordion_group_4mYeHG",
           "accordion_link_ABjBRR",
+          "accordion_link_zqjtHw",
+          "accordion_link_GHEdai",
+          "accordion_link_bggGEh",
+          "accordion_link_QYnwG8",
           "accordion_group_PQNKhF",
+          "accordion_link_LfjmYg",
+          "accordion_link_KAMkhn",
+          "accordion_link_QeMQLd",
+          "accordion_link_chnGTt",
+          "accordion_link_UDTFna",
           "accordion_group_8nxtRk"
         ],
         "settings": {
