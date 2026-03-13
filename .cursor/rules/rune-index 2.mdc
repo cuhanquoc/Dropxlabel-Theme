@@ -1,0 +1,82 @@
+# Rune Skill Index
+
+> Platform: cursor | Skills: 57 | Extensions: 13
+
+## Core Skills
+
+- rune-adversary.mdc
+- rune-asset-creator.mdc
+- rune-audit.mdc
+- rune-autopsy.mdc
+- rune-ba.mdc
+- rune-brainstorm.mdc
+- rune-browser-pilot.mdc
+- rune-completion-gate.mdc
+- rune-constraint-check.mdc
+- rune-cook.mdc
+- rune-db.mdc
+- rune-debug.mdc
+- rune-dependency-doctor.mdc
+- rune-deploy.mdc
+- rune-design.mdc
+- rune-doc-processor.mdc
+- rune-docs-seeker.mdc
+- rune-docs.mdc
+- rune-fix.mdc
+- rune-git.mdc
+- rune-hallucination-guard.mdc
+- rune-incident.mdc
+- rune-integrity-check.mdc
+- rune-journal.mdc
+- rune-launch.mdc
+- rune-logic-guardian.mdc
+- rune-marketing.mdc
+- rune-mcp-builder.mdc
+- rune-onboard.mdc
+- rune-perf.mdc
+- rune-plan.mdc
+- rune-preflight.mdc
+- rune-problem-solver.mdc
+- rune-rescue.mdc
+- rune-research.mdc
+- rune-review-intake.mdc
+- rune-review.mdc
+- rune-safeguard.mdc
+- rune-sast.mdc
+- rune-scaffold.mdc
+- rune-scope-guard.mdc
+- rune-scout.mdc
+- rune-sentinel-env.mdc
+- rune-sentinel.mdc
+- rune-sequential-thinking.mdc
+- rune-session-bridge.mdc
+- rune-skill-forge.mdc
+- rune-skill-router.mdc
+- rune-surgeon.mdc
+- rune-team.mdc
+- rune-test.mdc
+- rune-trend-scout.mdc
+- rune-verification.mdc
+- rune-video-creator.mdc
+- rune-watchdog.mdc
+- rune-worktree.mdc
+
+## Extension Packs
+
+- rune-context-engine.mdc
+- rune-ext-ai-ml.mdc
+- rune-ext-analytics.mdc
+- rune-ext-backend.mdc
+- rune-ext-chrome-ext.mdc
+- rune-ext-content.mdc
+- rune-ext-devops.mdc
+- rune-ext-ecommerce.mdc
+- rune-ext-gamedev.mdc
+- rune-ext-mobile.mdc
+- rune-ext-saas.mdc
+- rune-ext-security.mdc
+- rune-ext-trading.mdc
+- rune-ext-ui.mdc
+
+---
+> Rune Skill Mesh — https://github.com/rune-kit/rune
