@@ -180,6 +180,64 @@
           "copyright_text": "All rights reserved.",
           "show_payment_icons": true
         }
+      },
+      "footer-accordion-mobile": {
+        "type": "footer-accordion-mobile",
+        "blocks": {
+          "accordion_group_4mYeHG": {
+            "type": "accordion_group",
+            "settings": {
+              "group_key": "nhom-1",
+              "heading": "QUIck links",
+              "default_open": false
+            }
+          },
+          "accordion_group_PQNKhF": {
+            "type": "accordion_group",
+            "settings": {
+              "group_key": "nhom-1",
+              "heading": "Support",
+              "default_open": false
+            }
+          },
+          "accordion_group_8nxtRk": {
+            "type": "accordion_group",
+            "settings": {
+              "group_key": "nhom-1",
+              "heading": "Follow us On",
+              "default_open": false
+            }
+          }
+        },
+        "block_order": [
+          "accordion_group_4mYeHG",
+          "accordion_group_PQNKhF",
+          "accordion_group_8nxtRk"
+        ],
+        "settings": {
+          "bg_color": "#000000",
+          "overlay_opacity": 60,
+          "text_color": "#ffffff",
+          "icon_color": "#ffffff",
+          "divider_color": "#ffffff",
+          "title_size": 13,
+          "title_weight": "600",
+          "title_spacing": 80,
+          "link_size": 13,
+          "link_weight": "400",
+          "link_spacing": 20,
+          "legal_size": 11,
+          "legal_weight": "400",
+          "legal_spacing": 3,
+          "social_instagram": "",
+          "social_tiktok": "",
+          "social_facebook": "",
+          "social_pinterest": "",
+          "social_youtube": "",
+          "legal_text": "<p>© 2025 Dropxlabel. All rights reserved.</p>",
+          "chat_url": "",
+          "chat_label": "Liên hệ hỗ trợ"
+        }
       }
     },
     "content_for_index": []
