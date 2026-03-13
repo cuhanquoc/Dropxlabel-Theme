@@ -23,8 +23,9 @@
     .fam2-bar {
       position: relative;
       z-index: 1;
-      background: var(--fam2-bar-bg, #060606);
+      background: transparent;
       padding: 20px 16px 28px;
+      padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
       border-top: 1px solid rgba(255,255,255,.08);
     }
     .fam2-bar__row {
@@ -99,8 +100,144 @@
       display: block;
     }
     @media (min-width: 768px) {
-      .fam2-bar { padding: 24px 40px 32px; }
+      .fam2-bar { padding: 24px 40px 32px; padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); }
       .fam2-bar__pay-svg { height: 22px; max-width: 42px; }
+    }
+
+    /* ── Premium Newsletter ── */
+    .fnl {
+      position: relative;
+      z-index: 1;
+      background: var(--fnl-bg);
+      color: var(--fnl-text);
+      border: 1px solid var(--fnl-border);
+      border-radius: 16px;
+      margin: 20px 16px;
+      padding: var(--fnl-pad-top) 0 var(--fnl-pad-bottom);
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(255,255,255,.03), inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .fnl__marquee {
+      overflow: hidden;
+      white-space: nowrap;
+      display: flex;
+      margin-bottom: 16px;
+      mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    }
+    .fnl__marquee-track {
+      display: flex;
+      flex-shrink: 0;
+      animation: fnlScroll var(--fnl-mq-speed) linear infinite;
+      will-change: transform;
+    }
+    .fnl__marquee-track[data-fnl-dir="right"] {
+      animation-direction: reverse;
+    }
+    [data-fnl-pause]:hover .fnl__marquee-track {
+      animation-play-state: paused;
+    }
+    @keyframes fnlScroll {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fnl__marquee-track { animation: none; }
+    }
+    .fnl__marquee-item {
+      font-family: var(--font-heading, serif);
+      font-size: var(--fnl-mq-size);
+      font-weight: var(--fnl-mq-weight);
+      letter-spacing: var(--fnl-mq-spacing);
+      text-transform: uppercase;
+      color: var(--fnl-text);
+      flex-shrink: 0;
+      padding: 0 4px;
+    }
+    @media (min-width: 768px) {
+      .fnl__marquee-item { font-size: var(--fnl-mq-size-d); }
+    }
+
+    .fnl__subcopy {
+      font-family: var(--font-body, sans-serif);
+      font-size: var(--fnl-sub-size);
+      font-weight: var(--fnl-sub-weight);
+      line-height: 1.6;
+      color: var(--fnl-text);
+      opacity: .65;
+      text-align: center;
+      padding: 0 24px;
+      margin: 0 0 20px;
+    }
+
+    .fnl__form { padding: 0 20px; }
+
+    .fnl__capsule {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--fnl-border);
+      border-radius: 999px;
+      overflow: hidden;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+    .fnl__capsule:focus-within {
+      border-color: rgba(255,255,255,.25);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+    }
+
+    .fnl__input {
+      flex: 1;
+      min-width: 0;
+      height: 50px;
+      padding: 0 20px;
+      border: none;
+      background: transparent;
+      font-family: var(--font-body, sans-serif);
+      font-size: .82rem;
+      color: var(--fnl-text);
+      outline: none;
+    }
+    .fnl__input::placeholder { color: rgba(255,255,255,.35); }
+
+    .fnl__btn {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 42px;
+      padding: 0 20px;
+      margin: 4px;
+      border: none;
+      border-radius: 999px;
+      background: var(--fnl-btn-bg);
+      color: var(--fnl-btn-text);
+      font-family: var(--font-body, sans-serif);
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform .15s ease, opacity .2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .fnl__btn:hover { opacity: .88; }
+    .fnl__btn:active { transform: scale(.95); }
+    .fnl__btn-arrow { transition: transform .2s ease; }
+    .fnl__btn:hover .fnl__btn-arrow { transform: translateX(3px); }
+
+    .fnl__success {
+      text-align: center;
+      font-size: .85rem;
+      color: #86EFAC;
+      padding: 12px 20px;
+    }
+    .fnl__error {
+      text-align: center;
+      font-size: .78rem;
+      color: #FCA5A5;
+      padding: 0 20px 8px;
     }
   </style>
 
@@ -254,48 +391,85 @@
         </li>
 
       {%- elsif block.type == 'newsletter' -%}
-        {%- comment -%} ── Newsletter form ── {%- endcomment -%}
+        {%- comment -%} ── Premium Newsletter: Marquee + Capsule Form ── {%- endcomment -%}
         {%- if fam2_in_list -%}</ul>{%- assign fam2_in_list = false -%}{%- endif -%}
 
         {%- assign nl_id = 'fam2-nl-' | append: block.id -%}
-        <div class="fam2__newsletter" {{ block.shopify_attributes }}>
-          {%- if block.settings.nl_heading != blank -%}
-            <p class="fam2__nl-heading">{{- block.settings.nl_heading | escape -}}</p>
-          {%- endif -%}
-          {%- if block.settings.nl_subtext != blank -%}
-            <p class="fam2__nl-subtext">{{- block.settings.nl_subtext | escape -}}</p>
+        {%- assign mq_text = block.settings.nl_marquee_text | default: block.settings.nl_heading | default: 'JOIN THE DROP' -%}
+        {%- assign mq_speed = block.settings.nl_marquee_speed | default: 30 -%}
+        {%- assign mq_dir = block.settings.nl_marquee_direction | default: 'left' -%}
+        {%- assign mq_pause = block.settings.nl_marquee_pause_hover -%}
+
+        <div class="fnl" {{ block.shopify_attributes }} style="
+          --fnl-bg: {{ block.settings.nl_bg_color | default: '#111111' }};
+          --fnl-text: {{ block.settings.nl_text_color | default: '#ffffff' }};
+          --fnl-border: {{ block.settings.nl_border_color | default: '#333333' }};
+          --fnl-btn-bg: {{ block.settings.nl_btn_bg | default: '#ffffff' }};
+          --fnl-btn-text: {{ block.settings.nl_btn_text | default: '#0a0a0a' }};
+          --fnl-mq-size: {{ block.settings.nl_marquee_size_mobile | default: 28 }}px;
+          --fnl-mq-size-d: {{ block.settings.nl_marquee_size_desktop | default: 42 }}px;
+          --fnl-mq-weight: {{ block.settings.nl_marquee_weight | default: '800' }};
+          --fnl-mq-spacing: {{ block.settings.nl_marquee_spacing | default: 4 }}px;
+          --fnl-mq-speed: {{ mq_speed }}s;
+          --fnl-sub-size: {{ block.settings.nl_subcopy_size | default: 13 }}px;
+          --fnl-sub-weight: {{ block.settings.nl_subcopy_weight | default: '400' }};
+          --fnl-pad-top: {{ block.settings.nl_padding_top | default: 32 }}px;
+          --fnl-pad-bottom: {{ block.settings.nl_padding_bottom | default: 32 }}px;
+        ">
+
+          {%- if block.settings.nl_marquee_enabled -%}
+          <div class="fnl__marquee" aria-hidden="true"{% if mq_pause %} data-fnl-pause{% endif %}>
+            <div class="fnl__marquee-track" data-fnl-dir="{{ mq_dir }}">
+              {%- for i in (1..6) -%}
+                <span class="fnl__marquee-item">{{ mq_text }}&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;</span>
+              {%- endfor -%}
+            </div>
+            <div class="fnl__marquee-track" data-fnl-dir="{{ mq_dir }}" aria-hidden="true">
+              {%- for i in (1..6) -%}
+                <span class="fnl__marquee-item">{{ mq_text }}&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;</span>
+              {%- endfor -%}
+            </div>
+          </div>
           {%- endif -%}
 
-          {% form 'customer', class: 'fam2__nl-form', id: nl_id %}
+          {%- if block.settings.nl_subcopy_enabled and block.settings.nl_subtext != blank -%}
+            <p class="fnl__subcopy">{{ block.settings.nl_subtext | escape }}</p>
+          {%- endif -%}
+
+          {%- if block.settings.nl_form_enabled -%}
+          {% form 'customer', class: 'fnl__form', id: nl_id %}
             <input type="hidden" name="contact[tags]" value="newsletter">
             {%- if form.posted_successfully? -%}
-              <p class="fam2__nl-success" role="status">
-                {{- block.settings.nl_success | default: 'Cảm ơn bạn đã đăng ký!' | escape -}}
+              <p class="fnl__success" role="status">
+                {{ block.settings.nl_success | default: 'Thank you for subscribing!' | escape }}
               </p>
             {%- else -%}
               {%- if form.errors -%}
-                <p class="fam2__nl-error" role="alert">{{- form.errors | default_errors -}}</p>
+                <p class="fnl__error" role="alert">{{ form.errors | default_errors }}</p>
               {%- endif -%}
-              <div class="fam2__nl-row">
-                <label for="{{ nl_id }}-email" class="visually-hidden">
-                  {{- block.settings.nl_placeholder | default: 'Email của bạn' | escape -}}
+              <div class="fnl__capsule">
+                <label for="{{ nl_id }}-email" class="sr-only">
+                  {{ block.settings.nl_placeholder | default: 'Your email' | escape }}
                 </label>
                 <input
                   id="{{ nl_id }}-email"
-                  class="fam2__nl-input"
+                  class="fnl__input"
                   type="email"
                   name="contact[email]"
                   autocomplete="email"
                   required
-                  placeholder="{{ block.settings.nl_placeholder | default: 'Email của bạn' | escape }}"
-                  aria-label="{{ block.settings.nl_placeholder | default: 'Email của bạn' | escape }}"
+                  placeholder="{{ block.settings.nl_placeholder | default: 'Your email' | escape }}"
+                  aria-label="{{ block.settings.nl_placeholder | default: 'Your email' | escape }}"
                 >
-                <button class="fam2__nl-btn" type="submit">
-                  {{- block.settings.nl_btn_label | default: 'Đăng ký' | escape -}}
+                <button class="fnl__btn" type="submit">
+                  {{ block.settings.nl_btn_label | default: 'Subscribe' | escape }}
+                  <svg class="fnl__btn-arrow" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
               </div>
             {%- endif -%}
           {% endform %}
+          {%- endif -%}
+
         </div>
 
       {%- comment -%} accordion_link blocks are rendered inside their parent group — skip here {%- endcomment -%}
@@ -404,7 +578,6 @@
 
   {%- comment -%} ── Bottom Bar: Locale · Copyright · Payment Icons ── {%- endcomment -%}
   <div class="fam2-bar" style="
-    --fam2-bar-bg: {{ section.settings.bar_bg_color | default: '#060606' }};
     --fam2-bar-text: {{ section.settings.bar_text_color | default: '#888888' }};
     --fam2-bar-icon-radius: {{ section.settings.bar_icon_radius | default: 4 }}px;
     --fam2-bar-gap: {{ section.settings.bar_spacing | default: 6 }}px;
@@ -674,12 +847,6 @@
     },
     {
       "type": "color",
-      "id": "bar_bg_color",
-      "label": "Bar background",
-      "default": "#060606"
-    },
-    {
-      "type": "color",
       "id": "bar_text_color",
       "label": "Bar text color",
       "default": "#888888"
@@ -723,38 +890,194 @@
   "blocks": [
     {
       "type": "newsletter",
-      "name": "📧 Newsletter subscribe",
+      "name": "📧 Newsletter",
       "limit": 1,
       "settings": [
         {
+          "type": "header",
+          "content": "Marquee Title"
+        },
+        {
+          "type": "checkbox",
+          "id": "nl_marquee_enabled",
+          "label": "Enable marquee",
+          "default": true
+        },
+        {
           "type": "text",
-          "id": "nl_heading",
-          "label": "Tiêu đề form",
-          "default": "Đăng ký nhận tin"
+          "id": "nl_marquee_text",
+          "label": "Marquee text",
+          "default": "JOIN THE DROP"
+        },
+        {
+          "type": "range",
+          "id": "nl_marquee_size_mobile",
+          "label": "Marquee font size (mobile)",
+          "min": 16, "max": 60, "step": 1, "default": 28, "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "nl_marquee_size_desktop",
+          "label": "Marquee font size (desktop)",
+          "min": 24, "max": 80, "step": 1, "default": 42, "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "nl_marquee_weight",
+          "label": "Marquee font weight",
+          "options": [
+            { "value": "400", "label": "Regular" },
+            { "value": "600", "label": "SemiBold" },
+            { "value": "700", "label": "Bold" },
+            { "value": "800", "label": "ExtraBold" },
+            { "value": "900", "label": "Black" }
+          ],
+          "default": "800"
+        },
+        {
+          "type": "range",
+          "id": "nl_marquee_spacing",
+          "label": "Marquee letter-spacing",
+          "min": 0, "max": 12, "step": 1, "default": 4, "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "nl_marquee_speed",
+          "label": "Marquee speed (seconds per loop)",
+          "min": 10, "max": 80, "step": 5, "default": 30
+        },
+        {
+          "type": "select",
+          "id": "nl_marquee_direction",
+          "label": "Marquee direction",
+          "options": [
+            { "value": "left", "label": "Left → Right scroll" },
+            { "value": "right", "label": "Right → Left scroll" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "checkbox",
+          "id": "nl_marquee_pause_hover",
+          "label": "Pause on hover",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Subcopy"
+        },
+        {
+          "type": "checkbox",
+          "id": "nl_subcopy_enabled",
+          "label": "Enable subcopy",
+          "default": true
         },
         {
           "type": "text",
           "id": "nl_subtext",
-          "label": "Mô tả ngắn (tuỳ chọn)",
-          "default": "Ưu đãi & xu hướng thời trang mới nhất thẳng vào hộp thư của bạn."
+          "label": "Subcopy text",
+          "default": "Exclusive drops, style tips & early access — straight to your inbox."
+        },
+        {
+          "type": "range",
+          "id": "nl_subcopy_size",
+          "label": "Subcopy font size",
+          "min": 10, "max": 18, "step": 1, "default": 13, "unit": "px"
+        },
+        {
+          "type": "select",
+          "id": "nl_subcopy_weight",
+          "label": "Subcopy font weight",
+          "options": [
+            { "value": "300", "label": "Light" },
+            { "value": "400", "label": "Regular" },
+            { "value": "500", "label": "Medium" }
+          ],
+          "default": "400"
+        },
+        {
+          "type": "header",
+          "content": "Form"
+        },
+        {
+          "type": "checkbox",
+          "id": "nl_form_enabled",
+          "label": "Enable email form",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "nl_heading",
+          "label": "Heading (legacy, used as marquee fallback)",
+          "default": "JOIN THE DROP"
         },
         {
           "type": "text",
           "id": "nl_placeholder",
-          "label": "Placeholder input email",
-          "default": "Email của bạn"
+          "label": "Email placeholder",
+          "default": "Your email"
         },
         {
           "type": "text",
           "id": "nl_btn_label",
-          "label": "Nhãn nút submit",
-          "default": "Đăng ký"
+          "label": "Button label",
+          "default": "Subscribe"
         },
         {
           "type": "text",
           "id": "nl_success",
-          "label": "Thông báo thành công",
-          "default": "Cảm ơn bạn đã đăng ký!"
+          "label": "Success message",
+          "default": "Thank you for subscribing!"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "nl_bg_color",
+          "label": "Panel background",
+          "default": "#111111"
+        },
+        {
+          "type": "color",
+          "id": "nl_text_color",
+          "label": "Text color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "nl_border_color",
+          "label": "Border / input border",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "nl_btn_bg",
+          "label": "Button background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "nl_btn_text",
+          "label": "Button text",
+          "default": "#0a0a0a"
+        },
+        {
+          "type": "header",
+          "content": "Spacing"
+        },
+        {
+          "type": "range",
+          "id": "nl_padding_top",
+          "label": "Top padding",
+          "min": 8, "max": 64, "step": 4, "default": 32, "unit": "px"
+        },
+        {
+          "type": "range",
+          "id": "nl_padding_bottom",
+          "label": "Bottom padding",
+          "min": 8, "max": 64, "step": 4, "default": 32, "unit": "px"
         }
       ]
     },
@@ -958,10 +1281,13 @@
         {
           "type": "newsletter",
           "settings": {
-            "nl_heading": "Đăng ký nhận tin",
-            "nl_subtext": "Ưu đãi & xu hướng thời trang mới nhất.",
-            "nl_placeholder": "Email của bạn",
-            "nl_btn_label": "Đăng ký"
+            "nl_marquee_enabled": true,
+            "nl_marquee_text": "JOIN THE DROP",
+            "nl_subcopy_enabled": true,
+            "nl_subtext": "Exclusive drops, style tips & early access — straight to your inbox.",
+            "nl_form_enabled": true,
+            "nl_placeholder": "Your email",
+            "nl_btn_label": "Subscribe"
           }
         },
         {
