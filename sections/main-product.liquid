@@ -607,6 +607,12 @@
       width: 100% !important;
       box-sizing: border-box !important;
     }
+    #main-product.mobile-compact-enabled {
+      --mobile-space-2: var(--mobile-section-gap);
+      --mobile-space-1: max(8px, calc(var(--mobile-space-2) - 4px));
+      --mobile-space-3: calc(var(--mobile-space-2) + 4px);
+      --mobile-space-4: calc(var(--mobile-space-2) + 8px);
+    }
     #main-product .sticky {
       position: relative !important;
       top: auto !important;
@@ -633,12 +639,104 @@
     .product-title {
       font-size: clamp(1.5rem, 5vw, 2.5rem);
     }
-    .product-hero-info-wrap {
+    #main-product.mobile-compact-enabled .product-gallery-stack {
+      gap: var(--mobile-space-2) !important;
+    }
+    #main-product.mobile-compact-enabled .product-main-image-wrap {
+      max-height: var(--mobile-gallery-max-height);
+    }
+    #main-product.mobile-compact-enabled #ProductMainImage {
+      height: 100%;
+      max-height: var(--mobile-gallery-max-height);
+      object-fit: cover;
+      aspect-ratio: 4 / 5;
+    }
+    #main-product.mobile-compact-enabled #ProductThumbnails {
+      gap: var(--mobile-space-1) !important;
+      padding-bottom: var(--mobile-space-1) !important;
+    }
+    #main-product.mobile-compact-enabled #ProductThumbnails .product-thumbnail-btn {
+      flex: 0 0 calc(34% - 6px) !important;
+    }
+    #main-product.mobile-compact-enabled .product-hero-info-wrap {
       background: #fbfbfb;
       border: 1px solid #e7e7e7;
       border-radius: 14px;
-      padding: 0.9rem 1rem 1rem;
+      padding: var(--mobile-space-2) 1rem var(--mobile-space-2);
       box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+      margin-bottom: var(--mobile-space-3) !important;
+    }
+    #main-product.mobile-compact-enabled .product-review-row {
+      margin-bottom: var(--mobile-space-1);
+      gap: var(--mobile-space-1);
+    }
+    #main-product.mobile-compact-enabled .product-variants-wrap {
+      margin-bottom: var(--mobile-space-2);
+    }
+    #main-product.mobile-compact-enabled .product-divider {
+      margin-bottom: var(--mobile-space-2) !important;
+    }
+    #main-product.mobile-compact-enabled .product-option-item {
+      margin-bottom: var(--mobile-space-2) !important;
+    }
+    #main-product.mobile-compact-enabled [data-option-group] {
+      gap: var(--mobile-space-1) !important;
+    }
+    #main-product.mobile-compact-enabled .size-btn {
+      height: var(--mobile-option-button-height) !important;
+      min-height: 44px !important;
+      padding-inline: 0.75rem !important;
+      font-size: 0.82rem !important;
+    }
+    #main-product.mobile-compact-enabled .color-swatch {
+      width: 44px;
+      height: 44px;
+    }
+    #main-product.mobile-compact-enabled .product-quantity-wrap,
+    #main-product.mobile-compact-enabled .product-stock-wrap,
+    #main-product.mobile-compact-enabled .product-pickup-wrap,
+    #main-product.mobile-compact-enabled .product-benefits-wrap,
+    #main-product.mobile-compact-enabled .product-buy-wrap,
+    #main-product.mobile-compact-enabled .product-payment-wrap,
+    #main-product.mobile-compact-enabled .product-info-actions {
+      margin-bottom: var(--mobile-space-3) !important;
+    }
+    #main-product.mobile-compact-enabled .product-quantity-wrap > p {
+      margin-bottom: var(--mobile-space-1) !important;
+    }
+    #main-product.mobile-compact-enabled .product-quantity-wrap > div {
+      height: max(44px, var(--mobile-option-button-height)) !important;
+    }
+    #main-product.mobile-compact-enabled .product-pickup-wrap--hide-mobile {
+      display: none !important;
+    }
+    #main-product.mobile-compact-enabled .product-pickup-card {
+      padding: var(--mobile-space-2) !important;
+      gap: var(--mobile-space-2) !important;
+    }
+    #main-product.mobile-compact-enabled .product-benefits-wrap {
+      padding: var(--mobile-space-2) 1rem !important;
+      gap: var(--mobile-space-2) !important;
+      margin-bottom: var(--mobile-space-2) !important;
+    }
+    #main-product.mobile-compact-enabled .product-buy-wrap {
+      margin-bottom: var(--mobile-space-2) !important;
+    }
+    #main-product.mobile-compact-enabled .btn-add-to-cart {
+      min-height: var(--mobile-cta-min-height) !important;
+      height: var(--mobile-cta-min-height) !important;
+      font-size: 0.84rem !important;
+    }
+    #main-product.mobile-compact-enabled .btn-wishlist {
+      min-height: var(--mobile-cta-min-height) !important;
+      height: var(--mobile-cta-min-height) !important;
+      width: 50px !important;
+    }
+    #main-product.mobile-compact-enabled .shopify-payment-button__button {
+      min-height: var(--mobile-cta-min-height) !important;
+    }
+    #main-product.mobile-compact-enabled .pw-desc-inline {
+      margin-top: var(--mobile-space-4) !important;
     }
     .product-info-sheet__panel {
       max-height: 78vh;
@@ -911,9 +1009,9 @@
 
 <div
   id="main-product"
-  class="mx-auto md:max-w-screen-xl w-full md:px-10 pb-12 mb-12"
+  class="mx-auto md:max-w-screen-xl w-full md:px-10 pb-12 mb-12{% if section.settings.mobile_compact_mode %} mobile-compact-enabled{% endif %}"
   data-product-id="{{ product.id }}"
-  style="overflow-x: hidden; max-width: 100vw; width: 100%; box-sizing: border-box;"
+  style="overflow-x: hidden; max-width: 100vw; width: 100%; box-sizing: border-box; --mobile-gallery-max-height: {{ section.settings.mobile_gallery_max_height | default: 62 }}vh; --mobile-section-gap: {{ section.settings.mobile_section_gap | default: 12 }}px; --mobile-option-button-height: {{ section.settings.mobile_option_button_height | default: 46 }}px; --mobile-cta-min-height: {{ section.settings.mobile_cta_min_height | default: 50 }}px;"
 >
 
   
@@ -926,10 +1024,10 @@
     <!-- ── LEFT: Image Gallery ── -->
     <div class="md:col-span-3">
       {% assign gallery_gap = section.settings.gallery_gap | default: 10 %}
-      <div style="display: flex; flex-direction: column; gap: {{ gallery_gap }}px; background-color: #fff; width: 100%;">
+      <div class="product-gallery-stack" style="display: flex; flex-direction: column; gap: {{ gallery_gap }}px; background-color: #fff; width: 100%;">
 
         <!-- Main Image -->
-        <div style="width: 100%; position: relative; background-color: #f5f4f1; display: block; overflow: hidden; border: 1px solid #e5e5e5; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-radius: 8px; box-sizing: border-box;">
+        <div class="product-main-image-wrap" style="width: 100%; position: relative; background-color: #f5f4f1; display: block; overflow: hidden; border: 1px solid #e5e5e5; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-radius: 8px; box-sizing: border-box;">
           {% if product.featured_image %}
             <img id="ProductMainImage" src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.title | escape }}" style="width: 100%; height: auto; display: block; margin: 0 auto;">
           {% else %}
@@ -1038,15 +1136,15 @@
           </div>
 
           <!-- Thin divider -->
-          <div style="height: 1px; background-color: var(--color-border); margin-bottom: 2rem;"></div>
+          <div class="product-divider" style="height: 1px; background-color: var(--color-border); margin-bottom: 2rem;"></div>
 
           <!-- ── Variant Options ── -->
           {% unless product.has_only_default_variant %}
-            <div style="padding: 0 1rem; width: 100%; box-sizing: border-box;">
+            <div class="product-variants-wrap" style="padding: 0 1rem; width: 100%; box-sizing: border-box;">
               {% for option in product.options_with_values %}
 
                 {%- assign option_name_lower = option.name | downcase -%}
-                <div class="mb-7">
+                <div class="mb-7 product-option-item">
 
                   <!-- Option Label + Size Chart -->
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
@@ -1157,7 +1255,7 @@
           {% endunless %}
 
           <!-- ── Quantity ── -->
-          <div style="margin-bottom: 2rem; padding: 0 1rem; width: 100%; box-sizing: border-box;">
+          <div class="product-quantity-wrap" style="margin-bottom: 2rem; padding: 0 1rem; width: 100%; box-sizing: border-box;">
             <p style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.75rem;">Quantity</p>
             <div style="display: inline-flex; border: 1px solid var(--color-text); border-radius: 6px; overflow: hidden; width: 140px; height: 50px;">
               <button
@@ -1183,57 +1281,8 @@
             </div>
           </div>
 
-          <!-- ── Stock Indicator (Dynamic) ── -->
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; font-size: 1.05rem; padding: 0 1rem; width: 100%; box-sizing: border-box;">
-            <svg id="variant-stock-icon" width="20" height="20" viewBox="0 0 24 24" fill="#00a82d" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="currentColor"/>
-            </svg>
-            <span id="variant-stock-display" style="font-weight: 400;">
-              {% assign current_variant = product.selected_or_first_available_variant %}
-              {% if current_variant.inventory_management and current_variant.inventory_quantity > 0 %}
-                {{ current_variant.inventory_quantity }} in stock
-              {% elsif current_variant.available %}
-                In stock
-              {% else %}
-                Out of stock
-              {% endif %}
-            </span>
-          </div>
-
-          <!-- ── Pickup Availability ── -->
-          <div style="padding: 0 1rem; width: 100%; box-sizing: border-box; margin-bottom: 2rem;">
-            <div style="background-color: #eefbf1; border: 1px solid #d4ebd9; border-radius: 6px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start;">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-top: 2px;">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-              <div style="flex: 1;">
-                <p style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; line-height: 1.3;">
-                  {{ section.settings.pickup_title | default: 'Pickup available at California Warehouse' }}
-                </p>
-                <p style="font-size: 0.9rem; color: #333; margin-bottom: 0.75rem;">
-                  {{ section.settings.pickup_time | default: 'Usually ready in 24 hours' }}
-                </p>
-                <a href="#" style="font-size: 0.85rem; text-decoration: underline; color: var(--color-text);">Check availability at other stores</a>
-              </div>
-            </div>
-          </div>
-
-          <!-- ── Trust Badges ── -->
-          <div style="display: flex; gap: 1rem; justify-content: space-between; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1.5rem 1rem; margin-bottom: 3rem; width: 100%; box-sizing: border-box;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-               <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15" stroke-linecap="round" stroke-linejoin="round"/></svg>
-               <span style="font-size: 0.95rem;">{{ section.settings.delivery_text | default: 'Free delivery within 2 days' }}</span>
-            </div>
-            <div style="width: 1px; height: 24px; background-color: #eee;"></div>
-            <div style="display: flex; align-items: center; gap: 10px;">
-               <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m3 9a9 9 0 1 0 5-6.5l-3 2"/><path d="m2 2v6h6"/><path d="m9 11v6l3-1.5 3 1.5v-6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-               <span style="font-size: 0.95rem; padding: 2px 4px; border-radius: 4px;">{{ section.settings.returns_text | default: 'Free + easy returns' }}</span>
-            </div>
-          </div>
-
           <!-- Add to Cart (Re-styled a bit) -->
-          <div class="mb-5 flex gap-3" style="max-width: 100%; box-sizing: border-box; flex-wrap: wrap; padding: 0 1rem;">
+          <div class="product-buy-wrap mb-5 flex gap-3" style="max-width: 100%; box-sizing: border-box; flex-wrap: wrap; padding: 0 1rem;">
             <button
               type="submit"
               name="add"
@@ -1274,7 +1323,7 @@
           </div>
 
           <!-- Dynamic Checkout -->
-          <div class="mt-3" style="max-width: 100%; overflow: hidden; padding: 0 1rem; box-sizing: border-box;">
+          <div class="product-payment-wrap mt-3" style="max-width: 100%; overflow: hidden; padding: 0 1rem; box-sizing: border-box;">
             <style>
               .shopify-payment-button__button {
                 border-radius: 8px !important;
@@ -1285,9 +1334,79 @@
               .shopify-payment-button {
                 max-width: 100% !important;
               }
+              @media (max-width: 767px) {
+                #main-product.mobile-compact-enabled .shopify-payment-button__button {
+                  min-height: var(--mobile-cta-min-height) !important;
+                }
+              }
             </style>
             {{ form | payment_button }}
           </div>
+
+          <!-- ── Stock Indicator (Dynamic) ── -->
+          <div class="product-stock-wrap" style="display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; font-size: 1.05rem; padding: 0 1rem; width: 100%; box-sizing: border-box;">
+            <svg id="variant-stock-icon" width="20" height="20" viewBox="0 0 24 24" fill="#00a82d" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="currentColor"/>
+            </svg>
+            <span id="variant-stock-display" style="font-weight: 400;">
+              {% assign current_variant = product.selected_or_first_available_variant %}
+              {% if current_variant.inventory_management and current_variant.inventory_quantity > 0 %}
+                {{ current_variant.inventory_quantity }} in stock
+              {% elsif current_variant.available %}
+                In stock
+              {% else %}
+                Out of stock
+              {% endif %}
+            </span>
+          </div>
+
+          <!-- ── Pickup Availability ── -->
+          {%- assign has_pickup_data = false -%}
+          {%- if section.settings.pickup_title != blank or section.settings.pickup_time != blank -%}
+            {%- assign has_pickup_data = true -%}
+          {%- endif -%}
+          {%- if has_pickup_data -%}
+          <div class="product-pickup-wrap{% unless section.settings.mobile_show_pickup_card %} product-pickup-wrap--hide-mobile{% endunless %}" style="padding: 0 1rem; width: 100%; box-sizing: border-box; margin-bottom: 2rem;">
+            <div class="product-pickup-card" style="background-color: #eefbf1; border: 1px solid #d4ebd9; border-radius: 6px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-top: 2px;">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <div style="flex: 1;">
+                <p style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; line-height: 1.3;">
+                  {{ section.settings.pickup_title | default: 'Pickup available at California Warehouse' }}
+                </p>
+                <p style="font-size: 0.9rem; color: #333; margin-bottom: 0.75rem;">
+                  {{ section.settings.pickup_time | default: 'Usually ready in 24 hours' }}
+                </p>
+                <a href="#" style="font-size: 0.85rem; text-decoration: underline; color: var(--color-text);">Check availability at other stores</a>
+              </div>
+            </div>
+          </div>
+          {%- endif -%}
+
+          <!-- ── Trust Badges ── -->
+          {%- assign has_delivery_text = section.settings.delivery_text != blank -%}
+          {%- assign has_returns_text = section.settings.returns_text != blank -%}
+          {%- if has_delivery_text or has_returns_text -%}
+          <div class="product-benefits-wrap" style="display: flex; gap: 1rem; justify-content: space-between; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1.5rem 1rem; margin-bottom: 3rem; width: 100%; box-sizing: border-box;">
+            {%- if has_delivery_text -%}
+            <div style="display: flex; align-items: center; gap: 10px;">
+               <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+               <span style="font-size: 0.95rem;">{{ section.settings.delivery_text | default: 'Free delivery within 2 days' }}</span>
+            </div>
+            {%- endif -%}
+            {%- if has_delivery_text and has_returns_text -%}
+            <div style="width: 1px; height: 24px; background-color: #eee;"></div>
+            {%- endif -%}
+            {%- if has_returns_text -%}
+            <div style="display: flex; align-items: center; gap: 10px;">
+               <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m3 9a9 9 0 1 0 5-6.5l-3 2"/><path d="m2 2v6h6"/><path d="m9 11v6l3-1.5 3 1.5v-6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+               <span style="font-size: 0.95rem; padding: 2px 4px; border-radius: 4px;">{{ section.settings.returns_text | default: 'Free + easy returns' }}</span>
+            </div>
+            {%- endif -%}
+          </div>
+          {%- endif -%}
 
           {%- assign info_action_blocks = section.blocks | where: "type", "info_action" -%}
           {%- if section.settings.show_info_actions and info_action_blocks.size > 0 -%}
@@ -2420,6 +2539,62 @@
       "id": "info_sheet_close_label",
       "label": "Bottom sheet close label",
       "default": "Close details"
+    },
+    {
+      "type": "header",
+      "content": "Mobile Density"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_compact_mode",
+      "label": "Enable mobile compact mode",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "mobile_gallery_max_height",
+      "label": "Mobile gallery max height",
+      "min": 48,
+      "max": 78,
+      "step": 1,
+      "unit": "vh",
+      "default": 62
+    },
+    {
+      "type": "range",
+      "id": "mobile_section_gap",
+      "label": "Mobile section gap",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "mobile_option_button_height",
+      "label": "Mobile option button height",
+      "min": 44,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 46
+    },
+    {
+      "type": "range",
+      "id": "mobile_cta_min_height",
+      "label": "Mobile CTA min height",
+      "min": 44,
+      "max": 64,
+      "step": 1,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_show_pickup_card",
+      "label": "Show pickup card on mobile",
+      "default": true
     },
     {
       "type": "header",
