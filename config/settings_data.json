@@ -202,6 +202,15 @@
               "default_open": false
             }
           },
+          "accordion_link_ABjBRR": {
+            "type": "accordion_link",
+            "settings": {
+              "parent_group_key": "nhom-1",
+              "label": "Home",
+              "url": "",
+              "open_in_new_tab": false
+            }
+          },
           "accordion_group_PQNKhF": {
             "type": "accordion_group",
             "settings": {
@@ -222,12 +231,13 @@
         "block_order": [
           "newsletter_wjFd7h",
           "accordion_group_4mYeHG",
+          "accordion_link_ABjBRR",
           "accordion_group_PQNKhF",
           "accordion_group_8nxtRk"
         ],
         "settings": {
-          "bg_color": "#000000",
-          "overlay_opacity": 60,
+          "bg_color": "#181818",
+          "overlay_opacity": 100,
           "text_color": "#ffffff",
           "icon_color": "#ffffff",
           "divider_color": "#ffffff",
