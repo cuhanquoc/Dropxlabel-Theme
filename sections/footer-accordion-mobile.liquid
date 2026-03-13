@@ -126,212 +126,159 @@
 
   <div class="fam2__inner">
 
-    {%- comment -%} ── Accordion Groups ── {%- endcomment -%}
     {%- comment -%}
-      Collect all accordion_link blocks into a lookup array per group_key.
-      Liquid doesn't have associative maps, so we build a pipe-delimited index:
-        fam2_link_index: "groupKeyA|blockId1|blockId2|...,groupKeyB|blockId3|..."
-      Then for each accordion_group we scan accordion_link blocks whose
-      parent_group_key matches — O(n*m) but n,m < 20 for typical footer use.
+      ── Single-pass block loop ──
+      Renders ALL blocks in exact Theme Editor order.
+      accordion_link blocks are skipped here — they render inside their
+      matching accordion_group via an inner lookup loop.
+      <ul> wrapper opens/closes automatically around consecutive groups.
     {%- endcomment -%}
 
-    {%- assign has_any_group = false -%}
+    {%- assign fam2_in_list = false -%}
     {%- for block in section.blocks -%}
-      {%- if block.type == 'accordion_group' or block.type == 'link_group' -%}
-        {%- assign has_any_group = true -%}
-        {%- break -%}
-      {%- endif -%}
-    {%- endfor -%}
 
-    {%- if has_any_group -%}
-      <ul class="fam2__list" role="list">
-        {%- for group_block in section.blocks -%}
-          {%- if group_block.type == 'accordion_group' -%}
+      {%- if block.type == 'accordion_group' -%}
+        {%- comment -%} ── Accordion group (new system) ── {%- endcomment -%}
+        {%- unless fam2_in_list -%}<ul class="fam2__list" role="list">{%- assign fam2_in_list = true -%}{%- endunless -%}
 
-            {%- comment -%} — Dynamic block-based group — {%- endcomment -%}
-            {%- assign panel_id   = 'fam2-panel-'   | append: group_block.id -%}
-            {%- assign trigger_id = 'fam2-trigger-' | append: group_block.id -%}
-            {%- assign group_key  = group_block.settings.group_key | strip -%}
+        {%- assign panel_id   = 'fam2-panel-'   | append: block.id -%}
+        {%- assign trigger_id = 'fam2-trigger-' | append: block.id -%}
+        {%- assign group_key  = block.settings.group_key | strip -%}
 
-            {%- comment -%} Collect child accordion_link blocks for this group {%- endcomment -%}
-            {%- assign child_count = 0 -%}
-            {%- for child_block in section.blocks -%}
-              {%- if child_block.type == 'accordion_link' -%}
-                {%- assign child_key = child_block.settings.parent_group_key | strip -%}
-                {%- if child_key == group_key and child_block.settings.label != blank -%}
-                  {%- assign child_count = child_count | plus: 1 -%}
-                {%- endif -%}
-              {%- endif -%}
-            {%- endfor -%}
-
-            <li class="fam2__item" {{ group_block.shopify_attributes }}>
-              <button
-                id="{{ trigger_id }}"
-                class="fam2__trigger"
-                type="button"
-                aria-expanded="{% if group_block.settings.default_open %}true{% else %}false{% endif %}"
-                aria-controls="{{ panel_id }}"
-              >
-                <span class="fam2__title">
-                  {{- group_block.settings.heading | escape -}}
-                </span>
-
-                {%- comment -%} Plus/Minus icon {%- endcomment -%}
-                <span class="fam2__icon" aria-hidden="true">
-                  <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <line class="fam2__bar fam2__bar--h" x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                    <line class="fam2__bar fam2__bar--v" x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                  </svg>
-                </span>
-              </button>
-
-              <div
-                id="{{ panel_id }}"
-                class="fam2__panel{% if group_block.settings.default_open %} fam2__panel--open{% endif %}"
-                role="region"
-                aria-labelledby="{{ trigger_id }}"
-              >
-                {%- if child_count > 0 -%}
-                  <ul class="fam2__links" role="list">
-                    {%- for child_block in section.blocks -%}
-                      {%- if child_block.type == 'accordion_link' -%}
-                        {%- assign child_key = child_block.settings.parent_group_key | strip -%}
-                        {%- assign lbl = child_block.settings.label -%}
-                        {%- if child_key == group_key and lbl != blank -%}
-                          <li class="fam2__link-item" {{ child_block.shopify_attributes }}>
-                            {%- assign lnk_url = child_block.settings.url -%}
-                            {%- if lnk_url != blank -%}
-                              <a
-                                class="fam2__link"
-                                href="{{ lnk_url }}"
-                                {%- if child_block.settings.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{%- endif -%}
-                              >{{- lbl | escape -}}</a>
-                            {%- else -%}
-                              <span class="fam2__link fam2__link--placeholder" aria-disabled="true">{{- lbl | escape -}}</span>
-                            {%- endif -%}
-                          </li>
-                        {%- endif -%}
-                      {%- endif -%}
-                    {%- endfor -%}
-                  </ul>
-                {%- else -%}
-                  <p class="fam2__empty">
-                    {{- 'sections.footer_accordion_mobile.no_links' | t | default: 'Chưa có liên kết.' -}}
-                  </p>
-                {%- endif -%}
-              </div>
-            </li>
-
-          {%- elsif group_block.type == 'link_group' -%}
-
-            {%- comment -%} — Backward-compat: old fixed link_1..link_8 groups — {%- endcomment -%}
-            {%- assign panel_id   = 'fam2-panel-'   | append: group_block.id -%}
-            {%- assign trigger_id = 'fam2-trigger-' | append: group_block.id -%}
-
-            {%- assign has_links = false -%}
-            {%- for i in (1..8) -%}
-              {%- assign lbl_key = 'link_' | append: i | append: '_label' -%}
-              {%- if group_block.settings[lbl_key] != blank -%}
-                {%- assign has_links = true -%}
-              {%- endif -%}
-            {%- endfor -%}
-
-            <li class="fam2__item" {{ group_block.shopify_attributes }}>
-              <button
-                id="{{ trigger_id }}"
-                class="fam2__trigger"
-                type="button"
-                aria-expanded="false"
-                aria-controls="{{ panel_id }}"
-              >
-                <span class="fam2__title">
-                  {{- group_block.settings.group_title | escape -}}
-                </span>
-                <span class="fam2__icon" aria-hidden="true">
-                  <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <line class="fam2__bar fam2__bar--h" x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                    <line class="fam2__bar fam2__bar--v" x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                  </svg>
-                </span>
-              </button>
-
-              <div
-                id="{{ panel_id }}"
-                class="fam2__panel"
-                role="region"
-                aria-labelledby="{{ trigger_id }}"
-              >
-                {%- if has_links -%}
-                  <ul class="fam2__links" role="list">
-                    {%- for i in (1..8) -%}
-                      {%- assign lbl_key        = 'link_' | append: i | append: '_label' -%}
-                      {%- assign url_key        = 'link_' | append: i | append: '_url' -%}
-                      {%- assign target_key     = 'link_' | append: i | append: '_target' -%}
-                      {%- assign lbl = group_block.settings[lbl_key] -%}
-                      {%- assign url = group_block.settings[url_key] -%}
-                      {%- if lbl != blank -%}
-                        <li class="fam2__link-item">
-                          {%- if url != blank -%}
-                            <a class="fam2__link" href="{{ url }}"
-                              {%- if group_block.settings[target_key] == '_blank' %} target="_blank" rel="noopener noreferrer"{%- endif -%}
-                            >{{- lbl | escape -}}</a>
-                          {%- else -%}
-                            <span class="fam2__link fam2__link--placeholder" aria-disabled="true">{{- lbl | escape -}}</span>
-                          {%- endif -%}
-                        </li>
-                      {%- endif -%}
-                    {%- endfor -%}
-                  </ul>
-                {%- else -%}
-                  <p class="fam2__empty">
-                    {{- 'sections.footer_accordion_mobile.no_links' | t | default: 'Chưa có liên kết.' -}}
-                  </p>
-                {%- endif -%}
-              </div>
-            </li>
-
+        {%- assign child_count = 0 -%}
+        {%- for cb in section.blocks -%}
+          {%- if cb.type == 'accordion_link' -%}
+            {%- assign ck = cb.settings.parent_group_key | strip -%}
+            {%- if ck == group_key and cb.settings.label != blank -%}
+              {%- assign child_count = child_count | plus: 1 -%}
+            {%- endif -%}
           {%- endif -%}
         {%- endfor -%}
-      </ul>
-    {%- endif -%}
 
-    {%- comment -%} ── Newsletter block(s) ── {%- endcomment -%}
-    {%- for nl_block in section.blocks -%}
-      {%- if nl_block.type == 'newsletter' -%}
-        {%- assign nl_id = 'fam2-nl-' | append: nl_block.id -%}
+        <li class="fam2__item" {{ block.shopify_attributes }}>
+          <button
+            id="{{ trigger_id }}"
+            class="fam2__trigger"
+            type="button"
+            aria-expanded="{% if block.settings.default_open %}true{% else %}false{% endif %}"
+            aria-controls="{{ panel_id }}"
+          >
+            <span class="fam2__title">{{- block.settings.heading | escape -}}</span>
+            <span class="fam2__icon" aria-hidden="true">
+              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line class="fam2__bar fam2__bar--h" x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                <line class="fam2__bar fam2__bar--v" x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </button>
 
-        <div class="fam2__newsletter" {{ nl_block.shopify_attributes }}>
+          <div
+            id="{{ panel_id }}"
+            class="fam2__panel{% if block.settings.default_open %} fam2__panel--open{% endif %}"
+            role="region"
+            aria-labelledby="{{ trigger_id }}"
+          >
+            {%- if child_count > 0 -%}
+              <ul class="fam2__links" role="list">
+                {%- for cb in section.blocks -%}
+                  {%- if cb.type == 'accordion_link' -%}
+                    {%- assign ck  = cb.settings.parent_group_key | strip -%}
+                    {%- assign lbl = cb.settings.label -%}
+                    {%- if ck == group_key and lbl != blank -%}
+                      <li class="fam2__link-item" {{ cb.shopify_attributes }}>
+                        {%- if cb.settings.url != blank -%}
+                          <a class="fam2__link" href="{{ cb.settings.url }}"
+                            {%- if cb.settings.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{%- endif -%}
+                          >{{- lbl | escape -}}</a>
+                        {%- else -%}
+                          <span class="fam2__link fam2__link--placeholder" aria-disabled="true">{{- lbl | escape -}}</span>
+                        {%- endif -%}
+                      </li>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- else -%}
+              <p class="fam2__empty">
+                {{- 'sections.footer_accordion_mobile.no_links' | t | default: 'Chưa có liên kết.' -}}
+              </p>
+            {%- endif -%}
+          </div>
+        </li>
 
-          {%- if nl_block.settings.nl_heading != blank -%}
-            <p class="fam2__nl-heading">
-              {{- nl_block.settings.nl_heading | escape -}}
-            </p>
+      {%- elsif block.type == 'link_group' -%}
+        {%- comment -%} ── Legacy link_group (deprecated, backward-compat) ── {%- endcomment -%}
+        {%- unless fam2_in_list -%}<ul class="fam2__list" role="list">{%- assign fam2_in_list = true -%}{%- endunless -%}
+
+        {%- assign panel_id   = 'fam2-panel-'   | append: block.id -%}
+        {%- assign trigger_id = 'fam2-trigger-' | append: block.id -%}
+        {%- assign has_links = false -%}
+        {%- for i in (1..8) -%}
+          {%- assign lbl_key = 'link_' | append: i | append: '_label' -%}
+          {%- if block.settings[lbl_key] != blank -%}{%- assign has_links = true -%}{%- endif -%}
+        {%- endfor -%}
+
+        <li class="fam2__item" {{ block.shopify_attributes }}>
+          <button id="{{ trigger_id }}" class="fam2__trigger" type="button" aria-expanded="false" aria-controls="{{ panel_id }}">
+            <span class="fam2__title">{{- block.settings.group_title | escape -}}</span>
+            <span class="fam2__icon" aria-hidden="true">
+              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line class="fam2__bar fam2__bar--h" x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                <line class="fam2__bar fam2__bar--v" x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </button>
+          <div id="{{ panel_id }}" class="fam2__panel" role="region" aria-labelledby="{{ trigger_id }}">
+            {%- if has_links -%}
+              <ul class="fam2__links" role="list">
+                {%- for i in (1..8) -%}
+                  {%- assign lbl_key = 'link_' | append: i | append: '_label' -%}
+                  {%- assign url_key = 'link_' | append: i | append: '_url' -%}
+                  {%- assign lbl = block.settings[lbl_key] -%}
+                  {%- assign url = block.settings[url_key] -%}
+                  {%- if lbl != blank -%}
+                    <li class="fam2__link-item">
+                      {%- if url != blank -%}
+                        <a class="fam2__link" href="{{ url }}">{{- lbl | escape -}}</a>
+                      {%- else -%}
+                        <span class="fam2__link fam2__link--placeholder" aria-disabled="true">{{- lbl | escape -}}</span>
+                      {%- endif -%}
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            {%- else -%}
+              <p class="fam2__empty">{{- 'sections.footer_accordion_mobile.no_links' | t | default: 'Chưa có liên kết.' -}}</p>
+            {%- endif -%}
+          </div>
+        </li>
+
+      {%- elsif block.type == 'newsletter' -%}
+        {%- comment -%} ── Newsletter form ── {%- endcomment -%}
+        {%- if fam2_in_list -%}</ul>{%- assign fam2_in_list = false -%}{%- endif -%}
+
+        {%- assign nl_id = 'fam2-nl-' | append: block.id -%}
+        <div class="fam2__newsletter" {{ block.shopify_attributes }}>
+          {%- if block.settings.nl_heading != blank -%}
+            <p class="fam2__nl-heading">{{- block.settings.nl_heading | escape -}}</p>
           {%- endif -%}
-
-          {%- if nl_block.settings.nl_subtext != blank -%}
-            <p class="fam2__nl-subtext">
-              {{- nl_block.settings.nl_subtext | escape -}}
-            </p>
+          {%- if block.settings.nl_subtext != blank -%}
+            <p class="fam2__nl-subtext">{{- block.settings.nl_subtext | escape -}}</p>
           {%- endif -%}
 
           {% form 'customer', class: 'fam2__nl-form', id: nl_id %}
             <input type="hidden" name="contact[tags]" value="newsletter">
-
             {%- if form.posted_successfully? -%}
               <p class="fam2__nl-success" role="status">
-                {{- nl_block.settings.nl_success | default: 'Cảm ơn bạn đã đăng ký!' | escape -}}
+                {{- block.settings.nl_success | default: 'Cảm ơn bạn đã đăng ký!' | escape -}}
               </p>
             {%- else -%}
-
               {%- if form.errors -%}
-                <p class="fam2__nl-error" role="alert">
-                  {{- form.errors | default_errors -}}
-                </p>
+                <p class="fam2__nl-error" role="alert">{{- form.errors | default_errors -}}</p>
               {%- endif -%}
-
               <div class="fam2__nl-row">
                 <label for="{{ nl_id }}-email" class="visually-hidden">
-                  {{- nl_block.settings.nl_placeholder | default: 'Email của bạn' | escape -}}
+                  {{- block.settings.nl_placeholder | default: 'Email của bạn' | escape -}}
                 </label>
                 <input
                   id="{{ nl_id }}-email"
@@ -340,20 +287,22 @@
                   name="contact[email]"
                   autocomplete="email"
                   required
-                  placeholder="{{ nl_block.settings.nl_placeholder | default: 'Email của bạn' | escape }}"
-                  aria-label="{{ nl_block.settings.nl_placeholder | default: 'Email của bạn' | escape }}"
+                  placeholder="{{ block.settings.nl_placeholder | default: 'Email của bạn' | escape }}"
+                  aria-label="{{ block.settings.nl_placeholder | default: 'Email của bạn' | escape }}"
                 >
                 <button class="fam2__nl-btn" type="submit">
-                  {{- nl_block.settings.nl_btn_label | default: 'Đăng ký' | escape -}}
+                  {{- block.settings.nl_btn_label | default: 'Đăng ký' | escape -}}
                 </button>
               </div>
-
             {%- endif -%}
           {% endform %}
-
         </div>
+
+      {%- comment -%} accordion_link blocks are rendered inside their parent group — skip here {%- endcomment -%}
       {%- endif -%}
+
     {%- endfor -%}
+    {%- if fam2_in_list -%}</ul>{%- endif -%}
 
     {%- comment -%} ── Social Icons ── {%- endcomment -%}
     {%- assign has_social = false -%}
@@ -814,22 +763,26 @@
       "name": "📂 Nhóm accordion",
       "settings": [
         {
+          "type": "paragraph",
+          "content": "Bước 1: Tạo block này trước, đặt group_key duy nhất (VD: quick-links). Bước 2: Thêm các block 🔗 Link con có cùng parent_group_key."
+        },
+        {
           "type": "text",
           "id": "group_key",
-          "label": "Khoá nhóm (group_key — duy nhất, không dấu)",
-          "info": "Ví dụ: chinh-sach. Phải trùng với Parent Group Key của các link con.",
+          "label": "Group key (unique, no spaces)",
+          "info": "Must be unique. Example: quick-links, support, about. Link blocks with matching parent_group_key will appear inside this group.",
           "default": "nhom-1"
         },
         {
           "type": "text",
           "id": "heading",
-          "label": "Tiêu đề nhóm",
+          "label": "Heading",
           "default": "Thông tin"
         },
         {
           "type": "checkbox",
           "id": "default_open",
-          "label": "Mở sẵn khi tải trang",
+          "label": "Open by default",
           "default": false
         }
       ]
@@ -839,26 +792,32 @@
       "name": "🔗 Link con",
       "settings": [
         {
+          "type": "paragraph",
+          "content": "Link này sẽ hiển thị bên trong nhóm accordion có cùng group_key. Ví dụ: nếu parent_group_key = quick-links, link sẽ nằm trong nhóm có group_key = quick-links."
+        },
+        {
           "type": "text",
           "id": "parent_group_key",
-          "label": "Khoá nhóm cha (Parent Group Key)",
-          "info": "Phải trùng với group_key của Nhóm accordion cha.",
+          "label": "Parent group key",
+          "info": "Must match the group_key of the 📂 Nhóm accordion this link belongs to.",
           "default": "nhom-1"
         },
         {
           "type": "text",
           "id": "label",
-          "label": "Nhãn link"
+          "label": "Label",
+          "info": "Leave empty to hide this link."
         },
         {
           "type": "url",
           "id": "url",
-          "label": "URL (để trống để hiển thị dạng text)"
+          "label": "URL",
+          "info": "Leave empty to show as non-clickable text."
         },
         {
           "type": "checkbox",
           "id": "open_in_new_tab",
-          "label": "Mở tab mới",
+          "label": "Open in new tab",
           "default": false
         }
       ]
@@ -997,67 +956,99 @@
       "name": "Footer Accordion Mobile",
       "blocks": [
         {
+          "type": "newsletter",
+          "settings": {
+            "nl_heading": "Đăng ký nhận tin",
+            "nl_subtext": "Ưu đãi & xu hướng thời trang mới nhất.",
+            "nl_placeholder": "Email của bạn",
+            "nl_btn_label": "Đăng ký"
+          }
+        },
+        {
           "type": "accordion_group",
           "settings": {
-            "group_key": "chinh-sach",
-            "heading": "Chính sách",
+            "group_key": "quick-links",
+            "heading": "Quick Links",
             "default_open": false
           }
         },
         {
           "type": "accordion_link",
           "settings": {
-            "parent_group_key": "chinh-sach",
-            "label": "Chính sách đổi trả",
-            "url": ""
+            "parent_group_key": "quick-links",
+            "label": "New Arrivals"
           }
         },
         {
           "type": "accordion_link",
           "settings": {
-            "parent_group_key": "chinh-sach",
-            "label": "Chính sách bảo mật",
-            "url": ""
+            "parent_group_key": "quick-links",
+            "label": "Best Sellers"
           }
         },
         {
           "type": "accordion_link",
           "settings": {
-            "parent_group_key": "chinh-sach",
-            "label": "Điều khoản sử dụng",
-            "url": ""
+            "parent_group_key": "quick-links",
+            "label": "About Us"
           }
         },
         {
           "type": "accordion_group",
           "settings": {
-            "group_key": "ho-tro",
-            "heading": "Hỗ trợ",
+            "group_key": "support",
+            "heading": "Support",
             "default_open": false
           }
         },
         {
           "type": "accordion_link",
           "settings": {
-            "parent_group_key": "ho-tro",
-            "label": "Liên hệ",
-            "url": ""
+            "parent_group_key": "support",
+            "label": "Contact Us"
           }
         },
         {
           "type": "accordion_link",
           "settings": {
-            "parent_group_key": "ho-tro",
-            "label": "FAQ",
-            "url": ""
+            "parent_group_key": "support",
+            "label": "FAQ"
           }
         },
         {
           "type": "accordion_link",
           "settings": {
-            "parent_group_key": "ho-tro",
-            "label": "Theo dõi đơn hàng",
-            "url": ""
+            "parent_group_key": "support",
+            "label": "Track Order"
+          }
+        },
+        {
+          "type": "accordion_group",
+          "settings": {
+            "group_key": "policies",
+            "heading": "Policies",
+            "default_open": false
+          }
+        },
+        {
+          "type": "accordion_link",
+          "settings": {
+            "parent_group_key": "policies",
+            "label": "Return Policy"
+          }
+        },
+        {
+          "type": "accordion_link",
+          "settings": {
+            "parent_group_key": "policies",
+            "label": "Privacy Policy"
+          }
+        },
+        {
+          "type": "accordion_link",
+          "settings": {
+            "parent_group_key": "policies",
+            "label": "Terms of Service"
           }
         }
       ]
