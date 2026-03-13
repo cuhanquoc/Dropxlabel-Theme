@@ -58,12 +58,65 @@
     letter-spacing: -0.01em;
   }
 
+  .product-review-row {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .product-review-stars {
+    position: relative;
+    display: inline-block;
+    font-size: 0.82rem;
+    line-height: 1;
+    letter-spacing: 0.12em;
+  }
+
+  .product-review-stars-base {
+    color: #b5b5b5;
+  }
+
+  .product-review-stars-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    overflow: hidden;
+    color: #111111;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .product-review-count {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: #3d3d3d;
+    letter-spacing: 0.02em;
+  }
+
+  .product-review-recommend {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: #111111;
+  }
+
+  .product-review-recommend svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
   /* Price */
   .product-price {
     font-family: var(--font-body);
-    font-size: 1.1rem;
-    font-weight: 500;
-    color: var(--color-text);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #c1272d;
     letter-spacing: 0.04em;
   }
 
@@ -74,6 +127,16 @@
     color: var(--color-muted);
     text-decoration: line-through;
     margin-left: 0.6rem;
+  }
+
+  .product-price-promo {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #111111;
+    margin: 0;
   }
 
   /* Option label */
@@ -220,6 +283,21 @@
   .btn-add-to-cart:disabled {
     opacity: 0.4;
     cursor: not-allowed;
+  }
+
+  .btn-add-to-cart.is-inactive,
+  .btn-add-to-cart.is-inactive:disabled {
+    opacity: 1;
+    background-color: #d2d2d2;
+    border-color: #b8b8b8;
+    color: #4d4d4d;
+    cursor: not-allowed;
+  }
+
+  .btn-add-to-cart.is-inactive:hover {
+    background-color: #d2d2d2;
+    border-color: #b8b8b8;
+    color: #4d4d4d;
   }
 
   @keyframes gradientAnimation {
@@ -719,21 +797,70 @@
 
           
 
+          {%- assign current_variant = product.selected_or_first_available_variant -%}
+          {%- assign requires_variant_selection = false -%}
+          {%- unless product.has_only_default_variant -%}
+            {%- assign requires_variant_selection = true -%}
+          {%- endunless -%}
+
           <!-- Title, Price, Taxes Layout -->
           <div style="margin-bottom: 2.5rem; max-width: 100%; overflow-wrap: break-word; padding: 0 1rem; box-sizing: border-box;">
             <h1 class="product-title" style="font-size: clamp(1.8rem, 4vw, 2.2rem); font-weight: 600; line-height: 1.25; margin-bottom: 0.75rem; word-break: break-word; word-wrap: break-word; min-width: 0; width: 100%;">{{ product.title }}</h1>
+
+            {%- if section.settings.show_rating_row -%}
+              {%- assign review_rating_raw = product.metafields.reviews.rating.value | default: product.metafields.reviews.rating | default: 0 -%}
+              {%- assign review_count_raw = product.metafields.reviews.count.value | default: product.metafields.reviews.count | default: 0 -%}
+              {%- assign review_recommend_raw = product.metafields.reviews.recommend_percent.value | default: product.metafields.reviews.recommend_percent | default: 0 -%}
+              {%- assign review_rating = review_rating_raw | plus: 0 -%}
+              {%- assign review_count = review_count_raw | plus: 0 -%}
+              {%- assign review_recommend = review_recommend_raw | plus: 0 -%}
+              {%- assign review_fill = review_rating | times: 20 -%}
+              <div
+                class="product-review-row"
+                data-review-widget
+                data-review-label="{{ section.settings.rating_label_text | default: 'Reviews' | escape }}"
+                data-metafield-rating="{{ review_rating }}"
+                data-metafield-count="{{ review_count }}"
+                data-metafield-recommend="{{ review_recommend }}"
+                data-app-rating=""
+                data-app-count=""
+                data-app-recommend=""
+              >
+                <span class="product-review-stars" aria-hidden="true">
+                  <span class="product-review-stars-base">★★★★★</span>
+                  <span class="product-review-stars-fill" data-review-stars-fill style="width: {{ review_fill }}%;">★★★★★</span>
+                </span>
+                <span class="product-review-count" data-review-count-text>{{ review_count }} {{ section.settings.rating_label_text | default: 'Reviews' }}</span>
+                {%- if section.settings.show_recommend_percent -%}
+                  <span class="product-review-recommend" data-review-recommend-wrap>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M7 11V5a3 3 0 0 1 3-3l.7 6.4a2.5 2.5 0 0 1-.5 1.8L8.7 12H18a2 2 0 0 1 2 2l-1.2 6a2 2 0 0 1-2 1.6H7z"></path>
+                      <path d="M3 11h4v11H3z"></path>
+                    </svg>
+                    <span data-review-recommend-text>{{ review_recommend }}%</span>
+                  </span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
             
             <div style="display: flex; flex-direction: column; gap: 8px;">
               <div style="display: flex; items-baseline: center; gap: 12px; font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 700;">
-                <span class="product-price" id="product-price">
-                  {{ product.selected_or_first_available_variant.price | money }} {% if shop.currency %}{{ shop.currency }}{% endif %}
+                <span
+                  class="product-price-compare"
+                  id="product-compare-price"
+                  style="text-decoration: line-through; color: var(--color-muted); font-weight: 400; font-size: 1.2rem;{% if current_variant.compare_at_price <= current_variant.price or current_variant.compare_at_price == blank %}display:none;{% endif %}"
+                >
+                  {% if current_variant.compare_at_price > current_variant.price %}
+                    {{ current_variant.compare_at_price | money }}
+                  {% endif %}
                 </span>
-                {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
-                  <span class="product-price-compare" style="text-decoration: line-through; color: var(--color-muted); font-weight: 400; font-size: 1.2rem;">
-                    {{ product.selected_or_first_available_variant.compare_at_price | money }}
-                  </span>
-                {% endif %}
+                <span class="product-price" id="product-price">
+                  {{ current_variant.price | money }}
+                </span>
               </div>
+              {%- if section.settings.price_promo_text != blank -%}
+                <p class="product-price-promo">{{ section.settings.price_promo_text | escape }}</p>
+              {%- endif -%}
               <p style="font-size: 0.95rem; color: #111;">
                 Taxes included. <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}" style="text-decoration: underline; color: inherit;">Shipping</a> calculated at checkout.
               </p>
@@ -753,8 +880,20 @@
 
                   <!-- Option Label + Size Chart -->
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    {%- assign option_default_label = 'Choose ' | append: option.name -%}
+                    {% if option_name_lower == 'size' or option_name_lower == 'kích thước' %}
+                      {%- assign option_default_label = section.settings.choose_size_text | default: 'Choose size' -%}
+                    {% elsif option_name_lower == 'color' or option_name_lower == 'colour' or option_name_lower == 'màu' %}
+                      {%- assign option_default_label = section.settings.choose_color_text | default: 'Choose color' -%}
+                    {% endif %}
                     <div style="font-family: Arial, sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase;">
-                      {{ option.name }} : <span id="selected-{{ option.name | handleize }}" style="font-weight: 700;">{{ option.selected_value | upcase }}</span>
+                      {{ option.name }} :
+                      <span
+                        id="selected-{{ option.name | handleize }}"
+                        data-option-label="{{ option.position }}"
+                        data-default-label="{{ option_default_label | escape }}"
+                        style="font-weight: 700;"
+                      >{{ option_default_label }}</span>
                     </div>
                     {% if option_name_lower == 'size' or option_name_lower == 'kích thước' %}
                       <button type="button" data-action="open-size-chart" style="display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.9rem; background: none; border: none; cursor: pointer; color: #111;">
@@ -776,15 +915,23 @@
 
                   {% if option_name_lower == 'color' or option_name_lower == 'colour' or option_name_lower == 'màu' %}
                     <!-- Color Swatches -->
-                    <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ option.name }}">
+                    <div
+                      class="flex flex-wrap gap-2"
+                      role="radiogroup"
+                      aria-label="{{ option.name }}"
+                      data-option-group
+                      data-option-position="{{ option.position }}"
+                      data-option-name="{{ option_name_lower }}"
+                    >
                       {% for value in option.values %}
                         {%- assign swatch_color = value | downcase | replace: ' ', '-' -%}
                         <button
                           type="button"
-                          class="color-swatch {% if value == option.selected_value %}active{% endif %}"
+                          class="color-swatch"
                           style="background-color: {{ value | downcase }}; border: 1px solid #ddd;"
                           title="{{ value }}"
-                          aria-label="{{ value }}"
+                          aria-label="{{ option.name }}: {{ value }}"
+                          aria-pressed="false"
                           data-option-position="{{ option.position }}"
                           data-option-value="{{ value }}"
                         ></button>
@@ -793,15 +940,23 @@
 
                   {% else %}
                     <!-- Size / Generic Option Buttons -->
-                    <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ option.name }}">
+                    <div
+                      class="flex flex-wrap gap-2"
+                      role="radiogroup"
+                      aria-label="{{ option.name }}"
+                      data-option-group
+                      data-option-position="{{ option.position }}"
+                      data-option-name="{{ option_name_lower }}"
+                    >
                       {% for value in option.values %}
                         <button
                           type="button"
-                          class="size-btn {% if value == option.selected_value %}active{% endif %}"
+                          class="size-btn"
                           style="min-width: 64px; height: 48px; border: 1px solid #111; border-radius: 4px; font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; background: transparent; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;"
                           data-option-position="{{ option.position }}"
                           data-option-value="{{ value }}"
                           aria-label="{{ option.name }}: {{ value }}"
+                          aria-pressed="false"
 
                         >
                           {{ value }}
@@ -913,19 +1068,25 @@
               type="submit"
               name="add"
               id="add-to-cart-btn"
-              class="btn-add-to-cart"
-              {% unless product.selected_or_first_available_variant.available %}disabled{% endunless %}
+              class="btn-add-to-cart{% if requires_variant_selection %} is-inactive{% endif %}"
+              data-select-label="{{ section.settings.select_size_button_text | default: 'Select a size' | escape }}"
+              data-add-label="{{ section.settings.add_to_cart_button_text | default: 'Add to cart' | escape }}"
+              data-sold-out-label="{{ 'products.product.sold_out' | t | default: 'Sold Out' | escape }}"
+              {% if requires_variant_selection or current_variant.available == false %}disabled{% endif %}
+              aria-disabled="{% if requires_variant_selection or current_variant.available == false %}true{% else %}false{% endif %}"
               style="border-radius: 8px; border: 1px solid #111; font-weight: 700; font-size: 0.9rem; letter-spacing: 0em; text-transform: none; flex: 1 1 auto; min-width: 200px; height: 60px; padding: 0 10px; box-sizing: border-box;"
             >
               <span class="atc-bubble" aria-hidden="true"></span>
               <span class="atc-bubble" aria-hidden="true"></span>
               <span class="atc-bubble" aria-hidden="true"></span>
               <span class="atc-bubble" aria-hidden="true"></span>
-              <span style="position:relative;z-index:1;">
-                {% if product.selected_or_first_available_variant.available %}
-                  Add to Cart
+              <span data-atc-text style="position:relative;z-index:1;">
+                {% if requires_variant_selection %}
+                  {{ section.settings.select_size_button_text | default: 'Select a size' }}
+                {% elsif current_variant.available %}
+                  {{ section.settings.add_to_cart_button_text | default: 'Add to cart' }}
                 {% else %}
-                  Sold Out
+                  {{ 'products.product.sold_out' | t | default: 'Sold Out' }}
                 {% endif %}
               </span>
             </button>
@@ -1232,168 +1393,254 @@
 {% render 'product-reviews', product: product %}
 
 <script>
-  /* ─────────────────────────────────────────────────
-     MAIN PRODUCT — Variant Selection & UI Logic
-  ───────────────────────────────────────────────── */
+  (function () {
+    const root = document.getElementById('main-product');
+    if (!root) return;
 
-  const productData = [
-  {% for v in product.variants %}
-    {
-      id: {{ v.id }},
-      title: {{ v.title | json }},
-      option1: {{ v.option1 | json }},
-      option2: {{ v.option2 | json }},
-      option3: {{ v.option3 | json }},
-      price: {{ v.price }},
-      compare_at_price: {{ v.compare_at_price | default: 'null' }},
-      available: {{ v.available }},
-      inventory_management: {{ v.inventory_management | json }},
-      inventory_quantity: {{ v.inventory_quantity | default: 0 }}
-    }{% unless forloop.last %},{% endunless %}
-  {% endfor %}
-  ];
+    if (window.__mainProductBindings) {
+      window.__mainProductBindings.abort();
+    }
+    const bindings = new AbortController();
+    window.__mainProductBindings = bindings;
+    const signal = bindings.signal;
 
-  /* ── Quantity adjust ── */
-  function adjustQty(delta) {
-    const input = document.getElementById('qty-input');
-    const next  = Math.max(1, parseInt(input.value || 1) + delta);
-    input.value = next;
-  }
+    const productData = [
+    {% for v in product.variants %}
+      {
+        id: {{ v.id }},
+        title: {{ v.title | json }},
+        option1: {{ v.option1 | json }},
+        option2: {{ v.option2 | json }},
+        option3: {{ v.option3 | json }},
+        price: {{ v.price }},
+        price_formatted: {{ v.price | money | json }},
+        compare_at_price: {{ v.compare_at_price | default: 'null' }},
+        compare_at_price_formatted: {% if v.compare_at_price %}{{ v.compare_at_price | money | json }}{% else %}null{% endif %},
+        available: {{ v.available }},
+        inventory_management: {{ v.inventory_management | json }},
+        inventory_quantity: {{ v.inventory_quantity | default: 0 }}
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+    ];
 
-  /* ── Option select ── */
-  function selectOption(el, optionName, value) {
-    const group = el.closest('[role="radiogroup"]');
-    group.querySelectorAll('.size-btn, .color-swatch').forEach(b => {
-      b.classList.remove('active');
-      b.classList.remove('size-pop');
-    });
-    el.classList.add('active');
+    const atcBtn = root.querySelector('#add-to-cart-btn');
+    const atcTextEl = atcBtn ? atcBtn.querySelector('[data-atc-text]') : null;
+    const addLabel = atcBtn?.dataset.addLabel || 'Add to cart';
+    const selectLabel = atcBtn?.dataset.selectLabel || 'Select a size';
+    const soldOutLabel = atcBtn?.dataset.soldOutLabel || 'Sold Out';
 
-    if (el.classList.contains('size-btn')) {
-      el.classList.add('size-pop');
-      el.addEventListener('animationend', function handler() {
-        el.classList.remove('size-pop');
-        el.removeEventListener('animationend', handler);
-      });
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
     }
 
-    const label = document.getElementById('selected-' + optionName.toLowerCase().replace(/\s+/g, '-'));
-    if (label) label.textContent = value.toUpperCase();
+    function parseNumber(value) {
+      if (value === '' || value === null || typeof value === 'undefined') return null;
+      const n = Number(value);
+      return Number.isFinite(n) ? n : null;
+    }
 
-    updateSelectedVariant();
-  }
-
-  function updateSelectedVariant() {
-    /* Collect current selections */
-    const selected = {};
-    document.querySelectorAll('[data-option-position]').forEach(el => {
-      if (el.classList.contains('active')) {
-        selected[parseInt(el.dataset.optionPosition)] = el.dataset.optionValue;
+    function setAtcVisualState(opts) {
+      if (!atcBtn) return;
+      atcBtn.disabled = !!opts.disabled;
+      atcBtn.setAttribute('aria-disabled', opts.disabled ? 'true' : 'false');
+      atcBtn.classList.toggle('is-inactive', !!opts.inactive);
+      if (atcTextEl && typeof opts.text === 'string') {
+        atcTextEl.textContent = opts.text;
       }
-    });
+    }
 
-    /* Match to a variant */
-    const match = productData.find(v =>
-      Object.entries(selected).every(([pos, val]) => v['option' + pos] === val)
-    );
+    function setAtcPending() {
+      setAtcVisualState({ disabled: true, inactive: true, text: selectLabel });
+    }
 
-    if (match) {
-      document.getElementById('selected-variant-id').value = match.id;
-      
-      /* Update price */
-      const priceEl = document.getElementById('product-price');
-      if (priceEl) priceEl.innerHTML = (match.price / 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' {{ shop.currency }}';
-      
-      /* Update compare at price if exists */
-      const compareEl = document.querySelector('.product-price-compare');
-      if (compareEl && match.compare_at_price) {
-        compareEl.innerHTML = (match.compare_at_price / 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' {{ shop.currency }}';
+    function setAtcAvailable() {
+      setAtcVisualState({ disabled: false, inactive: false, text: addLabel });
+    }
+
+    function setAtcSoldOut() {
+      setAtcVisualState({ disabled: true, inactive: false, text: soldOutLabel });
+    }
+
+    function initReviewWidget() {
+      const reviewWidget = root.querySelector('[data-review-widget]');
+      if (!reviewWidget) return;
+
+      const starsFill = reviewWidget.querySelector('[data-review-stars-fill]');
+      const countText = reviewWidget.querySelector('[data-review-count-text]');
+      const recommendWrap = reviewWidget.querySelector('[data-review-recommend-wrap]');
+      const recommendText = reviewWidget.querySelector('[data-review-recommend-text]');
+
+      function syncReviewValues() {
+        const appRating = parseNumber(reviewWidget.dataset.appRating);
+        const appCount = parseNumber(reviewWidget.dataset.appCount);
+        const appRecommend = parseNumber(reviewWidget.dataset.appRecommend);
+        const mfRating = parseNumber(reviewWidget.dataset.metafieldRating) || 0;
+        const mfCount = parseNumber(reviewWidget.dataset.metafieldCount) || 0;
+        const mfRecommend = parseNumber(reviewWidget.dataset.metafieldRecommend) || 0;
+
+        const rating = clamp(appRating !== null ? appRating : mfRating, 0, 5);
+        const count = clamp(Math.round(appCount !== null ? appCount : mfCount), 0, 999999);
+        const recommend = clamp(Math.round(appRecommend !== null ? appRecommend : mfRecommend), 0, 100);
+        const label = reviewWidget.dataset.reviewLabel || 'Reviews';
+
+        if (starsFill) {
+          starsFill.style.width = `${rating * 20}%`;
+        }
+        if (countText) {
+          countText.textContent = `${count} ${label}`;
+        }
+        if (recommendText) {
+          recommendText.textContent = `${recommend}%`;
+        }
+        if (recommendWrap) {
+          recommendWrap.style.display = 'inline-flex';
+        }
+        reviewWidget.setAttribute('aria-label', `${rating.toFixed(1)} out of 5 stars from ${count} ${label}`);
+      }
+
+      syncReviewValues();
+
+      const observer = new MutationObserver(syncReviewValues);
+      observer.observe(reviewWidget, {
+        attributes: true,
+        attributeFilter: ['data-app-rating', 'data-app-count', 'data-app-recommend']
+      });
+      signal.addEventListener('abort', () => observer.disconnect(), { once: true });
+    }
+
+    function adjustQty(delta) {
+      const input = root.querySelector('#qty-input');
+      if (!input) return;
+      const next = Math.max(1, parseInt(input.value || 1, 10) + delta);
+      input.value = next;
+    }
+
+    function selectOption(el, value) {
+      const group = el.closest('[data-option-group]');
+      if (!group) return;
+
+      group.querySelectorAll('.size-btn, .color-swatch').forEach(btn => {
+        btn.classList.remove('active');
+        btn.classList.remove('size-pop');
+        btn.setAttribute('aria-pressed', 'false');
+      });
+
+      el.classList.add('active');
+      el.setAttribute('aria-pressed', 'true');
+
+      if (el.classList.contains('size-btn')) {
+        el.classList.add('size-pop');
+        el.addEventListener('animationend', function handler() {
+          el.classList.remove('size-pop');
+          el.removeEventListener('animationend', handler);
+        });
+      }
+
+      const label = root.querySelector(`[data-option-label="${el.dataset.optionPosition}"]`);
+      if (label) label.textContent = value;
+
+      updateSelectedVariant();
+    }
+
+    function getSelectedOptions() {
+      const selected = {};
+      root.querySelectorAll('[data-option-position][data-option-value].active').forEach(el => {
+        selected[parseInt(el.dataset.optionPosition, 10)] = el.dataset.optionValue;
+      });
+      return selected;
+    }
+
+    function updatePrice(match) {
+      const priceEl = root.querySelector('#product-price');
+      const compareEl = root.querySelector('#product-compare-price');
+
+      if (priceEl) {
+        priceEl.textContent = match.price_formatted || '';
+      }
+
+      if (!compareEl) return;
+      if (match.compare_at_price && match.compare_at_price > match.price && match.compare_at_price_formatted) {
+        compareEl.textContent = match.compare_at_price_formatted;
         compareEl.style.display = 'inline';
-      } else if (compareEl) {
+      } else {
+        compareEl.textContent = '';
         compareEl.style.display = 'none';
       }
-      
-      /* Update add to cart state */
-      const btn = document.getElementById('add-to-cart-btn');
-      if (btn) {
-        btn.disabled = !match.available;
-        btn.innerHTML = match.available ? 'Add to Cart' : 'Sold Out';
-      }
+    }
 
-      /* Update stock text natively */
-      const stockEl = document.getElementById('variant-stock-display');
-      const stockIcon = document.getElementById('variant-stock-icon');
-      if (stockEl && stockIcon) {
-        if (match.inventory_management && match.inventory_quantity > 0) {
-          stockEl.textContent = match.inventory_quantity + ' in stock';
-          stockIcon.setAttribute('fill', '#00a82d');
-          stockIcon.style.color = '#00a82d';
-          stockEl.style.color = '#111';
-        } else if (match.available) {
-          stockEl.textContent = 'In stock';
-          stockIcon.setAttribute('fill', '#00a82d');
-          stockIcon.style.color = '#00a82d';
-          stockEl.style.color = '#111';
-        } else {
-          stockEl.textContent = 'Out of stock';
-          stockIcon.setAttribute('fill', '#888');
-          stockIcon.style.color = '#888';
-          stockEl.style.color = '#888';
-        }
+    function updateStock(match) {
+      const stockEl = root.querySelector('#variant-stock-display');
+      const stockIcon = root.querySelector('#variant-stock-icon');
+      if (!stockEl || !stockIcon) return;
+
+      if (match.inventory_management && match.inventory_quantity > 0) {
+        stockEl.textContent = `${match.inventory_quantity} in stock`;
+        stockIcon.setAttribute('fill', '#00a82d');
+        stockIcon.style.color = '#00a82d';
+        stockEl.style.color = '#111';
+      } else if (match.available) {
+        stockEl.textContent = 'In stock';
+        stockIcon.setAttribute('fill', '#00a82d');
+        stockIcon.style.color = '#00a82d';
+        stockEl.style.color = '#111';
+      } else {
+        stockEl.textContent = 'Out of stock';
+        stockIcon.setAttribute('fill', '#888');
+        stockIcon.style.color = '#888';
+        stockEl.style.color = '#888';
       }
     }
-  }
 
-  /* ── Product accordion ── */
-  function toggleAccordion(trigger) {
-    const allTriggers = document.querySelectorAll('.product-accordion-trigger');
-    const allBodies = document.querySelectorAll('.product-accordion-body');
-    const body     = trigger.nextElementSibling;
-    const isOpen   = trigger.getAttribute('aria-expanded') === 'true';
+    function updateSelectedVariant() {
+      const hiddenVariantInput = root.querySelector('#selected-variant-id');
+      const optionGroups = root.querySelectorAll('[data-option-group]');
+      const requiredOptionCount = optionGroups.length;
+      const selected = getSelectedOptions();
+      const selectedCount = Object.keys(selected).length;
 
-    // Close all blocks first
-    allTriggers.forEach(t => t.setAttribute('aria-expanded', 'false'));
-    allBodies.forEach(b => b.classList.remove('open'));
+      if (requiredOptionCount > 0 && selectedCount < requiredOptionCount) {
+        setAtcPending();
+        return null;
+      }
 
-    // Open clicked block if it wasn't open already
-    if (!isOpen) {
-      trigger.setAttribute('aria-expanded', 'true');
-      body.classList.add('open');
-    }
-  }
+      const match = requiredOptionCount === 0
+        ? productData.find(v => v.id === parseInt(hiddenVariantInput?.value || 0, 10)) || productData[0]
+        : productData.find(v => Object.entries(selected).every(([pos, val]) => v['option' + pos] === val));
 
-  /* ─────────────────────────────────────────────────
-     AJAX ADD TO CART
-  ───────────────────────────────────────────────── */
-  (function () {
-    const form   = document.getElementById('product-form');
-    const btn    = document.getElementById('add-to-cart-btn');
-    if (!form || !btn) return;
+      if (!match) {
+        setAtcPending();
+        return null;
+      }
 
-    function setBtnLoading() {
-      btn.disabled = true;
-      btn.style.opacity = '0.65';
-      btn.innerHTML = 'Adding...';
-    }
+      if (hiddenVariantInput) {
+        hiddenVariantInput.value = match.id;
+      }
 
-    function setBtnSuccess() {
-      btn.innerHTML = 'Added!';
-      btn.style.opacity = '1';
-      btn.disabled = false;
-      setTimeout(resetBtn, 1600);
+      updatePrice(match);
+      updateStock(match);
+
+      if (match.available) {
+        setAtcAvailable();
+      } else {
+        setAtcSoldOut();
+      }
+
+      return match;
     }
 
-    function setBtnError(msg) {
-      btn.innerHTML = msg || 'Try again';
-      btn.style.opacity = '1';
-      btn.disabled = false;
-      setTimeout(resetBtn, 2000);
-    }
+    function toggleAccordion(trigger) {
+      const allTriggers = document.querySelectorAll('.product-accordion-trigger');
+      const allBodies = document.querySelectorAll('.product-accordion-body');
+      const body = trigger.nextElementSibling;
+      const isOpen = trigger.getAttribute('aria-expanded') === 'true';
 
-    function resetBtn() {
-      btn.innerHTML = 'Add to Cart';
-      btn.disabled  = false;
-      btn.style.opacity = '1';
+      allTriggers.forEach(t => t.setAttribute('aria-expanded', 'false'));
+      allBodies.forEach(b => b.classList.remove('open'));
+
+      if (!isOpen) {
+        trigger.setAttribute('aria-expanded', 'true');
+        body.classList.add('open');
+      }
     }
 
     function refreshCartCount() {
@@ -1411,200 +1658,215 @@
           });
           const subtotalEl = document.getElementById('cd-subtotal');
           if (subtotalEl) {
-            subtotalEl.textContent = (cart.total_price / 100).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' {{ shop.currency }}';
+            subtotalEl.textContent = (cart.total_price / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' {{ shop.currency }}';
           }
         })
         .catch(() => {});
     }
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    (function initAddToCartAjax() {
+      const form = root.querySelector('#product-form');
+      if (!form || !atcBtn) return;
 
-      const variantId = document.getElementById('selected-variant-id')?.value;
-      const quantity  = parseInt(document.getElementById('qty-input')?.value || 1);
-
-      if (!variantId) { form.submit(); return; }
-
-      setBtnLoading();
-
-      fetch('/cart/add.js', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ id: parseInt(variantId), quantity: quantity }),
-      })
-      .then(async r => {
-        if (!r.ok) {
-          const err = await r.json().catch(() => ({}));
-          throw new Error(err.description || 'Could not add item');
-        }
-        return r.json();
-      })
-      .then(() => {
-        setBtnSuccess();
-        refreshCartCount();
-
-        if (typeof window.CartDrawer !== 'undefined') {
-          window.CartDrawer.open();
-        }
-      })
-      .catch(err => {
-        setBtnError(err.message);
-      });
-    });
-  })();
-
-  /* ── Pairs Well With Carousel (desktop) + Load More (mobile) ── */
-  function updatePairsArrows(track) {
-    if (!track) return;
-    var THRESHOLD = 1;
-    var atStart = track.scrollLeft <= THRESHOLD;
-    var atEnd   = track.scrollLeft + track.clientWidth >= track.scrollWidth - THRESHOLD;
-
-    var container = track.closest('.pw-container');
-    if (!container) return;
-    var btnLeft  = container.querySelector('[data-carousel-dir="-1"]');
-    var btnRight = container.querySelector('[data-carousel-dir="1"]');
-
-    if (btnLeft)  btnLeft.style.backgroundColor  = atStart ? '#888' : '#000';
-    if (btnRight) btnRight.style.backgroundColor = atEnd   ? '#888' : '#000';
-  }
-
-  function scrollPairsCarousel(dir) {
-    var track = document.getElementById('pairs-carousel-track');
-    if (!track) return;
-    var card = track.querySelector('.pw-card');
-    var scrollAmt = card ? card.offsetWidth + 12 : 200;
-    track.scrollBy({ left: dir * scrollAmt, behavior: 'smooth' });
-  }
-
-  (function initPairsGrid() {
-    var track = document.getElementById('pairs-carousel-track');
-    if (!track) return;
-
-    updatePairsArrows(track);
-    track.addEventListener('scroll', function () { updatePairsArrows(track); }, { passive: true });
-    window.addEventListener('resize', function () { updatePairsArrows(track); }, { passive: true });
-
-    var moreBtn = document.getElementById('pw-more-btn');
-    var moreWrap = document.getElementById('pw-more-wrap');
-    if (!moreBtn) return;
-
-    var initial = parseInt(track.dataset.pwInitial, 10) || 6;
-    var hiddenCards = Array.from(track.querySelectorAll('.pw-card-hidden'));
-
-    moreBtn.addEventListener('click', function () {
-      var batch = hiddenCards.splice(0, 3);
-      batch.forEach(function (card, i) {
-        card.classList.remove('pw-card-hidden');
-        card.classList.add('pw-card-reveal');
-      });
-      if (hiddenCards.length === 0 && moreWrap) {
-        moreWrap.style.display = 'none';
+      function setBtnLoading() {
+        setAtcVisualState({ disabled: true, inactive: false, text: 'Adding...' });
+        atcBtn.style.opacity = '0.65';
       }
-    });
-  })();
 
-  /* ─────────────────────────────────────────────────
-     EVENT DELEGATION — replaces all inline handlers
-  ───────────────────────────────────────────────── */
-  document.addEventListener('click', function (e) {
-    /* Size chart open */
-    const openBtn = e.target.closest('[data-action="open-size-chart"]');
-    if (openBtn) {
-      const modal = document.getElementById('size-chart-modal');
-      if (modal) modal.showModal();
-      return;
-    }
-
-    /* Size chart close */
-    const closeBtn = e.target.closest('[data-action="close-size-chart"]');
-    if (closeBtn) {
-      const modal = document.getElementById('size-chart-modal');
-      if (modal) modal.close();
-      return;
-    }
-
-    /* Option buttons (swatches & text) */
-    const optBtn = e.target.closest('[data-option-position][data-option-value]');
-    if (optBtn) {
-      const optionName = optBtn.getAttribute('aria-label')
-        ? null
-        : null; /* resolved via dataset below */
-      const pos   = optBtn.dataset.optionPosition;
-      const value = optBtn.dataset.optionValue;
-      /* derive option name from the nearest radiogroup legend / label span */
-      const group = optBtn.closest('[role="radiogroup"]');
-      let oName = '';
-      if (group) {
-        const nameEl = group.parentElement.querySelector('[id^="selected-"]');
-        if (nameEl) oName = nameEl.id.replace('selected-', '').replace(/-/g, ' ');
+      function setBtnSuccess() {
+        setAtcVisualState({ disabled: true, inactive: false, text: 'Added!' });
+        atcBtn.style.opacity = '1';
+        setTimeout(() => {
+          atcBtn.style.opacity = '1';
+          updateSelectedVariant();
+        }, 1600);
       }
-      selectOption(optBtn, oName, value);
-      return;
+
+      function setBtnError(msg) {
+        setAtcVisualState({ disabled: true, inactive: false, text: msg || 'Try again' });
+        atcBtn.style.opacity = '1';
+        setTimeout(() => {
+          atcBtn.style.opacity = '1';
+          updateSelectedVariant();
+        }, 2000);
+      }
+
+      form.addEventListener('submit', function (e) {
+        const requiredOptionCount = root.querySelectorAll('[data-option-group]').length;
+        const selectedCount = Object.keys(getSelectedOptions()).length;
+        if (requiredOptionCount > 0 && selectedCount < requiredOptionCount) {
+          e.preventDefault();
+          setAtcPending();
+          return;
+        }
+
+        e.preventDefault();
+
+        const variantId = root.querySelector('#selected-variant-id')?.value;
+        const quantity = parseInt(root.querySelector('#qty-input')?.value || 1, 10);
+        if (!variantId) {
+          setBtnError(selectLabel);
+          return;
+        }
+
+        setBtnLoading();
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ id: parseInt(variantId, 10), quantity: quantity })
+        })
+          .then(async r => {
+            if (!r.ok) {
+              const err = await r.json().catch(() => ({}));
+              throw new Error(err.description || 'Could not add item');
+            }
+            return r.json();
+          })
+          .then(() => {
+            setBtnSuccess();
+            refreshCartCount();
+            if (typeof window.CartDrawer !== 'undefined') {
+              window.CartDrawer.open();
+            }
+          })
+          .catch(err => {
+            setBtnError(err.message);
+          });
+      }, { signal });
+    })();
+
+    function updatePairsArrows(track) {
+      if (!track) return;
+      const THRESHOLD = 1;
+      const atStart = track.scrollLeft <= THRESHOLD;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - THRESHOLD;
+      const container = track.closest('.pw-container');
+      if (!container) return;
+      const btnLeft = container.querySelector('[data-carousel-dir="-1"]');
+      const btnRight = container.querySelector('[data-carousel-dir="1"]');
+      if (btnLeft) btnLeft.style.backgroundColor = atStart ? '#888' : '#000';
+      if (btnRight) btnRight.style.backgroundColor = atEnd ? '#888' : '#000';
     }
 
-    /* Quantity buttons */
-    const qtyBtn = e.target.closest('[data-qty-btn]');
-    if (qtyBtn) {
-      adjustQty(parseInt(qtyBtn.dataset.qtyBtn, 10));
-      return;
+    function scrollPairsCarousel(dir) {
+      const track = document.getElementById('pairs-carousel-track');
+      if (!track) return;
+      const card = track.querySelector('.pw-card');
+      const scrollAmt = card ? card.offsetWidth + 12 : 200;
+      track.scrollBy({ left: dir * scrollAmt, behavior: 'smooth' });
     }
 
-    /* Wishlist toggle */
-    const wishBtn = e.target.closest('.btn-wishlist');
-    if (wishBtn) {
-      const svg = wishBtn.querySelector('svg');
-      wishBtn.classList.toggle('wishlisted');
-      if (svg) svg.style.fill = wishBtn.classList.contains('wishlisted') ? 'currentColor' : 'none';
-      return;
-    }
+    (function initPairsGrid() {
+      const track = document.getElementById('pairs-carousel-track');
+      if (!track) return;
 
-    /* Carousel navigation buttons */
-    const carouselBtn = e.target.closest('[data-carousel-dir]');
-    if (carouselBtn) {
-      scrollPairsCarousel(parseInt(carouselBtn.dataset.carouselDir, 10));
-      return;
-    }
+      updatePairsArrows(track);
+      track.addEventListener('scroll', function () { updatePairsArrows(track); }, { passive: true, signal });
+      window.addEventListener('resize', function () { updatePairsArrows(track); }, { passive: true, signal });
 
-    /* Thumbnail buttons — update main product image */
-    const thumbBtn = e.target.closest('[data-thumb-url]');
-    if (thumbBtn) {
-      const main = document.getElementById('ProductMainImage');
-      if (main) main.src = thumbBtn.dataset.thumbUrl;
-      return;
-    }
+      const moreBtn = document.getElementById('pw-more-btn');
+      const moreWrap = document.getElementById('pw-more-wrap');
+      if (!moreBtn) return;
 
-    /* Accordion triggers */
-    const accordionBtn = e.target.closest('.product-accordion-trigger');
-    if (accordionBtn) {
-      toggleAccordion(accordionBtn);
-      return;
-    }
-  });
+      const hiddenCards = Array.from(track.querySelectorAll('.pw-card-hidden'));
+      moreBtn.addEventListener('click', function () {
+        const batch = hiddenCards.splice(0, 3);
+        batch.forEach(function (card) {
+          card.classList.remove('pw-card-hidden');
+          card.classList.add('pw-card-reveal');
+        });
+        if (hiddenCards.length === 0 && moreWrap) {
+          moreWrap.style.display = 'none';
+        }
+      }, { signal });
+    })();
 
-  /* Hover opacity for carousel nav buttons */
-  document.addEventListener('mouseover', function (e) {
-    const btn = e.target.closest('[data-carousel-dir]');
-    if (btn) btn.style.opacity = '0.8';
-  });
-  document.addEventListener('mouseout', function (e) {
-    const btn = e.target.closest('[data-carousel-dir]');
-    if (btn) btn.style.opacity = '1';
-  });
+    root.addEventListener('click', function (e) {
+      const openBtn = e.target.closest('[data-action="open-size-chart"]');
+      if (openBtn) {
+        const modal = document.getElementById('size-chart-modal');
+        if (modal) modal.showModal();
+        return;
+      }
 
-  /* Hover background for text-option buttons */
-  document.addEventListener('mouseover', function (e) {
-    const btn = e.target.closest('[data-option-value]');
-    if (btn && !btn.classList.contains('active') && btn.classList.contains('size-btn')) {
-      btn.style.backgroundColor = '#f5f5f5';
-    }
-  });
-  document.addEventListener('mouseout', function (e) {
-    const btn = e.target.closest('[data-option-value]');
-    if (btn && !btn.classList.contains('active') && btn.classList.contains('size-btn')) {
-      btn.style.backgroundColor = 'transparent';
-    }
-  });
+      const closeBtn = e.target.closest('[data-action="close-size-chart"]');
+      if (closeBtn) {
+        const modal = document.getElementById('size-chart-modal');
+        if (modal) modal.close();
+        return;
+      }
+
+      const optBtn = e.target.closest('[data-option-position][data-option-value]');
+      if (optBtn) {
+        selectOption(optBtn, optBtn.dataset.optionValue);
+        return;
+      }
+
+      const qtyBtn = e.target.closest('[data-qty-btn]');
+      if (qtyBtn) {
+        adjustQty(parseInt(qtyBtn.dataset.qtyBtn, 10));
+        return;
+      }
+
+      const wishBtn = e.target.closest('.btn-wishlist');
+      if (wishBtn) {
+        const svg = wishBtn.querySelector('svg');
+        wishBtn.classList.toggle('wishlisted');
+        if (svg) svg.style.fill = wishBtn.classList.contains('wishlisted') ? 'currentColor' : 'none';
+        return;
+      }
+
+      const carouselBtn = e.target.closest('[data-carousel-dir]');
+      if (carouselBtn) {
+        scrollPairsCarousel(parseInt(carouselBtn.dataset.carouselDir, 10));
+        return;
+      }
+
+      const thumbBtn = e.target.closest('[data-thumb-url]');
+      if (thumbBtn) {
+        const main = document.getElementById('ProductMainImage');
+        if (main) main.src = thumbBtn.dataset.thumbUrl;
+        return;
+      }
+
+      const accordionBtn = e.target.closest('.product-accordion-trigger');
+      if (accordionBtn) {
+        toggleAccordion(accordionBtn);
+      }
+    }, { signal });
+
+    root.addEventListener('mouseover', function (e) {
+      const carouselBtn = e.target.closest('[data-carousel-dir]');
+      if (carouselBtn) carouselBtn.style.opacity = '0.8';
+
+      const optionBtn = e.target.closest('[data-option-value]');
+      if (optionBtn && !optionBtn.classList.contains('active') && optionBtn.classList.contains('size-btn')) {
+        optionBtn.style.backgroundColor = '#f5f5f5';
+      }
+    }, { signal });
+
+    root.addEventListener('mouseout', function (e) {
+      const carouselBtn = e.target.closest('[data-carousel-dir]');
+      if (carouselBtn) carouselBtn.style.opacity = '1';
+
+      const optionBtn = e.target.closest('[data-option-value]');
+      if (optionBtn && !optionBtn.classList.contains('active') && optionBtn.classList.contains('size-btn')) {
+        optionBtn.style.backgroundColor = 'transparent';
+      }
+    }, { signal });
+
+    root.querySelectorAll('[data-option-label]').forEach(label => {
+      label.textContent = label.dataset.defaultLabel || label.textContent;
+    });
+    root.querySelectorAll('[data-option-position][data-option-value]').forEach(btn => {
+      btn.classList.remove('active');
+      btn.setAttribute('aria-pressed', 'false');
+    });
+
+    initReviewWidget();
+    updateSelectedVariant();
+  })();
 </script>
 
 {%- comment -%}── Product Image Lightbox ────────────────────────────────────{%- endcomment -%}
@@ -1956,6 +2218,66 @@
       "content": "Product Information"
     },
     {
+      "type": "header",
+      "content": "Review Row"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating_row",
+      "label": "Show rating row",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recommend_percent",
+      "label": "Show recommend icon + percent",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "rating_label_text",
+      "label": "Rating label text",
+      "default": "Reviews"
+    },
+    {
+      "type": "header",
+      "content": "Price Row"
+    },
+    {
+      "type": "text",
+      "id": "price_promo_text",
+      "label": "Promo text under price",
+      "default": "WE MADE TOO MUCH"
+    },
+    {
+      "type": "header",
+      "content": "Variant Selection & Add to Cart"
+    },
+    {
+      "type": "text",
+      "id": "choose_size_text",
+      "label": "Choose size text",
+      "default": "Choose size"
+    },
+    {
+      "type": "text",
+      "id": "choose_color_text",
+      "label": "Choose color text",
+      "default": "Choose color"
+    },
+    {
+      "type": "text",
+      "id": "select_size_button_text",
+      "label": "Pre-selection button text",
+      "default": "Select a size"
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_button_text",
+      "label": "Add to cart button text",
+      "default": "Add to cart"
+    },
+    {
       "type": "richtext",
       "id": "size_chart_text",
       "label": "Size Chart Content",
@@ -2154,5 +2476,3 @@
   ]
 }
 {% endschema %}
-
-
