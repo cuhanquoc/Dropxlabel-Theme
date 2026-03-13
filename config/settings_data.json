@@ -205,6 +205,7 @@
           },
           "accordion_link_ABjBRR": {
             "type": "accordion_link",
+            "name": "Home",
             "settings": {
               "parent_group_key": "nhom-1",
               "label": "Home",
@@ -214,6 +215,7 @@
           },
           "accordion_link_zqjtHw": {
             "type": "accordion_link",
+            "name": "Search",
             "settings": {
               "parent_group_key": "nhom-1",
               "label": "Search",
@@ -223,6 +225,7 @@
           },
           "accordion_link_GHEdai": {
             "type": "accordion_link",
+            "name": "Collections",
             "settings": {
               "parent_group_key": "nhom-1",
               "label": "Collections",
@@ -232,6 +235,7 @@
           },
           "accordion_link_bggGEh": {
             "type": "accordion_link",
+            "name": "About us",
             "settings": {
               "parent_group_key": "nhom-1",
               "label": "About us",
@@ -241,6 +245,7 @@
           },
           "accordion_link_QYnwG8": {
             "type": "accordion_link",
+            "name": "News",
             "settings": {
               "parent_group_key": "nhom-1",
               "label": "News",
@@ -252,7 +257,7 @@
             "type": "accordion_group",
             "name": "SUPPORT",
             "settings": {
-              "group_key": "nhom-1",
+              "group_key": "nhom-2",
               "heading": "Support",
               "default_open": false
             }
@@ -261,7 +266,7 @@
             "type": "accordion_link",
             "name": "PRIVACY POLICY",
             "settings": {
-              "parent_group_key": "nhom-1",
+              "parent_group_key": "nhom-2",
               "label": "PRIVACY POLICY",
               "url": "",
               "open_in_new_tab": false
@@ -271,7 +276,7 @@
             "type": "accordion_link",
             "name": "REFUND POLICY",
             "settings": {
-              "parent_group_key": "nhom-1",
+              "parent_group_key": "nhom-2",
               "label": "REFUND POLICY",
               "url": "",
               "open_in_new_tab": false
@@ -281,7 +286,7 @@
             "type": "accordion_link",
             "name": "SHIPPING POLICY",
             "settings": {
-              "parent_group_key": "nhom-1",
+              "parent_group_key": "nhom-2",
               "label": "SHIPPING POLICY",
               "url": "",
               "open_in_new_tab": false
@@ -291,7 +296,7 @@
             "type": "accordion_link",
             "name": "CONTACT",
             "settings": {
-              "parent_group_key": "nhom-1",
+              "parent_group_key": "nhom-2",
               "label": "CONTACT",
               "url": "",
               "open_in_new_tab": false
@@ -301,7 +306,7 @@
             "type": "accordion_link",
             "name": "FAQ",
             "settings": {
-              "parent_group_key": "nhom-1",
+              "parent_group_key": "nhom-2",
               "label": "FAQ",
               "url": "",
               "open_in_new_tab": false
@@ -311,9 +316,59 @@
             "type": "accordion_group",
             "name": "FLOW US ON",
             "settings": {
-              "group_key": "nhom-1",
+              "group_key": "nhom-3",
               "heading": "Follow us On",
               "default_open": false
+            }
+          },
+          "accordion_link_MTUpb7": {
+            "type": "accordion_link",
+            "name": "Facebook",
+            "settings": {
+              "parent_group_key": "nhom-3",
+              "label": "Facebook",
+              "url": "",
+              "open_in_new_tab": true
+            }
+          },
+          "accordion_link_kcL8jU": {
+            "type": "accordion_link",
+            "name": "Instagram",
+            "settings": {
+              "parent_group_key": "nhom-3",
+              "label": "Instagram",
+              "url": "",
+              "open_in_new_tab": true
+            }
+          },
+          "accordion_link_r98dM4": {
+            "type": "accordion_link",
+            "name": "Pinterest",
+            "settings": {
+              "parent_group_key": "nhom-3",
+              "label": "Pinterest",
+              "url": "",
+              "open_in_new_tab": true
+            }
+          },
+          "accordion_link_WXhJUm": {
+            "type": "accordion_link",
+            "name": "Tiktok",
+            "settings": {
+              "parent_group_key": "nhom-3",
+              "label": "Tiktok",
+              "url": "",
+              "open_in_new_tab": true
+            }
+          },
+          "accordion_link_hTrCFG": {
+            "type": "accordion_link",
+            "name": "Thread",
+            "settings": {
+              "parent_group_key": "nhom-3",
+              "label": "Thread",
+              "url": "",
+              "open_in_new_tab": true
             }
           }
         },
@@ -331,7 +386,12 @@
           "accordion_link_QeMQLd",
           "accordion_link_chnGTt",
           "accordion_link_UDTFna",
-          "accordion_group_8nxtRk"
+          "accordion_group_8nxtRk",
+          "accordion_link_MTUpb7",
+          "accordion_link_kcL8jU",
+          "accordion_link_r98dM4",
+          "accordion_link_WXhJUm",
+          "accordion_link_hTrCFG"
         ],
         "settings": {
           "bg_color": "#181818",
