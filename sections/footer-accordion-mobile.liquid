@@ -110,42 +110,52 @@
       z-index: 1;
       background: var(--fnl-bg);
       color: var(--fnl-text);
-      border: 1px solid var(--fnl-border);
-      border-radius: 16px;
-      margin: 20px 16px;
+      width: 100%;
+      margin: 0;
       padding: var(--fnl-pad-top) 0 var(--fnl-pad-bottom);
-      overflow: hidden;
-      box-shadow: 0 0 40px rgba(255,255,255,.03), inset 0 1px 0 rgba(255,255,255,.06);
+      border: 0;
+      border-radius: 0;
+      overflow: visible;
+      box-shadow: none;
     }
 
     .fnl__marquee {
       overflow: hidden;
       white-space: nowrap;
-      display: flex;
+      display: block;
       margin-bottom: 16px;
-      mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+      line-height: 1;
     }
-    .fnl__marquee-track {
+    .fnl__marquee-rail {
       display: flex;
-      flex-shrink: 0;
+      width: max-content;
       animation: fnlScroll var(--fnl-mq-speed) linear infinite;
       will-change: transform;
     }
-    .fnl__marquee-track[data-fnl-dir="right"] {
+    .fnl__marquee-rail[data-fnl-dir="right"] {
       animation-direction: reverse;
     }
-    [data-fnl-pause]:hover .fnl__marquee-track {
+    .fnl__marquee[data-fnl-pause]:hover .fnl__marquee-rail {
       animation-play-state: paused;
+    }
+    .fnl__marquee-track {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
     }
     @keyframes fnlScroll {
       from { transform: translateX(0); }
-      to { transform: translateX(-100%); }
+      to { transform: translateX(-50%); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .fnl__marquee-track { animation: none; }
+      .fnl__marquee-rail {
+        animation: none;
+        transform: none;
+      }
     }
     .fnl__marquee-item {
+      display: inline-flex;
+      align-items: center;
       font-family: var(--font-heading, serif);
       font-size: var(--fnl-mq-size);
       font-weight: var(--fnl-mq-weight);
@@ -153,7 +163,8 @@
       text-transform: uppercase;
       color: var(--fnl-text);
       flex-shrink: 0;
-      padding: 0 4px;
+      line-height: 1.1;
+      padding: 2px 8px;
     }
     @media (min-width: 768px) {
       .fnl__marquee-item { font-size: var(--fnl-mq-size-d); }
@@ -167,15 +178,19 @@
       color: var(--fnl-text);
       opacity: .65;
       text-align: center;
-      padding: 0 24px;
+      padding: 0;
       margin: 0 0 20px;
     }
 
-    .fnl__form { padding: 0 20px; }
+    .fnl__form {
+      width: 100%;
+      padding: 0;
+    }
 
     .fnl__capsule {
       display: flex;
       align-items: center;
+      width: 100%;
       background: rgba(255,255,255,.06);
       border: 1px solid var(--fnl-border);
       border-radius: 999px;
@@ -237,7 +252,15 @@
       text-align: center;
       font-size: .78rem;
       color: #FCA5A5;
-      padding: 0 20px 8px;
+      padding: 0 0 8px;
+    }
+    .fnl__error ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .fnl__error li {
+      margin: 0;
     }
   </style>
 
@@ -419,15 +442,17 @@
 
           {%- if block.settings.nl_marquee_enabled -%}
           <div class="fnl__marquee" aria-hidden="true"{% if mq_pause %} data-fnl-pause{% endif %}>
-            <div class="fnl__marquee-track" data-fnl-dir="{{ mq_dir }}">
-              {%- for i in (1..6) -%}
-                <span class="fnl__marquee-item">{{ mq_text }}&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;</span>
-              {%- endfor -%}
-            </div>
-            <div class="fnl__marquee-track" data-fnl-dir="{{ mq_dir }}" aria-hidden="true">
-              {%- for i in (1..6) -%}
-                <span class="fnl__marquee-item">{{ mq_text }}&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;</span>
-              {%- endfor -%}
+            <div class="fnl__marquee-rail" data-fnl-dir="{{ mq_dir }}">
+              <div class="fnl__marquee-track">
+                {%- for i in (1..8) -%}
+                  <span class="fnl__marquee-item">{{ mq_text }}&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;</span>
+                {%- endfor -%}
+              </div>
+              <div class="fnl__marquee-track" aria-hidden="true">
+                {%- for i in (1..8) -%}
+                  <span class="fnl__marquee-item">{{ mq_text }}&nbsp;&nbsp;&nbsp;✦&nbsp;&nbsp;&nbsp;</span>
+                {%- endfor -%}
+              </div>
             </div>
           </div>
           {%- endif -%}
@@ -445,7 +470,7 @@
               </p>
             {%- else -%}
               {%- if form.errors -%}
-                <p class="fnl__error" role="alert">{{ form.errors | default_errors }}</p>
+                <div class="fnl__error" role="alert">{{ form.errors | default_errors }}</div>
               {%- endif -%}
               <div class="fnl__capsule">
                 <label for="{{ nl_id }}-email" class="sr-only">
@@ -951,8 +976,8 @@
           "id": "nl_marquee_direction",
           "label": "Marquee direction",
           "options": [
-            { "value": "left", "label": "Left → Right scroll" },
-            { "value": "right", "label": "Right → Left scroll" }
+            { "value": "left", "label": "Right → Left scroll" },
+            { "value": "right", "label": "Left → Right scroll" }
           ],
           "default": "left"
         },
