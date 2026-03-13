@@ -74,29 +74,11 @@
         "cta_url": "/collections/all",
         "bg_color": "#0a0a0a"
       }
-    },
-    "apps": {
-      "type": "apps",
-      "blocks": {
-        "dropxlabel_reviews_reviews_rQ8NXd": {
-          "type": "shopify://apps/dropxlabel-reviews/blocks/reviews/019ce16d-8025-7287-8a67-3e94a24b9de9",
-          "settings": {
-            "title": "Customer Reviews",
-            "empty_text": "No reviews yet.",
-            "star_color": "#f7b200"
-          }
-        }
-      },
-      "block_order": [
-        "dropxlabel_reviews_reviews_rQ8NXd"
-      ],
-      "settings": {}
     }
   },
   "order": [
     "main",
     "trending-accordion",
-    "marquee-ticker-related",
-    "apps"
+    "marquee-ticker-related"
   ]
 }
