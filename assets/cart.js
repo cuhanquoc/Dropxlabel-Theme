@@ -5,14 +5,21 @@
   ───────────────────────────────────────────────────── */
   window.CartDrawer = (function () {
 
-    const DRAWER  = document.getElementById('cart-drawer');
-    const OVERLAY = document.getElementById('cart-overlay');
-    let   isOpen  = false;
+    let DRAWER  = null;
+    let OVERLAY = null;
+    let isOpen  = false;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    function ensureElements() {
+      if (!DRAWER)  DRAWER  = document.getElementById('cart-drawer');
+      if (!OVERLAY) OVERLAY = document.getElementById('cart-overlay');
+      return DRAWER && OVERLAY;
+    }
+
     function open() {
       if (isOpen) return;
+      if (!ensureElements()) return;
       isOpen = true;
       document.body.style.overflow = 'hidden';
       OVERLAY.classList.add('open');
@@ -29,6 +36,7 @@
 
     function close() {
       if (!isOpen) return;
+      if (!ensureElements()) return;
       isOpen = false;
       document.body.style.overflow = '';
       OVERLAY.classList.remove('open');

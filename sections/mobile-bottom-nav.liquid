@@ -191,12 +191,12 @@
       <span class="mob-nav__label">{{ section.settings.home_label | default: 'Home' }}</span>
     </a>
 
-    {%- comment -%} ── 2. MENU (Catalog) ── {%- endcomment -%}
-    <a
+    {%- comment -%} ── 2. MENU (opens Mobile Collection Menu overlay) ── {%- endcomment -%}
+    <button
+      type="button"
       class="mob-nav__item"
-      href="{{ menu_url }}"
       aria-label="{{ section.settings.menu_label | default: 'Menu' }}"
-      {%- if request.path == menu_url %} aria-current="page"{%- endif -%}
+      data-mob-menu-open
     >
       <svg class="mob-nav__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
         <line x1="3" y1="6"  x2="21" y2="6"/>
@@ -204,7 +204,7 @@
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
       <span class="mob-nav__label">{{ section.settings.menu_label | default: 'Menu' }}</span>
-    </a>
+    </button>
 
     {%- comment -%} ── 3. SHOP ── {%- endcomment -%}
     <a
@@ -282,6 +282,7 @@
     connectedCallback() {
       this._initSlideIn();
       this._initCartBadge();
+      this._initMenuButton();
       this._initActiveState();
     }
 
@@ -331,13 +332,21 @@
       });
     }
 
+    _initMenuButton() {
+      const menuBtn = this.querySelector('[data-mob-menu-open]');
+      if (menuBtn) {
+        menuBtn.addEventListener('click', function () {
+          if (typeof MobileCollectionMenu !== 'undefined') MobileCollectionMenu.open();
+        });
+      }
+    }
+
     /* Mark current page item active based on URL */
     _initActiveState() {
       const path = window.location.pathname;
       this.querySelectorAll('.mob-nav__item').forEach(item => {
         const href = item.getAttribute('href');
         if (!href) return;
-        /* Exact match or starts-with for account section */
         const isActive = href === path || (href !== '/' && path.startsWith(href));
         if (isActive) {
           item.classList.add('is-active');

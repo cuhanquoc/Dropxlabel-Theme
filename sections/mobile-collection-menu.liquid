@@ -1,0 +1,509 @@
+{%- comment -%}
+  MOBILE COLLECTION MENU
+  Block-driven, editable via Theme Editor.
+  Block types: category_tab, featured_card, menu_link (group: items/styles)
+  Blocks are grouped positionally — each non-tab block belongs to the preceding tab.
+{%- endcomment -%}
+
+{%- assign tab_blocks = section.blocks | where: 'type', 'category_tab' -%}
+{%- assign menu_title = section.settings.menu_title | default: 'Menu' -%}
+{%- assign items_heading = section.settings.items_heading | default: 'Items' -%}
+{%- assign styles_heading = section.settings.styles_heading | default: 'Styles' -%}
+
+<style>
+  .mcm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .32s ease, visibility .32s ease;
+    overscroll-behavior: contain;
+  }
+  .mcm-overlay.mcm-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mcm-overlay { transition: none; }
+  }
+  @media (min-width: 768px) {
+    .mcm-overlay { display: none !important; }
+  }
+
+  .mcm-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    flex-shrink: 0;
+  }
+  .mcm-header-title {
+    font-family: var(--font-body, sans-serif);
+    font-size: .75rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+  }
+  .mcm-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #f4f4f4;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0a0a0a;
+    transition: background .15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mcm-close:hover { background: #e8e8e8; }
+
+  .mcm-tabs-wrap {
+    flex-shrink: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .mcm-tabs-wrap::-webkit-scrollbar { display: none; }
+  .mcm-tabs {
+    display: flex;
+    gap: 0;
+    padding: 0 16px;
+    min-width: max-content;
+  }
+  .mcm-tab {
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    font-family: var(--font-body, sans-serif);
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #999;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: color .2s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mcm-tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 16px;
+    right: 16px;
+    height: 2px;
+    background: #0a0a0a;
+    transform: scaleX(0);
+    transition: transform .2s ease;
+  }
+  .mcm-tab--active {
+    color: #0a0a0a;
+  }
+  .mcm-tab--active::after {
+    transform: scaleX(1);
+  }
+
+  .mcm-scroll {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .mcm-panel {
+    display: none;
+    padding: 16px;
+  }
+  .mcm-panel--active {
+    display: block;
+    animation: mcmFadeIn .25s ease;
+  }
+  @keyframes mcmFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mcm-panel--active { animation: none; }
+  }
+
+  .mcm-featured-row {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 16px;
+  }
+  .mcm-featured-row::-webkit-scrollbar { display: none; }
+
+  .mcm-feat-card {
+    flex: 0 0 auto;
+    width: 140px;
+    text-decoration: none;
+    color: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mcm-feat-card img {
+    width: 140px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    background: #f2f2f2;
+  }
+  .mcm-feat-title {
+    font-family: var(--font-body, sans-serif);
+    font-size: .72rem;
+    font-weight: 600;
+    text-align: center;
+    display: block;
+  }
+
+  .mcm-section {
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 8px;
+  }
+  .mcm-section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .mcm-section-num {
+    font-family: var(--font-body, sans-serif);
+    font-size: .6rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: #bbb;
+  }
+  .mcm-section-heading {
+    font-family: var(--font-body, sans-serif);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #0a0a0a;
+    margin: 0;
+  }
+
+  .mcm-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .mcm-link {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid #e8e8e8;
+    border-radius: 999px;
+    font-family: var(--font-body, sans-serif);
+    font-size: .72rem;
+    font-weight: 500;
+    color: #333;
+    text-decoration: none;
+    transition: background .15s ease, border-color .15s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mcm-link:hover,
+  .mcm-link:active {
+    background: #f4f4f4;
+    border-color: #ccc;
+  }
+</style>
+
+<div class="mcm-overlay" id="mobile-collection-menu" aria-hidden="true" role="dialog" aria-modal="true" aria-label="{{ menu_title }}">
+
+  <!-- Header -->
+  <div class="mcm-header">
+    <span class="mcm-header-title">{{ menu_title }}</span>
+    <button class="mcm-close" data-mcm-close aria-label="Close menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+
+  {%- if tab_blocks.size > 0 -%}
+  <!-- Category Tabs -->
+  <div class="mcm-tabs-wrap">
+    <div class="mcm-tabs" role="tablist">
+      {%- assign ti = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'category_tab' -%}
+          <button class="mcm-tab{% if ti == 0 %} mcm-tab--active{% endif %}" role="tab"
+                  data-mcm-tab="{{ ti }}" aria-selected="{% if ti == 0 %}true{% else %}false{% endif %}"
+                  id="mcm-tab-{{ ti }}" aria-controls="mcm-panel-{{ ti }}"
+                  {{ block.shopify_attributes }}>
+            {{ block.settings.label | default: 'Category' }}
+          </button>
+          {%- assign ti = ti | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <!-- Panels -->
+  <div class="mcm-scroll">
+    {%- for tab_block in tab_blocks -%}
+      {%- assign tab_i = forloop.index0 -%}
+      <div class="mcm-panel{% if tab_i == 0 %} mcm-panel--active{% endif %}"
+           data-mcm-panel="{{ tab_i }}" role="tabpanel"
+           id="mcm-panel-{{ tab_i }}" aria-labelledby="mcm-tab-{{ tab_i }}">
+
+        {%- comment -%} Featured cards belonging to this tab {%- endcomment -%}
+        {%- assign ct = -1 -%}
+        {%- assign feat_open = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'category_tab' -%}
+            {%- assign ct = ct | plus: 1 -%}
+            {%- if ct > tab_i -%}{%- break -%}{%- endif -%}
+          {%- elsif ct == tab_i and block.type == 'featured_card' -%}
+            {%- unless feat_open -%}<div class="mcm-featured-row">{%- assign feat_open = true -%}{%- endunless -%}
+            <a href="{{ block.settings.url | default: '#' }}" class="mcm-feat-card" {{ block.shopify_attributes }}>
+              {%- if block.settings.image != blank -%}
+                <img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.title | default: '' | escape }}" loading="lazy" width="140" height="180" />
+              {%- else -%}
+                <div style="width:140px;height:180px;background:#f2f2f2;border-radius:10px;" aria-hidden="true"></div>
+              {%- endif -%}
+              {%- if block.settings.title != blank -%}
+                <span class="mcm-feat-title">{{ block.settings.title }}</span>
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if feat_open -%}</div>{%- endif -%}
+
+        {%- comment -%} Items links {%- endcomment -%}
+        {%- assign ct = -1 -%}
+        {%- assign items_open = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'category_tab' -%}
+            {%- assign ct = ct | plus: 1 -%}
+            {%- if ct > tab_i -%}{%- break -%}{%- endif -%}
+          {%- elsif ct == tab_i and block.type == 'menu_link' and block.settings.group == 'items' -%}
+            {%- unless items_open -%}
+              <div class="mcm-section">
+                <div class="mcm-section-head">
+                  <span class="mcm-section-num">01</span>
+                  <h3 class="mcm-section-heading">{{ items_heading }}</h3>
+                </div>
+                <div class="mcm-links">
+              {%- assign items_open = true -%}
+            {%- endunless -%}
+            <a href="{{ block.settings.url | default: '#' }}" class="mcm-link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if items_open -%}</div></div>{%- endif -%}
+
+        {%- comment -%} Styles links {%- endcomment -%}
+        {%- assign ct = -1 -%}
+        {%- assign styles_open = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'category_tab' -%}
+            {%- assign ct = ct | plus: 1 -%}
+            {%- if ct > tab_i -%}{%- break -%}{%- endif -%}
+          {%- elsif ct == tab_i and block.type == 'menu_link' and block.settings.group == 'styles' -%}
+            {%- unless styles_open -%}
+              <div class="mcm-section">
+                <div class="mcm-section-head">
+                  <span class="mcm-section-num">02</span>
+                  <h3 class="mcm-section-heading">{{ styles_heading }}</h3>
+                </div>
+                <div class="mcm-links">
+              {%- assign styles_open = true -%}
+            {%- endunless -%}
+            <a href="{{ block.settings.url | default: '#' }}" class="mcm-link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if styles_open -%}</div></div>{%- endif -%}
+
+      </div>
+    {%- endfor -%}
+  </div>
+  {%- else -%}
+  <div class="mcm-scroll" style="display:flex;align-items:center;justify-content:center;color:#999;font-size:.85rem;padding:2rem;">
+    Add category tabs and links in Theme Editor.
+  </div>
+  {%- endif -%}
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var KEY = '__mcm_init';
+  if (window[KEY]) return;
+  window[KEY] = true;
+
+  var overlay = document.getElementById('mobile-collection-menu');
+  if (!overlay) return;
+  var tabs = overlay.querySelectorAll('[data-mcm-tab]');
+  var panels = overlay.querySelectorAll('[data-mcm-panel]');
+
+  function switchTab(idx) {
+    tabs.forEach(function (t) {
+      var active = t.dataset.mcmTab === String(idx);
+      t.classList.toggle('mcm-tab--active', active);
+      t.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    panels.forEach(function (p) {
+      p.classList.toggle('mcm-panel--active', p.dataset.mcmPanel === String(idx));
+    });
+  }
+
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      switchTab(t.dataset.mcmTab);
+    });
+  });
+
+  window.MobileCollectionMenu = {
+    open: function () {
+      overlay.classList.add('mcm-open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    },
+    close: function () {
+      overlay.classList.remove('mcm-open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    },
+    toggle: function () {
+      overlay.classList.contains('mcm-open') ? this.close() : this.open();
+    }
+  };
+
+  overlay.querySelectorAll('[data-mcm-close]').forEach(function (btn) {
+    btn.addEventListener('click', function () { window.MobileCollectionMenu.close(); });
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('mcm-open')) {
+      window.MobileCollectionMenu.close();
+    }
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Mobile Collection Menu",
+  "tag": "section",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "menu_title",
+      "label": "Menu Title",
+      "default": "Menu"
+    },
+    {
+      "type": "text",
+      "id": "items_heading",
+      "label": "Section 01 Heading",
+      "default": "Items"
+    },
+    {
+      "type": "text",
+      "id": "styles_heading",
+      "label": "Section 02 Heading",
+      "default": "Styles"
+    }
+  ],
+  "max_blocks": 64,
+  "blocks": [
+    {
+      "type": "category_tab",
+      "name": "Category Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab Label",
+          "default": "Category"
+        }
+      ]
+    },
+    {
+      "type": "featured_card",
+      "name": "Featured Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended: 400×520px portrait"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "menu_link",
+      "name": "Menu Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Link"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        },
+        {
+          "type": "select",
+          "id": "group",
+          "label": "Section",
+          "options": [
+            { "value": "items", "label": "01 — Items" },
+            { "value": "styles", "label": "02 — Styles" }
+          ],
+          "default": "items"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mobile Collection Menu",
+      "blocks": [
+        { "type": "category_tab", "settings": { "label": "WOMAN" } },
+        { "type": "featured_card", "settings": { "title": "New Arrivals" } },
+        { "type": "menu_link", "settings": { "label": "Dresses", "group": "items" } },
+        { "type": "menu_link", "settings": { "label": "Tops", "group": "items" } },
+        { "type": "menu_link", "settings": { "label": "Bottoms", "group": "items" } },
+        { "type": "menu_link", "settings": { "label": "Casual", "group": "styles" } },
+        { "type": "menu_link", "settings": { "label": "Formal", "group": "styles" } },
+        { "type": "category_tab", "settings": { "label": "MAN" } },
+        { "type": "menu_link", "settings": { "label": "Shirts", "group": "items" } },
+        { "type": "menu_link", "settings": { "label": "Pants", "group": "items" } },
+        { "type": "menu_link", "settings": { "label": "Street", "group": "styles" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

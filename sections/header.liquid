@@ -109,7 +109,8 @@
   <!-- LEFT: Navigation Links -->
   <!-- Hamburger Button (mobile only) -->
   <button type="button" class="hamburger-btn" id="hamburger-btn"
-          aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+          aria-label="Open menu" aria-expanded="false" aria-controls="mobile-collection-menu"
+          data-action="open-collection-menu">
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
     <span class="hamburger-line"></span>
@@ -369,6 +370,9 @@
         }
       } else if (action === 'close-mobile-menu') {
         if (typeof MobileMenu !== 'undefined') MobileMenu.close();
+        if (typeof MobileCollectionMenu !== 'undefined') MobileCollectionMenu.close();
+      } else if (action === 'open-collection-menu') {
+        if (typeof MobileCollectionMenu !== 'undefined') MobileCollectionMenu.open();
       } else if (action === 'open-search') {
         if (typeof PredictiveSearch !== 'undefined') PredictiveSearch.open();
       } else if (action === 'open-cart') {

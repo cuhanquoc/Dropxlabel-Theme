@@ -23,6 +23,10 @@
     </h2>
   </div>
 
+  {%- assign fc_initial = section.settings.items_initial | default: 6 -%}
+  {%- assign fc_per_load = section.settings.items_per_load | default: 4 -%}
+  {%- assign fc_more_label = section.settings.more_label | default: 'More' -%}
+
   <!-- ── Carousel ── -->
   <div class="relative pb-16">
     <div
@@ -30,6 +34,8 @@
       id="fc-track"
       role="list"
       aria-label="Trending products"
+      data-fc-initial="{{ fc_initial }}"
+      data-fc-per-load="{{ fc_per_load }}"
     >
 
       {%- comment -%} Data source: product_list (individual picks) OR collection picker {%- endcomment -%}
@@ -264,6 +270,17 @@
 
     </div>
     <!-- /Carousel track -->
+
+    <!-- More Button -->
+    <div class="fc-more-wrap" id="fc-more-wrap" style="display:none;">
+      <button type="button" class="fc-more-btn" id="fc-more-btn" aria-label="{{ fc_more_label }}">
+        <span class="fc-more-text">{{ fc_more_label }}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </div>
+
+    <!-- Load More Grid (revealed below) -->
+    <div class="fc-more-grid" id="fc-more-grid" aria-label="Additional products"></div>
   </div>
 
 
@@ -641,6 +658,59 @@
 .fc-qv-bin-new { background: #0a0a0a; color: #fff; }
 .fc-qv-atc-new:hover, .fc-qv-bin-new:hover { opacity: 0.8; }
 
+/* ── Load More ── */
+.fc-more-wrap {
+  text-align: center;
+  padding: 24px 20px 8px;
+}
+.fc-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  border: 1.5px solid #0a0a0a;
+  border-radius: 999px;
+  background: transparent;
+  color: #0a0a0a;
+  font-family: var(--font-body, sans-serif);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s ease, color .2s ease, transform .15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.fc-more-btn:hover { background: #0a0a0a; color: #fff; }
+.fc-more-btn:active { transform: scale(.95); }
+
+.fc-more-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 0 20px;
+  overflow: hidden;
+}
+@media (min-width: 640px) { .fc-more-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 0 40px; } }
+@media (min-width: 1024px) { .fc-more-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
+
+.fc-more-grid .fc-card {
+  width: 100% !important;
+  flex: none !important;
+}
+.fc-more-card-enter {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity .4s ease, transform .4s ease;
+}
+.fc-more-card-enter.fc-more-card-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fc-more-card-enter { transition: none; opacity: 1; transform: none; }
+}
+
 </style>
 
 <!-- ══════════════════════════════════════════════
@@ -947,9 +1017,8 @@
   ────────────────────────────────────────── */
   class FeaturedCollection extends HTMLElement {
     connectedCallback() {
-      
       this._initCards();
-      
+      this._initLoadMore();
       this._initGSAP();
     }
 
@@ -960,6 +1029,44 @@
     }
 
 
+
+    _initLoadMore() {
+      var track = this.querySelector('#fc-track');
+      var moreWrap = document.getElementById('fc-more-wrap');
+      var moreBtn = document.getElementById('fc-more-btn');
+      var moreGrid = document.getElementById('fc-more-grid');
+      if (!track || !moreBtn || !moreGrid) return;
+
+      var cards = Array.from(track.querySelectorAll('[data-fc-card]'));
+      var initial = parseInt(track.dataset.fcInitial, 10) || 6;
+      var perLoad = parseInt(track.dataset.fcPerLoad, 10) || 4;
+
+      if (cards.length <= initial) return;
+
+      var hiddenCards = cards.slice(initial);
+      hiddenCards.forEach(function (c) { c.style.display = 'none'; });
+      moreWrap.style.display = '';
+
+      var revealed = 0;
+      moreBtn.addEventListener('click', function () {
+        var batch = hiddenCards.slice(revealed, revealed + perLoad);
+        if (batch.length === 0) return;
+
+        batch.forEach(function (card, i) {
+          var clone = card.cloneNode(true);
+          clone.style.display = '';
+          clone.style.width = '100%';
+          clone.classList.add('fc-more-card-enter');
+          moreGrid.appendChild(clone);
+          setTimeout(function () { clone.classList.add('fc-more-card-visible'); }, 50 + i * 60);
+        });
+
+        revealed += batch.length;
+        if (revealed >= hiddenCards.length) {
+          moreWrap.style.display = 'none';
+        }
+      });
+    }
 
     _initCards() {
       this.querySelectorAll('.fc-qv-trigger').forEach(btn => {
@@ -1142,6 +1249,34 @@
       "label": "Hand-pick Products (overrides collection)",
       "limit": 24,
       "info": "Select specific products to feature. Takes priority over Collection picker above."
+    },
+    {
+      "type": "header",
+      "content": "Load More"
+    },
+    {
+      "type": "text",
+      "id": "more_label",
+      "label": "More Button Label",
+      "default": "More"
+    },
+    {
+      "type": "range",
+      "id": "items_initial",
+      "label": "Initial items visible",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "items_per_load",
+      "label": "Items per load",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
     },
     {
       "type": "header",
