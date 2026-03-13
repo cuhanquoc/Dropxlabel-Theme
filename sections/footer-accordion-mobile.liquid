@@ -210,6 +210,66 @@
       </ul>
     {%- endif -%}
 
+    {%- comment -%} ── Newsletter block(s) ── {%- endcomment -%}
+    {%- for nl_block in section.blocks -%}
+      {%- if nl_block.type == 'newsletter' -%}
+        {%- assign nl_id = 'fam2-nl-' | append: nl_block.id -%}
+
+        <div class="fam2__newsletter" {{ nl_block.shopify_attributes }}>
+
+          {%- if nl_block.settings.nl_heading != blank -%}
+            <p class="fam2__nl-heading">
+              {{- nl_block.settings.nl_heading | escape -}}
+            </p>
+          {%- endif -%}
+
+          {%- if nl_block.settings.nl_subtext != blank -%}
+            <p class="fam2__nl-subtext">
+              {{- nl_block.settings.nl_subtext | escape -}}
+            </p>
+          {%- endif -%}
+
+          {% form 'customer', class: 'fam2__nl-form', id: nl_id %}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+
+            {%- if form.posted_successfully? -%}
+              <p class="fam2__nl-success" role="status">
+                {{- nl_block.settings.nl_success | default: 'Cảm ơn bạn đã đăng ký!' | escape -}}
+              </p>
+            {%- else -%}
+
+              {%- if form.errors -%}
+                <p class="fam2__nl-error" role="alert">
+                  {{- form.errors | default_errors -}}
+                </p>
+              {%- endif -%}
+
+              <div class="fam2__nl-row">
+                <label for="{{ nl_id }}-email" class="visually-hidden">
+                  {{- nl_block.settings.nl_placeholder | default: 'Email của bạn' | escape -}}
+                </label>
+                <input
+                  id="{{ nl_id }}-email"
+                  class="fam2__nl-input"
+                  type="email"
+                  name="contact[email]"
+                  autocomplete="email"
+                  required
+                  placeholder="{{ nl_block.settings.nl_placeholder | default: 'Email của bạn' | escape }}"
+                  aria-label="{{ nl_block.settings.nl_placeholder | default: 'Email của bạn' | escape }}"
+                >
+                <button class="fam2__nl-btn" type="submit">
+                  {{- nl_block.settings.nl_btn_label | default: 'Đăng ký' | escape -}}
+                </button>
+              </div>
+
+            {%- endif -%}
+          {% endform %}
+
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+
     {%- comment -%} ── Social Icons ── {%- endcomment -%}
     {%- assign has_social = false -%}
     {%- if section.settings.social_instagram != blank
@@ -530,6 +590,43 @@
     }
   ],
   "blocks": [
+    {
+      "type": "newsletter",
+      "name": "📧 Newsletter subscribe",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "nl_heading",
+          "label": "Tiêu đề form",
+          "default": "Đăng ký nhận tin"
+        },
+        {
+          "type": "text",
+          "id": "nl_subtext",
+          "label": "Mô tả ngắn (tuỳ chọn)",
+          "default": "Ưu đãi & xu hướng thời trang mới nhất thẳng vào hộp thư của bạn."
+        },
+        {
+          "type": "text",
+          "id": "nl_placeholder",
+          "label": "Placeholder input email",
+          "default": "Email của bạn"
+        },
+        {
+          "type": "text",
+          "id": "nl_btn_label",
+          "label": "Nhãn nút submit",
+          "default": "Đăng ký"
+        },
+        {
+          "type": "text",
+          "id": "nl_success",
+          "label": "Thông báo thành công",
+          "default": "Cảm ơn bạn đã đăng ký!"
+        }
+      ]
+    },
     {
       "type": "accordion_group",
       "name": "📂 Nhóm accordion",

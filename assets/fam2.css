@@ -160,6 +160,15 @@
   outline: none;
 }
 
+/* ── Link without URL: display-only, no click ── */
+.fam2__link--placeholder {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.45;
+  text-decoration: none !important;
+  user-select: text;
+}
+
 /* ── Placeholder when group has no links ── */
 .fam2__empty {
   padding: 8px 0 18px;
@@ -260,6 +269,98 @@
   }
 }
 
+/* ── Newsletter form block ── */
+.fam2__newsletter {
+  padding: 24px 0 20px;
+  border-bottom: 1px solid var(--fam2-divider, rgba(255,255,255,0.15));
+}
+
+.fam2__nl-heading {
+  margin: 0 0 6px;
+  font-size: var(--fam2-title-size, 14px);
+  font-weight: var(--fam2-title-weight, 600);
+  letter-spacing: var(--fam2-title-spacing, 0.06em);
+  text-transform: uppercase;
+  color: var(--fam2-text, #ffffff);
+}
+
+.fam2__nl-subtext {
+  margin: 0 0 16px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fam2-link, rgba(255,255,255,0.65));
+}
+
+.fam2__nl-form {
+  width: 100%;
+}
+
+.fam2__nl-row {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--fam2-divider, rgba(255,255,255,0.25));
+  border-radius: var(--fam2-btn-radius, 4px);
+  overflow: hidden;
+}
+
+.fam2__nl-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 11px 14px;
+  background: transparent;
+  border: none;
+  color: var(--fam2-text, #ffffff);
+  font-size: 13px;
+  outline: none;
+}
+
+.fam2__nl-input::placeholder {
+  color: var(--fam2-link, rgba(255,255,255,0.45));
+}
+
+.fam2__nl-input:focus {
+  background: rgba(255,255,255,0.05);
+}
+
+.fam2__nl-btn {
+  flex-shrink: 0;
+  padding: 11px 18px;
+  background: var(--fam2-text, #ffffff);
+  border: none;
+  color: var(--fam2-bg, #1a1a1a);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.fam2__nl-btn:hover {
+  opacity: 0.85;
+}
+
+.fam2__nl-btn:focus-visible {
+  outline: 2px solid var(--fam2-text, #ffffff);
+  outline-offset: -3px;
+}
+
+.fam2__nl-success,
+.fam2__nl-error {
+  margin: 0;
+  padding: 10px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.fam2__nl-success {
+  color: #7ed9a0;
+}
+
+.fam2__nl-error {
+  color: #ff8484;
+}
+
 /* ── Reduced-motion: skip transitions ── */
 @media (prefers-reduced-motion: reduce) {
   .fam2__panel,
@@ -267,7 +368,8 @@
   .fam2__icon .fam2__bar--h,
   .fam2__link,
   .fam2__social-link,
-  .fam2__chat {
+  .fam2__chat,
+  .fam2__nl-btn {
     transition: none !important;
   }
 }
