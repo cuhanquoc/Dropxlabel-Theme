@@ -1387,8 +1387,14 @@
           {%- endif -%}
 
           <!-- ── Trust Badges ── -->
-          {%- assign has_delivery_text = section.settings.delivery_text != blank -%}
-          {%- assign has_returns_text = section.settings.returns_text != blank -%}
+          {%- assign has_delivery_text = false -%}
+          {%- assign has_returns_text = false -%}
+          {%- if section.settings.delivery_text != blank -%}
+            {%- assign has_delivery_text = true -%}
+          {%- endif -%}
+          {%- if section.settings.returns_text != blank -%}
+            {%- assign has_returns_text = true -%}
+          {%- endif -%}
           {%- if has_delivery_text or has_returns_text -%}
           <div class="product-benefits-wrap" style="display: flex; gap: 1rem; justify-content: space-between; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1.5rem 1rem; margin-bottom: 3rem; width: 100%; box-sizing: border-box;">
             {%- if has_delivery_text -%}
