@@ -1,0 +1,610 @@
+{%- liquid
+  assign section_bg = section.settings.background_color | default: 'transparent'
+  assign card_bg = section.settings.card_background_color | default: 'var(--color-background, #ffffff)'
+  assign hero_overlay_opacity = section.settings.hero_overlay_opacity | divided_by: 100.0
+-%}
+
+<section
+  id="SupportContact-{{ section.id }}"
+  class="support-contact-section"
+  style="
+    --sc-padding-top: {{ section.settings.padding_top }}px;
+    --sc-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --sc-section-bg: {{ section_bg }};
+    --sc-card-bg: {{ card_bg }};
+    --sc-overlay-opacity: {{ hero_overlay_opacity }};
+  "
+>
+  <div class="sc-shell">
+    <header class="sc-hero" role="banner">
+      {%- if section.settings.hero_image != blank -%}
+        {{
+          section.settings.hero_image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'sc-hero__image',
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '480, 720, 960, 1200, 1600',
+            sizes: '(max-width: 767px) 100vw, 430px',
+            alt: section.settings.hero_title
+        }}
+      {%- endif -%}
+
+      <div class="sc-hero__overlay" aria-hidden="true"></div>
+      <div class="sc-hero__content">
+        {%- if section.settings.hero_title != blank -%}
+          <h1 class="sc-hero__title">{{ section.settings.hero_title }}</h1>
+        {%- endif -%}
+        {%- if section.settings.hero_description != blank -%}
+          <p class="sc-hero__description">{{ section.settings.hero_description }}</p>
+        {%- endif -%}
+      </div>
+    </header>
+
+    <div class="sc-form-wrap">
+      <article class="sc-card" aria-labelledby="sc-form-title-{{ section.id }}">
+        {%- if section.settings.form_heading != blank -%}
+          <h2 id="sc-form-title-{{ section.id }}" class="sc-card__title">{{ section.settings.form_heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.form_description != blank -%}
+          <p class="sc-card__description">{{ section.settings.form_description }}</p>
+        {%- endif -%}
+
+        {%- form 'contact', id: 'SupportContactForm-' | append: section.id, class: 'sc-form' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="sc-form__feedback sc-form__feedback--success" role="status">
+              {{ 'templates.contact.form.post_success' | t | default: 'Thanks for contacting us. We will reply as soon as possible.' }}
+            </p>
+          {%- endif -%}
+
+          {%- if form.errors -%}
+            <div class="sc-form__feedback sc-form__feedback--error" role="alert">
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+
+          <div class="sc-form__grid">
+            <div class="sc-field">
+              <label class="sc-label sr-only" for="sc-name-{{ section.id }}">
+                {{ 'templates.contact.form.name' | t | default: 'First name' }}
+              </label>
+              <input
+                id="sc-name-{{ section.id }}"
+                class="sc-input"
+                type="text"
+                name="contact[name]"
+                autocomplete="given-name"
+                value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.first_name | escape }}{% endif %}"
+                placeholder="{{ 'templates.contact.form.name' | t | default: 'First name' }}"
+              >
+            </div>
+
+            <div class="sc-field">
+              <label class="sc-label sr-only" for="sc-last-name-{{ section.id }}">
+                {{ 'customer.name.last_name' | t | default: 'Last name' }}
+              </label>
+              <input
+                id="sc-last-name-{{ section.id }}"
+                class="sc-input"
+                type="text"
+                name="contact[last_name]"
+                autocomplete="family-name"
+                value="{{ form.last_name | escape }}"
+                placeholder="{{ 'customer.name.last_name' | t | default: 'Last name' }}"
+              >
+            </div>
+
+            <div class="sc-field">
+              <label class="sc-label sr-only" for="sc-email-{{ section.id }}">
+                {{ 'templates.contact.form.email' | t | default: 'Email' }}
+              </label>
+              <input
+                id="sc-email-{{ section.id }}"
+                class="sc-input"
+                type="email"
+                name="contact[email]"
+                autocomplete="email"
+                autocorrect="off"
+                autocapitalize="off"
+                required
+                value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
+                placeholder="{{ 'templates.contact.form.email' | t | default: 'Email' }}"
+              >
+            </div>
+
+            <div class="sc-field">
+              <label class="sc-label sr-only" for="sc-phone-{{ section.id }}">
+                {{ 'templates.contact.form.phone' | t | default: 'Phone' }}
+              </label>
+              <input
+                id="sc-phone-{{ section.id }}"
+                class="sc-input"
+                type="tel"
+                name="contact[phone]"
+                autocomplete="tel"
+                value="{% if form.phone %}{{ form.phone | escape }}{% elsif customer %}{{ customer.phone | escape }}{% endif %}"
+                placeholder="{{ 'templates.contact.form.phone' | t | default: 'Phone number' }}"
+              >
+            </div>
+
+            <div class="sc-field sc-field--full">
+              <label class="sc-label sr-only" for="sc-message-{{ section.id }}">
+                {{ 'templates.contact.form.comment' | t | default: 'Comment' }}
+              </label>
+              <textarea
+                id="sc-message-{{ section.id }}"
+                class="sc-input sc-textarea"
+                name="contact[body]"
+                rows="6"
+                placeholder="{{ 'templates.contact.form.comment' | t | default: 'Comment' }}"
+              >{{- form.body | escape -}}</textarea>
+            </div>
+          </div>
+
+          <button class="sc-submit" type="submit">
+            {{ section.settings.submit_label | default: 'Send' }}
+          </button>
+        {%- endform -%}
+      </article>
+    </div>
+
+    <div class="sc-info">
+      {%- if section.settings.info_heading != blank -%}
+        <h2 class="sc-info__heading">{{ section.settings.info_heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.info_description != blank -%}
+        <p class="sc-info__description">{{ section.settings.info_description }}</p>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="sc-info__list" role="list">
+          {%- for block in section.blocks -%}
+            <li class="sc-info__item" {{ block.shopify_attributes }}>
+              {%- if block.settings.label != blank -%}
+                <p class="sc-info__label">{{ block.settings.label }}</p>
+              {%- endif -%}
+
+              {%- assign block_content = block.settings.content | strip -%}
+              {%- case block.type -%}
+                {%- when 'phone' -%}
+                  {%- assign phone_href = block_content | remove: ' ' | remove: '(' | remove: ')' | remove: '-' -%}
+                  <a class="sc-info__value" href="tel:{{ phone_href }}">{{ block_content }}</a>
+                {%- when 'email' -%}
+                  <a class="sc-info__value" href="mailto:{{ block_content | escape }}">{{ block_content }}</a>
+                {%- else -%}
+                  <p class="sc-info__value">{{ block_content }}</p>
+              {%- endcase -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  #SupportContact-{{ section.id }} {
+    padding-top: var(--sc-padding-top);
+    padding-bottom: var(--sc-padding-bottom);
+    background: var(--sc-section-bg);
+    color: var(--color-base-text, var(--color-text, currentColor));
+  }
+
+  #SupportContact-{{ section.id }} .sc-shell {
+    max-width: 430px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  #SupportContact-{{ section.id }} .sc-hero {
+    position: relative;
+    min-height: 340px;
+    overflow: hidden;
+    background: var(--sc-card-bg);
+  }
+
+  #SupportContact-{{ section.id }} .sc-hero__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #SupportContact-{{ section.id }} .sc-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--sc-overlay-opacity));
+  }
+
+  #SupportContact-{{ section.id }} .sc-hero__content {
+    position: relative;
+    z-index: 1;
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 24px;
+    color: var(--color-background, #ffffff);
+  }
+
+  #SupportContact-{{ section.id }} .sc-hero__title {
+    margin: 0 0 12px;
+    font-size: clamp(1.9rem, 6vw, 2.125rem);
+    line-height: 1.15;
+    color: inherit;
+  }
+
+  #SupportContact-{{ section.id }} .sc-hero__description {
+    margin: 0;
+    max-width: 32ch;
+    line-height: 1.6;
+    color: inherit;
+    opacity: 0.92;
+  }
+
+  #SupportContact-{{ section.id }} .sc-form-wrap {
+    padding: 16px 16px 0;
+  }
+
+  #SupportContact-{{ section.id }} .sc-card {
+    background: var(--sc-card-bg);
+    border-radius: 20px;
+    padding: 28px 20px 24px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  #SupportContact-{{ section.id }} .sc-card__title,
+  #SupportContact-{{ section.id }} .sc-info__heading {
+    margin: 0 0 8px;
+    line-height: 1.25;
+    color: inherit;
+  }
+
+  #SupportContact-{{ section.id }} .sc-card__title {
+    font-size: clamp(1.35rem, 4.8vw, 1.5rem);
+  }
+
+  #SupportContact-{{ section.id }} .sc-card__description,
+  #SupportContact-{{ section.id }} .sc-info__description {
+    margin: 0 0 24px;
+    line-height: 1.6;
+    color: inherit;
+    opacity: 0.72;
+  }
+
+  #SupportContact-{{ section.id }} .sc-form {
+    display: grid;
+    gap: 12px;
+  }
+
+  #SupportContact-{{ section.id }} .sc-form__feedback {
+    margin: 0 0 4px;
+    border-radius: 14px;
+    padding: 10px 14px;
+    line-height: 1.5;
+  }
+
+  #SupportContact-{{ section.id }} .sc-form__feedback--success {
+    background: rgba(16, 185, 129, 0.15);
+  }
+
+  #SupportContact-{{ section.id }} .sc-form__feedback--error {
+    background: rgba(239, 68, 68, 0.13);
+  }
+
+  #SupportContact-{{ section.id }} .sc-form__grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  #SupportContact-{{ section.id }} .sc-field--full {
+    width: 100%;
+  }
+
+  #SupportContact-{{ section.id }} .sc-input {
+    width: 100%;
+    min-height: 48px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: var(--color-input-background, rgba(0, 0, 0, 0.04));
+    padding: 12px 18px;
+    color: inherit;
+    line-height: 1.5;
+  }
+
+  #SupportContact-{{ section.id }} .sc-input::placeholder {
+    color: inherit;
+    opacity: 0.55;
+  }
+
+  #SupportContact-{{ section.id }} .sc-input:focus-visible {
+    border-color: rgba(0, 0, 0, 0.32);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.16);
+    outline: none;
+  }
+
+  #SupportContact-{{ section.id }} .sc-textarea {
+    border-radius: 22px;
+    min-height: 148px;
+    resize: vertical;
+    padding-block: 14px;
+  }
+
+  #SupportContact-{{ section.id }} .sc-submit {
+    width: 100%;
+    min-height: 52px;
+    border: 0;
+    border-radius: 999px;
+    padding: 12px 20px;
+    line-height: 1.2;
+    cursor: pointer;
+    background: var(--color-base-text, var(--color-text, #111111));
+    color: var(--color-background, #ffffff);
+    transition: opacity 0.2s ease;
+  }
+
+  #SupportContact-{{ section.id }} .sc-submit:hover {
+    opacity: 0.88;
+  }
+
+  #SupportContact-{{ section.id }} .sc-info {
+    padding: 36px 16px 48px;
+  }
+
+  #SupportContact-{{ section.id }} .sc-info__heading {
+    margin-bottom: 14px;
+    font-size: clamp(1.55rem, 7.2vw, 1.95rem);
+    line-height: 1.2;
+  }
+
+  #SupportContact-{{ section.id }} .sc-info__description {
+    margin-bottom: 24px;
+  }
+
+  #SupportContact-{{ section.id }} .sc-info__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 14px;
+  }
+
+  #SupportContact-{{ section.id }} .sc-info__item {
+    background: var(--sc-card-bg);
+    border-radius: 16px;
+    padding: 18px 16px;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+    display: grid;
+    gap: 8px;
+  }
+
+  #SupportContact-{{ section.id }} .sc-info__label {
+    margin: 0;
+    line-height: 1.4;
+    font-weight: 600;
+    color: inherit;
+  }
+
+  #SupportContact-{{ section.id }} .sc-info__value {
+    margin: 0;
+    line-height: 1.6;
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.82;
+    word-break: break-word;
+  }
+
+  #SupportContact-{{ section.id }} .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 768px) {
+    #SupportContact-{{ section.id }} .sc-shell {
+      max-width: 560px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Support Contact Form",
+  "tag": "section",
+  "class": "support-contact-form-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background color",
+      "default": "#f2f2f2"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "range",
+      "id": "hero_overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "label": "Hero overlay opacity",
+      "default": 50
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero heading",
+      "default": "Get in Touch"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_description",
+      "label": "Hero description",
+      "default": "Reach out to us anytime — we're here to assist with your questions, feedback, or support needs."
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form heading",
+      "default": "Send Us a Message"
+    },
+    {
+      "type": "textarea",
+      "id": "form_description",
+      "label": "Form description",
+      "default": "Have a question or request? Send us a message and we'll get back to you shortly."
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Submit button label",
+      "default": "Send"
+    },
+    {
+      "type": "text",
+      "id": "info_heading",
+      "label": "Info heading",
+      "default": "We are always ready to help you and answer your questions"
+    },
+    {
+      "type": "textarea",
+      "id": "info_description",
+      "label": "Info description",
+      "default": "We are always ready to help you and answer your questions with prompt, friendly support tailored to your needs."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "address",
+      "name": "Address",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Office Address:"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "Address",
+          "default": "3556 Hartford Way Vlg, Mount Pleasant, SC, 29466, Australia."
+        }
+      ]
+    },
+    {
+      "type": "phone",
+      "name": "Phone",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Call Us For Help:"
+        },
+        {
+          "type": "text",
+          "id": "content",
+          "label": "Phone number",
+          "default": "+159-2563-2562"
+        }
+      ]
+    },
+    {
+      "type": "email",
+      "name": "Email",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Customer Services"
+        },
+        {
+          "type": "text",
+          "id": "content",
+          "label": "Email address",
+          "default": "shop@yourstore.com"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Support Hours"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "Content",
+          "default": "Monday - Friday, 9:00 AM - 6:00 PM"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    {
+      "name": "Support Contact Form",
+      "blocks": [
+        {
+          "type": "address"
+        },
+        {
+          "type": "phone"
+        },
+        {
+          "type": "email"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
