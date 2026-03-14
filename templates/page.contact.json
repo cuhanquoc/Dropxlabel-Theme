@@ -1,8 +1,31 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "support-contact-form",
-      "settings": {}
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#f2f2f2",
+        "card_background_color": "#ffffff",
+        "hero_image": "shopify://shop_images/Screenshot_2026-03-13_110450.png",
+        "hero_overlay_opacity": 50,
+        "hero_title": "Get in Touch",
+        "hero_description": "Reach out to us anytime — we're here to assist with your questions, feedback, or support needs.",
+        "form_heading": "Send Us a Message",
+        "form_description": "Have a question or request? Send us a message and we'll get back to you shortly.",
+        "submit_label": "Send",
+        "info_heading": "We are always ready to help you and answer your questions",
+        "info_description": "We are always ready to help you and answer your questions with prompt, friendly support tailored to your needs."
+      }
     }
   },
   "order": [
