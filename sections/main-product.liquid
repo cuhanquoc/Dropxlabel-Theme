@@ -1063,24 +1063,24 @@
 
           <!-- Title, Price, Taxes Layout -->
           <div class="product-hero-info-wrap">
-            <h1 class="product-title" style="font-size: clamp(1.45rem, 5.2vw, 2rem); font-weight: 600; line-height: 1.18; margin-bottom: 0.5rem; word-break: break-word; word-wrap: break-word; min-width: 0; width: 100%;">{{ product.title }}</h1>
+            <h1 class="product-title" style="font-size: {{ section.settings.pdp_title_size | default: 58 | divided_by: 20.0 }}rem; font-weight: 600; line-height: 1.18; margin-bottom: 0.5rem; word-break: break-word; word-wrap: break-word; min-width: 0; width: 100%;">{{ product.title }}</h1>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-              <div style="display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 12px; row-gap: 6px; font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 700;">
+              <div style="display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: 12px; row-gap: 0; font-weight: 700; white-space: nowrap;">
                 <span
                   class="product-price-compare"
                   id="product-compare-price"
-                  style="text-decoration: line-through; color: var(--color-muted); font-weight: 400; font-size: 1.2rem;{% if current_variant.compare_at_price <= current_variant.price or current_variant.compare_at_price == blank %}display:none;{% endif %}"
+                  style="text-decoration: line-through; color: var(--color-muted); font-weight: 400; font-size: {{ section.settings.pdp_compare_price_size | default: 38 | divided_by: 20.0 }}rem;{% if current_variant.compare_at_price <= current_variant.price or current_variant.compare_at_price == blank %}display:none;{% endif %}"
                 >
                   {% if current_variant.compare_at_price > current_variant.price %}
                     {{ current_variant.compare_at_price | money }}
                   {% endif %}
                 </span>
-                <span class="product-price" id="product-price">
+                <span class="product-price" id="product-price" style="font-size: {{ section.settings.pdp_sale_price_size | default: 56 | divided_by: 20.0 }}rem;">
                   {{ current_variant.price | money }}
                 </span>
                 {%- if section.settings.price_promo_text != blank -%}
-                  <span class="product-price-promo-inline">
+                  <span class="product-price-promo-inline" style="font-size: {{ section.settings.pdp_promo_size | default: 16 | divided_by: 20.0 }}rem;">
                     <svg class="product-price-promo-inline__icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                       <path d="M12.6 2.4c.5 2.1-.2 3.8-1.6 5.2-1.1 1.1-1.8 2.2-1.8 3.8 0 1.7 1.4 3.1 3.1 3.1 2.5 0 4.4-2 4.4-4.8 0-2.2-1-4.2-2.7-6 .1 1-.2 2-1 2.8-.6-1.2-.5-2.6-.4-4.1zM7.5 12.5c-1.9 1.5-3 3.7-3 6 0 3.1 2.5 5.5 5.5 5.5h4c3.1 0 5.5-2.5 5.5-5.6 0-2.1-.9-4-2.5-5.4.1.5.2 1.1.2 1.6 0 3.5-2.4 6.2-5.6 6.2-3.4 0-6.1-2.8-6.1-6.2 0-.7.1-1.4.4-2.1z"></path>
                     </svg>
@@ -1088,7 +1088,7 @@
                   </span>
                 {%- endif -%}
               </div>
-              <p style="font-size: 0.95rem; color: #111;">
+              <p style="font-size: {{ section.settings.pdp_taxes_size | default: 19 | divided_by: 20.0 }}rem; color: #111;">
                 Taxes included. <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}" style="text-decoration: underline; color: inherit;">Shipping</a> calculated at checkout.
               </p>
             </div>
@@ -2580,6 +2580,56 @@
       "id": "price_promo_text",
       "label": "Promo text under price",
       "default": "WE MADE TOO MUCH"
+    },
+    {
+      "type": "range",
+      "id": "pdp_title_size",
+      "label": "Product title font size",
+      "min": 26,
+      "max": 80,
+      "step": 1,
+      "default": 58,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "pdp_compare_price_size",
+      "label": "Compare price font size",
+      "min": 14,
+      "max": 42,
+      "step": 1,
+      "default": 38,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "pdp_sale_price_size",
+      "label": "Sale price font size",
+      "min": 18,
+      "max": 62,
+      "step": 1,
+      "default": 56,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "pdp_promo_size",
+      "label": "Promo text font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "default": 16,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "pdp_taxes_size",
+      "label": "Taxes/shipping font size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "default": 19,
+      "unit": "px"
     },
     {
       "type": "color",
