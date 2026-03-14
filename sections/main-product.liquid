@@ -308,6 +308,16 @@
     color: #4f4f4f;
   }
 
+  @media (max-width: 767px) {
+    body.pdp-info-sheet-open .mob-nav {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      transform: translate(-50%, 120%) !important;
+      transition: opacity 180ms ease, transform 220ms ease !important;
+    }
+  }
+
   /* Option label */
   .option-label {
     font-family: var(--font-body);
@@ -1858,6 +1868,7 @@
       infoSheet.setAttribute('aria-hidden', 'false');
       restoreBodyOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('pdp-info-sheet-open');
 
       const focusables = getFocusableElements(infoSheetPanel);
       const firstFocusable = focusables[0] || infoSheetPanel;
@@ -1870,6 +1881,7 @@
       infoSheet.setAttribute('aria-hidden', 'true');
       if (infoSheetBody) infoSheetBody.innerHTML = '';
       document.body.style.overflow = restoreBodyOverflow || '';
+      document.body.classList.remove('pdp-info-sheet-open');
       if (infoSheetLastTrigger) {
         infoSheetLastTrigger.focus();
         infoSheetLastTrigger = null;
