@@ -197,16 +197,20 @@
       {%- else -%}
         <ul class="sc-info__list" role="list">
           <li class="sc-info__item">
-            <p class="sc-info__label">Office Address:</p>
-            <p class="sc-info__value">3556 Hartford Way Vlg, Mount Pleasant, SC, 29466, Australia.</p>
+            <p class="sc-info__label">{{ section.settings.fallback_card_1_label }}</p>
+            <p class="sc-info__value">{{ section.settings.fallback_card_1_content }}</p>
           </li>
           <li class="sc-info__item">
-            <p class="sc-info__label">Call Us For Help:</p>
-            <a class="sc-info__value" href="tel:+15925632562">+159-2563-2562 , +159-2563-2562</a>
+            <p class="sc-info__label">{{ section.settings.fallback_card_2_label }}</p>
+            <a class="sc-info__value" href="tel:{{ section.settings.fallback_card_2_content | remove: ' ' | remove: '(' | remove: ')' | remove: '-' }}">
+              {{ section.settings.fallback_card_2_content }}
+            </a>
           </li>
           <li class="sc-info__item">
-            <p class="sc-info__label">Customer services</p>
-            <a class="sc-info__value" href="mailto:shop@yourstore.com">shop@yourstore.com</a>
+            <p class="sc-info__label">{{ section.settings.fallback_card_3_label }}</p>
+            <a class="sc-info__value" href="mailto:{{ section.settings.fallback_card_3_content | escape }}">
+              {{ section.settings.fallback_card_3_content }}
+            </a>
           </li>
         </ul>
       {%- endif -%}
@@ -601,6 +605,46 @@
       "id": "info_description",
       "label": "Info description",
       "default": "We are always ready to help you and answer your questions with prompt, friendly support tailored to your needs."
+    },
+    {
+      "type": "header",
+      "content": "Fallback cards when no blocks are configured"
+    },
+    {
+      "type": "text",
+      "id": "fallback_card_1_label",
+      "label": "Fallback card 1 title",
+      "default": "Office Address:"
+    },
+    {
+      "type": "textarea",
+      "id": "fallback_card_1_content",
+      "label": "Fallback card 1 content",
+      "default": "3556 Hartford Way Vlg, Mount Pleasant, SC, 29466, Australia."
+    },
+    {
+      "type": "text",
+      "id": "fallback_card_2_label",
+      "label": "Fallback card 2 title",
+      "default": "Call Us For Help:"
+    },
+    {
+      "type": "text",
+      "id": "fallback_card_2_content",
+      "label": "Fallback card 2 content",
+      "default": "+159-2563-2562 , +159-2563-2562"
+    },
+    {
+      "type": "text",
+      "id": "fallback_card_3_label",
+      "label": "Fallback card 3 title",
+      "default": "Customer services"
+    },
+    {
+      "type": "text",
+      "id": "fallback_card_3_content",
+      "label": "Fallback card 3 content",
+      "default": "shop@yourstore.com"
     }
   ],
   "blocks": [
