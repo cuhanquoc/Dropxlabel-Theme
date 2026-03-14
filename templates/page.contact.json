@@ -23,8 +23,16 @@
         "form_heading": "Send Us a Message",
         "form_description": "Have a question or request? Send us a message and we'll get back to you shortly.",
         "submit_label": "Send",
+        "success_heading": "Thank you for contacting us",
+        "success_description": "We received your message and will get back to you as soon as possible.",
         "info_heading": "We are always ready to help you and answer your questions",
-        "info_description": "We are always ready to help you and answer your questions with prompt, friendly support tailored to your needs."
+        "info_description": "We are always ready to help you and answer your questions with prompt, friendly support tailored to your needs.",
+        "fallback_card_1_label": "Office Address:",
+        "fallback_card_1_content": "3556 Hartford Way Vlg, Mount Pleasant, SC, 29466, Australia.",
+        "fallback_card_2_label": "Call Us For Help:",
+        "fallback_card_2_content": "+159-2563-2562 , +159-2563-2562",
+        "fallback_card_3_label": "Customer services",
+        "fallback_card_3_content": "support@dropxlabel.com"
       }
     }
   },
