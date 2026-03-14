@@ -109,9 +109,26 @@
       padding-right: 0 !important;
     }
 
+    header.site-header > .mx-auto {
+      position: relative;
+    }
+
+    /* Keep logo visually centered but remove it from flex flow on mobile */
+    header.site-header .header-logo-wrap {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 46vw;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
     /* Tighten icon cluster on the right per mobile mock */
     header.site-header .header-right-icons {
       margin-left: auto !important;
+      justify-content: flex-end;
+      flex: 0 0 auto;
       gap: 0.35rem !important;
     }
   }
