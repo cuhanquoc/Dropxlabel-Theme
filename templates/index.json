@@ -33,13 +33,20 @@
         "collection": "",
         "max_products": 12,
         "product_list": [
+          "arden-dress™-asymmetrical-dress",
           "aurelie-dress™-floral-printed-dress",
-          "esme-bikini™-tie-side-triangle-bikini",
-          "isolde-bikini™-metal-decor-bikini",
-          "odessa-bikini™-polkadots-beach-resort-bikini",
-          "vivienne-bikini™-stripe-sexy-bikini",
-          "jessey-dress™-camisole-sun-dress"
+          "azure-dress™-hem-dress",
+          "celine-bikini™-halter-triangle-bikini",
+          "clarisse-top™-casual-commuting-contrast-top",
+          "alys-dress™-solid-white-sexy-deep-v-neck-dress",
+          "cordelia-dress™-button-front-dress",
+          "elenie-dress™-neck-chain-dress",
+          "evren-dress™-tea-party-dress",
+          "marisol-dress™-cutout-dress"
         ],
+        "more_label": "More",
+        "items_initial": 6,
+        "items_per_load": 4,
         "title_font_size": "1.2rem",
         "title_color": "#999999",
         "title_font_weight": "500",
@@ -146,7 +153,6 @@
         "subtitle": "",
         "title_align": "left",
         "title_color": "#0a0a0a",
-        "bg_image": "",
         "bg_color": "#f2f0ec"
       }
     },
