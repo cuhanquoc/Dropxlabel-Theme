@@ -296,6 +296,9 @@
       if (this._menuBtn && this._onMenuClick) {
         this._menuBtn.removeEventListener('click', this._onMenuClick);
       }
+      if (this._cartLink && this._onCartClick) {
+        this._cartLink.removeEventListener('click', this._onCartClick);
+      }
     }
 
     /* Slide in after 350ms (allow page paint first) */
@@ -353,6 +356,16 @@
           if (typeof MobileCollectionMenu !== 'undefined') MobileCollectionMenu.open();
         };
         this._menuBtn.addEventListener('click', this._onMenuClick);
+      }
+
+      this._cartLink = this.querySelector('[data-mob-cart]');
+      if (this._cartLink) {
+        this._onCartClick = (event) => {
+          event.stopPropagation();
+          const href = this._cartLink.getAttribute('href') || '/cart';
+          window.location.assign(href);
+        };
+        this._cartLink.addEventListener('click', this._onCartClick);
       }
     }
 

@@ -691,7 +691,6 @@
       height: 44px;
     }
     #main-product.mobile-compact-enabled .product-quantity-wrap,
-    #main-product.mobile-compact-enabled .product-stock-wrap,
     #main-product.mobile-compact-enabled .product-benefits-wrap,
     #main-product.mobile-compact-enabled .product-buy-wrap,
     #main-product.mobile-compact-enabled .product-payment-wrap,
@@ -727,6 +726,19 @@
     }
     #main-product.mobile-compact-enabled .pw-desc-inline {
       margin-top: var(--mobile-space-1) !important;
+    }
+    #main-product .product-hero-info-wrap,
+    #main-product .product-variants-wrap,
+    #main-product .product-quantity-wrap,
+    #main-product .product-buy-wrap,
+    #main-product .product-payment-wrap,
+    #main-product .product-benefits-wrap,
+    #main-product .product-info-actions,
+    #main-product .product-app-blocks,
+    #main-product .pw-desc-inline,
+    #main-product .pw-container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
     }
     .product-info-sheet__panel {
       max-height: 80vh;
@@ -1311,23 +1323,6 @@
             {{ form | payment_button }}
           </div>
 
-          <!-- ── Stock Indicator (Dynamic) ── -->
-          <div class="product-stock-wrap" style="display: flex; align-items: center; gap: 8px; margin-bottom: 2rem; font-size: 1.05rem; padding: 0 1rem; width: 100%; box-sizing: border-box;">
-            <svg id="variant-stock-icon" width="20" height="20" viewBox="0 0 24 24" fill="#00a82d" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="currentColor"/>
-            </svg>
-            <span id="variant-stock-display" style="font-weight: 400;">
-              {% assign current_variant = product.selected_or_first_available_variant %}
-              {% if current_variant.inventory_management and current_variant.inventory_quantity > 0 %}
-                {{ current_variant.inventory_quantity }} in stock
-              {% elsif current_variant.available %}
-                In stock
-              {% else %}
-                Out of stock
-              {% endif %}
-            </span>
-          </div>
-
           <!-- Pickup card removed by request -->
 
           <!-- ── Trust Badges ── -->
@@ -1470,11 +1465,14 @@
           {%- if section.settings.pairs_collection != blank -%}
             {%- assign pairs_collection_obj = collections[section.settings.pairs_collection] -%}
           {%- endif -%}
+          {%- if pairs_collection_obj == blank and product.collections.size > 0 -%}
+            {%- assign pairs_collection_obj = product.collections.first -%}
+          {%- endif -%}
           {%- if pairs_collection_obj == blank -%}
             {%- assign pairs_collection_obj = collections.all -%}
           {%- endif -%}
           {%- assign pairs_max = section.settings.pairs_limit | default: 12 | plus: 0 -%}
-          {%- assign pairs_initial = 3 -%}
+          {%- assign pairs_initial = section.settings.pairs_initial | default: 3 | plus: 0 -%}
           {%- assign pairs_heading_text = section.settings.pairs_heading | default: 'PAIRS WELL WITH' -%}
           {%- assign pairs_more_text = section.settings.pairs_more_label | default: 'More' -%}
           {%- assign pairs_less_text = section.settings.pairs_less_label | default: 'Less' -%}
@@ -1484,6 +1482,7 @@
               class="pw-container"
               data-pw-grid-wrap
               data-initial-visible="{{ pairs_initial }}"
+              data-product-tags="{{ product.tags | join: '||' | escape }}"
               style="margin-top: 1rem; padding: 0 1rem 1rem;"
             >
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem;">
@@ -1499,6 +1498,7 @@
                       href="{{ p.url }}"
                       class="pw-card"
                       data-pw-item
+                      data-pw-tags="{{ p.tags | join: '||' | escape }}"
                       {% if shown_pairs > pairs_initial %}hidden{% endif %}
                       style="text-decoration: none; color: inherit; border: 1px solid #ececec; border-radius: 10px; overflow: hidden; background: #fff;"
                     >
@@ -1759,29 +1759,6 @@
       }
     }
 
-    function updateStock(match) {
-      const stockEl = root.querySelector('#variant-stock-display');
-      const stockIcon = root.querySelector('#variant-stock-icon');
-      if (!stockEl || !stockIcon) return;
-
-      if (match.inventory_management && match.inventory_quantity > 0) {
-        stockEl.textContent = `${match.inventory_quantity} in stock`;
-        stockIcon.setAttribute('fill', '#00a82d');
-        stockIcon.style.color = '#00a82d';
-        stockEl.style.color = '#111';
-      } else if (match.available) {
-        stockEl.textContent = 'In stock';
-        stockIcon.setAttribute('fill', '#00a82d');
-        stockIcon.style.color = '#00a82d';
-        stockEl.style.color = '#111';
-      } else {
-        stockEl.textContent = 'Out of stock';
-        stockIcon.setAttribute('fill', '#888');
-        stockIcon.style.color = '#888';
-        stockEl.style.color = '#888';
-      }
-    }
-
     function updateSelectedVariant() {
       const hiddenVariantInput = root.querySelector('#selected-variant-id');
       const optionGroups = root.querySelectorAll('[data-option-group]');
@@ -1808,7 +1785,6 @@
       }
 
       updatePrice(match);
-      updateStock(match);
 
       if (match.available) {
         setAtcAvailable();
@@ -2061,7 +2037,7 @@
     function initPairsMore() {
       const container = root.querySelector('[data-pw-grid-wrap]');
       if (!container) return;
-      const items = Array.from(container.querySelectorAll('[data-pw-item]'));
+      let items = Array.from(container.querySelectorAll('[data-pw-item]'));
       const moreBtn = container.querySelector('[data-pw-more-btn]');
       if (!moreBtn) return;
 
@@ -2069,6 +2045,34 @@
       const moreLabel = moreBtn.dataset.moreLabel || 'More';
       const lessLabel = moreBtn.dataset.lessLabel || 'Less';
       let expanded = false;
+
+      const currentTags = (container.dataset.productTags || '')
+        .split('||')
+        .map(tag => tag.trim().toLowerCase())
+        .filter(Boolean);
+
+      if (currentTags.length) {
+        const scored = items.map(item => {
+          const itemTags = (item.dataset.pwTags || '')
+            .split('||')
+            .map(tag => tag.trim().toLowerCase())
+            .filter(Boolean);
+          const score = itemTags.reduce((total, tag) => total + (currentTags.includes(tag) ? 1 : 0), 0);
+          return { item, score };
+        });
+
+        const matched = scored
+          .filter(entry => entry.score > 0)
+          .sort((a, b) => b.score - a.score);
+
+        if (matched.length > 0) {
+          const grid = items[0] ? items[0].parentElement : null;
+          if (grid) {
+            matched.forEach(entry => grid.appendChild(entry.item));
+          }
+          items = matched.map(entry => entry.item);
+        }
+      }
 
       function refreshButtonState() {
         if (items.length <= initialVisible) {
