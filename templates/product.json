@@ -12,55 +12,57 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "description_MXQQtL": {
-          "type": "description",
+        "info_action_Vf7p9q": {
+          "type": "info_action",
           "settings": {
-            "heading": "Description"
+            "title": "WHY YOU'LL LOVE IT?",
+            "content": "<p>Tại sao bạn sẽ yêu thích chiếc váy này<br/><br/>Thiết kế bất đối xứng độc đáo tạo nên phong cách hiện đại và nổi bật. Chất liệu mềm mại, thoáng khí giúp bạn thoải mái suốt cả ngày. Dễ dàng phối đồ với nhiều phong cách khác nhau từ casual đến dạo phố. Đường cắt tinh tế che khéo điểm yếu và làm nổi bật vóc dáng. Phù hợp cho nhiều dịp từ công sở đến những buổi gặp gỡ bạn bè.</p>",
+            "review_anchor_or_note": "Optional note"
+          }
+        },
+        "info_action_d4HyeN": {
+          "type": "info_action",
+          "settings": {
+            "title": "",
+            "content": "<p>Chiếc áo này được thiết kế để mang lại sự thoải mái và phong cách cho bạn. Chất liệu cao cấp đảm bảo độ bền lâu dài và cảm giác mềm mại khi mặc. Phù hợp với nhiều dịp, từ casual đến semi-formal. Dễ dàng kết hợp với các trang phục khác trong tủ quần áo của bạn. Hỗ trợ tùy chỉnh màu sắc và thiết kế theo sở thích cá nhân của bạn.</p>",
+            "review_anchor_or_note": "Optional note"
           }
         }
       },
       "block_order": [
-        "description_MXQQtL"
+        "info_action_Vf7p9q",
+        "info_action_d4HyeN"
       ],
       "settings": {
         "gallery_gap": 2,
+        "show_rating_row": true,
+        "show_recommend_percent": true,
+        "rating_label_text": "Reviews",
+        "price_promo_text": "WE MADE TOO MUCH",
+        "choose_size_text": "Choose size",
+        "choose_color_text": "Choose color",
+        "select_size_button_text": "Select a size",
+        "add_to_cart_button_text": "Add to cart",
         "size_chart_text": "<p>S (Chest: 36\", Length: 28\")</p><p>M (Chest: 38\", Length: 29\")</p><p>L (Chest: 40\", Length: 30\")</p>",
         "pickup_title": "Pickup available at California Warehouse",
         "pickup_time": "Usually ready in 24 hours",
         "delivery_text": "Free delivery within 2 days",
         "returns_text": "Free + easy returns",
+        "show_info_actions": true,
+        "info_actions_heading": "More information",
+        "primary_info_action_title": "DESCRIPTIONS",
+        "info_sheet_close_label": "Close details",
+        "mobile_compact_mode": true,
+        "mobile_gallery_max_height": 62,
+        "mobile_section_gap": 12,
+        "mobile_option_button_height": 46,
+        "mobile_cta_min_height": 50,
+        "mobile_show_pickup_card": true,
         "pairs_collection": "",
-        "pairs_heading": "PAIRS WELL WITH"
-      }
-    },
-    "trending-accordion": {
-      "type": "trending-accordion",
-      "disabled": true,
-      "settings": {
-        "eyebrow": "New Arrivals",
-        "heading": "Trending<br>Styles You<br>Can't Miss.",
-        "description": "Each style is a statement — restrained, intentional, and made to outlast every passing season.",
-        "cta_text": "Shop Now",
-        "cta_url": "shopify://collections/all",
-        "mobile_heading": "Trending Styles",
-        "island_text": "Trending Now",
-        "island_badge": "LIVE",
-        "pin_label1": "Fall Capsule",
-        "pin_url1": "",
-        "pin_label2": "Editorial",
-        "pin_url2": "",
-        "pin_label3": "Street Style",
-        "pin_url3": "",
-        "pin_label4": "Minimalist",
-        "pin_url4": "",
-        "pin_label5": "Runway",
-        "pin_url5": "",
-        "pin_label6": "New Season",
-        "pin_url6": "",
-        "deco_url1": "",
-        "deco_url2": "",
-        "deco_url3": "",
-        "deco_url4": ""
+        "pairs_heading": "PAIRS WELL WITH",
+        "pairs_limit": 12,
+        "pairs_initial": 6,
+        "pairs_more_label": "More"
       }
     },
     "marquee-ticker-related": {
@@ -78,7 +80,6 @@
   },
   "order": [
     "main",
-    "trending-accordion",
     "marquee-ticker-related"
   ]
 }
