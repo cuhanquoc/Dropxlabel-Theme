@@ -714,11 +714,11 @@
       flex: 0 0 calc(34% - 6px) !important;
     }
     #main-product.mobile-compact-enabled .product-hero-info-wrap {
-      background: #fbfbfb;
-      border: 1px solid #e7e7e7;
-      border-radius: 14px;
-      padding: var(--mobile-space-2) 1rem var(--mobile-space-2);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      padding: 0 1rem var(--mobile-space-2);
+      box-shadow: none;
       margin-bottom: var(--mobile-space-3) !important;
     }
     #main-product.mobile-compact-enabled .product-review-row {
@@ -1509,6 +1509,25 @@
             </div>
           {%- endif -%}
 
+          {%- assign has_app_blocks = false -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}
+              {%- assign has_app_blocks = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if has_app_blocks -%}
+            <div class="product-app-blocks" style="padding: 0 1rem; margin: 0.5rem 0 1rem;">
+              {%- for block in section.blocks -%}
+                {%- if block.type == '@app' -%}
+                  <div class="product-app-block" {{ block.shopify_attributes }}>
+                    {% render block %}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
           <!-- ── INLINE DESCRIPTION (above Pairs Well With) ── -->
           {%- assign desc_blocks = section.blocks | where: 'type', 'description' -%}
           {%- if desc_blocks.size > 0 -%}
@@ -1527,7 +1546,54 @@
             </div>
           {%- endif -%}
 
-	          <!-- ── PAIRS WELL WITH Grid removed by request ── -->
+          <!-- ── PAIRS WELL WITH ── -->
+          {%- assign pairs_collection_obj = blank -%}
+          {%- if section.settings.pairs_collection != blank -%}
+            {%- assign pairs_collection_obj = collections[section.settings.pairs_collection] -%}
+          {%- endif -%}
+          {%- if pairs_collection_obj == blank -%}
+            {%- assign pairs_collection_obj = collections.all -%}
+          {%- endif -%}
+          {%- assign pairs_max = section.settings.pairs_limit | default: 12 | plus: 0 -%}
+          {%- assign pairs_heading_text = section.settings.pairs_heading | default: 'PAIRS WELL WITH' -%}
+          {%- assign shown_pairs = 0 -%}
+          {%- if pairs_collection_obj != blank and pairs_collection_obj.products_count > 0 -%}
+            <div class="pw-container" style="margin-top: 1rem; padding: 0 1rem 1rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem;">
+                <h3 style="margin: 0; font-size: 1.05rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 800; color: #111;">
+                  {{ pairs_heading_text | escape }}
+                </h3>
+                <div style="display: inline-flex; gap: 0.4rem;">
+                  <button type="button" data-carousel-dir="-1" aria-label="Scroll left" style="width: 28px; height: 28px; border-radius: 999px; border: 0; background: #000; color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;">‹</button>
+                  <button type="button" data-carousel-dir="1" aria-label="Scroll right" style="width: 28px; height: 28px; border-radius: 999px; border: 0; background: #000; color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;">›</button>
+                </div>
+              </div>
+              <div id="pairs-carousel-track" style="display: flex; gap: 0.65rem; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; padding-bottom: 0.35rem;">
+                {%- for p in pairs_collection_obj.products limit: pairs_max -%}
+                  {%- if p.id != product.id -%}
+                    {%- assign shown_pairs = shown_pairs | plus: 1 -%}
+                    <a href="{{ p.url }}" class="pw-card" style="flex: 0 0 39%; min-width: 130px; max-width: 180px; text-decoration: none; color: inherit; border: 1px solid #ececec; border-radius: 10px; overflow: hidden; background: #fff;">
+                      <div style="aspect-ratio: 3/4; background: #f7f7f7;">
+                        {%- if p.featured_image -%}
+                          <img src="{{ p.featured_image | image_url: width: 420 }}" alt="{{ p.title | escape }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                        {%- else -%}
+                          {{ 'product-1' | placeholder_svg_tag: 'w-full h-full text-gray-300 object-contain' }}
+                        {%- endif -%}
+                      </div>
+                      <div style="padding: 0.55rem 0.6rem 0.65rem;">
+                        <p style="margin: 0 0 0.35rem; font-size: 0.72rem; line-height: 1.35; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                          {{ p.title }}
+                        </p>
+                        <p style="margin: 0; font-size: 0.73rem; font-weight: 700; color: #111;">
+                          {{ p.price | money }}
+                        </p>
+                      </div>
+                    </a>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
 
 
           <!-- ── Social Icons (Dynamic Blocks) ── -->
@@ -2181,6 +2247,12 @@
       const accordionBtn = e.target.closest('.product-accordion-trigger');
       if (accordionBtn) {
         toggleAccordion(accordionBtn);
+        return;
+      }
+
+      const carouselBtn = e.target.closest('[data-carousel-dir]');
+      if (carouselBtn) {
+        scrollPairsCarousel(parseInt(carouselBtn.dataset.carouselDir || '0', 10));
       }
     }, { signal });
 
@@ -2244,6 +2316,14 @@
       btn.classList.remove('active');
       btn.setAttribute('aria-pressed', 'false');
     });
+
+    const pairsTrack = document.getElementById('pairs-carousel-track');
+    if (pairsTrack) {
+      updatePairsArrows(pairsTrack);
+      pairsTrack.addEventListener('scroll', function () {
+        updatePairsArrows(pairsTrack);
+      }, { signal, passive: true });
+    }
 
     initReviewWidget();
     updateSelectedVariant();
@@ -2816,6 +2896,9 @@
     }
   ],
   "blocks": [
+    {
+      "type": "@app"
+    },
     {
       "type": "social_icon",
       "name": "Social Icon",
