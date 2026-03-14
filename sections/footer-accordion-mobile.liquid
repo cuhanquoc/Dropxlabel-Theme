@@ -352,9 +352,40 @@
                     {%- assign ck  = cb.settings.parent_group_key | strip -%}
                     {%- assign lbl = cb.settings.label -%}
                     {%- if ck == group_key and lbl != blank -%}
+                      {%- assign lbl_down = lbl | strip | downcase -%}
+                      {%- assign auto_url = '' -%}
+                      {%- if lbl_down == 'home' -%}
+                        {%- assign auto_url = routes.root_url -%}
+                      {%- elsif lbl_down == 'search' -%}
+                        {%- assign auto_url = routes.search_url -%}
+                      {%- elsif lbl_down == 'collections' or lbl_down == 'all products' -%}
+                        {%- assign auto_url = routes.collections_url -%}
+                      {%- elsif lbl_down == 'about us' or lbl_down == 'about' -%}
+                        {%- assign auto_url = '/pages/about-us' -%}
+                      {%- elsif lbl_down == 'news' -%}
+                        {%- assign auto_url = '/pages/news' -%}
+                      {%- elsif lbl_down == 'privacy policy' -%}
+                        {%- assign auto_url = shop.privacy_policy.url | default: '/policies/privacy-policy' -%}
+                      {%- elsif lbl_down == 'refund policy' -%}
+                        {%- assign auto_url = shop.refund_policy.url | default: '/policies/refund-policy' -%}
+                      {%- elsif lbl_down == 'shipping policy' -%}
+                        {%- assign auto_url = shop.shipping_policy.url | default: '/policies/shipping-policy' -%}
+                      {%- elsif lbl_down == 'terms of service' -%}
+                        {%- assign auto_url = shop.terms_of_service.url | default: '/policies/terms-of-service' -%}
+                      {%- elsif lbl_down == 'contact' or lbl_down == 'contact us' -%}
+                        {%- assign auto_url = '/pages/contact' -%}
+                      {%- elsif lbl_down == 'faq' -%}
+                        {%- assign auto_url = '/pages/faq' -%}
+                      {%- elsif lbl_down == 'track order' -%}
+                        {%- assign auto_url = '/pages/track-order' -%}
+                      {%- endif -%}
+                      {%- assign resolved_url = cb.settings.url -%}
+                      {%- if resolved_url == blank and auto_url != blank -%}
+                        {%- assign resolved_url = auto_url -%}
+                      {%- endif -%}
                       <li class="fam2__link-item" {{ cb.shopify_attributes }}>
-                        {%- if cb.settings.url != blank -%}
-                          <a class="fam2__link" href="{{ cb.settings.url }}"
+                        {%- if resolved_url != blank -%}
+                          <a class="fam2__link" href="{{ resolved_url }}"
                             {%- if cb.settings.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{%- endif -%}
                           >{{- lbl | escape -}}</a>
                         {%- else -%}
@@ -404,9 +435,40 @@
                   {%- assign lbl = block.settings[lbl_key] -%}
                   {%- assign url = block.settings[url_key] -%}
                   {%- if lbl != blank -%}
+                    {%- assign lbl_down = lbl | strip | downcase -%}
+                    {%- assign auto_url = '' -%}
+                    {%- if lbl_down == 'home' -%}
+                      {%- assign auto_url = routes.root_url -%}
+                    {%- elsif lbl_down == 'search' -%}
+                      {%- assign auto_url = routes.search_url -%}
+                    {%- elsif lbl_down == 'collections' or lbl_down == 'all products' -%}
+                      {%- assign auto_url = routes.collections_url -%}
+                    {%- elsif lbl_down == 'about us' or lbl_down == 'about' -%}
+                      {%- assign auto_url = '/pages/about-us' -%}
+                    {%- elsif lbl_down == 'news' -%}
+                      {%- assign auto_url = '/pages/news' -%}
+                    {%- elsif lbl_down == 'privacy policy' -%}
+                      {%- assign auto_url = shop.privacy_policy.url | default: '/policies/privacy-policy' -%}
+                    {%- elsif lbl_down == 'refund policy' -%}
+                      {%- assign auto_url = shop.refund_policy.url | default: '/policies/refund-policy' -%}
+                    {%- elsif lbl_down == 'shipping policy' -%}
+                      {%- assign auto_url = shop.shipping_policy.url | default: '/policies/shipping-policy' -%}
+                    {%- elsif lbl_down == 'terms of service' -%}
+                      {%- assign auto_url = shop.terms_of_service.url | default: '/policies/terms-of-service' -%}
+                    {%- elsif lbl_down == 'contact' or lbl_down == 'contact us' -%}
+                      {%- assign auto_url = '/pages/contact' -%}
+                    {%- elsif lbl_down == 'faq' -%}
+                      {%- assign auto_url = '/pages/faq' -%}
+                    {%- elsif lbl_down == 'track order' -%}
+                      {%- assign auto_url = '/pages/track-order' -%}
+                    {%- endif -%}
+                    {%- assign resolved_url = url -%}
+                    {%- if resolved_url == blank and auto_url != blank -%}
+                      {%- assign resolved_url = auto_url -%}
+                    {%- endif -%}
                     <li class="fam2__link-item">
-                      {%- if url != blank -%}
-                        <a class="fam2__link" href="{{ url }}">{{- lbl | escape -}}</a>
+                      {%- if resolved_url != blank -%}
+                        <a class="fam2__link" href="{{ resolved_url }}">{{- lbl | escape -}}</a>
                       {%- else -%}
                         <span class="fam2__link fam2__link--placeholder" aria-disabled="true">{{- lbl | escape -}}</span>
                       {%- endif -%}
@@ -1219,7 +1281,7 @@
           "type": "url",
           "id": "url",
           "label": "URL",
-          "info": "Leave empty to show as non-clickable text."
+          "info": "Leave empty to auto-map by label: Home/Search/Collections/About us/News/Privacy Policy/Refund Policy/Shipping Policy/Contact/FAQ."
         },
         {
           "type": "checkbox",
@@ -1386,14 +1448,21 @@
           "type": "accordion_link",
           "settings": {
             "parent_group_key": "quick-links",
-            "label": "New Arrivals"
+            "label": "Home"
           }
         },
         {
           "type": "accordion_link",
           "settings": {
             "parent_group_key": "quick-links",
-            "label": "Best Sellers"
+            "label": "Search"
+          }
+        },
+        {
+          "type": "accordion_link",
+          "settings": {
+            "parent_group_key": "quick-links",
+            "label": "Collections"
           }
         },
         {
@@ -1401,6 +1470,13 @@
           "settings": {
             "parent_group_key": "quick-links",
             "label": "About Us"
+          }
+        },
+        {
+          "type": "accordion_link",
+          "settings": {
+            "parent_group_key": "quick-links",
+            "label": "News"
           }
         },
         {
@@ -1415,7 +1491,28 @@
           "type": "accordion_link",
           "settings": {
             "parent_group_key": "support",
-            "label": "Contact Us"
+            "label": "PRIVACY POLICY"
+          }
+        },
+        {
+          "type": "accordion_link",
+          "settings": {
+            "parent_group_key": "support",
+            "label": "REFUND POLICY"
+          }
+        },
+        {
+          "type": "accordion_link",
+          "settings": {
+            "parent_group_key": "support",
+            "label": "SHIPPING POLICY"
+          }
+        },
+        {
+          "type": "accordion_link",
+          "settings": {
+            "parent_group_key": "support",
+            "label": "CONTACT"
           }
         },
         {
@@ -1423,13 +1520,6 @@
           "settings": {
             "parent_group_key": "support",
             "label": "FAQ"
-          }
-        },
-        {
-          "type": "accordion_link",
-          "settings": {
-            "parent_group_key": "support",
-            "label": "Track Order"
           }
         },
         {
