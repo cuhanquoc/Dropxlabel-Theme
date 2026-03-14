@@ -944,14 +944,21 @@
         setTimeout(() => {
           atcBtn.textContent = 'Add to Cart';
           atcBtn.disabled = false;
-          // Update cart count if element exists
-          const cartCount = document.querySelector('[data-cart-count], .cart-count, .header-cart-count');
-          if (cartCount) {
-            fetch('/cart.js')
-              .then(r => r.json())
-              .then(c => { cartCount.textContent = c.item_count; })
-              .catch(() => {});
-          }
+          fetch('/cart.js')
+            .then(r => r.json())
+            .then(c => {
+              document.querySelectorAll('.cart-count').forEach(el => {
+                el.textContent = c.item_count;
+                el.style.display = c.item_count > 0 ? '' : 'none';
+              });
+              const mobBadge = document.getElementById('mob-nav-cart-badge');
+              if (mobBadge) {
+                mobBadge.textContent = c.item_count;
+                mobBadge.style.display = c.item_count > 0 ? '' : 'none';
+              }
+              document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: c } }));
+            })
+            .catch(() => {});
           closeModal();
         }, 1200);
       } else {

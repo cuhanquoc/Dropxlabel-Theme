@@ -101,6 +101,17 @@
     background: var(--header-gold);
     color: #fff;
   }
+
+  @media (max-width: 767px) {
+    header.site-header {
+      padding-left: 1rem !important;
+      padding-right: 1rem !important;
+    }
+
+    header.site-header .header-right-icons {
+      gap: 0.5rem !important;
+    }
+  }
 </style>
 
 <header class="site-header left-0 w-full z-40 py-3 md:py-6 transition-colors duration-300">
@@ -286,7 +297,7 @@
   </a>
 
   <!-- RIGHT: Icon Actions -->
-  <div class="flex items-center gap-4 md:gap-6 header-right-icons">
+  <div class="flex items-center gap-2 md:gap-6 header-right-icons">
 
     <!-- Search Icon -->
     <button class="icon-btn" aria-label="Search" data-action="open-search">
@@ -311,9 +322,7 @@
         <path d="M3 6h18"/>
         <path d="M16 10a4 4 0 0 1-8 0"/>
       </svg>
-      {% if cart.item_count > 0 %}
-        <span class="cart-count">{{ cart.item_count }}</span>
-      {% endif %}
+      <span class="cart-count"{% if cart.item_count == 0 %} style="display:none"{% endif %}>{{ cart.item_count }}</span>
     </button>
 
   </div>

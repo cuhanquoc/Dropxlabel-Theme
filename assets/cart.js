@@ -121,7 +121,7 @@
 
           /* Sync header cart badge */
           const cartCount = document.querySelector('.cart-count');
-          const mobBadge  = document.getElementById('mob-nav-badge');
+          const mobBadge  = document.getElementById('mob-nav-cart-badge');
           fetch('/cart.js')
             .then(r => r.json())
             .then(cart => {
@@ -134,6 +134,7 @@
                 mobBadge.textContent = n;
                 mobBadge.style.display = n > 0 ? '' : 'none';
               }
+              document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: cart } }));
             });
 
           setLoading(false);

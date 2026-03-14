@@ -1019,12 +1019,12 @@
   <!-- ══════════════════════════════════════════
        Main 2-Column Grid: 60% Images / 40% Info
   ══════════════════════════════════════════ -->
-  <div class="grid md:grid-cols-5 gap-8 md:gap-16" style="max-width: 100vw; width: 100%; overflow: hidden; box-sizing: border-box; margin: 0; padding: 0 1rem;">
+  <div class="grid md:grid-cols-5 gap-3 md:gap-16" style="max-width: 100vw; width: 100%; overflow: hidden; box-sizing: border-box; margin: 0; padding: 0 1rem;">
 
     <!-- ── LEFT: Image Gallery ── -->
     <div class="md:col-span-3">
       {% assign gallery_gap = section.settings.gallery_gap | default: 10 %}
-      <div class="product-gallery-stack" style="display: flex; flex-direction: column; gap: {{ gallery_gap }}px; background-color: #fff; width: 100%;">
+      <div class="product-gallery-stack" style="display: flex; flex-direction: column; gap: {{ gallery_gap }}px; background-color: transparent; width: 100%;">
 
         <!-- Main Image -->
         <div class="product-main-image-wrap" style="width: 100%; position: relative; background-color: #f5f4f1; display: block; overflow: hidden; border: 1px solid #e5e5e5; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-radius: 8px; box-sizing: border-box;">
@@ -1056,7 +1056,7 @@
     <!-- / Left Column -->
 
     <!-- ── RIGHT: Product Info (40% = 2/5 cols) — STICKY ── -->
-    <div class="md:col-span-2 px-0 md:px-0" style="padding-top: 1rem; max-width: 100%; box-sizing: border-box; overflow-x: hidden;">
+    <div class="md:col-span-2 px-0 md:px-0" style="padding-top: 0.25rem; max-width: 100%; box-sizing: border-box; overflow-x: hidden;">
       <div class="sticky top-10">
 
         {%- form 'product', product, id: 'product-form', novalidate: 'novalidate' -%}
@@ -1073,7 +1073,7 @@
 
           <!-- Title, Price, Taxes Layout -->
           <div class="product-hero-info-wrap">
-            <h1 class="product-title" style="font-size: clamp(1.8rem, 4vw, 2.2rem); font-weight: 600; line-height: 1.25; margin-bottom: 0.75rem; word-break: break-word; word-wrap: break-word; min-width: 0; width: 100%;">{{ product.title }}</h1>
+            <h1 class="product-title" style="font-size: clamp(1.45rem, 5.2vw, 2rem); font-weight: 600; line-height: 1.18; margin-bottom: 0.5rem; word-break: break-word; word-wrap: break-word; min-width: 0; width: 100%;">{{ product.title }}</h1>
 
             {%- if section.settings.show_rating_row -%}
               {%- assign review_rating_raw = product.metafields.reviews.rating.value | default: product.metafields.reviews.rating | default: 0 -%}
@@ -1270,6 +1270,7 @@
                 name="quantity"
                 value="1"
                 min="1"
+                aria-label="Quantity"
                 style="flex: 1; min-width: 0; text-align: center; border: none; font-family: var(--font-body); font-size: 1.1rem; color: var(--color-text); background: transparent; appearance: textfield;"
               />
               <button
@@ -1867,10 +1868,16 @@
             el.textContent = cart.item_count;
             el.style.display = cart.item_count > 0 ? '' : 'none';
           });
+          const mobBadge = document.getElementById('mob-nav-cart-badge');
+          if (mobBadge) {
+            mobBadge.textContent = cart.item_count;
+            mobBadge.style.display = cart.item_count > 0 ? '' : 'none';
+          }
           const subtotalEl = document.getElementById('cd-subtotal');
           if (subtotalEl) {
             subtotalEl.textContent = (cart.total_price / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' {{ shop.currency }}';
           }
+          document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: cart } }));
         })
         .catch(() => {});
     }

@@ -286,6 +286,18 @@
       this._initActiveState();
     }
 
+    disconnectedCallback() {
+      if (this._onCartUpdated) {
+        document.removeEventListener('cart:updated', this._onCartUpdated);
+      }
+      if (this._onVisibilityChange) {
+        document.removeEventListener('visibilitychange', this._onVisibilityChange);
+      }
+      if (this._menuBtn && this._onMenuClick) {
+        this._menuBtn.removeEventListener('click', this._onMenuClick);
+      }
+    }
+
     /* Slide in after 350ms (allow page paint first) */
     _initSlideIn() {
       requestAnimationFrame(() => {
@@ -315,29 +327,32 @@
       };
 
       /* Listen to Shopify cart section render updates */
-      document.addEventListener('cart:updated', (e) => {
+      this._onCartUpdated = (e) => {
         if (typeof e.detail?.cart?.item_count === 'number') {
           update(e.detail.cart.item_count);
         }
-      });
+      };
+      document.addEventListener('cart:updated', this._onCartUpdated);
 
       /* Also poll on page focus (user switches tabs) */
-      document.addEventListener('visibilitychange', () => {
+      this._onVisibilityChange = () => {
         if (document.visibilityState === 'visible') {
           fetch('/cart.js')
             .then(r => r.json())
             .then(d => update(d.item_count))
             .catch(() => {});
         }
-      });
+      };
+      document.addEventListener('visibilitychange', this._onVisibilityChange);
     }
 
     _initMenuButton() {
-      const menuBtn = this.querySelector('[data-mob-menu-open]');
-      if (menuBtn) {
-        menuBtn.addEventListener('click', function () {
+      this._menuBtn = this.querySelector('[data-mob-menu-open]');
+      if (this._menuBtn) {
+        this._onMenuClick = function () {
           if (typeof MobileCollectionMenu !== 'undefined') MobileCollectionMenu.open();
-        });
+        };
+        this._menuBtn.addEventListener('click', this._onMenuClick);
       }
     }
 

@@ -16,6 +16,7 @@
           <p class="text-green-400 text-sm">{{ 'footer.newsletter.success' | t }}</p>
         {%- else -%}
           <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <label for="footer-email" class="sr-only">{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}</label>
             <input
               type="email"
               name="contact[email]"
