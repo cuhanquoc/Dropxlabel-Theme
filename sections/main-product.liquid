@@ -2083,7 +2083,6 @@
         e.preventDefault();
 
         const variantId = root.querySelector('#selected-variant-id')?.value;
-        const quantity = parseInt(root.querySelector('#qty-input')?.value || 1, 10);
         if (!variantId) {
           setBtnError(selectLabel);
           return;
@@ -2091,10 +2090,13 @@
 
         setBtnLoading();
 
+        const payload = new FormData(form);
+        payload.set('id', variantId);
+
         fetch('/cart/add.js', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ id: parseInt(variantId, 10), quantity: quantity })
+          headers: { 'Accept': 'application/json' },
+          body: payload
         })
           .then(async r => {
             if (!r.ok) {
@@ -2107,6 +2109,9 @@
             setBtnSuccess();
             refreshCartCount();
             if (typeof window.CartDrawer !== 'undefined') {
+              if (typeof window.CartDrawer.refresh === 'function') {
+                window.CartDrawer.refresh();
+              }
               window.CartDrawer.open();
             }
           })

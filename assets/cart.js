@@ -18,8 +18,9 @@
     }
 
     function open() {
-      if (isOpen) return;
       if (!ensureElements()) return;
+      refreshDrawerSection();
+      if (isOpen) return;
       isOpen = true;
       document.body.style.overflow = 'hidden';
       OVERLAY.classList.add('open');
@@ -166,7 +167,7 @@
       if (e.key === 'Escape' && isOpen) close();
     });
 
-    return { open, close, toggle, removeItem, updateQty, updateCartNote };
+    return { open, close, toggle, removeItem, updateQty, updateCartNote, refresh: refreshDrawerSection };
 
   }());
 
