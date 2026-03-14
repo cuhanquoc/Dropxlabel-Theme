@@ -35,10 +35,13 @@
       ],
       "settings": {
         "gallery_gap": 2,
-        "show_rating_row": true,
-        "show_recommend_percent": true,
-        "rating_label_text": "Reviews",
         "price_promo_text": "WE MADE TOO MUCH",
+        "pdp_title_size": 26,
+        "pdp_compare_price_size": 16,
+        "pdp_sale_price_size": 32,
+        "pdp_promo_size": 12,
+        "pdp_taxes_size": 14,
+        "more_payment_options_color": "#9ca3af",
         "choose_size_text": "Choose size",
         "choose_color_text": "Choose color",
         "select_size_button_text": "Select a size",
@@ -47,7 +50,9 @@
         "pickup_title": "Pickup available at California Warehouse",
         "pickup_time": "Usually ready in 24 hours",
         "delivery_text": "Free delivery within 2 days",
+        "delivery_icon_svg": "<svg fill=\"none\" height=\"24\" viewbox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg>",
         "returns_text": "Free + easy returns",
+        "returns_icon_svg": "<svg fill=\"none\" height=\"24\" viewbox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"m3 9a9 9 0 1 0 5-6.5l-3 2\"></path><path d=\"m2 2v6h6\"></path><path d=\"m9 11v6l3-1.5 3 1.5v-6z\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></svg>",
         "show_info_actions": true,
         "info_actions_heading": "",
         "primary_info_action_title": "DESCRIPTIONS",
@@ -62,7 +67,8 @@
         "pairs_heading": "PAIRS WELL WITH",
         "pairs_limit": 12,
         "pairs_initial": 6,
-        "pairs_more_label": "More"
+        "pairs_more_label": "More",
+        "pairs_less_label": "Less"
       }
     },
     "marquee-ticker-related": {
