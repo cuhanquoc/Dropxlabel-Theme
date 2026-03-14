@@ -3,6 +3,12 @@
   assign card_bg = section.settings.card_background_color | default: 'var(--color-background, #ffffff)'
   assign hero_overlay_opacity = section.settings.hero_overlay_opacity | divided_by: 100.0
   assign form_id = 'SupportContactForm-' | append: section.id
+  assign success_message = 'Thanks for contacting us. We will reply as soon as possible.'
+  assign first_name_label = 'First name'
+  assign last_name_label = 'Last name'
+  assign email_label = 'Email'
+  assign phone_label = 'Phone number'
+  assign comment_label = 'Comment'
 -%}
 
 <section
@@ -55,7 +61,7 @@
         {%- form 'contact', id: form_id, class: 'sc-form' -%}
           {%- if form.posted_successfully? -%}
             <p class="sc-form__feedback sc-form__feedback--success" role="status">
-              {{ 'templates.contact.form.post_success' | t | default: 'Thanks for contacting us. We will reply as soon as possible.' }}
+              {{ success_message }}
             </p>
           {%- endif -%}
 
@@ -68,7 +74,7 @@
           <div class="sc-form__grid">
             <div class="sc-field">
               <label class="sc-label sr-only" for="sc-name-{{ section.id }}">
-                {{ 'templates.contact.form.name' | t | default: 'First name' }}
+                {{ first_name_label }}
               </label>
               <input
                 id="sc-name-{{ section.id }}"
@@ -77,13 +83,13 @@
                 name="contact[name]"
                 autocomplete="given-name"
                 value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.first_name | escape }}{% endif %}"
-                placeholder="{{ 'templates.contact.form.name' | t | default: 'First name' }}"
+                placeholder="{{ first_name_label }}"
               >
             </div>
 
             <div class="sc-field">
               <label class="sc-label sr-only" for="sc-last-name-{{ section.id }}">
-                {{ 'customer.name.last_name' | t | default: 'Last name' }}
+                {{ last_name_label }}
               </label>
               <input
                 id="sc-last-name-{{ section.id }}"
@@ -92,13 +98,13 @@
                 name="contact[last_name]"
                 autocomplete="family-name"
                 value="{{ form.last_name | escape }}"
-                placeholder="{{ 'customer.name.last_name' | t | default: 'Last name' }}"
+                placeholder="{{ last_name_label }}"
               >
             </div>
 
             <div class="sc-field">
               <label class="sc-label sr-only" for="sc-email-{{ section.id }}">
-                {{ 'templates.contact.form.email' | t | default: 'Email' }}
+                {{ email_label }}
               </label>
               <input
                 id="sc-email-{{ section.id }}"
@@ -110,13 +116,13 @@
                 autocapitalize="off"
                 required
                 value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
-                placeholder="{{ 'templates.contact.form.email' | t | default: 'Email' }}"
+                placeholder="{{ email_label }}"
               >
             </div>
 
             <div class="sc-field">
               <label class="sc-label sr-only" for="sc-phone-{{ section.id }}">
-                {{ 'templates.contact.form.phone' | t | default: 'Phone' }}
+                {{ phone_label }}
               </label>
               <input
                 id="sc-phone-{{ section.id }}"
@@ -125,20 +131,20 @@
                 name="contact[phone]"
                 autocomplete="tel"
                 value="{% if form.phone %}{{ form.phone | escape }}{% elsif customer %}{{ customer.phone | escape }}{% endif %}"
-                placeholder="{{ 'templates.contact.form.phone' | t | default: 'Phone number' }}"
+                placeholder="{{ phone_label }}"
               >
             </div>
 
             <div class="sc-field sc-field--full">
               <label class="sc-label sr-only" for="sc-message-{{ section.id }}">
-                {{ 'templates.contact.form.comment' | t | default: 'Comment' }}
+                {{ comment_label }}
               </label>
               <textarea
                 id="sc-message-{{ section.id }}"
                 class="sc-input sc-textarea"
                 name="contact[body]"
                 rows="6"
-                placeholder="{{ 'templates.contact.form.comment' | t | default: 'Comment' }}"
+                placeholder="{{ comment_label }}"
               >{{- form.body | escape -}}</textarea>
             </div>
           </div>
