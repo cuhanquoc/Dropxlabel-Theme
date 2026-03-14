@@ -1,394 +1,163 @@
-{% comment %} HEADER — CSS → src/input.css {% endcomment %}
-
-
 {%- liquid
-  assign is_home = false
-  if request.page_type == 'index'
-    assign is_home = true
-  endif
+  assign nav_link_blocks = section.blocks | where: 'type', 'nav_link'
 -%}
-<style>
-  /* ── Design tokens (UI Pro Max · Quiet Luxury) ─────────────────── */
-  :root {
-    --header-gold:        #CA8A04;
-    --header-dark:        #0C0A09;
-    --header-blur:        blur(20px) saturate(180%);
-    --header-glass:       rgba(250, 250, 249, 0.88);
-    --header-transition:  350ms cubic-bezier(0.4, 0, 0.2, 1);
-  }
 
-  /* ── Sticky base — starts transparent ──────────────────────────── */
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 40;
-    background: transparent;
-    border-bottom: 1px solid transparent;
-    transition:
-      background var(--header-transition),
-      border-color var(--header-transition),
-      backdrop-filter var(--header-transition),
-      -webkit-backdrop-filter var(--header-transition);
-  }
+<header class="dx-header" data-section-id="{{ section.id }}">
+  <div class="dx-header__inner">
+    <div class="dx-header__left">
+      <button
+        id="hamburger-btn"
+        type="button"
+        class="dx-menu-btn"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-collection-menu"
+        data-action="open-collection-menu"
+      >
+        <span class="dx-menu-btn__line"></span>
+        <span class="dx-menu-btn__line"></span>
+        <span class="dx-menu-btn__line"></span>
+      </button>
 
-  /* ── Scrolled state (JS toggles .is-scrolled) ───────────────────── */
-  .site-header.is-scrolled {
-    background: var(--header-glass);
-    backdrop-filter: var(--header-blur);
-    -webkit-backdrop-filter: var(--header-blur);
-    border-bottom-color: rgba(202, 138, 4, 0.18);
-  }
+      <nav class="dx-nav-desktop" aria-label="Primary">
+        <a href="{{ routes.root_url }}" class="dx-nav-link nav-link">Home</a>
 
-  /* ── Text & icon colour (inherits from header state) ────────────── */
-  .site-header,
-  .nav-link,
-  .icon-btn,
-  .mega-trigger { color: var(--header-dark) !important; }
-  .hamburger-line { background-color: var(--header-dark) !important; }
-  .site-header svg { stroke: var(--header-dark) !important; }
-  /* Logo: invert ensures white logos show on transparent/dark hero */
-  .header-logo-img { filter: invert(0); }
+        <div class="dx-catalog">
+          <a href="{{ routes.collections_url }}" class="dx-nav-link nav-link" aria-haspopup="true">
+            Catalog
+            <svg class="dx-nav-link__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </a>
 
-  /* ── Nav links — gold sliding underline ─────────────────────────── */
-  .nav-link {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    text-decoration: none;
-    position: relative;
-    padding-bottom: 3px;
-  }
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: var(--header-gold);
-    transition: width 180ms ease;
-  }
-  .nav-link:hover::after,
-  .mega-trigger:hover .nav-link::after { width: 100%; }
+          <div class="dx-mega" role="menu" aria-label="Catalog menu">
+            <div class="dx-mega__media-col">
+              <a href="{{ section.settings.mega_image_link | default: routes.collections_url }}" class="dx-mega__card" role="menuitem">
+                {% if section.settings.mega_image != blank %}
+                  {{ section.settings.mega_image | image_url: width: 900 | image_tag: class: 'dx-mega__image', loading: 'lazy', alt: section.settings.mega_image_label | default: "Women's Fashion" }}
+                {% else %}
+                  <div class="dx-mega__image dx-mega__image--placeholder" role="img" aria-label="{{ section.settings.mega_image_label | default: "Women's Fashion" }}"></div>
+                {% endif %}
+                <div class="dx-mega__label-wrap">
+                  <span class="dx-mega__label">{{ section.settings.mega_image_label | default: "Women's Fashion" }}</span>
+                  <span class="dx-mega__label-icon" aria-hidden="true">↗</span>
+                </div>
+              </a>
 
-  /* ── Icon hover → gold ──────────────────────────────────────────── */
-  .icon-btn {
-    transition: opacity 150ms ease;
-    cursor: pointer;
-  }
-  .icon-btn:hover { opacity: 0.75; }
-  .icon-btn:hover svg { stroke: var(--header-gold) !important; }
+              <a href="{{ section.settings.mega_video_link | default: routes.collections_url }}" class="dx-mega__card" role="menuitem">
+                {% if section.settings.mega_video != blank %}
+                  <video class="dx-mega__image" autoplay muted loop playsinline preload="metadata">
+                    {% for source in section.settings.mega_video.sources %}
+                      <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                    {% endfor %}
+                  </video>
+                {% else %}
+                  <div class="dx-mega__image dx-mega__image--placeholder" role="img" aria-label="{{ section.settings.mega_video_label | default: "Men's Fashion" }}"></div>
+                {% endif %}
+                <div class="dx-mega__label-wrap">
+                  <span class="dx-mega__label">{{ section.settings.mega_video_label | default: "Men's Fashion" }}</span>
+                  <span class="dx-mega__label-icon" aria-hidden="true">↗</span>
+                </div>
+              </a>
+            </div>
 
-  /* ── Mega menu — frosted glass panel ────────────────────────────── */
-  .mega-menu {
-    background: var(--header-glass);
-    backdrop-filter: var(--header-blur);
-    -webkit-backdrop-filter: var(--header-blur);
-    border: 1px solid rgba(202, 138, 4, 0.12);
-    border-top: 2px solid var(--header-gold);
-    box-shadow: 0 24px 64px rgba(12, 10, 9, 0.12), 0 4px 16px rgba(12, 10, 9, 0.06);
-  }
+            <div class="dx-mega__links-col">
+              {% for block in section.blocks %}
+                {% if block.type == 'mega_column' %}
+                  <div class="dx-mega__column" {{ block.shopify_attributes }}>
+                    <p class="dx-mega__title" style="font-size: {{ block.settings.title_font_size | default: 14 }}px; font-weight: {{ block.settings.title_font_weight | default: '700' }}; color: {{ block.settings.title_color | default: '#1a1a1a' }};">
+                      {{ block.settings.title | default: 'Collection' }}
+                    </p>
+                    <ul class="dx-mega__list" role="none">
+                      {% if block.settings.link_1_label != blank %}<li><a href="{{ block.settings.link_1_url | default: routes.collections_url }}" role="menuitem">{{ block.settings.link_1_label }}</a></li>{% endif %}
+                      {% if block.settings.link_2_label != blank %}<li><a href="{{ block.settings.link_2_url | default: routes.collections_url }}" role="menuitem">{{ block.settings.link_2_label }}</a></li>{% endif %}
+                      {% if block.settings.link_3_label != blank %}<li><a href="{{ block.settings.link_3_url | default: routes.collections_url }}" role="menuitem">{{ block.settings.link_3_label }}</a></li>{% endif %}
+                      {% if block.settings.link_4_label != blank %}<li><a href="{{ block.settings.link_4_url | default: routes.collections_url }}" role="menuitem">{{ block.settings.link_4_label }}</a></li>{% endif %}
+                      {% if block.settings.link_5_label != blank %}<li><a href="{{ block.settings.link_5_url | default: routes.collections_url }}" role="menuitem">{{ block.settings.link_5_label }}</a></li>{% endif %}
+                      {% if block.settings.link_6_label != blank %}<li><a href="{{ block.settings.link_6_url | default: routes.collections_url }}" role="menuitem">{{ block.settings.link_6_label }}</a></li>{% endif %}
+                      {% if block.settings.link_7_label != blank %}<li><a href="{{ block.settings.link_7_url | default: routes.collections_url }}" role="menuitem">{{ block.settings.link_7_label }}</a></li>{% endif %}
+                      {% if block.settings.link_8_label != blank %}<li><a href="{{ block.settings.link_8_url | default: routes.collections_url }}" role="menuitem">{{ block.settings.link_8_label }}</a></li>{% endif %}
+                    </ul>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
 
-  /* ── Mega col links — subtle gold on hover ──────────────────────── */
-  .mega-col ul a {
-    transition: color 150ms ease;
-  }
-  .mega-col ul a:hover { color: var(--header-gold); }
+        {%- if nav_link_blocks.size > 0 -%}
+          {%- for block in nav_link_blocks -%}
+            {%- if block.settings.label != blank -%}
+              <a href="{{ block.settings.url | default: '#' }}" class="dx-nav-link nav-link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="dx-nav-link nav-link">About</a>
+          <a href="{{ routes.blogs_url }}" class="dx-nav-link nav-link">Blogs</a>
+        {%- endif -%}
+      </nav>
+    </div>
 
-  /* ── Cart count badge ───────────────────────────────────────────── */
-  .cart-count {
-    background: var(--header-gold);
-    color: #fff;
-  }
+    <a href="{{ routes.root_url }}" class="dx-logo" style="--dx-logo-width: {{ section.settings.logo_width | default: 120 }}px;">
+      {% if section.settings.logo_image != blank %}
+        {{ section.settings.logo_image | image_url: width: 420 | image_tag: class: 'dx-logo__image', loading: 'eager', alt: shop.name }}
+      {% else %}
+        <span class="dx-logo__text">{{ section.settings.logo_text | default: shop.name }}</span>
+      {% endif %}
+    </a>
 
-  @media (max-width: 767px) {
-    /* Keep outer header flush; control horizontal gutter from inner wrapper */
-    header.site-header {
-      padding-left: 0 !important;
-      padding-right: 0 !important;
-    }
+    <div class="dx-header__right" aria-label="Header actions">
+      <button class="dx-icon-btn icon-btn" aria-label="Search" data-action="open-search" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+      </button>
 
-    header.site-header > .mx-auto {
-      position: relative;
-      min-height: 48px;
-    }
-
-    /* Keep logo visually centered but remove it from flex flow on mobile */
-    header.site-header .header-logo-wrap {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      max-width: 46vw;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    /* Keep hamburger in normal flow on the left; push icon cluster to right */
-    header.site-header .hamburger-btn {
-      position: relative;
-      left: auto;
-      top: auto;
-      transform: none;
-      z-index: 2;
-    }
-
-    header.site-header .header-right-icons {
-      position: relative;
-      right: auto;
-      top: auto;
-      transform: none;
-      margin-left: auto !important;
-      justify-content: flex-end;
-      flex: 0 0 auto;
-      gap: 0.35rem !important;
-      z-index: 2;
-    }
-  }
-</style>
-
-<header class="site-header left-0 w-full z-40 py-3 md:py-6 transition-colors duration-300">
-  <div class="mx-auto max-w-screen-xl w-full flex justify-between items-center px-4 md:px-10">
-
-  <!-- LEFT: Navigation Links -->
-  <!-- Hamburger Button (mobile only) -->
-  <button type="button" class="hamburger-btn" id="hamburger-btn"
-          aria-label="Open menu" aria-expanded="false" aria-controls="mobile-collection-menu"
-          data-action="open-collection-menu">
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-  </button>
-
-  <nav class="hidden md:flex items-center gap-8">
-    <a href="{{ routes.root_url }}" class="nav-link">Home</a>
-
-    <!-- Catalog with Mega Menu -->
-    <div class="mega-trigger">
-      <a href="{{ routes.collections_url }}" class="nav-link">
-        Catalog
-        <svg class="chevron-down" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="m6 9 6 6 6-6"/>
+      <a href="{{ routes.account_url }}" class="dx-icon-btn icon-btn" aria-label="My Account">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
         </svg>
       </a>
 
-      <!-- ═══ MEGA MENU PANEL ═══ -->
-      <div class="mega-menu">
-
-        <!-- Left: 2 Image Panels -->
-        <div class="mega-images">
-
-          <!-- Panel 1 -->
-          <a href="{{ section.settings.mega_image_link | default: routes.collections_url }}" class="mega-img-panel">
-            {% if section.settings.mega_image != blank %}
-              <img
-                src="{{ section.settings.mega_image | image_url: width: 800 }}"
-                alt="{{ section.settings.mega_image_label | default: 'Fashion' }}"
-                loading="lazy"
-              />
-            {% else %}
-              {%- comment -%}Shopify-hosted image not set — render CSS block to avoid third-party request{%- endcomment -%}
-              <div
-                class="mega-img-placeholder"
-                style="width:800px;height:600px;max-width:100%;background:#1a1a1a;display:block;"
-                role="img"
-                aria-label="{{ section.settings.mega_image_label | default: "Women's Fashion" }}"
-              ></div>
-            {% endif %}
-            <div class="mega-img-label">
-              <span class="mega-img-label-text">{{ section.settings.mega_image_label | default: "Women's Fashion" }}</span>
-              <span class="mega-img-label-arrow">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M7 17 17 7M7 7h10v10"/>
-                </svg>
-              </span>
-            </div>
-          </a>
-
-          <!-- Panel 2 — Video -->
-          <a href="{{ section.settings.mega_video_link | default: routes.collections_url }}" class="mega-video-panel">
-            {% if section.settings.mega_video != blank %}
-              <video
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="metadata"
-              >
-                {% for source in section.settings.mega_video.sources %}
-                  <source src="{{ source.url }}" type="{{ source.mime_type }}">
-                {% endfor %}
-              </video>
-            {% else %}
-              <!-- No video uploaded: render a styled placeholder to avoid external CDN dependency -->
-              <div
-                style="width:100%;height:100%;background:linear-gradient(160deg,#1a1a1a 0%,#2e2e2e 50%,#111 100%);display:flex;align-items:center;justify-content:center;"
-                role="img"
-                aria-label="{{ section.settings.mega_video_label | default: "Men's Fashion" }}"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <polygon points="5 3 19 12 5 21 5 3"/>
-                </svg>
-              </div>
-            {% endif %}
-            <div class="mega-img-label">
-              <span class="mega-img-label-text">{{ section.settings.mega_video_label | default: "Men's Fashion" }}</span>
-              <span class="mega-img-label-arrow">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M7 17 17 7M7 7h10v10"/>
-                </svg>
-              </span>
-            </div>
-          </a>
-
-        </div>
-
-        <!-- Right: Collection Columns (dynamic blocks) -->
-        <div class="mega-cols">
-          {% for block in section.blocks %}
-            {% if block.type == 'mega_column' %}
-              <div class="mega-col" {{ block.shopify_attributes }}>
-                <p class="mega-col-title" style="
-                  font-size: {{ block.settings.title_font_size | default: 14 }}px;
-                  font-weight: {{ block.settings.title_font_weight | default: '700' }};
-                  color: {{ block.settings.title_color | default: '#1a1a1a' }};
-                ">
-                  {{ block.settings.title | default: 'Collection' }}
-                </p>
-                <ul>
-                  {% if block.settings.link_1_label != blank %}
-                    <li><a href="{{ block.settings.link_1_url | default: routes.collections_url }}">{{ block.settings.link_1_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_2_label != blank %}
-                    <li><a href="{{ block.settings.link_2_url | default: routes.collections_url }}">{{ block.settings.link_2_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_3_label != blank %}
-                    <li><a href="{{ block.settings.link_3_url | default: routes.collections_url }}">{{ block.settings.link_3_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_4_label != blank %}
-                    <li><a href="{{ block.settings.link_4_url | default: routes.collections_url }}">{{ block.settings.link_4_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_5_label != blank %}
-                    <li><a href="{{ block.settings.link_5_url | default: routes.collections_url }}">{{ block.settings.link_5_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_6_label != blank %}
-                    <li><a href="{{ block.settings.link_6_url | default: routes.collections_url }}">{{ block.settings.link_6_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_7_label != blank %}
-                    <li><a href="{{ block.settings.link_7_url | default: routes.collections_url }}">{{ block.settings.link_7_label }}</a></li>
-                  {% endif %}
-                  {% if block.settings.link_8_label != blank %}
-                    <li><a href="{{ block.settings.link_8_url | default: routes.collections_url }}">{{ block.settings.link_8_label }}</a></li>
-                  {% endif %}
-                </ul>
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-
-        <!-- Close button -->
-        <button class="mega-close" data-action="mega-close" aria-label="Close menu">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 6 6 18M6 6l12 12"/>
-          </svg>
-        </button>
-
-      </div>
-      <!-- / MEGA MENU PANEL -->
-
+      <button class="dx-icon-btn dx-icon-btn--cart icon-btn" aria-label="Shopping Cart" data-action="open-cart" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+          <path d="M3 6h18"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        <span class="cart-count"{% if cart.item_count == 0 %} style="display:none"{% endif %}>{{ cart.item_count }}</span>
+      </button>
     </div>
-    <!-- / Catalog with Mega Menu -->
-
-    {%- comment -%} Dynamic nav links — add via Customizer > Header > Add block > Nav Link {%- endcomment -%}
-    {%- assign nav_link_blocks = section.blocks | where: 'type', 'nav_link' -%}
-    {%- if nav_link_blocks.size > 0 -%}
-      {%- for block in nav_link_blocks -%}
-        {%- if block.settings.label != blank -%}
-          <a href="{{ block.settings.url | default: '#' }}" class="nav-link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
-        {%- endif -%}
-      {%- endfor -%}
-    {%- else -%}
-      {%- comment -%} Fallback: hardcode defaults (shown when no nav_link blocks added yet) {%- endcomment -%}
-      <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="nav-link">About</a>
-      <a href="{{ routes.blogs_url }}" class="nav-link">Blogs</a>
-    {%- endif -%}
-  </nav>
-
-  <!-- CENTER: Brand Logo -->
-  <a href="{{ routes.root_url }}" class="header-logo header-logo-wrap">
-    {% if section.settings.logo_image != blank %}
-      <img
-        src="{{ section.settings.logo_image | image_url: width: 400 }}"
-        alt="{{ shop.name }}"
-        class="header-logo-img"
-        style="max-width: {{ section.settings.logo_width | default: 120 }}px; height: auto;"
-        loading="eager"
-      />
-    {% else %}
-      {{ section.settings.logo_text | default: shop.name }}
-    {% endif %}
-  </a>
-
-  <!-- RIGHT: Icon Actions -->
-  <div class="flex items-center gap-2 md:gap-6 header-right-icons">
-
-    <!-- Search Icon -->
-    <button class="icon-btn" aria-label="Search" data-action="open-search">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/>
-        <path d="m21 21-4.3-4.3"/>
-      </svg>
-    </button>
-
-    <!-- Account Icon -->
-    <a href="{{ routes.account_url }}" class="icon-btn" aria-label="My Account">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="8" r="4"/>
-        <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-      </svg>
-    </a>
-
-    <!-- Cart Icon -->
-    <button class="icon-btn relative" aria-label="Shopping Cart" data-action="open-cart">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
-        <path d="M3 6h18"/>
-        <path d="M16 10a4 4 0 0 1-8 0"/>
-      </svg>
-      <span class="cart-count"{% if cart.item_count == 0 %} style="display:none"{% endif %}>{{ cart.item_count }}</span>
-    </button>
-
-  </div>
   </div>
 </header>
 
-<!-- ═══ MOBILE MENU OVERLAY ═══ -->
-<div class="mobile-menu-overlay" id="mobile-menu">
-  <a href="{{ routes.root_url }}" class="mobile-nav-link" data-action="close-mobile-menu">Home</a>
-  <a href="{{ routes.collections_url }}" class="mobile-nav-link" data-action="close-mobile-menu">Catalog</a>
-  <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="mobile-nav-link" data-action="close-mobile-menu">About</a>
-  <a href="{{ routes.blogs_url }}" class="mobile-nav-link" data-action="close-mobile-menu">Blogs</a>
+<div id="mobile-menu" class="dx-mobile-menu" aria-hidden="true" role="dialog" aria-label="Site menu" aria-modal="true">
+  <a href="{{ routes.root_url }}" class="dx-mobile-menu__link" data-action="close-mobile-menu">Home</a>
+  <a href="{{ routes.collections_url }}" class="dx-mobile-menu__link" data-action="close-mobile-menu">Catalog</a>
+  <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="dx-mobile-menu__link" data-action="close-mobile-menu">About</a>
+  <a href="{{ routes.blogs_url }}" class="dx-mobile-menu__link" data-action="close-mobile-menu">Blogs</a>
 
-  <div class="mobile-menu-divider"></div>
-
-  <div class="mobile-menu-icons">
-    <button class="mobile-menu-icon-link" data-action="close-mobile-menu open-search" style="background:none;border:none;cursor:pointer;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <div class="dx-mobile-menu__icons">
+    <button class="dx-mobile-menu__icon-link" data-action="close-mobile-menu open-search" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="11" cy="11" r="8"/>
         <path d="m21 21-4.3-4.3"/>
       </svg>
       Search
     </button>
-    <a href="{{ routes.account_url }}" class="mobile-menu-icon-link" data-action="close-mobile-menu">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+
+    <a href="{{ routes.account_url }}" class="dx-mobile-menu__icon-link" data-action="close-mobile-menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="12" cy="8" r="4"/>
         <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
       </svg>
       Account
     </a>
-    <button class="mobile-menu-icon-link" data-action="close-mobile-menu open-cart" style="background:none;border:none;cursor:pointer;">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+
+    <button class="dx-mobile-menu__icon-link" data-action="close-mobile-menu open-cart" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
         <path d="M3 6h18"/>
         <path d="M16 10a4 4 0 0 1-8 0"/>
@@ -399,41 +168,76 @@
 </div>
 
 <script>
-  /* ── Click action dispatcher ────────────────────────────────── */
-  document.addEventListener('click', function(e) {
-    var btn = e.target.closest('[data-action]');
-    if (!btn) return;
-    btn.dataset.action.split(' ').forEach(function(action) {
-      if (action === 'mega-close') {
-        var panel = btn.closest('.mega-menu');
-        if (panel) {
-          panel.style.pointerEvents = 'none';
-          panel.style.clipPath = 'inset(0 0 100% 0)';
-          panel.style.opacity = '0';
+(function () {
+  var KEY = '__dx_header_v2_init';
+  if (window[KEY]) return;
+  window[KEY] = true;
+
+  function setHamburgerExpanded(expanded) {
+    var btn = document.getElementById('hamburger-btn');
+    if (btn) btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  }
+
+  function closeAllMenus() {
+    if (typeof window.MobileMenu !== 'undefined') window.MobileMenu.close();
+    if (typeof window.MobileCollectionMenu !== 'undefined') window.MobileCollectionMenu.close();
+    setHamburgerExpanded(false);
+  }
+
+  document.addEventListener('click', function (event) {
+    var trigger = event.target.closest('[data-action]');
+    if (!trigger) return;
+
+    var actions = trigger.dataset.action.split(' ');
+    actions.forEach(function (action) {
+      if (action === 'close-mobile-menu') {
+        closeAllMenus();
+        return;
+      }
+
+      if (action === 'open-collection-menu') {
+        if (typeof window.MobileCollectionMenu !== 'undefined') {
+          window.MobileCollectionMenu.open();
+        } else if (typeof window.MobileMenu !== 'undefined') {
+          window.MobileMenu.open();
         }
-      } else if (action === 'close-mobile-menu') {
-        if (typeof MobileMenu !== 'undefined') MobileMenu.close();
-        if (typeof MobileCollectionMenu !== 'undefined') MobileCollectionMenu.close();
-      } else if (action === 'open-collection-menu') {
-        if (typeof MobileCollectionMenu !== 'undefined') MobileCollectionMenu.open();
-      } else if (action === 'open-search') {
-        if (typeof PredictiveSearch !== 'undefined') PredictiveSearch.open();
-      } else if (action === 'open-cart') {
-        if (typeof CartDrawer !== 'undefined') CartDrawer.open();
+        setHamburgerExpanded(true);
+        return;
+      }
+
+      if (action === 'toggle-mobile-menu') {
+        if (typeof window.MobileMenu !== 'undefined') {
+          window.MobileMenu.toggle();
+        }
+        return;
+      }
+
+      if (action === 'open-search' && typeof window.PredictiveSearch !== 'undefined') {
+        window.PredictiveSearch.open();
+        return;
+      }
+
+      if (action === 'open-cart' && typeof window.CartDrawer !== 'undefined') {
+        window.CartDrawer.open();
       }
     });
   });
 
-  /* ── Frosted glass on scroll ─────────────────────────────────── */
-  (function () {
-    var header = document.querySelector('.site-header');
-    if (!header) return;
-    function tick() { header.classList.toggle('is-scrolled', window.scrollY > 40); }
-    tick();
-    window.addEventListener('scroll', tick, { passive: true });
-  })();
-</script>
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeAllMenus();
+  });
 
+  var header = document.querySelector('.dx-header');
+  if (!header) return;
+
+  function updateHeaderState() {
+    header.classList.toggle('is-scrolled', window.scrollY > 12);
+  }
+
+  updateHeaderState();
+  window.addEventListener('scroll', updateHeaderState, { passive: true });
+})();
+</script>
 {% schema %}
 {
   "name": "Header",

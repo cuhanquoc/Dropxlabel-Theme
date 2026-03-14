@@ -2767,3 +2767,413 @@ textarea.ma-form-field {
         scroll-behavior: auto !important;
     }
 }
+/* ═══════════════════════════════════════════════════════
+   HEADER V2 — rebuild for stable mobile left/right layout
+   ═══════════════════════════════════════════════════════ */
+.dx-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(250, 250, 249, 0.96);
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
+    border-bottom: 1px solid rgba(12, 10, 9, 0.08);
+    transition: box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.dx-header.is-scrolled {
+    box-shadow: 0 10px 28px rgba(12, 10, 9, 0.08);
+    border-bottom-color: rgba(12, 10, 9, 0.14);
+}
+
+.dx-header__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    min-height: 56px;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    column-gap: 1rem;
+    position: relative;
+}
+
+.dx-header__left {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.dx-menu-btn {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    color: #0c0a09;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.dx-menu-btn__line {
+    display: block;
+    width: 24px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+}
+
+.dx-nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+}
+
+.dx-nav-link {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #0c0a09;
+    text-decoration: none;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.dx-nav-link__chevron {
+    width: 12px;
+    height: 12px;
+    transition: transform 200ms ease;
+}
+
+.dx-catalog {
+    position: relative;
+}
+
+.dx-catalog:hover .dx-nav-link__chevron,
+.dx-catalog:focus-within .dx-nav-link__chevron {
+    transform: rotate(180deg);
+}
+
+.dx-mega {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+    width: min(1100px, 92vw);
+    min-height: 420px;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid rgba(12, 10, 9, 0.12);
+    box-shadow: 0 24px 54px rgba(12, 10, 9, 0.14);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity 220ms ease, transform 220ms ease, visibility 220ms ease;
+    z-index: 70;
+    overflow: hidden;
+}
+
+.dx-catalog:hover .dx-mega,
+.dx-catalog:focus-within .dx-mega {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+.dx-mega__media-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100%;
+}
+
+.dx-mega__card {
+    position: relative;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.dx-mega__image {
+    width: 100%;
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    display: block;
+}
+
+.dx-mega__image--placeholder {
+    background: linear-gradient(160deg, #1b1b1b 0%, #2e2e2e 50%, #101010 100%);
+}
+
+.dx-mega__card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.62) 100%);
+}
+
+.dx-mega__label-wrap {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.dx-mega__label {
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.dx-mega__label-icon {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 999px;
+    font-size: 0.9rem;
+}
+
+.dx-mega__links-col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0;
+    padding: 2.2rem 2rem;
+    align-content: start;
+}
+
+.dx-mega__column {
+    padding: 0 1rem;
+}
+
+.dx-mega__title {
+    margin: 0 0 0.9rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.dx-mega__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.45rem;
+}
+
+.dx-mega__list a {
+    color: #555;
+    text-decoration: none;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    transition: color 140ms ease;
+}
+
+.dx-mega__list a:hover {
+    color: #0c0a09;
+}
+
+.dx-logo {
+    justify-self: center;
+    color: #f5f5f4;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    max-width: min(46vw, var(--dx-logo-width, 120px));
+}
+
+.dx-logo__image {
+    display: block;
+    width: 100%;
+    max-width: var(--dx-logo-width, 120px);
+    height: auto;
+}
+
+.dx-logo__text {
+    font-size: 1.8rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dx-header__right {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.55rem;
+}
+
+.dx-icon-btn {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+    color: #0c0a09;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 999px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.dx-icon-btn:hover {
+    background: rgba(12, 10, 9, 0.06);
+}
+
+.cart-count {
+    position: absolute;
+    top: 3px;
+    right: 1px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #ca8a04;
+    color: #fff;
+    font-size: 0.68rem;
+    line-height: 18px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.dx-mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 5rem 1.5rem 2.5rem;
+    background: rgba(12, 10, 9, 0.97);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 220ms ease, visibility 220ms ease;
+}
+
+.dx-mobile-menu.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.dx-mobile-menu__link {
+    color: #fff;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    font-size: 0.95rem;
+    font-weight: 600;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.dx-mobile-menu__icons {
+    margin-top: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.dx-mobile-menu__icon-link {
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    min-width: 54px;
+    min-height: 44px;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+}
+
+@media (max-width: 767px) {
+    .dx-header__inner {
+        display: flex;
+        min-height: 56px;
+        padding: 0 1rem;
+        gap: 0;
+    }
+
+    .dx-menu-btn {
+        display: inline-flex;
+        z-index: 2;
+    }
+
+    .dx-nav-desktop {
+        display: none;
+    }
+
+    .dx-logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+        pointer-events: auto;
+        max-width: 44vw;
+    }
+
+    .dx-logo__text {
+        font-size: 1.55rem;
+        opacity: 0.25;
+    }
+
+    .dx-header__right {
+        margin-left: auto;
+        justify-self: auto;
+        gap: 0.35rem;
+        z-index: 2;
+    }
+
+    .dx-icon-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .dx-mega {
+        display: none;
+    }
+
+    .dx-mobile-menu {
+        display: flex;
+    }
+}
+
+@media (min-width: 768px) {
+    .dx-menu-btn {
+        display: none;
+    }
+
+    .dx-mobile-menu {
+        display: none !important;
+    }
+}
