@@ -1546,7 +1546,7 @@
             </div>
           {%- endif -%}
 
-          <!-- ── PAIRS WELL WITH ── -->
+          <!-- ── PAIRS WELL WITH (3 columns + More) ── -->
           {%- assign pairs_collection_obj = blank -%}
           {%- if section.settings.pairs_collection != blank -%}
             {%- assign pairs_collection_obj = collections[section.settings.pairs_collection] -%}
@@ -1555,24 +1555,28 @@
             {%- assign pairs_collection_obj = collections.all -%}
           {%- endif -%}
           {%- assign pairs_max = section.settings.pairs_limit | default: 12 | plus: 0 -%}
+          {%- assign pairs_initial = section.settings.pairs_initial | default: 6 | plus: 0 -%}
           {%- assign pairs_heading_text = section.settings.pairs_heading | default: 'PAIRS WELL WITH' -%}
+          {%- assign pairs_more_text = section.settings.pairs_more_label | default: 'More' -%}
           {%- assign shown_pairs = 0 -%}
           {%- if pairs_collection_obj != blank and pairs_collection_obj.products_count > 0 -%}
-            <div class="pw-container" style="margin-top: 1rem; padding: 0 1rem 1rem;">
+            <div class="pw-container" data-pw-grid-wrap style="margin-top: 1rem; padding: 0 1rem 1rem;">
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem;">
                 <h3 style="margin: 0; font-size: 1.05rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 800; color: #111;">
                   {{ pairs_heading_text | escape }}
                 </h3>
-                <div style="display: inline-flex; gap: 0.4rem;">
-                  <button type="button" data-carousel-dir="-1" aria-label="Scroll left" style="width: 28px; height: 28px; border-radius: 999px; border: 0; background: #000; color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;">‹</button>
-                  <button type="button" data-carousel-dir="1" aria-label="Scroll right" style="width: 28px; height: 28px; border-radius: 999px; border: 0; background: #000; color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer;">›</button>
-                </div>
               </div>
-              <div id="pairs-carousel-track" style="display: flex; gap: 0.65rem; overflow-x: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; padding-bottom: 0.35rem;">
+              <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.65rem;">
                 {%- for p in pairs_collection_obj.products limit: pairs_max -%}
                   {%- if p.id != product.id -%}
                     {%- assign shown_pairs = shown_pairs | plus: 1 -%}
-                    <a href="{{ p.url }}" class="pw-card" style="flex: 0 0 39%; min-width: 130px; max-width: 180px; text-decoration: none; color: inherit; border: 1px solid #ececec; border-radius: 10px; overflow: hidden; background: #fff;">
+                    <a
+                      href="{{ p.url }}"
+                      class="pw-card"
+                      data-pw-item
+                      {% if shown_pairs > pairs_initial %}hidden{% endif %}
+                      style="text-decoration: none; color: inherit; border: 1px solid #ececec; border-radius: 10px; overflow: hidden; background: #fff;"
+                    >
                       <div style="aspect-ratio: 3/4; background: #f7f7f7;">
                         {%- if p.featured_image -%}
                           <img src="{{ p.featured_image | image_url: width: 420 }}" alt="{{ p.title | escape }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; display: block;">
@@ -1592,6 +1596,18 @@
                   {%- endif -%}
                 {%- endfor -%}
               </div>
+              {%- if shown_pairs > pairs_initial -%}
+                <div style="display: flex; justify-content: center; margin-top: 0.9rem;">
+                  <button
+                    type="button"
+                    data-pw-more-btn
+                    data-batch="3"
+                    style="min-width: 120px; height: 38px; border: 1px solid #111; border-radius: 999px; background: #fff; color: #111; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; padding: 0 1rem;"
+                  >
+                    {{ pairs_more_text | escape }}
+                  </button>
+                </div>
+              {%- endif -%}
             </div>
           {%- endif -%}
 
@@ -2175,25 +2191,26 @@
       }, { signal });
     })();
 
-    function updatePairsArrows(track) {
-      if (!track) return;
-      const THRESHOLD = 1;
-      const atStart = track.scrollLeft <= THRESHOLD;
-      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - THRESHOLD;
-      const container = track.closest('.pw-container');
+    function initPairsMore() {
+      const container = root.querySelector('[data-pw-grid-wrap]');
       if (!container) return;
-      const btnLeft = container.querySelector('[data-carousel-dir="-1"]');
-      const btnRight = container.querySelector('[data-carousel-dir="1"]');
-      if (btnLeft) btnLeft.style.backgroundColor = atStart ? '#888' : '#000';
-      if (btnRight) btnRight.style.backgroundColor = atEnd ? '#888' : '#000';
-    }
+      const items = Array.from(container.querySelectorAll('[data-pw-item]'));
+      const moreBtn = container.querySelector('[data-pw-more-btn]');
+      if (!moreBtn) return;
 
-    function scrollPairsCarousel(dir) {
-      const track = document.getElementById('pairs-carousel-track');
-      if (!track) return;
-      const card = track.querySelector('.pw-card');
-      const scrollAmt = card ? card.offsetWidth + 12 : 200;
-      track.scrollBy({ left: dir * scrollAmt, behavior: 'smooth' });
+      const batch = Math.max(1, parseInt(moreBtn.dataset.batch || '3', 10));
+      function refreshMoreButton() {
+        const hiddenItems = items.filter(item => item.hasAttribute('hidden'));
+        moreBtn.style.display = hiddenItems.length ? 'inline-flex' : 'none';
+      }
+
+      moreBtn.addEventListener('click', function () {
+        const hiddenItems = items.filter(item => item.hasAttribute('hidden'));
+        hiddenItems.slice(0, batch).forEach(item => item.removeAttribute('hidden'));
+        refreshMoreButton();
+      }, { signal });
+
+      refreshMoreButton();
     }
 
     root.addEventListener('click', function (e) {
@@ -2250,10 +2267,6 @@
         return;
       }
 
-      const carouselBtn = e.target.closest('[data-carousel-dir]');
-      if (carouselBtn) {
-        scrollPairsCarousel(parseInt(carouselBtn.dataset.carouselDir || '0', 10));
-      }
     }, { signal });
 
     if (infoSheet) {
@@ -2317,13 +2330,7 @@
       btn.setAttribute('aria-pressed', 'false');
     });
 
-    const pairsTrack = document.getElementById('pairs-carousel-track');
-    if (pairsTrack) {
-      updatePairsArrows(pairsTrack);
-      pairsTrack.addEventListener('scroll', function () {
-        updatePairsArrows(pairsTrack);
-      }, { signal, passive: true });
-    }
+    initPairsMore();
 
     initReviewWidget();
     updateSelectedVariant();
