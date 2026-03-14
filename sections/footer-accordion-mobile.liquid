@@ -16,6 +16,10 @@
     --fam2-legal-size: {{ section.settings.legal_size }}px;
     --fam2-legal-weight: {{ section.settings.legal_weight }};
     --fam2-legal-spacing: {{ section.settings.legal_spacing | divided_by: 1000.0 }}em;
+    --fam2-bar-copyright-size: {{ section.settings.bar_copyright_size | default: 13 }}px;
+    --fam2-bar-copyright-weight: {{ section.settings.bar_copyright_weight | default: '400' }};
+    --fam2-bar-copyright-spacing: {{ section.settings.bar_copyright_spacing | default: 40 | divided_by: 1000.0 }}em;
+    --fam2-bar-copyright-color: {{ section.settings.bar_copyright_color | default: section.settings.bar_text_color | default: '#888888' }};
   "
 >
 
@@ -59,14 +63,14 @@
     }
     .fam2-bar__copyright {
       font-family: var(--font-body, sans-serif);
-      font-size: .62rem;
-      font-weight: 400;
-      letter-spacing: .04em;
-      color: var(--fam2-bar-text, #888);
+      font-size: var(--fam2-bar-copyright-size, 13px);
+      font-weight: var(--fam2-bar-copyright-weight, 400);
+      letter-spacing: var(--fam2-bar-copyright-spacing, .04em);
+      color: var(--fam2-bar-copyright-color, var(--fam2-bar-text, #888));
       text-align: center;
     }
     .fam2-bar__copyright a {
-      color: var(--fam2-bar-text, #888);
+      color: var(--fam2-bar-copyright-color, var(--fam2-bar-text, #888));
       text-decoration: none;
       opacity: .8;
     }
@@ -118,12 +122,15 @@
       overflow: visible;
       box-shadow: none;
     }
+    .fam2__inner > .fnl:first-child {
+      padding-top: calc(var(--fnl-pad-top) * 0.45);
+    }
 
     .fnl__marquee {
       overflow: hidden;
       white-space: nowrap;
       display: block;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       line-height: 1;
     }
     .fnl__marquee-rail {
@@ -436,7 +443,7 @@
           --fnl-mq-speed: {{ mq_speed }}s;
           --fnl-sub-size: {{ block.settings.nl_subcopy_size | default: 13 }}px;
           --fnl-sub-weight: {{ block.settings.nl_subcopy_weight | default: '400' }};
-          --fnl-pad-top: {{ block.settings.nl_padding_top | default: 32 }}px;
+          --fnl-pad-top: {{ block.settings.nl_padding_top | default: 12 }}px;
           --fnl-pad-bottom: {{ block.settings.nl_padding_bottom | default: 32 }}px;
         ">
 
@@ -606,6 +613,10 @@
     --fam2-bar-text: {{ section.settings.bar_text_color | default: '#888888' }};
     --fam2-bar-icon-radius: {{ section.settings.bar_icon_radius | default: 4 }}px;
     --fam2-bar-gap: {{ section.settings.bar_spacing | default: 6 }}px;
+    --fam2-bar-copyright-size: {{ section.settings.bar_copyright_size | default: 13 }}px;
+    --fam2-bar-copyright-weight: {{ section.settings.bar_copyright_weight | default: '400' }};
+    --fam2-bar-copyright-spacing: {{ section.settings.bar_copyright_spacing | default: 40 | divided_by: 1000.0 }}em;
+    --fam2-bar-copyright-color: {{ section.settings.bar_copyright_color | default: section.settings.bar_text_color | default: '#888888' }};
   ">
 
     {%- if section.settings.bar_show_locale -%}
@@ -620,7 +631,11 @@
 
     <div class="fam2-bar__row fam2-bar__legal-row">
       <span class="fam2-bar__copyright">
-        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}.
+        {%- if section.settings.bar_copyright_text != blank -%}
+          {{ section.settings.bar_copyright_text | escape }}
+        {%- else -%}
+          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}.
+        {%- endif -%}
         {%- if section.settings.bar_show_powered %}
           {{ powered_by_link }}
         {%- endif -%}
@@ -877,6 +892,50 @@
       "default": "#888888"
     },
     {
+      "type": "text",
+      "id": "bar_copyright_text",
+      "label": "Copyright text",
+      "default": "© 2025 Dropxlabel. All rights reserved."
+    },
+    {
+      "type": "range",
+      "id": "bar_copyright_size",
+      "label": "Copyright font size",
+      "min": 10,
+      "max": 22,
+      "step": 1,
+      "default": 13,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "bar_copyright_weight",
+      "label": "Copyright font weight",
+      "options": [
+        { "value": "300", "label": "Light 300" },
+        { "value": "400", "label": "Regular 400" },
+        { "value": "500", "label": "Medium 500" },
+        { "value": "600", "label": "SemiBold 600" },
+        { "value": "700", "label": "Bold 700" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "bar_copyright_spacing",
+      "label": "Copyright letter spacing (x1000 em)",
+      "min": 0,
+      "max": 160,
+      "step": 5,
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "bar_copyright_color",
+      "label": "Copyright color",
+      "default": "#888888"
+    },
+    {
       "type": "range",
       "id": "bar_icon_radius",
       "label": "Payment icon corner radius",
@@ -1096,7 +1155,7 @@
           "type": "range",
           "id": "nl_padding_top",
           "label": "Top padding",
-          "min": 8, "max": 64, "step": 4, "default": 32, "unit": "px"
+          "min": 0, "max": 64, "step": 4, "default": 12, "unit": "px"
         },
         {
           "type": "range",

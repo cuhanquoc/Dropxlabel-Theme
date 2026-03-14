@@ -58,59 +58,6 @@
     letter-spacing: -0.01em;
   }
 
-  .product-review-row {
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-    margin-bottom: 0.9rem;
-  }
-
-  .product-review-stars {
-    position: relative;
-    display: inline-block;
-    font-size: 0.82rem;
-    line-height: 1;
-    letter-spacing: 0.12em;
-  }
-
-  .product-review-stars-base {
-    color: #b5b5b5;
-  }
-
-  .product-review-stars-fill {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 0%;
-    overflow: hidden;
-    color: #111111;
-    white-space: nowrap;
-    pointer-events: none;
-  }
-
-  .product-review-count {
-    font-family: var(--font-body);
-    font-size: 0.78rem;
-    color: #3d3d3d;
-    letter-spacing: 0.02em;
-  }
-
-  .product-review-recommend {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-family: var(--font-body);
-    font-size: 0.78rem;
-    color: #111111;
-  }
-
-  .product-review-recommend svg {
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
-  }
-
   /* Price */
   .product-price {
     font-family: var(--font-body);
@@ -721,10 +668,6 @@
       box-shadow: none;
       margin-bottom: var(--mobile-space-3) !important;
     }
-    #main-product.mobile-compact-enabled .product-review-row {
-      margin-bottom: var(--mobile-space-1);
-      gap: var(--mobile-space-1);
-    }
     #main-product.mobile-compact-enabled .product-variants-wrap {
       margin-bottom: var(--mobile-space-2);
     }
@@ -1122,42 +1065,6 @@
           <div class="product-hero-info-wrap">
             <h1 class="product-title" style="font-size: clamp(1.45rem, 5.2vw, 2rem); font-weight: 600; line-height: 1.18; margin-bottom: 0.5rem; word-break: break-word; word-wrap: break-word; min-width: 0; width: 100%;">{{ product.title }}</h1>
 
-            {%- if section.settings.show_rating_row -%}
-              {%- assign review_rating_raw = product.metafields.reviews.rating.value | default: product.metafields.reviews.rating | default: 0 -%}
-              {%- assign review_count_raw = product.metafields.reviews.count.value | default: product.metafields.reviews.count | default: 0 -%}
-              {%- assign review_recommend_raw = product.metafields.reviews.recommend_percent.value | default: product.metafields.reviews.recommend_percent | default: 0 -%}
-              {%- assign review_rating = review_rating_raw | plus: 0 -%}
-              {%- assign review_count = review_count_raw | plus: 0 -%}
-              {%- assign review_recommend = review_recommend_raw | plus: 0 -%}
-              {%- assign review_fill = review_rating | times: 20 -%}
-              <div
-                class="product-review-row"
-                data-review-widget
-                data-review-label="{{ section.settings.rating_label_text | default: 'Reviews' | escape }}"
-                data-metafield-rating="{{ review_rating }}"
-                data-metafield-count="{{ review_count }}"
-                data-metafield-recommend="{{ review_recommend }}"
-                data-app-rating=""
-                data-app-count=""
-                data-app-recommend=""
-              >
-                <span class="product-review-stars" aria-hidden="true">
-                  <span class="product-review-stars-base">★★★★★</span>
-                  <span class="product-review-stars-fill" data-review-stars-fill style="width: {{ review_fill }}%;">★★★★★</span>
-                </span>
-                <span class="product-review-count" data-review-count-text>{{ review_count }} {{ section.settings.rating_label_text | default: 'Reviews' }}</span>
-                {%- if section.settings.show_recommend_percent -%}
-                  <span class="product-review-recommend" data-review-recommend-wrap>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                      <path d="M7 11V5a3 3 0 0 1 3-3l.7 6.4a2.5 2.5 0 0 1-.5 1.8L8.7 12H18a2 2 0 0 1 2 2l-1.2 6a2 2 0 0 1-2 1.6H7z"></path>
-                      <path d="M3 11h4v11H3z"></path>
-                    </svg>
-                    <span data-review-recommend-text>{{ review_recommend }}%</span>
-                  </span>
-                {%- endif -%}
-              </div>
-            {%- endif -%}
-            
             <div style="display: flex; flex-direction: column; gap: 8px;">
               <div style="display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 12px; row-gap: 6px; font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 700;">
                 <span
@@ -1436,7 +1343,13 @@
           <div class="product-benefits-wrap" style="display: flex; gap: 1rem; justify-content: space-between; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1.5rem 1rem; margin-bottom: 3rem; width: 100%; box-sizing: border-box;">
             {%- if has_delivery_text -%}
             <div style="display: flex; align-items: center; gap: 10px;">
-               <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+               <span style="display:inline-flex; width:24px; height:24px; align-items:center; justify-content:center;">
+                 {%- if section.settings.delivery_icon_svg != blank -%}
+                   {{ section.settings.delivery_icon_svg }}
+                 {%- else -%}
+                   <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                 {%- endif -%}
+               </span>
                <span style="font-size: 0.95rem;">{{ section.settings.delivery_text | default: 'Free delivery within 2 days' }}</span>
             </div>
             {%- endif -%}
@@ -1445,7 +1358,13 @@
             {%- endif -%}
             {%- if has_returns_text -%}
             <div style="display: flex; align-items: center; gap: 10px;">
-               <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m3 9a9 9 0 1 0 5-6.5l-3 2"/><path d="m2 2v6h6"/><path d="m9 11v6l3-1.5 3 1.5v-6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+               <span style="display:inline-flex; width:24px; height:24px; align-items:center; justify-content:center;">
+                 {%- if section.settings.returns_icon_svg != blank -%}
+                   {{ section.settings.returns_icon_svg }}
+                 {%- else -%}
+                   <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m3 9a9 9 0 1 0 5-6.5l-3 2"/><path d="m2 2v6h6"/><path d="m9 11v6l3-1.5 3 1.5v-6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                 {%- endif -%}
+               </span>
                <span style="font-size: 0.95rem; padding: 2px 4px; border-radius: 4px;">{{ section.settings.returns_text | default: 'Free + easy returns' }}</span>
             </div>
             {%- endif -%}
@@ -1710,8 +1629,6 @@
   </div>
 </div>
 
-{% render 'product-reviews', product: product %}
-
 <script>
   (function () {
     const root = document.getElementById('main-product');
@@ -1760,16 +1677,6 @@
     let infoSheetClearTimer = null;
     const infoSheetDragState = { active: false, startY: 0, deltaY: 0 };
 
-    function clamp(value, min, max) {
-      return Math.min(max, Math.max(min, value));
-    }
-
-    function parseNumber(value) {
-      if (value === '' || value === null || typeof value === 'undefined') return null;
-      const n = Number(value);
-      return Number.isFinite(n) ? n : null;
-    }
-
     function setAtcVisualState(opts) {
       if (!atcBtn) return;
       atcBtn.disabled = !!opts.disabled;
@@ -1790,53 +1697,6 @@
 
     function setAtcSoldOut() {
       setAtcVisualState({ disabled: true, inactive: false, text: soldOutLabel });
-    }
-
-    function initReviewWidget() {
-      const reviewWidget = root.querySelector('[data-review-widget]');
-      if (!reviewWidget) return;
-
-      const starsFill = reviewWidget.querySelector('[data-review-stars-fill]');
-      const countText = reviewWidget.querySelector('[data-review-count-text]');
-      const recommendWrap = reviewWidget.querySelector('[data-review-recommend-wrap]');
-      const recommendText = reviewWidget.querySelector('[data-review-recommend-text]');
-
-      function syncReviewValues() {
-        const appRating = parseNumber(reviewWidget.dataset.appRating);
-        const appCount = parseNumber(reviewWidget.dataset.appCount);
-        const appRecommend = parseNumber(reviewWidget.dataset.appRecommend);
-        const mfRating = parseNumber(reviewWidget.dataset.metafieldRating) || 0;
-        const mfCount = parseNumber(reviewWidget.dataset.metafieldCount) || 0;
-        const mfRecommend = parseNumber(reviewWidget.dataset.metafieldRecommend) || 0;
-
-        const rating = clamp(appRating !== null ? appRating : mfRating, 0, 5);
-        const count = clamp(Math.round(appCount !== null ? appCount : mfCount), 0, 999999);
-        const recommend = clamp(Math.round(appRecommend !== null ? appRecommend : mfRecommend), 0, 100);
-        const label = reviewWidget.dataset.reviewLabel || 'Reviews';
-
-        if (starsFill) {
-          starsFill.style.width = `${rating * 20}%`;
-        }
-        if (countText) {
-          countText.textContent = `${count} ${label}`;
-        }
-        if (recommendText) {
-          recommendText.textContent = `${recommend}%`;
-        }
-        if (recommendWrap) {
-          recommendWrap.style.display = 'inline-flex';
-        }
-        reviewWidget.setAttribute('aria-label', `${rating.toFixed(1)} out of 5 stars from ${count} ${label}`);
-      }
-
-      syncReviewValues();
-
-      const observer = new MutationObserver(syncReviewValues);
-      observer.observe(reviewWidget, {
-        attributes: true,
-        attributeFilter: ['data-app-rating', 'data-app-count', 'data-app-recommend']
-      });
-      signal.addEventListener('abort', () => observer.disconnect(), { once: true });
     }
 
     function adjustQty(delta) {
@@ -2359,7 +2219,6 @@
 
     initPairsMore();
 
-    initReviewWidget();
     updateSelectedVariant();
   })();
 </script>
@@ -2714,28 +2573,6 @@
     },
     {
       "type": "header",
-      "content": "Review Row"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_rating_row",
-      "label": "Show rating row",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_recommend_percent",
-      "label": "Show recommend icon + percent",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "rating_label_text",
-      "label": "Rating label text",
-      "default": "Reviews"
-    },
-    {
-      "type": "header",
       "content": "Price Row"
     },
     {
@@ -2797,16 +2634,28 @@
       "default": "Usually ready in 24 hours"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "delivery_text",
       "label": "Delivery Text",
       "default": "Free delivery within 2 days"
     },
     {
-      "type": "text",
+      "type": "textarea",
+      "id": "delivery_icon_svg",
+      "label": "Delivery icon SVG (optional)",
+      "default": "<svg fill=\"none\" height=\"24\" viewBox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"
+    },
+    {
+      "type": "textarea",
       "id": "returns_text",
       "label": "Returns Text",
       "default": "Free + easy returns"
+    },
+    {
+      "type": "textarea",
+      "id": "returns_icon_svg",
+      "label": "Returns icon SVG (optional)",
+      "default": "<svg fill=\"none\" height=\"24\" viewBox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"m3 9a9 9 0 1 0 5-6.5l-3 2\"/><path d=\"m2 2v6h6\"/><path d=\"m9 11v6l3-1.5 3 1.5v-6z\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"
     },
     {
       "type": "checkbox",
