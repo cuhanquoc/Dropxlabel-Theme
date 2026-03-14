@@ -9,6 +9,8 @@
   assign email_label = 'Email'
   assign phone_label = 'Phone number'
   assign comment_label = 'Comment'
+  assign success_heading = section.settings.success_heading | default: 'Thank you for contacting us'
+  assign success_description = section.settings.success_description | default: 'We received your message and will get back to you as soon as possible.'
 -%}
 
 <section
@@ -60,98 +62,105 @@
 
         {%- form 'contact', id: form_id, class: 'sc-form' -%}
           {%- if form.posted_successfully? -%}
-            <p class="sc-form__feedback sc-form__feedback--success" role="status">
-              {{ success_message }}
-            </p>
+            <div class="sc-success" role="status" tabindex="-1">
+              <div class="sc-success__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6 9 17l-5-5"></path>
+                </svg>
+              </div>
+              <h3 class="sc-success__title">{{ success_heading }}</h3>
+              <p class="sc-success__description">{{ success_description }}</p>
+              <p class="sc-success__note">{{ success_message }}</p>
+            </div>
+          {%- else -%}
+            {%- if form.errors -%}
+              <div class="sc-form__feedback sc-form__feedback--error" role="alert">
+                {{ form.errors | default_errors }}
+              </div>
+            {%- endif -%}
+
+            <div class="sc-form__grid">
+              <div class="sc-field">
+                <label class="sc-label sr-only" for="sc-name-{{ section.id }}">
+                  {{ first_name_label }}
+                </label>
+                <input
+                  id="sc-name-{{ section.id }}"
+                  class="sc-input"
+                  type="text"
+                  name="contact[name]"
+                  autocomplete="given-name"
+                  value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.first_name | escape }}{% endif %}"
+                  placeholder="{{ first_name_label }}"
+                >
+              </div>
+
+              <div class="sc-field">
+                <label class="sc-label sr-only" for="sc-last-name-{{ section.id }}">
+                  {{ last_name_label }}
+                </label>
+                <input
+                  id="sc-last-name-{{ section.id }}"
+                  class="sc-input"
+                  type="text"
+                  name="contact[last_name]"
+                  autocomplete="family-name"
+                  value="{{ form.last_name | escape }}"
+                  placeholder="{{ last_name_label }}"
+                >
+              </div>
+
+              <div class="sc-field">
+                <label class="sc-label sr-only" for="sc-email-{{ section.id }}">
+                  {{ email_label }}
+                </label>
+                <input
+                  id="sc-email-{{ section.id }}"
+                  class="sc-input"
+                  type="email"
+                  name="contact[email]"
+                  autocomplete="email"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  required
+                  value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
+                  placeholder="{{ email_label }}"
+                >
+              </div>
+
+              <div class="sc-field">
+                <label class="sc-label sr-only" for="sc-phone-{{ section.id }}">
+                  {{ phone_label }}
+                </label>
+                <input
+                  id="sc-phone-{{ section.id }}"
+                  class="sc-input"
+                  type="tel"
+                  name="contact[phone]"
+                  autocomplete="tel"
+                  value="{% if form.phone %}{{ form.phone | escape }}{% elsif customer %}{{ customer.phone | escape }}{% endif %}"
+                  placeholder="{{ phone_label }}"
+                >
+              </div>
+
+              <div class="sc-field sc-field--full">
+                <label class="sc-label sr-only" for="sc-message-{{ section.id }}">
+                  {{ comment_label }}
+                </label>
+                <textarea
+                  id="sc-message-{{ section.id }}"
+                  class="sc-input sc-textarea"
+                  name="contact[body]"
+                  rows="6"
+                  placeholder="{{ comment_label }}"
+                >{{- form.body | escape -}}</textarea>
+              </div>
+            </div>
+
+            <button class="sc-submit" type="submit">
+              {{ section.settings.submit_label | default: 'Send' }}
+            </button>
           {%- endif -%}
-
-          {%- if form.errors -%}
-            <div class="sc-form__feedback sc-form__feedback--error" role="alert">
-              {{ form.errors | default_errors }}
-            </div>
-          {%- endif -%}
-
-          <div class="sc-form__grid">
-            <div class="sc-field">
-              <label class="sc-label sr-only" for="sc-name-{{ section.id }}">
-                {{ first_name_label }}
-              </label>
-              <input
-                id="sc-name-{{ section.id }}"
-                class="sc-input"
-                type="text"
-                name="contact[name]"
-                autocomplete="given-name"
-                value="{% if form.name %}{{ form.name | escape }}{% elsif customer %}{{ customer.first_name | escape }}{% endif %}"
-                placeholder="{{ first_name_label }}"
-              >
-            </div>
-
-            <div class="sc-field">
-              <label class="sc-label sr-only" for="sc-last-name-{{ section.id }}">
-                {{ last_name_label }}
-              </label>
-              <input
-                id="sc-last-name-{{ section.id }}"
-                class="sc-input"
-                type="text"
-                name="contact[last_name]"
-                autocomplete="family-name"
-                value="{{ form.last_name | escape }}"
-                placeholder="{{ last_name_label }}"
-              >
-            </div>
-
-            <div class="sc-field">
-              <label class="sc-label sr-only" for="sc-email-{{ section.id }}">
-                {{ email_label }}
-              </label>
-              <input
-                id="sc-email-{{ section.id }}"
-                class="sc-input"
-                type="email"
-                name="contact[email]"
-                autocomplete="email"
-                autocorrect="off"
-                autocapitalize="off"
-                required
-                value="{% if form.email %}{{ form.email | escape }}{% elsif customer %}{{ customer.email | escape }}{% endif %}"
-                placeholder="{{ email_label }}"
-              >
-            </div>
-
-            <div class="sc-field">
-              <label class="sc-label sr-only" for="sc-phone-{{ section.id }}">
-                {{ phone_label }}
-              </label>
-              <input
-                id="sc-phone-{{ section.id }}"
-                class="sc-input"
-                type="tel"
-                name="contact[phone]"
-                autocomplete="tel"
-                value="{% if form.phone %}{{ form.phone | escape }}{% elsif customer %}{{ customer.phone | escape }}{% endif %}"
-                placeholder="{{ phone_label }}"
-              >
-            </div>
-
-            <div class="sc-field sc-field--full">
-              <label class="sc-label sr-only" for="sc-message-{{ section.id }}">
-                {{ comment_label }}
-              </label>
-              <textarea
-                id="sc-message-{{ section.id }}"
-                class="sc-input sc-textarea"
-                name="contact[body]"
-                rows="6"
-                placeholder="{{ comment_label }}"
-              >{{- form.body | escape -}}</textarea>
-            </div>
-          </div>
-
-          <button class="sc-submit" type="submit">
-            {{ section.settings.submit_label | default: 'Send' }}
-          </button>
         {%- endform -%}
       </article>
     </div>
@@ -303,6 +312,51 @@
 
   #SupportContact-{{ section.id }} .sc-form__feedback--error {
     background: rgba(239, 68, 68, 0.13);
+  }
+
+  #SupportContact-{{ section.id }} .sc-success {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+    padding: 8px 0 4px;
+  }
+
+  #SupportContact-{{ section.id }} .sc-success__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(16, 185, 129, 0.12);
+    color: rgb(5, 150, 105);
+  }
+
+  #SupportContact-{{ section.id }} .sc-success__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  #SupportContact-{{ section.id }} .sc-success__title {
+    margin: 0;
+    font-size: clamp(1.25rem, 4.8vw, 1.45rem);
+    line-height: 1.25;
+    color: inherit;
+  }
+
+  #SupportContact-{{ section.id }} .sc-success__description,
+  #SupportContact-{{ section.id }} .sc-success__note {
+    margin: 0;
+    line-height: 1.6;
+    color: inherit;
+  }
+
+  #SupportContact-{{ section.id }} .sc-success__description {
+    opacity: 0.8;
+  }
+
+  #SupportContact-{{ section.id }} .sc-success__note {
+    opacity: 0.7;
   }
 
   #SupportContact-{{ section.id }} .sc-form__grid {
@@ -508,6 +562,18 @@
       "id": "submit_label",
       "label": "Submit button label",
       "default": "Send"
+    },
+    {
+      "type": "text",
+      "id": "success_heading",
+      "label": "Success heading",
+      "default": "Thank you for contacting us"
+    },
+    {
+      "type": "textarea",
+      "id": "success_description",
+      "label": "Success description",
+      "default": "We received your message and will get back to you as soon as possible."
     },
     {
       "type": "text",
