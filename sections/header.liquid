@@ -112,7 +112,6 @@
     header.site-header > .mx-auto {
       position: relative;
       min-height: 48px;
-      justify-content: center;
     }
 
     /* Keep logo visually centered but remove it from flex flow on mobile */
@@ -126,24 +125,25 @@
       text-overflow: ellipsis;
     }
 
-    /* Lock hamburger to left edge */
+    /* Keep hamburger in normal flow on the left; push icon cluster to right */
     header.site-header .hamburger-btn {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
+      position: relative;
+      left: auto;
+      top: auto;
+      transform: none;
+      z-index: 2;
     }
 
-    /* Tighten icon cluster on the right per mobile mock */
     header.site-header .header-right-icons {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      margin-left: 0 !important;
+      position: relative;
+      right: auto;
+      top: auto;
+      transform: none;
+      margin-left: auto !important;
       justify-content: flex-end;
       flex: 0 0 auto;
       gap: 0.35rem !important;
+      z-index: 2;
     }
   }
 </style>
