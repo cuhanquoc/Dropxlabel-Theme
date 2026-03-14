@@ -89,6 +89,21 @@
       if (wrap) wrap.style.opacity = on ? '0.5' : '1';
     }
 
+    function syncCartBadgesFromCartObject(cart) {
+      if (!cart) return;
+      const n = cart.item_count || 0;
+      document.querySelectorAll('.cart-count').forEach(cartCount => {
+        cartCount.textContent = n;
+        cartCount.style.display = n > 0 ? '' : 'none';
+      });
+      const mobBadge = document.getElementById('mob-nav-cart-badge');
+      if (mobBadge) {
+        mobBadge.textContent = n;
+        mobBadge.style.display = n > 0 ? '' : 'none';
+      }
+      document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: cart } }));
+    }
+
     /* Re-render cart drawer HTML via Shopify Section Rendering API.
        No full page reload — only the cart-drawer snippet content updates. */
     function refreshDrawerSection() {
@@ -119,27 +134,31 @@
           const curCount = document.getElementById('cd-count');
           if (newCount && curCount) curCount.textContent = newCount.textContent;
 
+          /* Update grand total if present */
+          const newGrand = doc.getElementById('cd-grand-total');
+          const curGrand = document.getElementById('cd-grand-total');
+          if (newGrand && curGrand) curGrand.textContent = newGrand.textContent;
+
           /* Sync header cart badge */
-          const cartCount = document.querySelector('.cart-count');
-          const mobBadge  = document.getElementById('mob-nav-cart-badge');
           fetch('/cart.js')
             .then(r => r.json())
-            .then(cart => {
-              const n = cart.item_count;
-              if (cartCount) {
-                cartCount.textContent = n;
-                cartCount.style.display = n > 0 ? '' : 'none';
-              }
-              if (mobBadge) {
-                mobBadge.textContent = n;
-                mobBadge.style.display = n > 0 ? '' : 'none';
-              }
-              document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: cart } }));
-            });
+            .then(syncCartBadgesFromCartObject)
+            .catch(() => {});
 
           setLoading(false);
         })
         .catch(() => setLoading(false));
+    }
+
+    function updateCartNote(note) {
+      fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ note: note || '' })
+      })
+        .then(r => r.json())
+        .then(syncCartBadgesFromCartObject)
+        .catch(() => {});
     }
 
     /* ESC key support */
@@ -147,7 +166,7 @@
       if (e.key === 'Escape' && isOpen) close();
     });
 
-    return { open, close, toggle, removeItem, updateQty };
+    return { open, close, toggle, removeItem, updateQty, updateCartNote };
 
   }());
 
@@ -170,5 +189,36 @@
     const removeBtn = e.target.closest('[data-cd-remove]');
     if (removeBtn) {
       window.CartDrawer.removeItem(removeBtn.dataset.key);
+      return;
+    }
+
+    /* Toggle order note panel */
+    const noteToggle = e.target.closest('[data-cd-note-toggle]');
+    if (noteToggle) {
+      const panel = document.querySelector('[data-cd-note-panel]');
+      if (panel) panel.classList.toggle('is-open');
+      return;
+    }
+
+    /* Save order note */
+    const noteSave = e.target.closest('[data-cd-note-save]');
+    if (noteSave) {
+      const input = document.querySelector('[data-cd-note-input]');
+      const note = input ? input.value : '';
+      if (window.CartDrawer && typeof window.CartDrawer.updateCartNote === 'function') {
+        window.CartDrawer.updateCartNote(note);
+      }
+      return;
+    }
+
+    /* Recommendation carousel nav */
+    const prevBtn = e.target.closest('[data-cd-reco-prev]');
+    const nextBtn = e.target.closest('[data-cd-reco-next]');
+    if (prevBtn || nextBtn) {
+      const track = document.querySelector('[data-cd-reco-track]');
+      if (!track) return;
+      const step = 187;
+      const dir = nextBtn ? 1 : -1;
+      track.scrollBy({ left: dir * step, behavior: 'smooth' });
     }
   });

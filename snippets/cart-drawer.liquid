@@ -1,124 +1,132 @@
 {%- comment -%}
-  ─────────────────────────────────────────
-  CART DRAWER SNIPPET
-  Include in layout/theme.liquid via:
-    {% render 'cart-drawer' %}
-  Open/close via window.CartDrawer.open() / .close()
-  ─────────────────────────────────────────
+  Cart drawer — Figma-aligned redesign
+  Keeps compatibility with assets/cart.js hooks:
+  - #cart-overlay, #cart-drawer
+  - #cd-count, #cd-items-wrap, .cd-footer, #cd-subtotal, #cd-grand-total
+  - [data-cd-close], [data-cd-qty], [data-cd-remove]
 {%- endcomment -%}
 
 <style>
-  /* ─── Cart Drawer ─── */
-
   #cart-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0);
     z-index: 200;
     pointer-events: none;
-    transition: background 400ms ease;
+    transition: background 360ms ease;
   }
 
   #cart-overlay.open {
-    background: rgba(0, 0, 0, 0.5);
-    pointer-events: all;
+    background: rgba(0, 0, 0, 0.55);
+    pointer-events: auto;
   }
 
   #cart-drawer {
     position: fixed;
     top: 0;
     right: 0;
-    width: min(420px, 100vw);
+    width: min(390px, 100vw);
     height: 100dvh;
-    background-color: #ffffff;
+    background: #f4f4f4;
+    color: #111;
     z-index: 201;
     display: flex;
     flex-direction: column;
-    transform: translateX(100%); /* GSAP controls this */
+    transform: translateX(100%);
     will-change: transform;
-    box-shadow: -8px 0 40px rgba(0, 0, 0, 0.08);
+    box-shadow: -10px 0 32px rgba(0, 0, 0, 0.15);
   }
 
-  /* Header bar */
-  .cd-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.75rem 2rem 1.5rem;
-    border-bottom: 1px solid var(--color-border);
+  .cd-top {
+    padding: 28px 20px 16px;
+    background: #f4f4f4;
+    border-bottom: 1px solid #e0e0e0;
     flex-shrink: 0;
+  }
+
+  .cd-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
   }
 
   .cd-title {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--color-text);
-    font-weight: 500;
-  }
-
-  .cd-count {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: var(--color-muted);
+    margin: 0;
+    font-family: var(--font-body, Inter, sans-serif);
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.01em;
   }
 
   .cd-close-btn {
-    display: flex;
+    width: 26px;
+    height: 26px;
+    border: 0;
+    background: transparent;
+    color: #333;
+    border-radius: 999px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: none;
-    border: 1px solid var(--color-border);
-    border-radius: 50%;
     cursor: pointer;
-    color: var(--color-text);
-    transition: background-color 200ms ease, border-color 200ms ease;
-    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .cd-close-btn:hover {
-    background-color: var(--color-text);
-    border-color: var(--color-text);
-    color: #ffffff;
+  .cd-subline {
+    margin: 0 0 12px;
+    color: #333;
+    font-size: 15px;
+    line-height: 1.5;
+    font-family: var(--font-body, Inter, sans-serif);
   }
 
-  /* Item list (scrollable) */
+  .cd-progress {
+    height: 8px;
+    border-radius: 999px;
+    background: #c8dbc0;
+    overflow: hidden;
+  }
+
+  .cd-progress__fill {
+    width: 100%;
+    height: 100%;
+    background: #4a6741;
+    border-radius: inherit;
+  }
+
+  .cd-count {
+    display: none;
+  }
+
   .cd-items {
     flex: 1;
     overflow-y: auto;
-    padding: 1.5rem 2rem;
+    padding: 0 20px;
     scrollbar-width: thin;
-    scrollbar-color: var(--color-border) transparent;
+    scrollbar-color: #cfcfcf transparent;
   }
 
-  .cd-items::-webkit-scrollbar        { width: 4px; }
-  .cd-items::-webkit-scrollbar-track  { background: transparent; }
-  .cd-items::-webkit-scrollbar-thumb  { background: var(--color-border); border-radius: 9999px; }
+  .cd-items::-webkit-scrollbar { width: 5px; }
+  .cd-items::-webkit-scrollbar-track { background: transparent; }
+  .cd-items::-webkit-scrollbar-thumb { background: #cfcfcf; border-radius: 999px; }
 
-  /* Single cart item */
   .cd-item {
-    display: flex;
-    gap: 1.25rem;
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--color-border);
-    align-items: flex-start;
-  }
-
-  .cd-item:last-child {
-    border-bottom: none;
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr);
+    gap: 12px;
+    padding: 20px 0;
+    border-bottom: 1px solid #e0e0e0;
   }
 
   .cd-item-img {
-    flex-shrink: 0;
-    width: 80px;
-    aspect-ratio: 3/4;
+    width: 100px;
+    height: 110px;
     border-radius: 8px;
     overflow: hidden;
-    background-color: #f5f4f1;
+    background: #e0e0e0;
   }
 
   .cd-item-img img {
@@ -128,266 +136,487 @@
     display: block;
   }
 
-  .cd-item-info {
-    flex: 1;
+  .cd-item-main {
     min-width: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
   }
 
-  .cd-item-vendor {
-    font-family: var(--font-body);
-    font-size: 0.58rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-    margin-bottom: 0.3rem;
+  .cd-item-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .cd-item-name {
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    font-weight: 400;
-    color: var(--color-text);
-    line-height: 1.4;
-    margin-bottom: 0.4rem;
+    margin: 0;
+    font-family: var(--font-body, Inter, sans-serif);
+    font-size: 15px;
+    line-height: 1.3;
+    font-weight: 700;
+    color: #111;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .cd-item-variant {
+    margin: 4px 0 0;
+    color: #555;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .cd-qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .cd-qty-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    border: 1.5px solid #333;
+    background: transparent;
+    color: #111;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .cd-qty-val {
+    min-width: 14px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #111;
+    border: 0;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  .cd-item-side {
+    min-width: 86px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .cd-item-price {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 700;
+    color: #111;
+    white-space: nowrap;
+  }
+
+  .cd-remove-btn {
+    border: 0;
+    background: transparent;
+    color: #333;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-size: 13px;
+    line-height: 1.5;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .cd-reco {
+    padding: 14px 0 0;
+  }
+
+  .cd-reco__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .cd-reco__title {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.5;
+    font-weight: 700;
+    color: #111;
+  }
+
+  .cd-reco__nav {
+    display: inline-flex;
+    gap: 8px;
+  }
+
+  .cd-reco__btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 19px;
+    border: 1.5px solid #ccc;
+    background: #fff;
+    color: #444;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .cd-reco__track {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .cd-reco__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cd-reco__card {
+    flex: 0 0 175px;
+    scroll-snap-align: start;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .cd-reco__img-wrap {
+    width: 175px;
+    height: 185px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #e0e0e0;
+  }
+
+  .cd-reco__img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .cd-reco__name {
+    margin: 8px 0 0;
+    font-size: 13px;
+    line-height: 1.35;
+    font-weight: 700;
+    color: #111;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .cd-item-variant {
-    font-family: var(--font-body);
-    font-size: 0.7rem;
-    color: var(--color-muted);
-    margin-bottom: 0.75rem;
+  .cd-reco__price {
+    margin: 4px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #555;
   }
 
-  .cd-item-footer {
+  .cd-footer {
+    flex-shrink: 0;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background: #fff;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .cd-note-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 10px;
+    min-height: 50px;
+    border-bottom: 1px solid #eee;
   }
 
-  .cd-item-price {
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--color-text);
-    letter-spacing: 0.04em;
-  }
-
-  /* Remove item button */
-  .cd-remove-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--color-muted);
-    padding: 2px;
-    transition: color 200ms ease;
-    display: flex;
+  .cd-note-toggle {
+    display: inline-flex;
     align-items: center;
-  }
-
-  .cd-remove-btn:hover {
-    color: var(--color-text);
-  }
-
-  /* Qty inline control */
-  .cd-qty {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    overflow: hidden;
-  }
-
-  .cd-qty-btn {
-    width: 36px;
-    height: 36px;
+    gap: 10px;
+    border: 0;
     background: transparent;
-    border: none;
+    color: #111;
+    padding: 0;
     cursor: pointer;
-    color: var(--color-text);
-    font-size: 1rem;
-    display: flex;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .cd-note-toggle .icon {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 150ms ease;
   }
 
-  .cd-qty-btn:hover { background-color: var(--color-border); }
-
-  .cd-qty-val {
-    width: 36px;
-    text-align: center;
-    font-family: var(--font-body);
-    font-size: 0.78rem;
-    color: var(--color-text);
-    border: none;
+  .cd-note-plus {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    border: 1.5px solid #ccc;
     background: transparent;
-    pointer-events: none;
-    outline: none; /* display-only, not interactive — pointer-events: none */
-  }
-
-  /* Empty state */
-  .cd-empty {
-    display: flex;
-    flex-direction: column;
+    color: #555;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    gap: 1rem;
-    text-align: center;
-    color: var(--color-muted);
   }
 
-  .cd-empty-icon {
-    color: var(--color-border);
+  .cd-note-panel {
+    display: none;
+    padding: 10px 0 12px;
+    border-bottom: 1px solid #eee;
   }
 
-  .cd-empty p {
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    letter-spacing: 0.04em;
-    color: var(--color-muted);
+  .cd-note-panel.is-open {
+    display: block;
   }
 
-  /* Footer: subtotal + checkout */
-  .cd-footer {
-    border-top: 1px solid var(--color-border);
-    padding: 1.5rem 2rem 2rem;
-    flex-shrink: 0;
+  .cd-note-textarea {
+    width: 100%;
+    min-height: 82px;
+    resize: vertical;
+    border: 1px solid #d6d6d6;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: var(--font-body, Inter, sans-serif);
+    background: #fff;
+    color: #111;
+  }
+
+  .cd-note-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 8px;
+  }
+
+  .cd-note-save {
+    border: 1px solid #111;
+    background: #fff;
+    color: #111;
+    border-radius: 999px;
+    min-height: 38px;
+    padding: 0 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .cd-gift-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 50px;
+    border-bottom: 1px solid #eee;
+  }
+
+  .cd-gift-row input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    border: 1.5px solid #aaa;
+    appearance: none;
+    background: #fff;
+    margin: 0;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .cd-gift-row input[type="checkbox"]:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid #111;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .cd-gift-label {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: #222;
+  }
+
+  .cd-subtotal-row,
+  .cd-grand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
   }
 
   .cd-subtotal-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 1.25rem;
+    min-height: 40px;
+    border-bottom: 1px solid #eee;
   }
 
-  .cd-subtotal-label {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-  }
-
+  .cd-subtotal-label,
   .cd-subtotal-value {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--color-text);
-    letter-spacing: 0.04em;
+    font-size: 15px;
+    line-height: 1.5;
+    font-weight: 700;
+    color: #111;
+  }
+
+  .cd-tax-note {
+    margin: 4px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #888;
+  }
+
+  .cd-tax-note a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .cd-grand-row {
+    min-height: 50px;
+    margin-top: 8px;
+  }
+
+  .cd-grand-label,
+  .cd-grand-value {
+    font-size: 30px;
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: #111;
+  }
+
+  .cd-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .btn-view-cart,
+  .btn-checkout {
+    flex: 1 1 0;
+    min-height: 52px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .btn-view-cart {
+    border: 1.5px solid #111;
+    color: #111;
+    background: #fff;
   }
 
   .btn-checkout {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-    width: 100%;
-    height: 56px;
-    background-color: var(--color-text);
-    color: var(--color-bg);
-    border: 2px solid var(--color-text);
-    border-radius: 9999px;
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-    font-weight: 500;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 350ms ease, color 350ms ease;
-    margin-bottom: 0.75rem;
+    border: 1.5px solid #111;
+    color: #fff;
+    background: #111;
   }
 
-  .btn-checkout:hover {
-    background-color: transparent;
-    color: var(--color-text);
-  }
-
-  .btn-continue {
-    display: block;
+  .cd-empty {
+    padding: 28px 0;
     text-align: center;
-    font-family: var(--font-body);
-    font-size: 0.62rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--color-muted);
-    text-decoration: none;
-    transition: color 200ms ease;
-    cursor: pointer;
-    background: none;
-    border: none;
-    width: 100%;
+    color: #777;
   }
 
-  .btn-continue:hover {
-    color: var(--color-text);
+  .cd-empty p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 389px) {
+    #cart-drawer {
+      width: 100vw;
+    }
+
+    .cd-actions {
+      gap: 10px;
+    }
+
+    .cd-grand-label,
+    .cd-grand-value {
+      font-size: 24px;
+    }
   }
 </style>
 
-<!-- ── Overlay ── -->
 <div id="cart-overlay" role="dialog" aria-modal="true" aria-label="Shopping Bag" data-cd-overlay></div>
 
-<!-- ── Drawer Panel ── -->
-<div id="cart-drawer">
-
-  <!-- Header -->
-  <div class="cd-header">
-    <div>
-      <p class="cd-title">Shopping Bag</p>
-      <p class="cd-count" id="cd-count">
-        {{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}
-      </p>
+<div id="cart-drawer" aria-label="Shopping Bag Drawer">
+  <div class="cd-top">
+    <div class="cd-head">
+      <h2 class="cd-title">Shopping bag</h2>
+      <button class="cd-close-btn" data-cd-close aria-label="Close shopping bag" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
     </div>
-    <button class="cd-close-btn" data-cd-close aria-label="Close shopping bag">
-      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M18 6 6 18M6 6l12 12"/>
-      </svg>
-    </button>
+    <p class="cd-subline">
+      {% if cart.item_count > 0 %}
+        You got free shipping.
+      {% else %}
+        Your shopping bag is empty.
+      {% endif %}
+    </p>
+    <div class="cd-progress" aria-hidden="true"><div class="cd-progress__fill"></div></div>
+    <span class="cd-count" id="cd-count">{{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}</span>
   </div>
 
-  <!-- Item List -->
   <div class="cd-items" id="cd-items-wrap">
-
     {% if cart.item_count > 0 %}
-
       {% for item in cart.items %}
         <article class="cd-item" data-key="{{ item.key }}">
-
-          <!-- Thumbnail -->
-          <div class="cd-item-img">
+          <a href="{{ item.url }}" class="cd-item-img" aria-label="{{ item.product_title | escape }}">
             {% if item.image %}
               <img
-                src="{{ item.image | image_url: width: 200 }}"
+                src="{{ item.image | image_url: width: 260 }}"
                 alt="{{ item.title | escape }}"
                 loading="lazy"
-                width="80"
-                height="107"
+                width="100"
+                height="110"
               />
             {% else %}
-              <div style="width:100%;height:100%;background:var(--color-border);"></div>
+              <div style="width:100%;height:100%;background:#ddd"></div>
             {% endif %}
-          </div>
+          </a>
 
-          <!-- Info -->
-          <div class="cd-item-info">
-            {% if item.vendor != blank %}
-              <p class="cd-item-vendor">{{ item.vendor }}</p>
-            {% endif %}
-            <p class="cd-item-name">{{ item.product_title }}</p>
+          <div class="cd-item-main">
+            <div class="cd-item-info">
+              <div>
+                <p class="cd-item-name">{{ item.product_title }}</p>
+                {% unless item.variant_title == 'Default Title' %}
+                  <p class="cd-item-variant">{{ item.variant_title }}</p>
+                {% endunless %}
+              </div>
 
-            {% unless item.variant_title == 'Default Title' %}
-              <p class="cd-item-variant">{{ item.variant_title }}</p>
-            {% endunless %}
-
-            <div class="cd-item-footer">
-
-              <!-- Inline Qty -->
               <div class="cd-qty">
                 <button
                   class="cd-qty-btn"
@@ -395,6 +624,7 @@
                   data-cd-qty
                   data-key="{{ item.key }}"
                   data-qty="{{ item.quantity | minus: 1 }}"
+                  type="button"
                 >−</button>
                 <span class="cd-qty-val">{{ item.quantity }}</span>
                 <button
@@ -403,70 +633,116 @@
                   data-cd-qty
                   data-key="{{ item.key }}"
                   data-qty="{{ item.quantity | plus: 1 }}"
+                  type="button"
                 >+</button>
               </div>
+            </div>
 
+            <div class="cd-item-side">
               <p class="cd-item-price">{{ item.final_line_price | money }}</p>
+              <button
+                class="cd-remove-btn"
+                aria-label="Remove {{ item.title | escape }}"
+                data-cd-remove
+                data-key="{{ item.key }}"
+                type="button"
+              >Remove</button>
             </div>
           </div>
-
-          <!-- Remove -->
-          <button
-            class="cd-remove-btn"
-            aria-label="Remove {{ item.title | escape }}"
-            data-cd-remove
-            data-key="{{ item.key }}"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M18 6 6 18M6 6l12 12"/>
-            </svg>
-          </button>
-
         </article>
       {% endfor %}
 
-    {% else %}
+      {%- assign shown_reco = 0 -%}
+      <div class="cd-reco">
+        <div class="cd-reco__head">
+          <h3 class="cd-reco__title">You may also like</h3>
+          <div class="cd-reco__nav">
+            <button type="button" class="cd-reco__btn" data-cd-reco-prev aria-label="Previous products">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button type="button" class="cd-reco__btn" data-cd-reco-next aria-label="Next products">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
 
-      <!-- Empty state -->
-      <div class="cd-empty">
-        <svg class="cd-empty-icon" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
-          <path d="M3 6h18"/>
-          <path d="M16 10a4 4 0 0 1-8 0"/>
-        </svg>
-        <p>Your bag is empty.</p>
-        <p style="font-size: 0.72rem;">Add pieces you love.</p>
+        <div class="cd-reco__track" data-cd-reco-track>
+          {%- for p in collections.all.products limit: 30 -%}
+            {%- if p.available -%}
+              {%- assign in_cart = false -%}
+              {%- for ci in cart.items -%}
+                {%- if ci.product_id == p.id -%}
+                  {%- assign in_cart = true -%}
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- unless in_cart -%}
+                {%- assign shown_reco = shown_reco | plus: 1 -%}
+                <a class="cd-reco__card" href="{{ p.url }}">
+                  <div class="cd-reco__img-wrap">
+                    {% if p.featured_image %}
+                      <img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title | escape }}" loading="lazy" width="175" height="185">
+                    {% endif %}
+                  </div>
+                  <p class="cd-reco__name">{{ p.title }}</p>
+                  <p class="cd-reco__price">{{ p.price | money }} {{ cart.currency.iso_code }}</p>
+                </a>
+                {%- if shown_reco >= 8 -%}{%- break -%}{%- endif -%}
+              {%- endunless -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
       </div>
 
+    {% else %}
+      <div class="cd-empty">
+        <p>Your bag is empty.</p>
+      </div>
     {% endif %}
-
   </div>
-  <!-- / Item List -->
 
-  <!-- Footer -->
   {% if cart.item_count > 0 %}
     <div class="cd-footer">
+      <div class="cd-note-row">
+        <button class="cd-note-toggle" type="button" data-cd-note-toggle>
+          <span class="icon" aria-hidden="true">☰</span>
+          <span>Order special instructions</span>
+        </button>
+        <span class="cd-note-plus" aria-hidden="true">+</span>
+      </div>
 
-      <!-- Subtotal only — no shipping copy per brand guidelines -->
+      <div class="cd-note-panel" data-cd-note-panel>
+        <textarea class="cd-note-textarea" data-cd-note-input placeholder="Add a note for your order">{{ cart.note }}</textarea>
+        <div class="cd-note-actions">
+          <button type="button" class="cd-note-save" data-cd-note-save>Save note</button>
+        </div>
+      </div>
+
+      <label class="cd-gift-row">
+        <input type="checkbox" data-cd-gift-wrap>
+        <p class="cd-gift-label">Add a gift wrap to make your order extra special!</p>
+      </label>
+
       <div class="cd-subtotal-row">
         <span class="cd-subtotal-label">Subtotal</span>
         <span class="cd-subtotal-value" id="cd-subtotal">{{ cart.total_price | money }}</span>
       </div>
 
-      <!-- Checkout CTA -->
-      <a href="{{ routes.cart_url }}/checkout" class="btn-checkout">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
-        Checkout
-      </a>
+      <p class="cd-tax-note">
+        Taxes included. Discounts and
+        <a href="{{ shop.shipping_policy.url | default: '/policies/shipping-policy' }}">shipping</a>
+        calculated at checkout.
+      </p>
 
-      <button class="btn-continue" data-cd-close>Continue Shopping</button>
+      <div class="cd-grand-row">
+        <span class="cd-grand-label">Grand total</span>
+        <span class="cd-grand-value" id="cd-grand-total">{{ cart.total_price | money }}</span>
+      </div>
 
+      <div class="cd-actions">
+        <a href="{{ routes.cart_url }}" class="btn-view-cart">View cart</a>
+        <a href="{{ routes.cart_url }}/checkout" class="btn-checkout">Check out</a>
+      </div>
     </div>
   {% endif %}
-
 </div>
-<!-- / Drawer Panel -->
-
-
