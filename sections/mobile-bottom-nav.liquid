@@ -241,11 +241,11 @@
     </a>
 
     {%- comment -%} ── 5. CART ── {%- endcomment -%}
-    <a
+    <button
+      type="button"
       class="mob-nav__item"
-      href="{{ cart_url }}"
+      data-cart-fallback-url="{{ cart_url }}"
       aria-label="{{ section.settings.cart_label | default: 'Cart' }} ({{ cart.item_count }} {{ 'accessibility.cart_count' | t | default: 'items' }})"
-      {%- if request.path == cart_url %} aria-current="page"{%- endif -%}
       data-mob-cart
     >
       <svg class="mob-nav__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -268,7 +268,7 @@
         >0</span>
       {%- endif -%}
       <span class="mob-nav__label">{{ section.settings.cart_label | default: 'Cart' }}</span>
-    </a>
+    </button>
 
   </div>
 </mob-bottom-nav>
@@ -298,7 +298,6 @@
       }
       if (this._cartLink && this._onCartClick) {
         this._cartLink.removeEventListener('click', this._onCartClick, true);
-        this._cartLink.removeEventListener('touchend', this._onCartClick, true);
       }
     }
 
@@ -364,11 +363,14 @@
         this._onCartClick = (event) => {
           event.preventDefault();
           event.stopPropagation();
-          const href = this._cartLink.getAttribute('href') || '/cart';
-          window.location.assign(href);
+          if (typeof window.CartDrawer !== 'undefined' && typeof window.CartDrawer.open === 'function') {
+            window.CartDrawer.open();
+            return;
+          }
+          const fallbackUrl = this._cartLink.dataset.cartFallbackUrl || '/cart';
+          window.location.assign(fallbackUrl);
         };
         this._cartLink.addEventListener('click', this._onCartClick, true);
-        this._cartLink.addEventListener('touchend', this._onCartClick, true);
       }
     }
 

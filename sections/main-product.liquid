@@ -274,6 +274,79 @@
     color: #222222;
   }
 
+  .product-info-sheet__prose > *:first-child {
+    margin-top: 0 !important;
+  }
+
+  .product-info-sheet__prose > *:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .product-info-sheet__prose p {
+    margin: 0 0 1rem;
+    line-height: 1.75;
+  }
+
+  .product-info-sheet__prose h1,
+  .product-info-sheet__prose h2,
+  .product-info-sheet__prose h3,
+  .product-info-sheet__prose h4,
+  .product-info-sheet__prose h5,
+  .product-info-sheet__prose h6 {
+    margin: 1.35rem 0 0.8rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    line-height: 1.25;
+    color: #111111;
+  }
+
+  .product-info-sheet__prose h1 { font-size: 1.35rem; }
+  .product-info-sheet__prose h2 { font-size: 1.22rem; }
+  .product-info-sheet__prose h3 { font-size: 1.12rem; }
+  .product-info-sheet__prose h4,
+  .product-info-sheet__prose h5,
+  .product-info-sheet__prose h6 { font-size: 1.02rem; }
+
+  .product-info-sheet__prose ul,
+  .product-info-sheet__prose ol {
+    margin: 0 0 1rem 1.2rem;
+    padding-left: 0.45rem;
+  }
+
+  .product-info-sheet__prose ul {
+    list-style: disc;
+  }
+
+  .product-info-sheet__prose ol {
+    list-style: decimal;
+  }
+
+  .product-info-sheet__prose li {
+    margin: 0 0 0.62rem;
+    line-height: 1.7;
+  }
+
+  .product-info-sheet__prose li:last-child {
+    margin-bottom: 0;
+  }
+
+  .product-info-sheet__prose strong {
+    font-weight: 700;
+    color: #171717;
+  }
+
+  .product-info-sheet__prose a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .product-info-sheet__prose br {
+    display: block;
+    content: '';
+    margin-top: 0.45rem;
+  }
+
   .product-info-sheet__review-note {
     margin-top: 1rem;
     padding-top: 0.85rem;
@@ -1837,7 +1910,7 @@
       if (infoSheetTitle) {
         infoSheetTitle.textContent = button.dataset.sheetTitle || 'Info';
       }
-      infoSheetBody.innerHTML = source.innerHTML;
+      infoSheetBody.innerHTML = '<div class="product-info-sheet__prose">' + source.innerHTML + '</div>';
       infoSheet.classList.add('is-open');
       infoSheet.setAttribute('aria-hidden', 'false');
       restoreBodyOverflow = document.body.style.overflow;
