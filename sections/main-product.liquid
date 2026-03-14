@@ -1555,12 +1555,18 @@
             {%- assign pairs_collection_obj = collections.all -%}
           {%- endif -%}
           {%- assign pairs_max = section.settings.pairs_limit | default: 12 | plus: 0 -%}
-          {%- assign pairs_initial = section.settings.pairs_initial | default: 6 | plus: 0 -%}
+          {%- assign pairs_initial = 3 -%}
           {%- assign pairs_heading_text = section.settings.pairs_heading | default: 'PAIRS WELL WITH' -%}
           {%- assign pairs_more_text = section.settings.pairs_more_label | default: 'More' -%}
+          {%- assign pairs_less_text = section.settings.pairs_less_label | default: 'Thu gọn' -%}
           {%- assign shown_pairs = 0 -%}
           {%- if pairs_collection_obj != blank and pairs_collection_obj.products_count > 0 -%}
-            <div class="pw-container" data-pw-grid-wrap style="margin-top: 1rem; padding: 0 1rem 1rem;">
+            <div
+              class="pw-container"
+              data-pw-grid-wrap
+              data-initial-visible="{{ pairs_initial }}"
+              style="margin-top: 1rem; padding: 0 1rem 1rem;"
+            >
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem;">
                 <h3 style="margin: 0; font-size: 1.05rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 800; color: #111;">
                   {{ pairs_heading_text | escape }}
@@ -1597,11 +1603,12 @@
                 {%- endfor -%}
               </div>
               {%- if shown_pairs > pairs_initial -%}
-                <div style="display: flex; justify-content: center; margin-top: 0.9rem;">
+                <div style="display: flex; justify-content: center; align-items: center; width: 100%; margin-top: 0.9rem;">
                   <button
                     type="button"
                     data-pw-more-btn
-                    data-batch="3"
+                    data-more-label="{{ pairs_more_text | escape }}"
+                    data-less-label="{{ pairs_less_text | escape }}"
                     style="min-width: 120px; height: 38px; border: 1px solid #111; border-radius: 999px; background: #fff; color: #111; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; padding: 0 1rem;"
                   >
                     {{ pairs_more_text | escape }}
@@ -2198,19 +2205,39 @@
       const moreBtn = container.querySelector('[data-pw-more-btn]');
       if (!moreBtn) return;
 
-      const batch = Math.max(1, parseInt(moreBtn.dataset.batch || '3', 10));
-      function refreshMoreButton() {
-        const hiddenItems = items.filter(item => item.hasAttribute('hidden'));
-        moreBtn.style.display = hiddenItems.length ? 'inline-flex' : 'none';
+      const initialVisible = Math.max(1, parseInt(container.dataset.initialVisible || '3', 10));
+      const moreLabel = moreBtn.dataset.moreLabel || 'More';
+      const lessLabel = moreBtn.dataset.lessLabel || 'Thu gọn';
+      let expanded = false;
+
+      function refreshButtonState() {
+        if (items.length <= initialVisible) {
+          moreBtn.style.display = 'none';
+          return;
+        }
+        moreBtn.style.display = 'inline-flex';
+        moreBtn.textContent = expanded ? lessLabel : moreLabel;
       }
 
       moreBtn.addEventListener('click', function () {
-        const hiddenItems = items.filter(item => item.hasAttribute('hidden'));
-        hiddenItems.slice(0, batch).forEach(item => item.removeAttribute('hidden'));
-        refreshMoreButton();
+        if (!expanded) {
+          items.forEach(item => item.removeAttribute('hidden'));
+          expanded = true;
+        } else {
+          items.forEach(function (item, index) {
+            if (index < initialVisible) {
+              item.removeAttribute('hidden');
+            } else {
+              item.setAttribute('hidden', '');
+            }
+          });
+          expanded = false;
+          container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        refreshButtonState();
       }, { signal });
 
-      refreshMoreButton();
+      refreshButtonState();
     }
 
     root.addEventListener('click', function (e) {
@@ -2892,7 +2919,7 @@
       "min": 3,
       "max": 12,
       "step": 3,
-      "default": 6,
+      "default": 3,
       "info": "Must be multiple of 3 for grid alignment"
     },
     {
@@ -2900,6 +2927,12 @@
       "id": "pairs_more_label",
       "label": "More Button Label",
       "default": "More"
+    },
+    {
+      "type": "text",
+      "id": "pairs_less_label",
+      "label": "Collapse Button Label",
+      "default": "Thu gọn"
     }
   ],
   "blocks": [
