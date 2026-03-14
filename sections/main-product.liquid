@@ -1558,7 +1558,7 @@
           {%- assign pairs_initial = 3 -%}
           {%- assign pairs_heading_text = section.settings.pairs_heading | default: 'PAIRS WELL WITH' -%}
           {%- assign pairs_more_text = section.settings.pairs_more_label | default: 'More' -%}
-          {%- assign pairs_less_text = section.settings.pairs_less_label | default: 'Thu gọn' -%}
+          {%- assign pairs_less_text = section.settings.pairs_less_label | default: 'Less' -%}
           {%- assign shown_pairs = 0 -%}
           {%- if pairs_collection_obj != blank and pairs_collection_obj.products_count > 0 -%}
             <div
@@ -1609,7 +1609,7 @@
                     data-pw-more-btn
                     data-more-label="{{ pairs_more_text | escape }}"
                     data-less-label="{{ pairs_less_text | escape }}"
-                    style="min-width: 120px; height: 38px; border: 1px solid #111; border-radius: 999px; background: #fff; color: #111; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; padding: 0 1rem;"
+                    style="display: inline-flex; align-items: center; justify-content: center; text-align: center; min-width: 160px; height: 38px; border: 1px solid #111; border-radius: 999px; background: #fff; color: #111; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; padding: 0 1rem; line-height: 1; -webkit-tap-highlight-color: transparent; appearance: none;"
                   >
                     {{ pairs_more_text | escape }}
                   </button>
@@ -2207,7 +2207,7 @@
 
       const initialVisible = Math.max(1, parseInt(container.dataset.initialVisible || '3', 10));
       const moreLabel = moreBtn.dataset.moreLabel || 'More';
-      const lessLabel = moreBtn.dataset.lessLabel || 'Thu gọn';
+      const lessLabel = moreBtn.dataset.lessLabel || 'Less';
       let expanded = false;
 
       function refreshButtonState() {
@@ -2932,7 +2932,7 @@
       "type": "text",
       "id": "pairs_less_label",
       "label": "Collapse Button Label",
-      "default": "Thu gọn"
+      "default": "Less"
     }
   ],
   "blocks": [
