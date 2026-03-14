@@ -2,6 +2,7 @@
   assign section_bg = section.settings.background_color | default: 'transparent'
   assign card_bg = section.settings.card_background_color | default: 'var(--color-background, #ffffff)'
   assign hero_overlay_opacity = section.settings.hero_overlay_opacity | divided_by: 100.0
+  assign form_id = 'SupportContactForm-' | append: section.id
 -%}
 
 <section
@@ -51,7 +52,7 @@
           <p class="sc-card__description">{{ section.settings.form_description }}</p>
         {%- endif -%}
 
-        {%- form 'contact', id: 'SupportContactForm-' | append: section.id, class: 'sc-form' -%}
+        {%- form 'contact', id: form_id, class: 'sc-form' -%}
           {%- if form.posted_successfully? -%}
             <p class="sc-form__feedback sc-form__feedback--success" role="status">
               {{ 'templates.contact.form.post_success' | t | default: 'Thanks for contacting us. We will reply as soon as possible.' }}
