@@ -23,6 +23,7 @@
       if (isOpen) return;
       isOpen = true;
       document.body.style.overflow = 'hidden';
+      document.body.classList.add('cart-drawer-open');
       OVERLAY.classList.add('open');
 
       if (typeof gsap !== 'undefined' && !reducedMotion) {
@@ -40,6 +41,7 @@
       if (!ensureElements()) return;
       isOpen = false;
       document.body.style.overflow = '';
+      document.body.classList.remove('cart-drawer-open');
       OVERLAY.classList.remove('open');
 
       if (typeof gsap !== 'undefined' && !reducedMotion) {
@@ -117,6 +119,15 @@
           /* Parse the returned section HTML */
           const parser = new DOMParser();
           const doc = parser.parseFromString(html, 'text/html');
+          const newDrawer = doc.getElementById('cart-drawer');
+
+          if (newDrawer) {
+            const curDrawer = document.getElementById('cart-drawer');
+            if (curDrawer) {
+              curDrawer.dataset.cdGiftVariantId = newDrawer.dataset.cdGiftVariantId || '';
+              curDrawer.dataset.cdGiftLineKeys = newDrawer.dataset.cdGiftLineKeys || '';
+            }
+          }
 
           /* Replace items list */
           const newItems = doc.getElementById('cd-items-wrap');
@@ -162,12 +173,69 @@
         .catch(() => {});
     }
 
+    function addItem(variantId, quantity) {
+      return fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: parseInt(variantId, 10), quantity: quantity || 1 })
+      }).then(r => r.json());
+    }
+
+    function removeLineByKey(key) {
+      return fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ id: key, quantity: 0 })
+      }).then(r => r.json());
+    }
+
+    function toggleGiftWrap(enabled) {
+      if (!ensureElements()) return;
+      const variantId = (DRAWER.dataset.cdGiftVariantId || '').trim();
+      const lineKeys = (DRAWER.dataset.cdGiftLineKeys || '')
+        .split('||')
+        .map(v => v.trim())
+        .filter(Boolean);
+
+      if (!variantId) {
+        return;
+      }
+
+      setLoading(true);
+      if (enabled) {
+        const reco = document.querySelector('.cd-reco');
+        if (reco) reco.style.display = 'none';
+        addItem(variantId, 1)
+          .then(() => refreshDrawerSection())
+          .catch(() => setLoading(false));
+        return;
+      }
+
+      if (!lineKeys.length) {
+        refreshDrawerSection();
+        return;
+      }
+
+      Promise.all(lineKeys.map(removeLineByKey))
+        .then(() => refreshDrawerSection())
+        .catch(() => setLoading(false));
+    }
+
     /* ESC key support */
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && isOpen) close();
     });
 
-    return { open, close, toggle, removeItem, updateQty, updateCartNote, refresh: refreshDrawerSection };
+    return {
+      open,
+      close,
+      toggle,
+      removeItem,
+      updateQty,
+      updateCartNote,
+      refresh: refreshDrawerSection,
+      toggleGiftWrap
+    };
 
   }());
 
@@ -197,7 +265,12 @@
     const noteToggle = e.target.closest('[data-cd-note-toggle]');
     if (noteToggle) {
       const panel = document.querySelector('[data-cd-note-panel]');
-      if (panel) panel.classList.toggle('is-open');
+      if (panel) {
+        const isOpen = panel.classList.toggle('is-open');
+        noteToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        const plus = noteToggle.querySelector('.cd-note-plus');
+        if (plus) plus.textContent = isOpen ? '−' : '+';
+      }
       return;
     }
 
@@ -221,5 +294,13 @@
       const step = 187;
       const dir = nextBtn ? 1 : -1;
       track.scrollBy({ left: dir * step, behavior: 'smooth' });
+    }
+  });
+
+  document.addEventListener('change', function (e) {
+    const giftWrapInput = e.target.closest('[data-cd-gift-wrap]');
+    if (!giftWrapInput) return;
+    if (window.CartDrawer && typeof window.CartDrawer.toggleGiftWrap === 'function') {
+      window.CartDrawer.toggleGiftWrap(giftWrapInput.checked);
     }
   });

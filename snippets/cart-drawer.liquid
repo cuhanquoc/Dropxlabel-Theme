@@ -5,6 +5,22 @@
   - #cd-count, #cd-items-wrap, .cd-footer, #cd-subtotal, #cd-grand-total
   - [data-cd-close], [data-cd-qty], [data-cd-remove]
 {%- endcomment -%}
+{%- assign gift_variant_id_raw = gift_wrap_variant_id | default: '' | strip -%}
+{%- assign gift_variant_id_num = gift_variant_id_raw | plus: 0 -%}
+{%- assign gift_wrap_in_cart = false -%}
+{%- assign gift_wrap_line_keys = '' -%}
+{%- if gift_variant_id_raw != blank -%}
+  {%- for ci in cart.items -%}
+    {%- if ci.variant_id == gift_variant_id_num -%}
+      {%- assign gift_wrap_in_cart = true -%}
+      {%- if gift_wrap_line_keys == '' -%}
+        {%- assign gift_wrap_line_keys = ci.key -%}
+      {%- else -%}
+        {%- assign gift_wrap_line_keys = gift_wrap_line_keys | append: '||' | append: ci.key -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
 
 <style>
   #cart-overlay {
@@ -35,6 +51,7 @@
     transform: translateX(100%);
     will-change: transform;
     box-shadow: -10px 0 32px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
   }
 
   .cd-top {
@@ -102,8 +119,8 @@
   }
 
   .cd-items {
-    flex: 1;
-    overflow-y: auto;
+    flex: 0 0 auto;
+    overflow: visible;
     padding: 0 20px;
     scrollbar-width: thin;
     scrollbar-color: #cfcfcf transparent;
@@ -333,6 +350,7 @@
     background: #fff;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
     padding: 20px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+    margin-top: 14px;
   }
 
   .cd-note-row {
@@ -347,6 +365,7 @@
   .cd-note-toggle {
     display: inline-flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
     border: 0;
     background: transparent;
@@ -355,6 +374,7 @@
     cursor: pointer;
     font-size: 15px;
     font-weight: 700;
+    width: 100%;
   }
 
   .cd-note-toggle .icon {
@@ -375,6 +395,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    pointer-events: none;
   }
 
   .cd-note-panel {
@@ -565,11 +586,20 @@
       font-size: 24px;
     }
   }
+
+  body.cart-drawer-open .mob-nav {
+    display: none !important;
+  }
 </style>
 
 <div id="cart-overlay" role="dialog" aria-modal="true" aria-label="Shopping Bag" data-cd-overlay></div>
 
-<div id="cart-drawer" aria-label="Shopping Bag Drawer">
+<div
+  id="cart-drawer"
+  aria-label="Shopping Bag Drawer"
+  data-cd-gift-variant-id="{{ gift_variant_id_raw | escape }}"
+  data-cd-gift-line-keys="{{ gift_wrap_line_keys | escape }}"
+>
   <div class="cd-top">
     <div class="cd-head">
       <h2 class="cd-title">Shopping bag</h2>
@@ -653,6 +683,7 @@
       {% endfor %}
 
       {%- assign shown_reco = 0 -%}
+      {% unless gift_wrap_in_cart %}
       <div class="cd-reco">
         <div class="cd-reco__head">
           <h3 class="cd-reco__title">You may also like</h3>
@@ -693,6 +724,7 @@
           {%- endfor -%}
         </div>
       </div>
+      {% endunless %}
 
     {% else %}
       <div class="cd-empty">
@@ -704,11 +736,11 @@
   {% if cart.item_count > 0 %}
     <div class="cd-footer">
       <div class="cd-note-row">
-        <button class="cd-note-toggle" type="button" data-cd-note-toggle>
+        <button class="cd-note-toggle" type="button" data-cd-note-toggle aria-expanded="false">
           <span class="icon" aria-hidden="true">☰</span>
           <span>Order special instructions</span>
+          <span class="cd-note-plus" aria-hidden="true">+</span>
         </button>
-        <span class="cd-note-plus" aria-hidden="true">+</span>
       </div>
 
       <div class="cd-note-panel" data-cd-note-panel>
@@ -719,7 +751,7 @@
       </div>
 
       <label class="cd-gift-row">
-        <input type="checkbox" data-cd-gift-wrap>
+        <input type="checkbox" data-cd-gift-wrap {% if gift_wrap_in_cart %}checked{% endif %}>
         <p class="cd-gift-label">Add a gift wrap to make your order extra special!</p>
       </label>
 

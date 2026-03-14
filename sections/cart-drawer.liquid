@@ -9,11 +9,19 @@
   ─────────────────────────────────────────
 {% endcomment %}
 
-{% render 'cart-drawer' %}
+{% render 'cart-drawer', gift_wrap_variant_id: section.settings.gift_wrap_variant_id %}
 
 {% schema %}
 {
   "name": "Cart Drawer",
-  "tag": "div"
+  "tag": "div",
+  "settings": [
+    {
+      "type": "text",
+      "id": "gift_wrap_variant_id",
+      "label": "Gift wrap variant ID",
+      "info": "Enter the Shopify variant ID used for gift wrap item."
+    }
+  ]
 }
 {% endschema %}
