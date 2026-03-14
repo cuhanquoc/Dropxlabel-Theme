@@ -49,7 +49,7 @@
         "delivery_text": "Free delivery within 2 days",
         "returns_text": "Free + easy returns",
         "show_info_actions": true,
-        "info_actions_heading": "More information",
+        "info_actions_heading": "",
         "primary_info_action_title": "DESCRIPTIONS",
         "info_sheet_close_label": "Close details",
         "mobile_compact_mode": true,
