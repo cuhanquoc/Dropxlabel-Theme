@@ -231,7 +231,7 @@
     right: 0;
     bottom: 0;
     width: 100%;
-    max-height: min(74vh, 620px);
+    max-height: min(80vh, 760px);
     border-radius: 18px 18px 0 0;
     background: #ffffff;
     transform: translateY(100%);
@@ -243,6 +243,15 @@
 
   .product-info-sheet.is-open .product-info-sheet__panel {
     transform: translateY(0);
+  }
+
+  .product-info-sheet__grabber {
+    width: 56px;
+    height: 6px;
+    border-radius: 999px;
+    background: #d9d9d9;
+    margin: 0.75rem auto 0.25rem;
+    flex-shrink: 0;
   }
 
   .product-info-sheet__header {
@@ -739,7 +748,7 @@
       margin-top: var(--mobile-space-4) !important;
     }
     .product-info-sheet__panel {
-      max-height: 78vh;
+      max-height: 80vh;
     }
     .product-thumbnail-btn {
       flex: 0 0 calc(42%) !important;
@@ -1416,11 +1425,33 @@
           {%- endif -%}
 
           {%- assign info_action_blocks = section.blocks | where: "type", "info_action" -%}
-          {%- if section.settings.show_info_actions and info_action_blocks.size > 0 -%}
+          {%- if section.settings.show_info_actions -%}
             <div class="product-info-actions">
               {%- if section.settings.info_actions_heading != blank -%}
                 <p class="product-info-actions__heading">{{ section.settings.info_actions_heading | escape }}</p>
               {%- endif -%}
+
+              {%- assign primary_action_title = section.settings.primary_info_action_title | default: 'Product details' -%}
+              <button
+                type="button"
+                class="product-info-action-btn"
+                data-info-action-open
+                data-sheet-source="sheet-content-primary-description"
+                data-sheet-title="{{ primary_action_title | escape }}"
+              >
+                <span class="product-info-action-btn__title">{{ primary_action_title | escape }}</span>
+                <svg class="product-info-action-btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6"></path>
+                </svg>
+              </button>
+              <div id="sheet-content-primary-description" hidden>
+                {%- if product.description != blank -%}
+                  {{ product.description }}
+                {%- else -%}
+                  <p>{{ product.title | escape }}</p>
+                {%- endif -%}
+              </div>
+
               {%- for block in info_action_blocks -%}
                 {%- assign action_title = block.settings.title | default: 'Info' -%}
                 <button
@@ -1437,9 +1468,7 @@
                   </svg>
                 </button>
                 <div id="sheet-content-{{ block.id }}" hidden>
-                  {%- if block.settings.use_product_description and product.description != blank -%}
-                    {{ product.description }}
-                  {%- elsif block.settings.content != blank -%}
+                  {%- if block.settings.content != blank -%}
                     {{ block.settings.content }}
                   {%- else -%}
                     <p>{{ block.settings.title | default: 'Content' | escape }}</p>
@@ -1551,6 +1580,7 @@
     tabindex="-1"
     data-info-sheet-panel
   >
+    <div class="product-info-sheet__grabber" aria-hidden="true"></div>
     <div class="product-info-sheet__header">
       <h3 class="product-info-sheet__title" id="product-info-sheet-title">Info</h3>
       <button type="button" class="product-info-sheet__close" data-info-sheet-close aria-label="{{ section.settings.info_sheet_close_label | default: 'Close details' | escape }}">
@@ -2549,6 +2579,12 @@
     },
     {
       "type": "text",
+      "id": "primary_info_action_title",
+      "label": "Primary info row title (product description)",
+      "default": "Product details"
+    },
+    {
+      "type": "text",
       "id": "info_sheet_close_label",
       "label": "Bottom sheet close label",
       "default": "Close details"
@@ -2701,7 +2737,7 @@
     },
     {
       "type": "info_action",
-      "name": "Info Action Row",
+      "name": "Info Action Row (Custom)",
       "settings": [
         {
           "type": "text",
@@ -2714,12 +2750,6 @@
           "id": "content",
           "label": "Content",
           "default": "<p>Add helpful details for shoppers here.</p>"
-        },
-        {
-          "type": "checkbox",
-          "id": "use_product_description",
-          "label": "Use product description as content",
-          "default": false
         },
         {
           "type": "text",
@@ -2785,18 +2815,8 @@
         {
           "type": "info_action",
           "settings": {
-            "title": "Product details",
-            "content": "<p>Discover fit, fabric, and care notes.</p>",
-            "use_product_description": true,
-            "review_anchor_or_note": "Optional note"
-          }
-        },
-        {
-          "type": "info_action",
-          "settings": {
             "title": "Why you'll love it",
             "content": "<p>Crafted for comfort, shape retention, and all-day wear.</p>",
-            "use_product_description": false,
             "review_anchor_or_note": "Optional note"
           }
         },
@@ -2805,7 +2825,6 @@
           "settings": {
             "title": "Reviews",
             "content": "<p>See what verified buyers are saying.</p>",
-            "use_product_description": false,
             "review_anchor_or_note": "Hook this row to your review app anchor when installed."
           }
         },
