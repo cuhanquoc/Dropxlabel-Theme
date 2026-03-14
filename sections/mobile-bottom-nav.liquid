@@ -297,7 +297,8 @@
         this._menuBtn.removeEventListener('click', this._onMenuClick);
       }
       if (this._cartLink && this._onCartClick) {
-        this._cartLink.removeEventListener('click', this._onCartClick);
+        this._cartLink.removeEventListener('click', this._onCartClick, true);
+        this._cartLink.removeEventListener('touchend', this._onCartClick, true);
       }
     }
 
@@ -361,11 +362,13 @@
       this._cartLink = this.querySelector('[data-mob-cart]');
       if (this._cartLink) {
         this._onCartClick = (event) => {
+          event.preventDefault();
           event.stopPropagation();
           const href = this._cartLink.getAttribute('href') || '/cart';
           window.location.assign(href);
         };
-        this._cartLink.addEventListener('click', this._onCartClick);
+        this._cartLink.addEventListener('click', this._onCartClick, true);
+        this._cartLink.addEventListener('touchend', this._onCartClick, true);
       }
     }
 

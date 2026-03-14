@@ -345,8 +345,8 @@
 
   /* Color swatch */
   .color-swatch {
-    width: 32px;
-    height: 32px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     cursor: pointer;
     border: 2px solid transparent;
@@ -624,8 +624,8 @@
       height: 44px;
     }
     .color-swatch {
-      width: 36px;
-      height: 36px;
+      width: 22px;
+      height: 22px;
     }
     .qty-btn {
       width: 44px;
@@ -687,8 +687,13 @@
       font-size: 0.82rem !important;
     }
     #main-product.mobile-compact-enabled .color-swatch {
-      width: 44px;
-      height: 44px;
+      width: 22px;
+      height: 22px;
+    }
+    #main-product [data-option-name="color"],
+    #main-product [data-option-name="colour"],
+    #main-product [data-option-name="màu"] {
+      padding-left: 0.45rem;
     }
     #main-product.mobile-compact-enabled .product-quantity-wrap,
     #main-product.mobile-compact-enabled .product-benefits-wrap,
@@ -1339,7 +1344,9 @@
             {%- if has_delivery_text -%}
             <div style="display: flex; align-items: center; gap: 10px;">
                <span style="display:inline-flex; width:24px; height:24px; align-items:center; justify-content:center;">
-                 {%- if section.settings.delivery_icon_svg != blank -%}
+                 {%- if section.settings.delivery_icon_image != blank -%}
+                   {{ section.settings.delivery_icon_image | image_url: width: 48 | image_tag: loading: 'lazy', alt: 'Delivery icon', widths: '24,48', sizes: '24px', style: 'width:24px;height:24px;object-fit:contain;display:block;' }}
+                 {%- elsif section.settings.delivery_icon_svg != blank -%}
                    {{ section.settings.delivery_icon_svg }}
                  {%- else -%}
                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1354,7 +1361,9 @@
             {%- if has_returns_text -%}
             <div style="display: flex; align-items: center; gap: 10px;">
                <span style="display:inline-flex; width:24px; height:24px; align-items:center; justify-content:center;">
-                 {%- if section.settings.returns_icon_svg != blank -%}
+                 {%- if section.settings.returns_icon_image != blank -%}
+                   {{ section.settings.returns_icon_image | image_url: width: 48 | image_tag: loading: 'lazy', alt: 'Returns icon', widths: '24,48', sizes: '24px', style: 'width:24px;height:24px;object-fit:contain;display:block;' }}
+                 {%- elsif section.settings.returns_icon_svg != blank -%}
                    {{ section.settings.returns_icon_svg }}
                  {%- else -%}
                    <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5"><path d="m3 9a9 9 0 1 0 5-6.5l-3 2"/><path d="m2 2v6h6"/><path d="m9 11v6l3-1.5 3 1.5v-6z" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -2694,9 +2703,16 @@
       "default": "Free delivery within 2 days"
     },
     {
+      "type": "image_picker",
+      "id": "delivery_icon_image",
+      "label": "Delivery icon image (recommended)",
+      "info": "Upload PNG/SVG in Shopify Files first (transparent background, 24x24 to 48x48), then pick image here."
+    },
+    {
       "type": "textarea",
       "id": "delivery_icon_svg",
       "label": "Delivery icon SVG (optional)",
+      "info": "Used only when no icon image is selected.",
       "default": "<svg fill=\"none\" height=\"24\" viewBox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"m11.5 5h-7.5c-1.10457 0-2 .89543-2 2v9c0 1.1046.89543 2 2 2h1m6-13h3.5l4 4v5.5c0 1.1046-.8954 2-2 2h-1m-11 0c0 1.1046.89543 2 2 2s2-.8954 2-2m-4 0c0-1.1046.89543-2 2-2s2 .8954 2 2m5 0h2m-4 0c0 1.1046.8954 2 2 2s2-.8954 2-2m-4 0c0-1.1046.8954-2 2-2s2 .8954 2 2m-14-6h17m-17 3h15\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"
     },
     {
@@ -2706,9 +2722,16 @@
       "default": "Free + easy returns"
     },
     {
+      "type": "image_picker",
+      "id": "returns_icon_image",
+      "label": "Returns icon image (recommended)",
+      "info": "Upload PNG/SVG in Shopify Files first (transparent background, 24x24 to 48x48), then pick image here."
+    },
+    {
       "type": "textarea",
       "id": "returns_icon_svg",
       "label": "Returns icon SVG (optional)",
+      "info": "Used only when no icon image is selected.",
       "default": "<svg fill=\"none\" height=\"24\" viewBox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"m3 9a9 9 0 1 0 5-6.5l-3 2\"/><path d=\"m2 2v6h6\"/><path d=\"m9 11v6l3-1.5 3 1.5v-6z\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"
     },
     {
