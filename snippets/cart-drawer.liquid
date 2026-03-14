@@ -157,14 +157,21 @@
     min-width: 0;
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
     gap: 10px;
   }
 
   .cd-item-info {
+    flex: 1 1 auto;
     min-width: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+
+  .cd-item-meta {
+    min-width: 0;
+    margin-bottom: 10px;
   }
 
   .cd-item-name {
@@ -174,10 +181,10 @@
     line-height: 1.3;
     font-weight: 700;
     color: #111;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    display: block;
+    white-space: normal;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .cd-item-variant {
@@ -231,12 +238,28 @@
   }
 
   .cd-item-price {
-    margin: 0;
+    margin: 0 0 2px;
     font-size: 15px;
     line-height: 1.5;
     font-weight: 700;
     color: #111;
     white-space: nowrap;
+  }
+
+  .cd-item-compare {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #8a8a8a;
+    text-decoration: line-through;
+    white-space: nowrap;
+  }
+
+  .cd-item-price-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0;
   }
 
   .cd-remove-btn {
@@ -353,6 +376,10 @@
     margin-top: 14px;
   }
 
+  .cd-note-wrap {
+    position: relative;
+  }
+
   .cd-note-row {
     display: flex;
     align-items: center;
@@ -399,13 +426,28 @@
   }
 
   .cd-note-panel {
-    display: none;
-    padding: 10px 0 12px;
-    border-bottom: 1px solid #eee;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(100% + 10px);
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    padding: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(14px);
+    pointer-events: none;
+    transition: transform 260ms ease, opacity 260ms ease, visibility 260ms ease;
+    z-index: 3;
   }
 
   .cd-note-panel.is-open {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
   .cd-note-textarea {
@@ -640,8 +682,8 @@
 
           <div class="cd-item-main">
             <div class="cd-item-info">
-              <div>
-                <p class="cd-item-name">{{ item.product_title }}</p>
+              <div class="cd-item-meta">
+                <p class="cd-item-name">{{ item.product_title | default: item.title }}</p>
                 {% unless item.variant_title == 'Default Title' %}
                   <p class="cd-item-variant">{{ item.variant_title }}</p>
                 {% endunless %}
@@ -669,7 +711,12 @@
             </div>
 
             <div class="cd-item-side">
-              <p class="cd-item-price">{{ item.final_line_price | money }}</p>
+              <div class="cd-item-price-wrap">
+                <p class="cd-item-price">{{ item.final_line_price | money }}</p>
+                {% if item.original_line_price > item.final_line_price %}
+                  <p class="cd-item-compare">{{ item.original_line_price | money }}</p>
+                {% endif %}
+              </div>
               <button
                 class="cd-remove-btn"
                 aria-label="Remove {{ item.title | escape }}"
@@ -735,18 +782,20 @@
 
   {% if cart.item_count > 0 %}
     <div class="cd-footer">
-      <div class="cd-note-row">
-        <button class="cd-note-toggle" type="button" data-cd-note-toggle aria-expanded="false">
-          <span class="icon" aria-hidden="true">☰</span>
-          <span>Order special instructions</span>
-          <span class="cd-note-plus" aria-hidden="true">+</span>
-        </button>
-      </div>
+      <div class="cd-note-wrap">
+        <div class="cd-note-row">
+          <button class="cd-note-toggle" type="button" data-cd-note-toggle aria-expanded="false">
+            <span class="icon" aria-hidden="true">☰</span>
+            <span>Order special instructions</span>
+            <span class="cd-note-plus" aria-hidden="true">+</span>
+          </button>
+        </div>
 
-      <div class="cd-note-panel" data-cd-note-panel>
-        <textarea class="cd-note-textarea" data-cd-note-input placeholder="Add a note for your order">{{ cart.note }}</textarea>
-        <div class="cd-note-actions">
-          <button type="button" class="cd-note-save" data-cd-note-save>Save note</button>
+        <div class="cd-note-panel" data-cd-note-panel>
+          <textarea class="cd-note-textarea" data-cd-note-input placeholder="Add a note for your order">{{ cart.note }}</textarea>
+          <div class="cd-note-actions">
+            <button type="button" class="cd-note-save" data-cd-note-save>Save note</button>
+          </div>
         </div>
       </div>
 

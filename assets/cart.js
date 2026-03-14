@@ -266,6 +266,10 @@
     if (noteToggle) {
       const panel = document.querySelector('[data-cd-note-panel]');
       if (panel) {
+        const drawer = document.getElementById('cart-drawer');
+        if (drawer) {
+          drawer.scrollTo({ top: drawer.scrollHeight, behavior: 'smooth' });
+        }
         const isOpen = panel.classList.toggle('is-open');
         noteToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
         const plus = noteToggle.querySelector('.cd-note-plus');
