@@ -1,0 +1,74 @@
+{
+  "sections": {
+    "main": {
+      "type": "faq-page-ui",
+      "settings": {
+        "hero_image_alt": "Yellow knitted fabric texture",
+        "hero_title": "Customer Queries",
+        "hero_height_mobile": 260,
+        "overlay_color": "#000000",
+        "overlay_top_opacity": 40,
+        "overlay_middle_opacity": 20,
+        "overlay_bottom_opacity": 40,
+        "heading": "Got Questions? We've Got Answers!",
+        "description": "We know that choosing the right products and understanding how they work can sometimes be overwhelming. That's why we've put together a comprehensive FAQ section to help answer all your queries quickly and efficiently.",
+        "page_bg_color": "#E8E8E8",
+        "card_bg_color": "#F3F3F3",
+        "text_color": "#111111",
+        "muted_text_color": "#4F4F4F",
+        "border_color": "#E5E5E5",
+        "icon_bg_color": "#111111",
+        "icon_color": "#FFFFFF",
+        "card_radius": 28,
+        "item_radius": 12,
+        "shadow_y": 28,
+        "shadow_blur": 70,
+        "shadow_opacity": 18
+      },
+      "blocks": {
+        "faq_1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How can I track my order?",
+            "answer": "<p>Once your order is shipped, you'll receive a tracking number via email to monitor your delivery status.</p>",
+            "default_open": false
+          }
+        },
+        "faq_2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return policy?",
+            "answer": "<p>We offer a 30-day return policy on all unused items in their original packaging. Simply contact our support team to initiate a return.</p>",
+            "default_open": false
+          }
+        },
+        "faq_3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How long does it take to process a refund?",
+            "answer": "<p>Refunds are typically processed within 5-7 business days after we receive your returned item. You'll receive a confirmation email once the refund has been issued.</p>",
+            "default_open": false
+          }
+        },
+        "faq_4": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What payment methods do you accept?",
+            "answer": "<p>We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, and Google Pay for your convenience.</p>",
+            "default_open": false
+          }
+        },
+        "faq_5": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How can I contact customer support?",
+            "answer": "<p>You can reach our customer support team via email, live chat on the website, or by calling your support hotline.</p>",
+            "default_open": false
+          }
+        }
+      },
+      "block_order": ["faq_1", "faq_2", "faq_3", "faq_4", "faq_5"]
+    }
+  },
+  "order": ["main"]
+}
