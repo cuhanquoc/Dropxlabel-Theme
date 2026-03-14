@@ -111,6 +111,8 @@
 
     header.site-header > .mx-auto {
       position: relative;
+      min-height: 48px;
+      justify-content: center;
     }
 
     /* Keep logo visually centered but remove it from flex flow on mobile */
@@ -124,9 +126,21 @@
       text-overflow: ellipsis;
     }
 
+    /* Lock hamburger to left edge */
+    header.site-header .hamburger-btn {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
     /* Tighten icon cluster on the right per mobile mock */
     header.site-header .header-right-icons {
-      margin-left: auto !important;
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-left: 0 !important;
       justify-content: flex-end;
       flex: 0 0 auto;
       gap: 0.35rem !important;
