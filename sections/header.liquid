@@ -103,19 +103,21 @@
   }
 
   @media (max-width: 767px) {
+    /* Keep outer header flush; control horizontal gutter from inner wrapper */
     header.site-header {
-      padding-left: 1rem !important;
-      padding-right: 1rem !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
     }
 
+    /* Tighten icon cluster on the right per mobile mock */
     header.site-header .header-right-icons {
-      gap: 0.5rem !important;
+      gap: 0.35rem !important;
     }
   }
 </style>
 
 <header class="site-header left-0 w-full z-40 py-3 md:py-6 transition-colors duration-300">
-  <div class="mx-auto max-w-screen-xl w-full flex justify-between items-center px-3 md:px-10">
+  <div class="mx-auto max-w-screen-xl w-full flex justify-between items-center px-4 md:px-10">
 
   <!-- LEFT: Navigation Links -->
   <!-- Hamburger Button (mobile only) -->
