@@ -463,7 +463,9 @@
               "banner_alt": "",
               "group_number": "01",
               "group_title": "Collections",
-              "collections": [],
+              "collections": [
+                "beach-vibes"
+              ],
               "fallback_menu": ""
             }
           },
