@@ -47,7 +47,7 @@
             fetchpriority: 'high',
             widths: '480, 720, 960, 1200, 1600',
             sizes: '(max-width: 767px) 100vw, 430px',
-            alt: section.settings.hero_title
+            alt: section.settings.hero_image_alt | default: section.settings.hero_title
         }}
       {%- else -%}
         <div class="news-page__hero-placeholder" aria-hidden="true"></div>
@@ -64,7 +64,7 @@
     {%- if selected_blog != blank and article_count > 0 -%}
       <div class="news-page__count">
         <p class="news-page__count-text">
-          {{ article_count }} {{ article_count | pluralize: 'Article', 'Articles' }}
+          {{ article_count }} {{ article_count | pluralize: section.settings.count_label_singular, section.settings.count_label_plural }}
         </p>
       </div>
 
@@ -628,6 +628,12 @@
     },
     {
       "type": "text",
+      "id": "hero_image_alt",
+      "label": "Hero image alt text",
+      "default": "News hero banner"
+    },
+    {
+      "type": "text",
       "id": "hero_title",
       "label": "Hero title",
       "default": "Stories to Inspire You"
@@ -672,6 +678,18 @@
       "max": 24,
       "step": 1,
       "default": 12
+    },
+    {
+      "type": "text",
+      "id": "count_label_singular",
+      "label": "Article count singular label",
+      "default": "Article"
+    },
+    {
+      "type": "text",
+      "id": "count_label_plural",
+      "label": "Article count plural label",
+      "default": "Articles"
     },
     {
       "type": "checkbox",

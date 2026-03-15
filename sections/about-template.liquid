@@ -232,7 +232,9 @@
 
         {%- if testimonial_count == 0 -%}
           <article class="abt3-testimonials__card">
-            <p class="abt3-testimonials__empty">Add testimonial blocks in the Theme Editor.</p>
+            <p class="abt3-testimonials__empty">
+              {{ section.settings.testimonials_empty_text | default: 'Add testimonial blocks in the Theme Editor.' }}
+            </p>
           </article>
         {%- endif -%}
       </div>
@@ -1026,6 +1028,12 @@
       "id": "testimonials_heading",
       "label": "Testimonials heading",
       "default": "SEE WHAT REAL CUSTOMER SAY"
+    },
+    {
+      "type": "text",
+      "id": "testimonials_empty_text",
+      "label": "Testimonials empty state text",
+      "default": "Add testimonial blocks in the Theme Editor."
     }
   ],
   "blocks": [
