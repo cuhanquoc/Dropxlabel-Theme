@@ -140,29 +140,35 @@
                 {%- endif -%}
               </div>
 
-              <div class="abt-style__card abt-reveal-soft">
-                {%- if block.settings.card_title != blank -%}
-                  <h3 class="abt-style__card-title">{{ block.settings.card_title }}</h3>
-                {%- endif -%}
+              <div class="abt-style__card-wrap" aria-hidden="true"></div>
+              <div class="abt-style__card-area">
+                <div class="abt-style__card abt-reveal-soft">
+                  {%- if block.settings.card_title != blank -%}
+                    <h3 class="abt-style__card-title">{{ block.settings.card_title }}</h3>
+                  {%- endif -%}
 
-                {%- if block.settings.card_text != blank -%}
-                  <div class="abt-style__card-text rte">{{ block.settings.card_text }}</div>
-                {%- endif -%}
+                  {%- if block.settings.card_text != blank -%}
+                    <div class="abt-style__card-text rte">{{ block.settings.card_text }}</div>
+                  {%- endif -%}
 
-                {%- if block.settings.button_label != blank -%}
-                  <a class="abt-style__button" href="{{ block.settings.button_link | default: routes.collections_url }}">
-                    <span>{{ block.settings.button_label }}</span>
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                  </a>
-                {%- endif -%}
+                  {%- if block.settings.button_label != blank -%}
+                    <a class="abt-style__button" href="{{ block.settings.button_link | default: routes.collections_url }}">
+                      <span>{{ block.settings.button_label }}</span>
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                      </svg>
+                    </a>
+                  {%- endif -%}
+                </div>
               </div>
             </section>
         {%- endcase -%}
       {%- endfor -%}
 
       <section class="abt-testimonials" aria-labelledby="abt-testimonials-title-{{ section.id }}">
+        <svg class="abt-testimonials__wave" viewBox="0 0 375 40" fill="none" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 40V20C62.5 0 125 0 187.5 20C250 40 312.5 40 375 20V40H0Z" fill="currentColor"></path>
+        </svg>
         <div class="abt-testimonials__inner">
           {%- if section.settings.testimonials_eyebrow != blank -%}
             <p class="abt-testimonials__eyebrow abt-reveal">{{ section.settings.testimonials_eyebrow }}</p>
@@ -466,16 +472,17 @@
     letter-spacing: 0.03em;
   }
 
+  #AboutTemplate-{{ section.id }} .abt-style__card-area {
+    background: var(--abt-card-bg);
+    padding: 24px 20px;
+  }
+
   #AboutTemplate-{{ section.id }} .abt-style__card {
-    margin: 0 20px;
-    margin-top: -16px;
-    position: relative;
-    z-index: 1;
     background: var(--abt-card-bg);
     border: 1px solid var(--abt-border);
     border-radius: var(--abt-radius-lg);
     padding: 24px;
-    box-shadow: var(--abt-shadow);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--abt-text) 8%, transparent);
   }
 
   #AboutTemplate-{{ section.id }} .abt-style__card-title {
@@ -538,6 +545,19 @@
     padding-bottom: 48px;
     background: color-mix(in srgb, var(--abt-bg) 92%, var(--abt-text) 4%);
     overflow: hidden;
+    color: color-mix(in srgb, var(--abt-bg) 92%, var(--abt-text) 4%);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__wave {
+    display: block;
+    width: 100%;
+    height: 40px;
+    margin-top: -48px;
+    color: color-mix(in srgb, var(--abt-bg) 92%, var(--abt-text) 4%);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__inner {
+    color: var(--abt-text);
   }
 
   #AboutTemplate-{{ section.id }} .abt-testimonials__eyebrow {
