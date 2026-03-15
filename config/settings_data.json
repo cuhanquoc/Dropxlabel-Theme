@@ -461,13 +461,20 @@
             "settings": {
               "label": "All",
               "banner_link": "",
-              "banner_alt": "",
-              "group_number": "01",
-              "group_title": "Collections",
-              "collections": [
-                "beach-vibes"
-              ],
-              "fallback_menu": "customer-account-main-menu"
+              "banner_alt": ""
+            }
+          },
+          "collection_group_KL8ejJ": {
+            "type": "collection_group",
+            "settings": {
+              "number": "01",
+              "title": "New",
+              "collection_1": "best-sellers",
+              "collection_2": "",
+              "collection_3": "bikini",
+              "collection_4": "",
+              "collection_5": "",
+              "collection_6": ""
             }
           },
           "category_tab_VLmX8q": {
@@ -475,11 +482,7 @@
             "settings": {
               "label": "Women Man",
               "banner_link": "",
-              "banner_alt": "",
-              "group_number": "01",
-              "group_title": "Collections",
-              "collections": [],
-              "fallback_menu": ""
+              "banner_alt": ""
             }
           },
           "category_tab_azqAL9": {
@@ -487,11 +490,7 @@
             "settings": {
               "label": "Women",
               "banner_link": "",
-              "banner_alt": "",
-              "group_number": "01",
-              "group_title": "Collections",
-              "collections": [],
-              "fallback_menu": ""
+              "banner_alt": ""
             }
           },
           "category_tab_gMYFER": {
@@ -499,23 +498,19 @@
             "settings": {
               "label": "Men",
               "banner_link": "",
-              "banner_alt": "",
-              "group_number": "01",
-              "group_title": "Collections",
-              "collections": [],
-              "fallback_menu": ""
+              "banner_alt": ""
             }
           }
         },
         "block_order": [
           "category_tab_DJkwVi",
+          "collection_group_KL8ejJ",
           "category_tab_VLmX8q",
           "category_tab_azqAL9",
           "category_tab_gMYFER"
         ],
         "settings": {
           "menu_title": "Menu",
-          "group_heading": "Collections",
           "tab_font_size": 12,
           "group_font_size": 11,
           "link_font_size": 14,
