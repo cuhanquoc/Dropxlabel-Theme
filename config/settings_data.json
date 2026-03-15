@@ -457,6 +457,7 @@
         "blocks": {
           "category_tab_DJkwVi": {
             "type": "category_tab",
+            "name": "ALl",
             "settings": {
               "label": "All",
               "banner_link": "",
@@ -466,7 +467,7 @@
               "collections": [
                 "beach-vibes"
               ],
-              "fallback_menu": ""
+              "fallback_menu": "customer-account-main-menu"
             }
           },
           "category_tab_VLmX8q": {
