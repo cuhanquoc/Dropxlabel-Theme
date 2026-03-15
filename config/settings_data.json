@@ -454,30 +454,13 @@
       },
       "mobile-collection-menu": {
         "type": "mobile-collection-menu",
-        "blocks": {
-          "category_tab_riiBTE": {
-            "type": "category_tab",
-            "settings": {
-              "label": "Women",
-              "banner_link": "",
-              "banner_alt": "",
-              "group_number": "01",
-              "group_title": "Collections",
-              "collections": [],
-              "fallback_menu": ""
-            }
-          }
-        },
-        "block_order": [
-          "category_tab_riiBTE"
-        ],
         "settings": {
           "menu_title": "Menu",
           "group_heading": "Collections",
           "tab_font_size": 12,
           "group_font_size": 11,
           "link_font_size": 14,
-          "show_collection_count": false
+          "show_collection_count": true
         }
       }
     },
