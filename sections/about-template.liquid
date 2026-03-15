@@ -1,320 +1,331 @@
 {%- liquid
+  assign section_id = 'AboutTemplate-' | append: section.id
   assign section_bg = section.settings.background_color | default: 'var(--color-base-background-1, #ffffff)'
   assign card_bg = section.settings.card_background_color | default: 'var(--color-base-background-1, #ffffff)'
   assign muted_text = section.settings.muted_text_color | default: 'rgba(17, 17, 17, 0.68)'
+  assign section_tint = 'color-mix(in srgb, ' | append: section_bg | append: ' 92%, var(--abt-text) 4%)'
   assign hero_overlay = section.settings.hero_overlay_opacity | divided_by: 100.0
-  assign style_overlay = section.settings.style_overlay_opacity | divided_by: 100.0
+  assign street_overlay = section.settings.street_overlay_opacity | divided_by: 100.0
 -%}
 
 <section
-  id="AboutTemplate-{{ section.id }}"
-  class="abt"
+  id="{{ section_id }}"
+  class="abt3"
   style="
     --abt-bg: {{ section_bg }};
     --abt-card-bg: {{ card_bg }};
     --abt-text: var(--color-base-text, var(--color-text, #111111));
     --abt-muted: {{ muted_text }};
     --abt-border: color-mix(in srgb, var(--abt-text) 12%, transparent);
-    --abt-shadow: 0 12px 40px color-mix(in srgb, var(--abt-text) 8%, transparent);
+    --abt-shadow: 0 12px 30px color-mix(in srgb, var(--abt-text) 6%, transparent);
+    --abt-section-tint: {{ section_tint }};
     --abt-hero-overlay: {{ hero_overlay }};
-    --abt-style-overlay: {{ style_overlay }};
+    --abt-street-overlay: {{ street_overlay }};
     --abt-top: {{ section.settings.padding_top }}px;
     --abt-bottom: {{ section.settings.padding_bottom }}px;
-    --abt-radius-xl: {{ section.settings.card_radius }}px;
-    --abt-radius-lg: {{ section.settings.inner_radius }}px;
+    --abt-card-radius: {{ section.settings.card_radius }}px;
     --abt-button-radius: {{ section.settings.button_radius }}px;
+    --abt-wave-height: 40px;
   "
 >
-  <div class="abt__shell">
-    <header class="abt__hero abt-reveal" role="banner">
-      <div class="abt__hero-media">
-        {%- if section.settings.hero_image != blank -%}
+  <div class="abt3__shell">
+    <section class="abt3-hero">
+      <div class="abt3-hero__media">
+        <div class="abt3-hero__img-wrap abt3-anim--hero-zoom">
+          {%- if section.settings.hero_image != blank -%}
+            {{
+              section.settings.hero_image
+              | image_url: width: 1600
+              | image_tag:
+                class: 'abt3-hero__img',
+                loading: 'eager',
+                fetchpriority: 'high',
+                widths: '480, 720, 960, 1200, 1600',
+                sizes: '(max-width: 767px) 100vw, 480px',
+                alt: section.settings.hero_heading
+            }}
+          {%- else -%}
+            <div class="abt3__placeholder abt3-hero__placeholder" aria-hidden="true"></div>
+          {%- endif -%}
+        </div>
+        <div class="abt3-hero__overlay abt3-anim--fade-in" aria-hidden="true"></div>
+        <div class="abt3-hero__content">
+          {%- if section.settings.hero_heading != blank -%}
+            <h1 class="abt3-hero__heading abt3-anim--slide-up" style="animation-delay: 0.6s;">
+              {{ section.settings.hero_heading }}
+            </h1>
+          {%- endif -%}
+          {%- if section.settings.hero_subheading != blank -%}
+            <div class="abt3-hero__subheading abt3-anim--slide-up" style="animation-delay: 1s;">
+              {{ section.settings.hero_subheading }}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+
+    <section class="abt3-brand" data-anim-section>
+      <div class="abt3-brand__text abt3-scroll-anim" data-anim="fade-up">
+        {%- if section.settings.brand_text != blank -%}
+          <div class="abt3-brand__paragraph rte">{{ section.settings.brand_text }}</div>
+        {%- endif -%}
+      </div>
+      <div class="abt3-brand__media abt3-scroll-anim" data-anim="scale-in" data-anim-delay="0.3">
+        {%- if section.settings.brand_image != blank -%}
           {{
-            section.settings.hero_image
+            section.settings.brand_image
             | image_url: width: 1600
             | image_tag:
-              class: 'abt__hero-image',
-              loading: 'eager',
-              fetchpriority: 'high',
+              class: 'abt3-brand__img',
+              loading: 'lazy',
               widths: '480, 720, 960, 1200, 1600',
               sizes: '(max-width: 767px) 100vw, 480px',
-              alt: section.settings.hero_image_alt
+              alt: section.settings.brand_image_alt
           }}
         {%- else -%}
-          <div class="abt__hero-placeholder" aria-hidden="true"></div>
-        {%- endif -%}
-        <div class="abt__hero-overlay" aria-hidden="true"></div>
-      </div>
-
-      <div class="abt__hero-copy">
-        {%- if section.settings.hero_heading != blank -%}
-          <h1 class="abt__hero-heading">{{ section.settings.hero_heading }}</h1>
-        {%- endif -%}
-        {%- if section.settings.hero_subheading != blank -%}
-          <p class="abt__hero-subheading">{{ section.settings.hero_subheading }}</p>
+          <div class="abt3__placeholder abt3-brand__placeholder" aria-hidden="true"></div>
         {%- endif -%}
       </div>
-    </header>
+    </section>
 
-    <div class="abt__content">
-      {%- for block in section.blocks -%}
-        {%- case block.type -%}
-          {%- when 'story_quote' -%}
-            <section class="abt-story abt-reveal" {{ block.shopify_attributes }}>
-              {%- if block.settings.text != blank -%}
-                <div class="abt-story__text rte">{{ block.settings.text }}</div>
+    <section class="abt3-mission" data-anim-section>
+      {%- if section.settings.mission_heading != blank -%}
+        <div class="abt3-mission__heading abt3-scroll-anim" data-anim="slide-left">
+          {{ section.settings.mission_heading }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.mission_text_1 != blank -%}
+        <div class="abt3-mission__text rte abt3-scroll-anim" data-anim="fade-up" data-anim-delay="0.2">
+          {{ section.settings.mission_text_1 }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.mission_text_2 != blank -%}
+        <div class="abt3-mission__text rte abt3-scroll-anim" data-anim="fade-up" data-anim-delay="0.4">
+          {{ section.settings.mission_text_2 }}
+        </div>
+      {%- endif -%}
+
+      <div class="abt3-mission__media abt3-scroll-anim" data-anim="zoom-reveal">
+        {%- if section.settings.mission_image != blank -%}
+          {{
+            section.settings.mission_image
+            | image_url: width: 1600
+            | image_tag:
+              class: 'abt3-mission__img',
+              loading: 'lazy',
+              widths: '480, 720, 960, 1200, 1600',
+              sizes: '(max-width: 767px) 100vw, 480px',
+              alt: section.settings.mission_image_alt
+          }}
+        {%- else -%}
+          <div class="abt3__placeholder abt3-mission__placeholder" aria-hidden="true"></div>
+        {%- endif -%}
+      </div>
+    </section>
+
+    <section class="abt3-street" data-anim-section>
+      <div class="abt3-street__media abt3-scroll-anim" data-anim="fade-in">
+        <div class="abt3-street__img-wrap abt3-scroll-anim" data-anim="hero-zoom">
+          {%- if section.settings.street_image != blank -%}
+            {{
+              section.settings.street_image
+              | image_url: width: 1600
+              | image_tag:
+                class: 'abt3-street__img',
+                loading: 'lazy',
+                widths: '480, 720, 960, 1200, 1600',
+                sizes: '(max-width: 767px) 100vw, 480px',
+                alt: section.settings.street_image_alt
+            }}
+          {%- else -%}
+            <div class="abt3__placeholder abt3-street__placeholder" aria-hidden="true"></div>
+          {%- endif -%}
+        </div>
+        <div class="abt3-street__overlay" aria-hidden="true"></div>
+        <div class="abt3-street__heading-wrap">
+          {%- if section.settings.street_heading != blank -%}
+            <h2 class="abt3-street__heading abt3-scroll-anim" data-anim="fade-up" data-anim-delay="0.4">
+              {{ section.settings.street_heading }}
+            </h2>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="abt3-street__card-wrap">
+        <div class="abt3-street__card abt3-scroll-anim" data-anim="fade-up">
+          {%- if section.settings.street_card_title != blank -%}
+            <h3 class="abt3-street__card-title">{{ section.settings.street_card_title }}</h3>
+          {%- endif -%}
+          {%- if section.settings.street_card_text != blank -%}
+            <div class="abt3-street__card-text rte">{{ section.settings.street_card_text }}</div>
+          {%- endif -%}
+          {%- if section.settings.street_cta_text != blank -%}
+            <a
+              href="{{ section.settings.street_cta_link | default: routes.collections_url }}"
+              class="abt3-street__btn"
+            >
+              {{ section.settings.street_cta_text }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+
+    <section class="abt3-testimonials" data-anim-section>
+      <svg class="abt3-testimonials__wave" viewBox="0 0 375 40" fill="none" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 40V20C62.5 0 125 0 187.5 20C250 40 312.5 40 375 20V40H0Z" fill="currentColor"></path>
+      </svg>
+
+      <div class="abt3-testimonials__header">
+        {%- if section.settings.testimonials_subtitle != blank -%}
+          <p class="abt3-testimonials__subtitle abt3-scroll-anim" data-anim="fade-up">
+            {{ section.settings.testimonials_subtitle }}
+          </p>
+        {%- endif -%}
+        {%- if section.settings.testimonials_heading != blank -%}
+          <h2 class="abt3-testimonials__heading abt3-scroll-anim" data-anim="fade-up" data-anim-delay="0.15">
+            {{ section.settings.testimonials_heading }}
+          </h2>
+        {%- endif -%}
+      </div>
+
+      <div class="abt3-testimonials__carousel abt3-scroll-anim" data-anim="slide-right" data-anim-delay="0.3" data-abt3-carousel>
+        {%- assign testimonial_count = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'testimonial' -%}
+            {%- assign testimonial_count = testimonial_count | plus: 1 -%}
+            <article class="abt3-testimonials__card" data-abt3-card {{ block.shopify_attributes }}>
+              {%- if block.settings.review_text != blank -%}
+                <div class="abt3-testimonials__review rte">{{ block.settings.review_text }}</div>
               {%- endif -%}
-
-              <div class="abt-story__media abt-reveal-soft">
-                {%- if block.settings.image != blank -%}
+              <div class="abt3-testimonials__author">
+                {%- if block.settings.avatar != blank -%}
                   {{
-                    block.settings.image
-                    | image_url: width: 1200
+                    block.settings.avatar
+                    | image_url: width: 112
                     | image_tag:
-                      class: 'abt-story__image',
+                      class: 'abt3-testimonials__avatar',
                       loading: 'lazy',
-                      widths: '480, 720, 960, 1200',
-                      sizes: '(max-width: 767px) 100vw, 480px',
-                      alt: block.settings.image_alt
+                      widths: '56, 80, 112',
+                      sizes: '56px',
+                      alt: block.settings.name
                   }}
                 {%- else -%}
-                  <div class="abt-story__placeholder" aria-hidden="true"></div>
-                {%- endif -%}
-              </div>
-            </section>
-
-          {%- when 'mission_story' -%}
-            <section class="abt-mission abt-reveal" {{ block.shopify_attributes }}>
-              {%- if block.settings.heading != blank -%}
-                <div class="abt-mission__heading">{{ block.settings.heading }}</div>
-              {%- endif -%}
-
-              {%- if block.settings.body_1 != blank -%}
-                <div class="abt-mission__body rte">{{ block.settings.body_1 }}</div>
-              {%- endif -%}
-
-              {%- if block.settings.body_2 != blank -%}
-                <div class="abt-mission__body rte">{{ block.settings.body_2 }}</div>
-              {%- endif -%}
-
-              <div class="abt-mission__media abt-reveal-soft">
-                {%- if block.settings.image != blank -%}
-                  {{
-                    block.settings.image
-                    | image_url: width: 1400
-                    | image_tag:
-                      class: 'abt-mission__image',
-                      loading: 'lazy',
-                      widths: '480, 720, 960, 1200, 1400',
-                      sizes: '(max-width: 767px) 100vw, 480px',
-                      alt: block.settings.image_alt
-                  }}
-                {%- else -%}
-                  <div class="abt-mission__placeholder" aria-hidden="true"></div>
-                {%- endif -%}
-              </div>
-            </section>
-
-          {%- when 'style_feature' -%}
-            <section class="abt-style abt-reveal" {{ block.shopify_attributes }}>
-              <div class="abt-style__hero">
-                {%- if block.settings.image != blank -%}
-                  {{
-                    block.settings.image
-                    | image_url: width: 1400
-                    | image_tag:
-                      class: 'abt-style__image',
-                      loading: 'lazy',
-                      widths: '480, 720, 960, 1200, 1400',
-                      sizes: '(max-width: 767px) 100vw, 480px',
-                      alt: block.settings.image_alt
-                  }}
-                {%- else -%}
-                  <div class="abt-style__placeholder" aria-hidden="true"></div>
-                {%- endif -%}
-                <div class="abt-style__overlay" aria-hidden="true"></div>
-                {%- if block.settings.overlay_heading != blank -%}
-                  <div class="abt-style__headline-wrap">
-                    <h2 class="abt-style__headline">{{ block.settings.overlay_heading }}</h2>
+                  <div class="abt3-testimonials__avatar-placeholder" aria-hidden="true">
+                    {{ block.settings.name | default: 'A' | slice: 0 }}
                   </div>
                 {%- endif -%}
-              </div>
-
-              <div class="abt-style__card-wrap" aria-hidden="true"></div>
-              <div class="abt-style__card-area">
-                <div class="abt-style__card abt-reveal-soft">
-                  {%- if block.settings.card_title != blank -%}
-                    <h3 class="abt-style__card-title">{{ block.settings.card_title }}</h3>
+                <div>
+                  {%- if block.settings.name != blank -%}
+                    <p class="abt3-testimonials__name">{{ block.settings.name }}</p>
                   {%- endif -%}
-
-                  {%- if block.settings.card_text != blank -%}
-                    <div class="abt-style__card-text rte">{{ block.settings.card_text }}</div>
-                  {%- endif -%}
-
-                  {%- if block.settings.button_label != blank -%}
-                    <a class="abt-style__button" href="{{ block.settings.button_link | default: routes.collections_url }}">
-                      <span>{{ block.settings.button_label }}</span>
-                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </svg>
-                    </a>
+                  {%- if block.settings.location != blank -%}
+                    <p class="abt3-testimonials__location">{{ block.settings.location }}</p>
                   {%- endif -%}
                 </div>
               </div>
-            </section>
-        {%- endcase -%}
-      {%- endfor -%}
-
-      <section class="abt-testimonials" aria-labelledby="abt-testimonials-title-{{ section.id }}">
-        <svg class="abt-testimonials__wave" viewBox="0 0 375 40" fill="none" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 40V20C62.5 0 125 0 187.5 20C250 40 312.5 40 375 20V40H0Z" fill="currentColor"></path>
-        </svg>
-        <div class="abt-testimonials__inner">
-          {%- if section.settings.testimonials_eyebrow != blank -%}
-            <p class="abt-testimonials__eyebrow abt-reveal">{{ section.settings.testimonials_eyebrow }}</p>
+            </article>
           {%- endif -%}
+        {%- endfor -%}
 
-          {%- if section.settings.testimonials_heading != blank -%}
-            <h2 id="abt-testimonials-title-{{ section.id }}" class="abt-testimonials__heading abt-reveal">
-              {{ section.settings.testimonials_heading }}
-            </h2>
-          {%- endif -%}
+        {%- if testimonial_count == 0 -%}
+          <article class="abt3-testimonials__card">
+            <p class="abt3-testimonials__empty">Add testimonial blocks in the Theme Editor.</p>
+          </article>
+        {%- endif -%}
+      </div>
 
-          <div class="abt-testimonials__track abt-reveal" data-abt-track>
-            {%- assign has_testimonials = false -%}
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'testimonial' -%}
-                {%- assign has_testimonials = true -%}
-                <article class="abt-testimonials__card" data-abt-card {{ block.shopify_attributes }}>
-                  {%- if block.settings.text != blank -%}
-                    <div class="abt-testimonials__text rte">{{ block.settings.text }}</div>
-                  {%- endif -%}
-
-                  <div class="abt-testimonials__author">
-                    <div class="abt-testimonials__avatar-wrap">
-                      {%- if block.settings.avatar != blank -%}
-                        {{
-                          block.settings.avatar
-                          | image_url: width: 160
-                          | image_tag:
-                            class: 'abt-testimonials__avatar',
-                            loading: 'lazy',
-                            widths: '80, 120, 160',
-                            sizes: '56px',
-                            alt: block.settings.name
-                        }}
-                      {%- else -%}
-                        <div class="abt-testimonials__avatar-placeholder" aria-hidden="true">
-                          {{ block.settings.name | default: 'A' | slice: 0 }}
-                        </div>
-                      {%- endif -%}
-                    </div>
-
-                    <div class="abt-testimonials__author-copy">
-                      {%- if block.settings.name != blank -%}
-                        <p class="abt-testimonials__name">{{ block.settings.name }}</p>
-                      {%- endif -%}
-                      {%- if block.settings.location != blank -%}
-                        <p class="abt-testimonials__location">{{ block.settings.location }}</p>
-                      {%- endif -%}
-                    </div>
-                  </div>
-                </article>
-              {%- endif -%}
-            {%- endfor -%}
-
-            {%- unless has_testimonials -%}
-              <article class="abt-testimonials__card">
-                <p class="abt-testimonials__empty">Add testimonial blocks in the Theme Editor.</p>
-              </article>
-            {%- endunless -%}
-          </div>
-
-          <div class="abt-testimonials__dots" role="tablist" aria-label="Testimonial pagination">
-            {%- assign testimonial_count = 0 -%}
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'testimonial' -%}
-                <button
-                  class="abt-testimonials__dot{% if testimonial_count == 0 %} is-active{% endif %}"
-                  type="button"
-                  role="tab"
-                  aria-selected="{% if testimonial_count == 0 %}true{% else %}false{% endif %}"
-                  aria-label="Go to testimonial {{ testimonial_count | plus: 1 }}"
-                  data-abt-dot
-                  data-abt-index="{{ testimonial_count }}"
-                ></button>
-                {%- assign testimonial_count = testimonial_count | plus: 1 -%}
-              {%- endif -%}
-            {%- endfor -%}
-          </div>
+      {%- if testimonial_count > 0 -%}
+        <div class="abt3-testimonials__dots" data-abt3-dots>
+          {%- assign dot_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'testimonial' -%}
+              <button
+                class="abt3-testimonials__dot{% if dot_index == 0 %} is-active{% endif %}"
+                type="button"
+                aria-label="Go to testimonial {{ dot_index | plus: 1 }}"
+                aria-selected="{% if dot_index == 0 %}true{% else %}false{% endif %}"
+                data-abt3-dot
+                data-index="{{ dot_index }}"
+              ></button>
+              {%- assign dot_index = dot_index | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
         </div>
-      </section>
-    </div>
+      {%- endif -%}
+    </section>
   </div>
 </section>
 
 <style>
-  #AboutTemplate-{{ section.id }} {
+  #{{ section_id }} {
     padding-top: var(--abt-top);
     padding-bottom: var(--abt-bottom);
     background: var(--abt-bg);
     color: var(--abt-text);
   }
 
-  #AboutTemplate-{{ section.id }} .abt__shell {
+  #{{ section_id }} .abt3__shell {
     width: 100%;
     max-width: 480px;
     margin-inline: auto;
     background: var(--abt-bg);
+    overflow: clip;
   }
 
-  #AboutTemplate-{{ section.id }} .abt__content {
-    display: grid;
-    gap: 0;
+  #{{ section_id }} .abt3__placeholder {
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--abt-text) 8%, transparent), transparent),
+      color-mix(in srgb, var(--abt-card-bg) 88%, var(--abt-text) 6%);
   }
 
-  #AboutTemplate-{{ section.id }} .abt__hero {
-    position: relative;
-    width: 100%;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt__hero-media {
+  #{{ section_id }} .abt3-hero__media,
+  #{{ section_id }} .abt3-street__media {
     position: relative;
     width: 100%;
     aspect-ratio: 3 / 4;
     overflow: hidden;
   }
 
-  #AboutTemplate-{{ section.id }} .abt__hero-image,
-  #AboutTemplate-{{ section.id }} .abt__hero-placeholder {
+  #{{ section_id }} .abt3-hero__img-wrap,
+  #{{ section_id }} .abt3-street__img-wrap {
+    width: 100%;
+    height: 100%;
+  }
+
+  #{{ section_id }} .abt3-hero__img,
+  #{{ section_id }} .abt3-street__img,
+  #{{ section_id }} .abt3-brand__img,
+  #{{ section_id }} .abt3-mission__img {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
   }
 
-  #AboutTemplate-{{ section.id }} .abt__hero-placeholder,
-  #AboutTemplate-{{ section.id }} .abt-story__placeholder,
-  #AboutTemplate-{{ section.id }} .abt-mission__placeholder,
-  #AboutTemplate-{{ section.id }} .abt-style__placeholder {
-    background:
-      linear-gradient(135deg, color-mix(in srgb, var(--abt-text) 10%, transparent), transparent),
-      color-mix(in srgb, var(--abt-card-bg) 88%, var(--abt-text) 5%);
+  #{{ section_id }} .abt3-hero__placeholder,
+  #{{ section_id }} .abt3-street__placeholder {
+    width: 100%;
+    height: 100%;
   }
 
-  #AboutTemplate-{{ section.id }} .abt__hero-image {
-    transform: scale(1.12);
-    animation: abtHeroZoom-{{ section.id }} 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt__hero-overlay,
-  #AboutTemplate-{{ section.id }} .abt-style__overlay {
+  #{{ section_id }} .abt3-hero__overlay,
+  #{{ section_id }} .abt3-street__overlay {
     position: absolute;
     inset: 0;
+  }
+
+  #{{ section_id }} .abt3-hero__overlay {
     background: rgba(0, 0, 0, var(--abt-hero-overlay));
   }
 
-  #AboutTemplate-{{ section.id }} .abt__hero-copy {
+  #{{ section_id }} .abt3-street__overlay {
+    background: rgba(0, 0, 0, var(--abt-street-overlay));
+  }
+
+  #{{ section_id }} .abt3-hero__content {
     position: absolute;
     inset: 0;
     z-index: 1;
@@ -322,140 +333,105 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 0 24px;
     text-align: center;
     color: var(--color-base-solid-button-labels, #ffffff);
   }
 
-  #AboutTemplate-{{ section.id }} .abt__hero-heading,
-  #AboutTemplate-{{ section.id }} .abt__hero-subheading {
+  #{{ section_id }} .abt3-hero__heading {
     margin: 0;
-    opacity: 0;
-    transform: translateY(24px);
-    animation: abtHeroText-{{ section.id }} 0.9s ease-out forwards;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt__hero-heading {
+    color: inherit;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     font-size: clamp(1.75rem, 6vw, 2.3rem);
     line-height: 1.15;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    animation-delay: 0.5s;
   }
 
-  #AboutTemplate-{{ section.id }} .abt__hero-subheading {
-    max-width: 30ch;
+  #{{ section_id }} .abt3-hero__subheading {
     margin-top: 16px;
+    max-width: 32ch;
+    color: color-mix(in srgb, var(--color-base-solid-button-labels, #ffffff) 85%, transparent);
     font-size: 0.95rem;
-    line-height: 1.65;
-    opacity: 0;
-    animation-delay: 0.85s;
+    line-height: 1.6;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-story,
-  #AboutTemplate-{{ section.id }} .abt-mission,
-  #AboutTemplate-{{ section.id }} .abt-style,
-  #AboutTemplate-{{ section.id }} .abt-testimonials {
+  #{{ section_id }} .abt3-hero__subheading p {
+    margin: 0;
+  }
+
+  #{{ section_id }} .abt3-brand {
+    padding: 40px 0;
+  }
+
+  #{{ section_id }} .abt3-brand__text,
+  #{{ section_id }} .abt3-mission,
+  #{{ section_id }} .abt3-testimonials__header,
+  #{{ section_id }} .abt3-testimonials__dots {
     padding-inline: 20px;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-story {
-    padding-top: 40px;
-    padding-bottom: 40px;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-story__text {
+  #{{ section_id }} .abt3-brand__paragraph {
+    text-align: center;
     color: var(--abt-text);
     font-size: 1.125rem;
     font-weight: 600;
     line-height: 1.6;
-    text-align: center;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-story__text p {
+  #{{ section_id }} .abt3-brand__paragraph p,
+  #{{ section_id }} .abt3-mission__text p,
+  #{{ section_id }} .abt3-street__card-text p,
+  #{{ section_id }} .abt3-testimonials__review p {
     margin: 0;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-story__media,
-  #AboutTemplate-{{ section.id }} .abt-mission__media {
+  #{{ section_id }} .abt3-brand__media {
     margin-top: 40px;
+    width: 100%;
     overflow: hidden;
-    margin-inline: -20px;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-story__image,
-  #AboutTemplate-{{ section.id }} .abt-mission__image {
-    width: 100%;
-    aspect-ratio: 4 / 5;
-    object-fit: cover;
-    display: block;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-story__placeholder,
-  #AboutTemplate-{{ section.id }} .abt-mission__placeholder {
+  #{{ section_id }} .abt3-brand__img,
+  #{{ section_id }} .abt3-brand__placeholder,
+  #{{ section_id }} .abt3-mission__img,
+  #{{ section_id }} .abt3-mission__placeholder {
     width: 100%;
     aspect-ratio: 4 / 5;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-mission {
+  #{{ section_id }} .abt3-mission {
     padding-bottom: 40px;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-mission__heading {
+  #{{ section_id }} .abt3-mission__heading {
     margin: 0;
+    color: var(--abt-text);
+    text-transform: uppercase;
     font-size: 1.375rem;
     line-height: 1.25;
-    text-transform: uppercase;
     letter-spacing: 0.03em;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-mission__heading u {
+  #{{ section_id }} .abt3-mission__heading em,
+  #{{ section_id }} .abt3-mission__heading u,
+  #{{ section_id }} .abt3-mission__heading span {
     text-underline-offset: 0.12em;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-mission__body {
+  #{{ section_id }} .abt3-mission__text {
     margin-top: 20px;
     color: var(--abt-muted);
     font-size: 0.95rem;
     line-height: 1.72;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-mission__body p {
-    margin: 0;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-style {
-    padding-inline: 0;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-style__hero {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 3 / 4;
+  #{{ section_id }} .abt3-mission__media {
+    margin-top: 32px;
+    margin-inline: -20px;
     overflow: hidden;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-style__image,
-  #AboutTemplate-{{ section.id }} .abt-style__placeholder {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-style__image {
-    transform: scale(1.12);
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-style.is-visible .abt-style__image {
-    animation: abtHeroZoom-{{ section.id }} 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-style__overlay {
-    background: rgba(0, 0, 0, var(--abt-style-overlay));
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-style__headline-wrap {
+  #{{ section_id }} .abt3-street__heading-wrap {
     position: absolute;
     top: 24px;
     left: 20px;
@@ -463,136 +439,127 @@
     z-index: 1;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-style__headline {
+  #{{ section_id }} .abt3-street__heading {
     margin: 0;
     color: var(--color-base-solid-button-labels, #ffffff);
+    text-transform: uppercase;
     font-size: 1.5rem;
     line-height: 1.2;
-    text-transform: uppercase;
     letter-spacing: 0.03em;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-style__card-area {
-    background: var(--abt-card-bg);
+  #{{ section_id }} .abt3-street__card-wrap {
+    background: var(--abt-bg);
     padding: 24px 20px;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-style__card {
+  #{{ section_id }} .abt3-street__card {
     background: var(--abt-card-bg);
+    border-radius: var(--abt-card-radius);
     border: 1px solid var(--abt-border);
-    border-radius: var(--abt-radius-lg);
     padding: 24px;
-    box-shadow: 0 4px 14px color-mix(in srgb, var(--abt-text) 8%, transparent);
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--abt-text) 6%, transparent);
   }
 
-  #AboutTemplate-{{ section.id }} .abt-style__card-title {
+  #{{ section_id }} .abt3-street__card-title {
     margin: 0;
+    color: var(--abt-text);
     font-size: 1.125rem;
     line-height: 1.3;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-style__card-text {
+  #{{ section_id }} .abt3-street__card-text {
     margin-top: 12px;
     color: var(--abt-muted);
     font-size: 0.9rem;
-    line-height: 1.65;
+    line-height: 1.6;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-style__card-text p {
-    margin: 0;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-style__button {
-    margin-top: 20px;
+  #{{ section_id }} .abt3-street__btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
     min-height: 48px;
-    padding: 0 28px;
+    margin-top: 20px;
+    padding: 0 32px;
     border-radius: var(--abt-button-radius);
     border: 2px solid var(--abt-text);
     background: var(--abt-text);
     color: var(--color-base-background-1, #ffffff);
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.1em;
     font-size: 0.8125rem;
+    line-height: 1;
     transition:
-      transform 180ms ease,
-      background-color 180ms ease,
-      color 180ms ease,
-      border-color 180ms ease;
+      background-color 200ms ease,
+      color 200ms ease,
+      transform 160ms ease;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-style__button:hover {
+  #{{ section_id }} .abt3-street__btn:hover {
     background: transparent;
     color: var(--abt-text);
   }
 
-  #AboutTemplate-{{ section.id }} .abt-style__button:active {
+  #{{ section_id }} .abt3-street__btn:active {
     transform: scale(0.97);
   }
 
-  #AboutTemplate-{{ section.id }} .abt-style__button svg {
-    width: 15px;
-    height: 15px;
-    stroke: currentColor;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-testimonials {
-    padding-top: 48px;
-    padding-bottom: 48px;
-    background: color-mix(in srgb, var(--abt-bg) 92%, var(--abt-text) 4%);
-    overflow: hidden;
-    color: color-mix(in srgb, var(--abt-bg) 92%, var(--abt-text) 4%);
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-testimonials__wave {
-    display: block;
+  #{{ section_id }} .abt3-testimonials {
+    position: relative;
     width: 100%;
-    height: 40px;
-    margin-top: -48px;
-    color: color-mix(in srgb, var(--abt-bg) 92%, var(--abt-text) 4%);
+    padding: 48px 0;
+    background: var(--abt-section-tint);
+    color: var(--abt-section-tint);
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__inner {
+  #{{ section_id }} .abt3-testimonials__wave {
+    position: absolute;
+    top: calc(var(--abt-wave-height) * -1 + 1px);
+    left: 0;
+    width: 100%;
+    height: var(--abt-wave-height);
+    color: var(--abt-section-tint);
+  }
+
+  #{{ section_id }} .abt3-testimonials__subtitle,
+  #{{ section_id }} .abt3-testimonials__heading {
+    margin: 0;
     color: var(--abt-text);
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__eyebrow {
-    margin: 0;
+  #{{ section_id }} .abt3-testimonials__subtitle {
     color: var(--abt-muted);
-    font-size: 0.8125rem;
-    line-height: 1.5;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
+    font-size: 0.8125rem;
     font-weight: 600;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__heading {
-    margin: 8px 0 0;
+  #{{ section_id }} .abt3-testimonials__heading {
+    margin-top: 8px;
+    text-transform: uppercase;
     font-size: 1.5rem;
     line-height: 1.2;
-    text-transform: uppercase;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__track {
+  #{{ section_id }} .abt3-testimonials__carousel {
     display: flex;
     gap: 16px;
     overflow-x: auto;
+    margin-top: 32px;
+    padding: 0 20px 16px;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    margin-top: 32px;
-    padding-bottom: 4px;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__track::-webkit-scrollbar {
+  #{{ section_id }} .abt3-testimonials__carousel::-webkit-scrollbar {
     display: none;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__card {
+  #{{ section_id }} .abt3-testimonials__card {
     flex: 0 0 82%;
     min-height: 280px;
     display: flex;
@@ -600,39 +567,37 @@
     justify-content: space-between;
     scroll-snap-align: center;
     background: var(--abt-card-bg);
+    border-radius: var(--abt-card-radius);
     border: 1px solid var(--abt-border);
-    border-radius: var(--abt-radius-xl);
     padding: 24px;
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--abt-text) 6%, transparent);
+    box-shadow: var(--abt-shadow);
+    color: var(--abt-text);
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__text {
+  #{{ section_id }} .abt3-testimonials__review {
     color: color-mix(in srgb, var(--abt-text) 88%, transparent);
     font-size: 0.95rem;
     line-height: 1.7;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__text p {
-    margin: 0;
-  }
-
-  #AboutTemplate-{{ section.id }} .abt-testimonials__author {
+  #{{ section_id }} .abt3-testimonials__author {
     display: flex;
     align-items: center;
     gap: 16px;
     margin-top: 24px;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__avatar,
-  #AboutTemplate-{{ section.id }} .abt-testimonials__avatar-placeholder {
+  #{{ section_id }} .abt3-testimonials__avatar,
+  #{{ section_id }} .abt3-testimonials__avatar-placeholder {
     width: 56px;
     height: 56px;
-    border-radius: 999px;
     display: block;
+    border-radius: 999px;
     object-fit: cover;
+    flex: 0 0 auto;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__avatar-placeholder {
+  #{{ section_id }} .abt3-testimonials__avatar-placeholder {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -641,142 +606,203 @@
     font-weight: 600;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__name,
-  #AboutTemplate-{{ section.id }} .abt-testimonials__location,
-  #AboutTemplate-{{ section.id }} .abt-testimonials__empty {
+  #{{ section_id }} .abt3-testimonials__name,
+  #{{ section_id }} .abt3-testimonials__location,
+  #{{ section_id }} .abt3-testimonials__empty {
     margin: 0;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__name {
+  #{{ section_id }} .abt3-testimonials__name {
+    color: var(--abt-text);
     font-size: 0.95rem;
-    line-height: 1.4;
     font-weight: 600;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__location,
-  #AboutTemplate-{{ section.id }} .abt-testimonials__empty {
+  #{{ section_id }} .abt3-testimonials__location,
+  #{{ section_id }} .abt3-testimonials__empty {
     margin-top: 2px;
     color: var(--abt-muted);
     font-size: 0.8125rem;
     line-height: 1.5;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__dots {
+  #{{ section_id }} .abt3-testimonials__dots {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-top: 16px;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__dot {
+  #{{ section_id }} .abt3-testimonials__dot {
     width: 10px;
     height: 10px;
-    border-radius: 999px;
-    border: 0;
     padding: 0;
+    border: 0;
+    border-radius: 999px;
     background: color-mix(in srgb, var(--abt-text) 16%, transparent);
     transition:
-      width 280ms cubic-bezier(0.22, 1, 0.36, 1),
-      background-color 280ms ease;
+      width 350ms cubic-bezier(0.34, 1.56, 0.64, 1),
+      background-color 300ms ease;
     cursor: pointer;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-testimonials__dot.is-active {
+  #{{ section_id }} .abt3-testimonials__dot.is-active {
     width: 28px;
     background: var(--abt-text);
   }
 
-  #AboutTemplate-{{ section.id }} .abt-reveal,
-  #AboutTemplate-{{ section.id }} .abt-reveal-soft {
+  #{{ section_id }} .abt3-anim--hero-zoom {
+    animation: abt3HeroZoom-{{ section.id }} 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  #{{ section_id }} .abt3-anim--fade-in {
     opacity: 0;
-    transform: translateY(32px);
-    transition:
-      opacity 720ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
+    animation: abt3FadeIn-{{ section.id }} 1.2s ease-out 0.3s forwards;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-reveal-soft {
-    transform: translateY(24px);
-    transition-duration: 620ms;
+  #{{ section_id }} .abt3-anim--slide-up {
+    opacity: 0;
+    animation: abt3SlideUp-{{ section.id }} 0.9s ease-out forwards;
   }
 
-  #AboutTemplate-{{ section.id }} .abt-reveal.is-visible,
-  #AboutTemplate-{{ section.id }} .abt-reveal-soft.is-visible {
+  #{{ section_id }} .abt3-scroll-anim {
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+
+  #{{ section_id }} .abt3-scroll-anim.abt3-anim--visible[data-anim='fade-up'] {
+    animation: abt3FadeUp-{{ section.id }} 0.8s ease-out forwards;
+  }
+
+  #{{ section_id }} .abt3-scroll-anim.abt3-anim--visible[data-anim='scale-in'] {
+    animation: abt3ScaleIn-{{ section.id }} 1s ease-out forwards;
+  }
+
+  #{{ section_id }} .abt3-scroll-anim.abt3-anim--visible[data-anim='slide-left'] {
+    animation: abt3SlideLeft-{{ section.id }} 0.7s ease-out forwards;
+  }
+
+  #{{ section_id }} .abt3-scroll-anim.abt3-anim--visible[data-anim='zoom-reveal'] {
+    animation: abt3ZoomReveal-{{ section.id }} 0.9s ease-out forwards;
+  }
+
+  #{{ section_id }} .abt3-scroll-anim.abt3-anim--visible[data-anim='fade-in'] {
+    animation: abt3FadeIn-{{ section.id }} 0.8s ease-out forwards;
+  }
+
+  #{{ section_id }} .abt3-scroll-anim.abt3-anim--visible[data-anim='hero-zoom'] {
+    animation: abt3HeroZoom-{{ section.id }} 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
     opacity: 1;
-    transform: translateY(0);
   }
 
-  @keyframes abtHeroZoom-{{ section.id }} {
-    from { transform: scale(1.12); }
+  #{{ section_id }} .abt3-scroll-anim.abt3-anim--visible[data-anim='slide-right'] {
+    animation: abt3SlideRight-{{ section.id }} 0.8s ease-out forwards;
+  }
+
+  @keyframes abt3HeroZoom-{{ section.id }} {
+    from { transform: scale(1.15); }
     to { transform: scale(1); }
   }
 
-  @keyframes abtHeroText-{{ section.id }} {
-    from { opacity: 0; transform: translateY(24px); }
+  @keyframes abt3FadeIn-{{ section.id }} {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes abt3SlideUp-{{ section.id }} {
+    from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes abt3FadeUp-{{ section.id }} {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes abt3ScaleIn-{{ section.id }} {
+    from { opacity: 0; transform: scale(1.05); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes abt3SlideLeft-{{ section.id }} {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes abt3ZoomReveal-{{ section.id }} {
+    from { opacity: 0; transform: translateY(50px) scale(1.1); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  @keyframes abt3SlideRight-{{ section.id }} {
+    from { opacity: 0; transform: translateX(60px); }
+    to { opacity: 1; transform: translateX(0); }
   }
 </style>
 
 <script>
-  (function () {
-    var root = document.getElementById('AboutTemplate-{{ section.id }}');
-    if (!root || root.dataset.abtInit === 'true') return;
-    root.dataset.abtInit = 'true';
+  (function() {
+    var root = document.getElementById('{{ section_id }}');
+    if (!root || root.dataset.abt3Init === 'true') return;
+    root.dataset.abt3Init = 'true';
 
-    var revealItems = root.querySelectorAll('.abt-reveal, .abt-reveal-soft');
+    var animElements = root.querySelectorAll('.abt3-scroll-anim');
     if ('IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
           if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
+            var el = entry.target;
+            var delay = el.getAttribute('data-anim-delay') || '0';
+            el.style.animationDelay = delay + 's';
+            el.classList.add('abt3-anim--visible');
+            observer.unobserve(el);
           }
         });
-      }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+      }, { threshold: 0.15, rootMargin: '-60px 0px' });
 
-      revealItems.forEach(function (item) { observer.observe(item); });
+      animElements.forEach(function(el) {
+        observer.observe(el);
+      });
     } else {
-      revealItems.forEach(function (item) { item.classList.add('is-visible'); });
-    }
-
-    var track = root.querySelector('[data-abt-track]');
-    var dots = Array.prototype.slice.call(root.querySelectorAll('[data-abt-dot]'));
-    if (!track || !dots.length) return;
-
-    function setActive(index) {
-      dots.forEach(function (dot, dotIndex) {
-        var active = dotIndex === index;
-        dot.classList.toggle('is-active', active);
-        dot.setAttribute('aria-selected', active ? 'true' : 'false');
+      animElements.forEach(function(el) {
+        el.classList.add('abt3-anim--visible');
       });
     }
 
-    function getIndexFromScroll() {
-      var cards = track.querySelectorAll('[data-abt-card]');
-      if (!cards.length) return 0;
-      var cardWidth = cards[0].offsetWidth + 16;
-      if (!cardWidth) return 0;
-      return Math.max(0, Math.min(cards.length - 1, Math.round(track.scrollLeft / cardWidth)));
+    var carousel = root.querySelector('[data-abt3-carousel]');
+    var dots = Array.prototype.slice.call(root.querySelectorAll('[data-abt3-dot]'));
+    if (!carousel || !dots.length) return;
+
+    var activeIndex = 0;
+
+    function updateDots(nextIndex) {
+      if (nextIndex === activeIndex) return;
+      dots.forEach(function(dot, index) {
+        var isActive = index === nextIndex;
+        dot.classList.toggle('is-active', isActive);
+        dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
+      });
+      activeIndex = nextIndex;
     }
 
-    var rafId = null;
-    track.addEventListener('scroll', function () {
-      if (rafId) cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(function () {
-        setActive(getIndexFromScroll());
-      });
+    carousel.addEventListener('scroll', function() {
+      var cardWidth = carousel.offsetWidth * 0.82;
+      var nextIndex = Math.round(carousel.scrollLeft / (cardWidth + 16));
+      if (nextIndex >= 0 && nextIndex < dots.length) {
+        updateDots(nextIndex);
+      }
     }, { passive: true });
 
-    dots.forEach(function (dot, index) {
-      dot.addEventListener('click', function () {
-        var cards = track.querySelectorAll('[data-abt-card]');
+    dots.forEach(function(dot, index) {
+      dot.addEventListener('click', function() {
+        var cards = root.querySelectorAll('[data-abt3-card]');
         var target = cards[index];
         if (!target) return;
-        track.scrollTo({
-          left: target.offsetLeft - track.offsetLeft,
+        carousel.scrollTo({
+          left: target.offsetLeft - carousel.offsetLeft,
           behavior: 'smooth'
         });
-        setActive(index);
+        updateDots(index);
       });
     });
   })();
@@ -824,78 +850,7 @@
       "type": "color",
       "id": "muted_text_color",
       "label": "Muted text color",
-      "default": "rgba(17,17,17,0.68)"
-    },
-    {
-      "type": "header",
-      "content": "Hero"
-    },
-    {
-      "type": "image_picker",
-      "id": "hero_image",
-      "label": "Hero image"
-    },
-    {
-      "type": "text",
-      "id": "hero_image_alt",
-      "label": "Hero image alt text",
-      "default": "Fashion hero banner"
-    },
-    {
-      "type": "text",
-      "id": "hero_heading",
-      "label": "Hero heading",
-      "default": "THE JOURNEY OF STYLE"
-    },
-    {
-      "type": "textarea",
-      "id": "hero_subheading",
-      "label": "Hero subheading",
-      "default": "A timeless exploration of fashion that evolves with you at every step."
-    },
-    {
-      "type": "range",
-      "id": "hero_overlay_opacity",
-      "label": "Hero overlay opacity",
-      "min": 0,
-      "max": 90,
-      "step": 5,
-      "unit": "%",
-      "default": 40
-    },
-    {
-      "type": "header",
-      "content": "Style feature overlay"
-    },
-    {
-      "type": "range",
-      "id": "style_overlay_opacity",
-      "label": "Style image overlay opacity",
-      "min": 0,
-      "max": 90,
-      "step": 5,
-      "unit": "%",
-      "default": 30
-    },
-    {
-      "type": "header",
-      "content": "Testimonials"
-    },
-    {
-      "type": "text",
-      "id": "testimonials_eyebrow",
-      "label": "Testimonials eyebrow",
-      "default": "SUCCESS STORIES THAT INSPIRE"
-    },
-    {
-      "type": "text",
-      "id": "testimonials_heading",
-      "label": "Testimonials heading",
-      "default": "SEE WHAT REAL CUSTOMER SAY"
-    },
-    {
-      "type": "header",
-      "content": "Shape"
+      "default": "#666666"
     },
     {
       "type": "range",
@@ -903,16 +858,6 @@
       "label": "Card radius",
       "min": 0,
       "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 24
-    },
-    {
-      "type": "range",
-      "id": "inner_radius",
-      "label": "Inner card radius",
-      "min": 0,
-      "max": 32,
       "step": 2,
       "unit": "px",
       "default": 16
@@ -926,130 +871,178 @@
       "step": 1,
       "unit": "px",
       "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Hero banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero heading",
+      "default": "THE JOURNEY OF STYLE"
+    },
+    {
+      "type": "richtext",
+      "id": "hero_subheading",
+      "label": "Hero subheading",
+      "default": "<p>A timeless exploration of fashion that evolves with you at every step.</p>"
+    },
+    {
+      "type": "range",
+      "id": "hero_overlay_opacity",
+      "label": "Hero overlay opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Brand story"
+    },
+    {
+      "type": "richtext",
+      "id": "brand_text",
+      "label": "Brand story text",
+      "default": "<p>From the soft drape of a blouse to the structured silhouette of a tailored jacket, every element is curated to empower you inside and out. Our garments are more than just fashion; they are a celebration of individuality, resilience, and the beauty of authenticity.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "brand_image",
+      "label": "Brand image"
+    },
+    {
+      "type": "text",
+      "id": "brand_image_alt",
+      "label": "Brand image alt text",
+      "default": "Brand story"
+    },
+    {
+      "type": "header",
+      "content": "Mission section"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "mission_heading",
+      "label": "Mission heading",
+      "default": "TIMELESS PIECES THAT TELL STORIES OF POWER, <u>BEAUTY</u>"
+    },
+    {
+      "type": "richtext",
+      "id": "mission_text_1",
+      "label": "Mission paragraph 1",
+      "default": "<p>Timeless pieces are more than just garments. They are expressions of personal journeys, woven with threads of power, beauty, and individuality.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "mission_text_2",
+      "label": "Mission paragraph 2",
+      "default": "<p>Each design in our collection is thoughtfully crafted to honor your unique essence, celebrate your confidence, and elevate your everyday presence.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "mission_image",
+      "label": "Mission image"
+    },
+    {
+      "type": "text",
+      "id": "mission_image_alt",
+      "label": "Mission image alt text",
+      "default": "Editorial fashion"
+    },
+    {
+      "type": "header",
+      "content": "Street style"
+    },
+    {
+      "type": "image_picker",
+      "id": "street_image",
+      "label": "Street image"
+    },
+    {
+      "type": "text",
+      "id": "street_image_alt",
+      "label": "Street image alt text",
+      "default": "Street style"
+    },
+    {
+      "type": "text",
+      "id": "street_heading",
+      "label": "Street heading",
+      "default": "WHERE STREET STYLE MEETS HIGH FASHION"
+    },
+    {
+      "type": "range",
+      "id": "street_overlay_opacity",
+      "label": "Street overlay opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "text",
+      "id": "street_card_title",
+      "label": "Street card title",
+      "default": "Explore Edgy Everyday Wear"
+    },
+    {
+      "type": "richtext",
+      "id": "street_card_text",
+      "label": "Street card text",
+      "default": "<p>Discover bold, street-smart styles crafted for comfort and everyday confidence.</p>"
+    },
+    {
+      "type": "text",
+      "id": "street_cta_text",
+      "label": "Street button text",
+      "default": "EXPLORE"
+    },
+    {
+      "type": "url",
+      "id": "street_cta_link",
+      "label": "Street button link"
+    },
+    {
+      "type": "header",
+      "content": "Testimonials"
+    },
+    {
+      "type": "text",
+      "id": "testimonials_subtitle",
+      "label": "Testimonials subtitle",
+      "default": "SUCCESS STORIES THAT INSPIRE"
+    },
+    {
+      "type": "text",
+      "id": "testimonials_heading",
+      "label": "Testimonials heading",
+      "default": "SEE WHAT REAL CUSTOMER SAY"
     }
   ],
   "blocks": [
-    {
-      "type": "story_quote",
-      "name": "Story quote",
-      "limit": 2,
-      "settings": [
-        {
-          "type": "richtext",
-          "id": "text",
-          "label": "Text",
-          "default": "<p>From the soft drape of a blouse to the structured silhouette of a tailored jacket, every element is curated to empower you—inside and out. Our garments are more than just fashion; they are a celebration of individuality, resilience, and the beauty of authenticity.</p>"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        },
-        {
-          "type": "text",
-          "id": "image_alt",
-          "label": "Image alt text",
-          "default": "Fashion model portrait"
-        }
-      ]
-    },
-    {
-      "type": "mission_story",
-      "name": "Mission story",
-      "limit": 3,
-      "settings": [
-        {
-          "type": "inline_richtext",
-          "id": "heading",
-          "label": "Heading",
-          "default": "TIMELESS PIECES THAT TELL STORIES OF POWER, <u>BEAUTY</u>"
-        },
-        {
-          "type": "richtext",
-          "id": "body_1",
-          "label": "Body 1",
-          "default": "<p>Timeless pieces are more than just garments — they are expressions of personal journeys, woven with threads of power, beauty, and individuality.</p>"
-        },
-        {
-          "type": "richtext",
-          "id": "body_2",
-          "label": "Body 2",
-          "default": "<p>Each design in our collection is thoughtfully crafted to honor your unique essence, celebrate your confidence, and elevate your everyday presence. Whether you're dressing for bold first impressions or quiet moments of reflection, these pieces carry the narrative of strength and self-expression in every detail.</p>"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        },
-        {
-          "type": "text",
-          "id": "image_alt",
-          "label": "Image alt text",
-          "default": "Editorial fashion shot"
-        }
-      ]
-    },
-    {
-      "type": "style_feature",
-      "name": "Style feature",
-      "limit": 3,
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        },
-        {
-          "type": "text",
-          "id": "image_alt",
-          "label": "Image alt text",
-          "default": "Street style meets high fashion"
-        },
-        {
-          "type": "text",
-          "id": "overlay_heading",
-          "label": "Overlay heading",
-          "default": "WHERE STREET STYLE MEETS HIGH FASHION"
-        },
-        {
-          "type": "text",
-          "id": "card_title",
-          "label": "Card title",
-          "default": "Explore Edgy Everyday Wear"
-        },
-        {
-          "type": "richtext",
-          "id": "card_text",
-          "label": "Card text",
-          "default": "<p>Discover bold, street-smart styles crafted for comfort and everyday confidence.</p>"
-        },
-        {
-          "type": "text",
-          "id": "button_label",
-          "label": "Button label",
-          "default": "EXPLORE"
-        },
-        {
-          "type": "url",
-          "id": "button_link",
-          "label": "Button link"
-        }
-      ]
-    },
     {
       "type": "testimonial",
       "name": "Testimonial",
       "settings": [
         {
           "type": "richtext",
-          "id": "text",
-          "label": "Text",
-          "default": "<p>I've been shopping at this store for a few months now, and I can confidently say it's one of the best online shopping experiences I've had. From the seamless ordering process to the fast delivery.</p>"
+          "id": "review_text",
+          "label": "Review text",
+          "default": "<p>I've been shopping at this store for a few months now, and I can confidently say it's one of the best online shopping experiences I've had.</p>"
         },
         {
           "type": "text",
           "id": "name",
-          "label": "Name",
+          "label": "Customer name",
           "default": "Sophia M."
         },
         {
@@ -1066,27 +1059,22 @@
       ]
     }
   ],
-  "max_blocks": 12,
   "presets": [
     {
       "name": "About Page",
       "blocks": [
         {
-          "type": "story_quote"
-        },
-        {
-          "type": "mission_story"
-        },
-        {
-          "type": "style_feature"
-        },
-        {
-          "type": "testimonial"
+          "type": "testimonial",
+          "settings": {
+            "review_text": "<p>I've been shopping at this store for a few months now, and I can confidently say it's one of the best online shopping experiences I've had. From the seamless ordering process to the fast delivery.</p>",
+            "name": "Sophia M.",
+            "location": "San Francisco, CA"
+          }
         },
         {
           "type": "testimonial",
           "settings": {
-            "text": "<p>I recently ordered a few items and I couldn't be happier. The quality is excellent and I've received so many compliments.</p>",
+            "review_text": "<p>I recently ordered a few items and I couldn't be happier. The quality is excellent and I've received so many compliments.</p>",
             "name": "John P.",
             "location": "Austin, TX"
           }
@@ -1094,7 +1082,7 @@
         {
           "type": "testimonial",
           "settings": {
-            "text": "<p>As someone who cares about style and materials, I was thrilled to find a brand that feels elevated without sacrificing comfort.</p>",
+            "review_text": "<p>As someone who cares about style and materials, I was thrilled to find a brand that feels elevated without sacrificing comfort.</p>",
             "name": "Emily R.",
             "location": "Miami, FL"
           }
