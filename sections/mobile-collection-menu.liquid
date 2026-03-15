@@ -342,7 +342,74 @@
             {%- endif -%}
 
             <div class="mcm-groups">
-              {%- if tab_block.settings.collections.size > 0 -%}
+              {%- liquid
+                assign inside_tab = false
+                assign has_group_blocks = false
+                for block in section.blocks
+                  if block.id == tab_block.id
+                    assign inside_tab = true
+                    continue
+                  endif
+                  if inside_tab
+                    if block.type == 'category_tab'
+                      break
+                    endif
+                    if block.type == 'collection_group'
+                      assign has_group_blocks = true
+                      break
+                    endif
+                  endif
+                endfor
+              -%}
+
+              {%- if has_group_blocks -%}
+                {%- assign inside_tab = false -%}
+                {%- for block in section.blocks -%}
+                  {%- if block.id == tab_block.id -%}
+                    {%- assign inside_tab = true -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                  {%- if inside_tab -%}
+                    {%- if block.type == 'category_tab' -%}
+                      {%- break -%}
+                    {%- endif -%}
+                    {%- if block.type == 'collection_group' -%}
+                      <div class="mcm-group" {{ block.shopify_attributes }}>
+                        <div class="mcm-group-num">|{{ block.settings.number | default: '01' }}|</div>
+                        <div class="mcm-group-body">
+                          <h3 class="mcm-group-title">{{ block.settings.title | default: group_heading }}</h3>
+                          {%- if block.settings.collections.size > 0 -%}
+                            <ul class="mcm-links">
+                              {%- for collection in block.settings.collections -%}
+                                <li>
+                                  <a class="mcm-link{% if collection.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ collection.url }}">
+                                    <span>{{ collection.title }}</span>
+                                    {%- if collection.all_products_count > 0 and section.settings.show_collection_count -%}
+                                      <span class="mcm-link-badge">{{ collection.all_products_count }}</span>
+                                    {%- endif -%}
+                                  </a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- elsif block.settings.fallback_menu != blank -%}
+                            <ul class="mcm-links">
+                              {%- for link in linklists[block.settings.fallback_menu].links -%}
+                                <li>
+                                  <a class="mcm-link" href="{{ link.url }}">
+                                    <span>{{ link.title }}</span>
+                                  </a>
+                                </li>
+                              {%- endfor -%}
+                            </ul>
+                          {%- else -%}
+                            <div class="mcm-empty">Choose Shopify collections for this group.</div>
+                          {%- endif -%}
+                        </div>
+                      </div>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- elsif tab_block.settings.collections.size > 0 -%}
                 <div class="mcm-group" {{ tab_block.shopify_attributes }}>
                   <div class="mcm-group-num">|{{ tab_block.settings.group_number | default: '01' }}|</div>
                   <div class="mcm-group-body">
@@ -379,7 +446,7 @@
                 </div>
               {%- else -%}
                 <div class="mcm-empty" {{ tab_block.shopify_attributes }}>
-                  Select child collections for this tab in Theme Editor.
+                  Add one or more <strong>Collection group</strong> blocks under this category tab, then choose Shopify collections inside each group.
                 </div>
               {%- endif -%}
             </div>
@@ -568,6 +635,35 @@
           "id": "fallback_menu",
           "label": "Fallback menu",
           "info": "Used only if you do not select child collections."
+        }
+      ]
+    },
+    {
+      "type": "collection_group",
+      "name": "Collection group",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Group number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Group title",
+          "default": "New"
+        },
+        {
+          "type": "collection_list",
+          "id": "collections",
+          "label": "Shopify collections"
+        },
+        {
+          "type": "link_list",
+          "id": "fallback_menu",
+          "label": "Fallback menu",
+          "info": "Used only if you do not select Shopify collections."
         }
       ]
     }
