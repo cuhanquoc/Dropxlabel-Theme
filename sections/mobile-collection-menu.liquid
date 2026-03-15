@@ -1,7 +1,6 @@
 {%- liquid
   assign tab_blocks = section.blocks | where: 'type', 'category_tab'
   assign menu_title = section.settings.menu_title | default: 'Catalog'
-  assign group_heading = section.settings.group_heading | default: 'Collections'
 -%}
 
 <style>
@@ -377,8 +376,87 @@
                       <div class="mcm-group" {{ block.shopify_attributes }}>
                         <div class="mcm-group-num">|{{ block.settings.number | default: '01' }}|</div>
                         <div class="mcm-group-body">
-                          <h3 class="mcm-group-title">{{ block.settings.title | default: group_heading }}</h3>
-                          {%- if block.settings.collections.size > 0 -%}
+                          <h3 class="mcm-group-title">{{ block.settings.title | default: 'Collections' }}</h3>
+                          {%- liquid
+                            assign has_group_collections = false
+                            if block.settings.collection_1 != blank
+                              assign has_group_collections = true
+                            elsif block.settings.collection_2 != blank
+                              assign has_group_collections = true
+                            elsif block.settings.collection_3 != blank
+                              assign has_group_collections = true
+                            elsif block.settings.collection_4 != blank
+                              assign has_group_collections = true
+                            elsif block.settings.collection_5 != blank
+                              assign has_group_collections = true
+                            elsif block.settings.collection_6 != blank
+                              assign has_group_collections = true
+                            endif
+                          -%}
+                          {%- if has_group_collections -%}
+                            <ul class="mcm-links">
+                              {%- if block.settings.collection_1 != blank -%}
+                                <li>
+                                  <a class="mcm-link{% if block.settings.collection_1.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_1.url }}">
+                                    <span>{{ block.settings.collection_1.title }}</span>
+                                    {%- if block.settings.collection_1.all_products_count > 0 and section.settings.show_collection_count -%}
+                                      <span class="mcm-link-badge">{{ block.settings.collection_1.all_products_count }}</span>
+                                    {%- endif -%}
+                                  </a>
+                                </li>
+                              {%- endif -%}
+                              {%- if block.settings.collection_2 != blank -%}
+                                <li>
+                                  <a class="mcm-link{% if block.settings.collection_2.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_2.url }}">
+                                    <span>{{ block.settings.collection_2.title }}</span>
+                                    {%- if block.settings.collection_2.all_products_count > 0 and section.settings.show_collection_count -%}
+                                      <span class="mcm-link-badge">{{ block.settings.collection_2.all_products_count }}</span>
+                                    {%- endif -%}
+                                  </a>
+                                </li>
+                              {%- endif -%}
+                              {%- if block.settings.collection_3 != blank -%}
+                                <li>
+                                  <a class="mcm-link{% if block.settings.collection_3.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_3.url }}">
+                                    <span>{{ block.settings.collection_3.title }}</span>
+                                    {%- if block.settings.collection_3.all_products_count > 0 and section.settings.show_collection_count -%}
+                                      <span class="mcm-link-badge">{{ block.settings.collection_3.all_products_count }}</span>
+                                    {%- endif -%}
+                                  </a>
+                                </li>
+                              {%- endif -%}
+                              {%- if block.settings.collection_4 != blank -%}
+                                <li>
+                                  <a class="mcm-link{% if block.settings.collection_4.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_4.url }}">
+                                    <span>{{ block.settings.collection_4.title }}</span>
+                                    {%- if block.settings.collection_4.all_products_count > 0 and section.settings.show_collection_count -%}
+                                      <span class="mcm-link-badge">{{ block.settings.collection_4.all_products_count }}</span>
+                                    {%- endif -%}
+                                  </a>
+                                </li>
+                              {%- endif -%}
+                              {%- if block.settings.collection_5 != blank -%}
+                                <li>
+                                  <a class="mcm-link{% if block.settings.collection_5.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_5.url }}">
+                                    <span>{{ block.settings.collection_5.title }}</span>
+                                    {%- if block.settings.collection_5.all_products_count > 0 and section.settings.show_collection_count -%}
+                                      <span class="mcm-link-badge">{{ block.settings.collection_5.all_products_count }}</span>
+                                    {%- endif -%}
+                                  </a>
+                                </li>
+                              {%- endif -%}
+                              {%- if block.settings.collection_6 != blank -%}
+                                <li>
+                                  <a class="mcm-link{% if block.settings.collection_6.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_6.url }}">
+                                    <span>{{ block.settings.collection_6.title }}</span>
+                                    {%- if block.settings.collection_6.all_products_count > 0 and section.settings.show_collection_count -%}
+                                      <span class="mcm-link-badge">{{ block.settings.collection_6.all_products_count }}</span>
+                                    {%- endif -%}
+                                  </a>
+                                </li>
+                              {%- endif -%}
+                            </ul>
+                          {%- elsif block.settings.collections != blank and block.settings.collections.size > 0 -%}
                             <ul class="mcm-links">
                               {%- for collection in block.settings.collections -%}
                                 <li>
@@ -391,62 +469,17 @@
                                 </li>
                               {%- endfor -%}
                             </ul>
-                          {%- elsif block.settings.fallback_menu != blank -%}
-                            <ul class="mcm-links">
-                              {%- for link in linklists[block.settings.fallback_menu].links -%}
-                                <li>
-                                  <a class="mcm-link" href="{{ link.url }}">
-                                    <span>{{ link.title }}</span>
-                                  </a>
-                                </li>
-                              {%- endfor -%}
-                            </ul>
                           {%- else -%}
-                            <div class="mcm-empty">Choose Shopify collections for this group.</div>
+                            <div class="mcm-empty">Choose one or more Shopify collections in the right sidebar for this group.</div>
                           {%- endif -%}
                         </div>
                       </div>
                     {%- endif -%}
                   {%- endif -%}
                 {%- endfor -%}
-              {%- elsif tab_block.settings.collections.size > 0 -%}
-                <div class="mcm-group" {{ tab_block.shopify_attributes }}>
-                  <div class="mcm-group-num">|{{ tab_block.settings.group_number | default: '01' }}|</div>
-                  <div class="mcm-group-body">
-                    <h3 class="mcm-group-title">{{ tab_block.settings.group_title | default: group_heading }}</h3>
-                    <ul class="mcm-links">
-                      {%- for collection in tab_block.settings.collections -%}
-                        <li>
-                          <a class="mcm-link{% if collection.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ collection.url }}">
-                            <span>{{ collection.title }}</span>
-                            {%- if collection.all_products_count > 0 and section.settings.show_collection_count -%}
-                              <span class="mcm-link-badge">{{ collection.all_products_count }}</span>
-                            {%- endif -%}
-                          </a>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  </div>
-                </div>
-              {%- elsif tab_block.settings.fallback_menu != blank -%}
-                <div class="mcm-group" {{ tab_block.shopify_attributes }}>
-                  <div class="mcm-group-num">|{{ tab_block.settings.group_number | default: '01' }}|</div>
-                  <div class="mcm-group-body">
-                    <h3 class="mcm-group-title">{{ tab_block.settings.group_title | default: group_heading }}</h3>
-                    <ul class="mcm-links">
-                      {%- for link in linklists[tab_block.settings.fallback_menu].links -%}
-                        <li>
-                          <a class="mcm-link" href="{{ link.url }}">
-                            <span>{{ link.title }}</span>
-                          </a>
-                        </li>
-                      {%- endfor -%}
-                    </ul>
-                  </div>
-                </div>
               {%- else -%}
                 <div class="mcm-empty" {{ tab_block.shopify_attributes }}>
-                  Add one or more <strong>Collection group</strong> blocks under this category tab, then choose Shopify collections inside each group.
+                  Add one or more <strong>Collection group</strong> blocks under this category tab. Then open each group and pick Shopify collections in the right sidebar.
                 </div>
               {%- endif -%}
             </div>
@@ -544,12 +577,6 @@
       "default": "Catalog"
     },
     {
-      "type": "text",
-      "id": "group_heading",
-      "label": "Default group heading",
-      "default": "Collections"
-    },
-    {
       "type": "range",
       "id": "tab_font_size",
       "label": "Tab font size",
@@ -612,29 +639,6 @@
           "type": "text",
           "id": "banner_alt",
           "label": "Banner alt text"
-        },
-        {
-          "type": "text",
-          "id": "group_number",
-          "label": "Group number",
-          "default": "01"
-        },
-        {
-          "type": "text",
-          "id": "group_title",
-          "label": "Group title",
-          "default": "Collections"
-        },
-        {
-          "type": "collection_list",
-          "id": "collections",
-          "label": "Child collections"
-        },
-        {
-          "type": "link_list",
-          "id": "fallback_menu",
-          "label": "Fallback menu",
-          "info": "Used only if you do not select child collections."
         }
       ]
     },
@@ -655,15 +659,38 @@
           "default": "New"
         },
         {
-          "type": "collection_list",
-          "id": "collections",
-          "label": "Shopify collections"
+          "type": "paragraph",
+          "content": "Choose the Shopify collections for this group below. Leave unused slots empty."
         },
         {
-          "type": "link_list",
-          "id": "fallback_menu",
-          "label": "Fallback menu",
-          "info": "Used only if you do not select Shopify collections."
+          "type": "collection",
+          "id": "collection_1",
+          "label": "Collection 1"
+        },
+        {
+          "type": "collection",
+          "id": "collection_2",
+          "label": "Collection 2"
+        },
+        {
+          "type": "collection",
+          "id": "collection_3",
+          "label": "Collection 3"
+        },
+        {
+          "type": "collection",
+          "id": "collection_4",
+          "label": "Collection 4"
+        },
+        {
+          "type": "collection",
+          "id": "collection_5",
+          "label": "Collection 5"
+        },
+        {
+          "type": "collection",
+          "id": "collection_6",
+          "label": "Collection 6"
         }
       ]
     }
@@ -672,10 +699,15 @@
     {
       "name": "Mobile Collection Menu",
       "blocks": [
-        { "type": "category_tab", "settings": { "label": "Women", "group_number": "01", "group_title": "Collections" } },
-        { "type": "category_tab", "settings": { "label": "Men", "group_number": "01", "group_title": "Collections" } },
-        { "type": "category_tab", "settings": { "label": "Kids", "group_number": "01", "group_title": "Collections" } },
-        { "type": "category_tab", "settings": { "label": "Perfume", "group_number": "01", "group_title": "Collections" } }
+        { "type": "category_tab", "settings": { "label": "Women" } },
+        { "type": "collection_group", "settings": { "number": "01", "title": "New" } },
+        { "type": "collection_group", "settings": { "number": "02", "title": "Collections" } },
+        { "type": "category_tab", "settings": { "label": "Men" } },
+        { "type": "collection_group", "settings": { "number": "01", "title": "New" } },
+        { "type": "category_tab", "settings": { "label": "Kids" } },
+        { "type": "collection_group", "settings": { "number": "01", "title": "Collections" } },
+        { "type": "category_tab", "settings": { "label": "Perfume" } },
+        { "type": "collection_group", "settings": { "number": "01", "title": "Fragrance" } }
       ]
     }
   ]
