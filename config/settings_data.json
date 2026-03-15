@@ -460,7 +460,7 @@
           "tab_font_size": 12,
           "group_font_size": 11,
           "link_font_size": 14,
-          "show_collection_count": true
+          "show_collection_count": false
         }
       }
     },
