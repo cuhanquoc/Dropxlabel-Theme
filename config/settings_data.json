@@ -110,8 +110,9 @@
         "settings": {
           "logo_width": 60,
           "logo_text": "dearnest",
+          "mega_image": "shopify://shop_images/hf_20260313_091236_e84bed11-414b-468a-9b04-988d45108619.png",
           "mega_image_label": "Styles",
-          "mega_image_link": "shopify://collections/cottage",
+          "mega_image_link": "shopify://collections/beach-vibes",
           "mega_video_label": "Items",
           "mega_video_link": ""
         }
@@ -138,7 +139,9 @@
       },
       "cart-drawer": {
         "type": "cart-drawer",
-        "settings": {}
+        "settings": {
+          "gift_wrap_variant_id": ""
+        }
       },
       "footer": {
         "type": "footer",
@@ -451,10 +454,30 @@
       },
       "mobile-collection-menu": {
         "type": "mobile-collection-menu",
+        "blocks": {
+          "category_tab_riiBTE": {
+            "type": "category_tab",
+            "settings": {
+              "label": "Women",
+              "banner_link": "",
+              "banner_alt": "",
+              "group_number": "01",
+              "group_title": "Collections",
+              "collections": [],
+              "fallback_menu": ""
+            }
+          }
+        },
+        "block_order": [
+          "category_tab_riiBTE"
+        ],
         "settings": {
           "menu_title": "Menu",
-          "items_heading": "Items",
-          "styles_heading": "Styles"
+          "group_heading": "Collections",
+          "tab_font_size": 12,
+          "group_font_size": 11,
+          "link_font_size": 14,
+          "show_collection_count": false
         }
       }
     },
