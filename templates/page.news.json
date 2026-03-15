@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "main": {
+      "type": "news-template",
+      "settings": {
+        "hero_title": "Stories to Inspire You",
+        "articles_per_page": 3,
+        "load_more_count": 3,
+        "max_articles": 12,
+        "show_author": true,
+        "show_date": true,
+        "show_excerpt": true,
+        "excerpt_length": 150,
+        "button_text": "Read More",
+        "load_more_text": "Load More",
+        "end_text": "You've reached the end"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,750 @@
+{%- liquid
+  assign section_id = 'NewsTemplate-' | append: section.id
+  assign selected_blog = blank
+  if section.settings.blog != blank
+    assign selected_blog = blogs[section.settings.blog]
+  endif
+
+  assign section_bg = section.settings.background_color | default: 'var(--color-base-background-1, #ffffff)'
+  assign card_bg = section.settings.card_background_color | default: 'var(--color-base-background-1, #ffffff)'
+  assign muted_text = section.settings.muted_text_color | default: '#777777'
+  assign hero_overlay = section.settings.hero_overlay_opacity | divided_by: 100.0
+  assign initial_count = section.settings.articles_per_page | default: 3
+  assign load_more_count = section.settings.load_more_count | default: 3
+  assign max_articles = section.settings.max_articles | default: 24
+  assign article_count = 0
+  if selected_blog != blank
+    assign article_count = selected_blog.articles_count
+  endif
+-%}
+
+<section
+  id="{{ section_id }}"
+  class="news-page"
+  style="
+    --news-bg: {{ section_bg }};
+    --news-card-bg: {{ card_bg }};
+    --news-text: var(--color-base-text, var(--color-text, #111111));
+    --news-muted: {{ muted_text }};
+    --news-border: color-mix(in srgb, var(--news-text) 12%, transparent);
+    --news-shadow: 0 12px 28px color-mix(in srgb, var(--news-text) 6%, transparent);
+    --news-top: {{ section.settings.padding_top }}px;
+    --news-bottom: {{ section.settings.padding_bottom }}px;
+    --news-card-radius: {{ section.settings.card_radius }}px;
+    --news-button-radius: {{ section.settings.button_radius }}px;
+    --news-hero-overlay: {{ hero_overlay }};
+  "
+>
+  <div class="news-page__shell">
+    <header class="news-page__hero">
+      {%- if section.settings.hero_image != blank -%}
+        {{
+          section.settings.hero_image
+          | image_url: width: 1600
+          | image_tag:
+            class: 'news-page__hero-image',
+            loading: 'eager',
+            fetchpriority: 'high',
+            widths: '480, 720, 960, 1200, 1600',
+            sizes: '(max-width: 767px) 100vw, 430px',
+            alt: section.settings.hero_title
+        }}
+      {%- else -%}
+        <div class="news-page__hero-placeholder" aria-hidden="true"></div>
+      {%- endif -%}
+
+      <div class="news-page__hero-overlay" aria-hidden="true"></div>
+      <div class="news-page__hero-content">
+        <h1 class="news-page__hero-title">
+          {{ section.settings.hero_title | default: 'Stories to Inspire You' }}
+        </h1>
+      </div>
+    </header>
+
+    {%- if selected_blog != blank and article_count > 0 -%}
+      <div class="news-page__count">
+        <p class="news-page__count-text">
+          {{ article_count }} {{ article_count | pluralize: 'Article', 'Articles' }}
+        </p>
+      </div>
+
+      <section class="news-page__articles" data-news-list>
+        {%- assign rendered_articles = 0 -%}
+        {%- for article in selected_blog.articles limit: max_articles -%}
+          {%- assign rendered_articles = rendered_articles | plus: 1 -%}
+          {%- assign is_hidden = false -%}
+          {%- assign image_loading = 'lazy' -%}
+          {%- if rendered_articles > initial_count -%}
+            {%- assign is_hidden = true -%}
+          {%- endif -%}
+          {%- if forloop.index0 < 2 -%}
+            {%- assign image_loading = 'eager' -%}
+          {%- endif -%}
+          {%- assign excerpt_text = article.excerpt_or_content | strip_html -%}
+          {%- if section.settings.excerpt_length > 0 -%}
+            {%- assign excerpt_text = excerpt_text | truncate: section.settings.excerpt_length -%}
+          {%- endif -%}
+
+          <article
+            class="news-card news-card--animate{% if is_hidden %} news-card--hidden{% endif %}"
+            data-index="{{ forloop.index0 }}"
+          >
+            <a href="{{ article.url }}" class="news-card__image-wrap" aria-label="{{ article.title | escape }}">
+              {%- if article.image -%}
+                {{
+                  article.image
+                  | image_url: width: 860
+                  | image_tag:
+                    class: 'news-card__image',
+                    loading: image_loading,
+                    widths: '375, 430, 750, 860',
+                    sizes: '(max-width: 430px) 100vw, 430px',
+                    alt: article.image.alt | default: article.title
+                }}
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'news-card__image news-card__image--placeholder' }}
+              {%- endif -%}
+            </a>
+
+            <div class="news-card__content">
+              {%- if section.settings.show_author or section.settings.show_date -%}
+                <p class="news-card__meta">
+                  {%- if section.settings.show_author -%}
+                    <span>BY {{ article.author | upcase }}</span>
+                  {%- endif -%}
+
+                  {%- if section.settings.show_author and section.settings.show_date -%}
+                    <span class="news-card__meta-divider">|</span>
+                  {%- endif -%}
+
+                  {%- if section.settings.show_date -%}
+                    <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                      {{ article.published_at | date: '%B %d, %Y' }}
+                    </time>
+                  {%- endif -%}
+                </p>
+              {%- endif -%}
+
+              <a href="{{ article.url }}" class="news-card__title-link">
+                <h2 class="news-card__title">{{ article.title }}</h2>
+              </a>
+
+              {%- if section.settings.show_excerpt and excerpt_text != blank -%}
+                <p class="news-card__excerpt">{{ excerpt_text }}</p>
+              {%- endif -%}
+
+              <a href="{{ article.url }}" class="news-card__button">
+                {{ section.settings.button_text | default: 'Read More' }}
+              </a>
+            </div>
+          </article>
+        {%- endfor -%}
+      </section>
+
+      {%- if rendered_articles > initial_count -%}
+        <div class="news-page__load-more-wrap" data-news-load-wrap>
+          <button
+            class="news-page__load-more-btn"
+            type="button"
+            data-news-load-more
+            data-step="{{ load_more_count }}"
+          >
+            {{ section.settings.load_more_text | default: 'Load More' }}
+          </button>
+        </div>
+      {%- else -%}
+        <div class="news-page__end">
+          <p class="news-page__end-text">{{ section.settings.end_text | default: "You've reached the end" }}</p>
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <div class="news-page__empty">
+        <h2 class="news-page__empty-title">
+          {{ section.settings.empty_heading | default: 'No articles available' }}
+        </h2>
+        <p class="news-page__empty-text">
+          {%- if selected_blog == blank -%}
+            {{ section.settings.empty_text_no_blog | default: 'Select a blog for this News page in the Theme Editor.' }}
+          {%- else -%}
+            {{ section.settings.empty_text_no_articles | default: 'This blog does not have any published articles yet.' }}
+          {%- endif -%}
+        </p>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<style>
+  #{{ section_id }} {
+    min-height: 100vh;
+    padding-top: var(--news-top);
+    padding-bottom: var(--news-bottom);
+    background: var(--news-bg);
+    color: var(--news-text);
+  }
+
+  #{{ section_id }} .news-page__shell {
+    width: 100%;
+    max-width: 430px;
+    margin-inline: auto;
+    background: var(--news-bg);
+  }
+
+  #{{ section_id }} .news-page__hero {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    opacity: 0;
+    animation: newsFadeIn-{{ section.id }} 0.8s ease forwards;
+  }
+
+  #{{ section_id }} .news-page__hero-image,
+  #{{ section_id }} .news-page__hero-placeholder {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  #{{ section_id }} .news-page__hero-placeholder {
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--news-text) 8%, transparent), transparent),
+      color-mix(in srgb, var(--news-card-bg) 88%, var(--news-text) 6%);
+  }
+
+  #{{ section_id }} .news-page__hero-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, var(--news-hero-overlay));
+  }
+
+  #{{ section_id }} .news-page__hero-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    text-align: center;
+  }
+
+  #{{ section_id }} .news-page__hero-title {
+    margin: 0;
+    color: var(--color-base-solid-button-labels, #ffffff);
+    text-transform: uppercase;
+    font-size: clamp(1.9rem, 7vw, 2.4rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: newsSlideUp-{{ section.id }} 0.7s ease 0.3s forwards;
+  }
+
+  #{{ section_id }} .news-page__count {
+    padding: 32px 20px 8px;
+    opacity: 0;
+    animation: newsFadeIn-{{ section.id }} 0.5s ease 0.5s forwards;
+  }
+
+  #{{ section_id }} .news-page__count-text,
+  #{{ section_id }} .news-page__end-text {
+    margin: 0;
+    color: var(--news-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  #{{ section_id }} .news-page__articles {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 16px 16px 24px;
+  }
+
+  #{{ section_id }} .news-card {
+    background: var(--news-card-bg);
+    display: flex;
+    flex-direction: column;
+  }
+
+  #{{ section_id }} .news-card__image-wrap {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--news-card-radius);
+    transition: transform 0.3s ease;
+  }
+
+  #{{ section_id }} .news-card__image-wrap:hover {
+    transform: scale(1.02);
+  }
+
+  #{{ section_id }} .news-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  #{{ section_id }} .news-card__image-wrap:hover .news-card__image {
+    transform: scale(1.05);
+  }
+
+  #{{ section_id }} .news-card__image--placeholder {
+    width: 100%;
+    height: 100%;
+    color: color-mix(in srgb, var(--news-text) 12%, transparent);
+    background: color-mix(in srgb, var(--news-card-bg) 90%, var(--news-text) 4%);
+  }
+
+  #{{ section_id }} .news-card__content {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 20px 0;
+  }
+
+  #{{ section_id }} .news-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 8px;
+    color: color-mix(in srgb, var(--news-text) 68%, transparent);
+    font-size: 0.8125rem;
+    letter-spacing: 0.05em;
+  }
+
+  #{{ section_id }} .news-card__meta-divider {
+    color: color-mix(in srgb, var(--news-text) 22%, transparent);
+  }
+
+  #{{ section_id }} .news-card__title-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  #{{ section_id }} .news-card__title {
+    margin: 0 0 8px;
+    color: var(--news-text);
+    text-transform: uppercase;
+    font-size: 1.375rem;
+    font-weight: 800;
+    line-height: 1.25;
+    transition: color 0.2s ease;
+  }
+
+  #{{ section_id }} .news-card__title-link:hover .news-card__title {
+    color: color-mix(in srgb, var(--news-text) 76%, transparent);
+  }
+
+  #{{ section_id }} .news-card__excerpt {
+    margin: 0 0 20px;
+    color: color-mix(in srgb, var(--news-text) 84%, transparent);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  #{{ section_id }} .news-card__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    width: 100%;
+    background: var(--news-text);
+    color: var(--color-base-background-1, #ffffff);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.5;
+    border: 2px solid var(--news-text);
+    border-radius: var(--news-button-radius);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  #{{ section_id }} .news-card__button:hover {
+    background: transparent;
+    color: var(--news-text);
+  }
+
+  #{{ section_id }} .news-card__button:active {
+    transform: scale(0.98);
+  }
+
+  #{{ section_id }} .news-page__load-more-wrap,
+  #{{ section_id }} .news-page__end {
+    padding: 8px 16px 48px;
+  }
+
+  #{{ section_id }} .news-page__load-more-btn {
+    width: 100%;
+    min-height: 48px;
+    border: 2px solid var(--news-text);
+    color: var(--news-text);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border-radius: var(--news-button-radius);
+    cursor: pointer;
+    background: transparent;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.5;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease,
+      transform 0.2s ease;
+  }
+
+  #{{ section_id }} .news-page__load-more-btn:hover {
+    background: var(--news-text);
+    color: var(--color-base-background-1, #ffffff);
+  }
+
+  #{{ section_id }} .news-page__load-more-btn:active {
+    transform: scale(0.98);
+  }
+
+  #{{ section_id }} .news-page__end {
+    text-align: center;
+    opacity: 0;
+    animation: newsFadeIn-{{ section.id }} 0.5s ease forwards;
+  }
+
+  #{{ section_id }} .news-page__empty {
+    padding: 48px 20px 60px;
+    text-align: center;
+  }
+
+  #{{ section_id }} .news-page__empty-title {
+    margin: 0;
+    color: var(--news-text);
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+
+  #{{ section_id }} .news-page__empty-text {
+    margin: 12px 0 0;
+    color: var(--news-muted);
+    line-height: 1.7;
+  }
+
+  #{{ section_id }} .news-card--animate {
+    opacity: 0;
+    transform: translateY(40px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease;
+  }
+
+  #{{ section_id }} .news-card--animate.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #{{ section_id }} .news-card--hidden {
+    display: none;
+  }
+
+  @keyframes newsFadeIn-{{ section.id }} {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes newsSlideUp-{{ section.id }} {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    var root = document.getElementById('{{ section_id }}');
+    if (!root || root.dataset.newsInit === 'true') return;
+    root.dataset.newsInit = 'true';
+
+    function initScrollAnimations(scope) {
+      var cards = scope.querySelectorAll('.news-card--animate:not(.is-visible)');
+      if (!cards.length) return;
+
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              var index = parseInt(entry.target.dataset.index || '0', 10);
+              setTimeout(function() {
+                entry.target.classList.add('is-visible');
+              }, index * 80);
+              observer.unobserve(entry.target);
+            }
+          });
+        }, {
+          rootMargin: '-40px 0px',
+          threshold: 0.1
+        });
+
+        cards.forEach(function(card) {
+          observer.observe(card);
+        });
+      } else {
+        cards.forEach(function(card) {
+          card.classList.add('is-visible');
+        });
+      }
+    }
+
+    function initLoadMore() {
+      var btn = root.querySelector('[data-news-load-more]');
+      var wrap = root.querySelector('[data-news-load-wrap]');
+      var hiddenCards = function() {
+        return Array.prototype.slice.call(root.querySelectorAll('.news-card--hidden'));
+      };
+      if (!btn || !wrap) return;
+
+      btn.addEventListener('click', function() {
+        var step = parseInt(btn.dataset.step || '3', 10);
+        var cards = hiddenCards();
+        if (!cards.length) return;
+
+        cards.slice(0, step).forEach(function(card) {
+          card.classList.remove('news-card--hidden');
+        });
+
+        initScrollAnimations(root);
+
+        if (!hiddenCards().length) {
+          wrap.outerHTML = '<div class="news-page__end"><p class="news-page__end-text">{{ section.settings.end_text | default: "You\\'ve reached the end" }}</p></div>';
+        }
+      });
+    }
+
+    if (document.readyState !== 'loading') {
+      initScrollAnimations(root);
+      initLoadMore();
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        initScrollAnimations(root);
+        initLoadMore();
+      }, { once: true });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "News Page",
+  "tag": "section",
+  "class": "section-news-page",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog source"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Muted text color",
+      "default": "#777777"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Button radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero title",
+      "default": "Stories to Inspire You"
+    },
+    {
+      "type": "range",
+      "id": "hero_overlay_opacity",
+      "label": "Hero overlay opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Articles"
+    },
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "label": "Initial visible articles",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "load_more_count",
+      "label": "Articles per load",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "max_articles",
+      "label": "Maximum articles to render",
+      "min": 3,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "Show excerpt",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "excerpt_length",
+      "label": "Excerpt character limit",
+      "min": 50,
+      "max": 300,
+      "step": 10,
+      "default": 150
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Article button text",
+      "default": "Read More"
+    },
+    {
+      "type": "text",
+      "id": "load_more_text",
+      "label": "Load more button text",
+      "default": "Load More"
+    },
+    {
+      "type": "text",
+      "id": "end_text",
+      "label": "End state text",
+      "default": "You've reached the end"
+    },
+    {
+      "type": "header",
+      "content": "Empty state"
+    },
+    {
+      "type": "text",
+      "id": "empty_heading",
+      "label": "Empty heading",
+      "default": "No articles available"
+    },
+    {
+      "type": "textarea",
+      "id": "empty_text_no_blog",
+      "label": "Empty text when no blog is selected",
+      "default": "Select a blog for this News page in the Theme Editor."
+    },
+    {
+      "type": "textarea",
+      "id": "empty_text_no_articles",
+      "label": "Empty text when selected blog has no articles",
+      "default": "This blog does not have any published articles yet."
+    }
+  ],
+  "presets": [
+    {
+      "name": "News Page"
+    }
+  ]
+}
+{% endschema %}
