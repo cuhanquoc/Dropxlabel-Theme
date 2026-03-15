@@ -1,11 +1,76 @@
 {
-    "sections": {
-        "main": {
-            "type": "about-template",
-            "settings": {}
+  "sections": {
+    "main": {
+      "type": "about-template",
+      "settings": {
+        "hero_heading": "THE JOURNEY OF STYLE",
+        "hero_subheading": "A timeless exploration of fashion that evolves with you at every step.",
+        "testimonials_eyebrow": "SUCCESS STORIES THAT INSPIRE",
+        "testimonials_heading": "SEE WHAT REAL CUSTOMER SAY"
+      },
+      "blocks": {
+        "story_quote": {
+          "type": "story_quote",
+          "settings": {
+            "text": "<p>From the soft drape of a blouse to the structured silhouette of a tailored jacket, every element is curated to empower you—inside and out. Our garments are more than just fashion; they are a celebration of individuality, resilience, and the beauty of authenticity.</p>",
+            "image_alt": "Fashion model portrait"
+          }
+        },
+        "mission_story": {
+          "type": "mission_story",
+          "settings": {
+            "heading": "TIMELESS PIECES THAT TELL STORIES OF POWER, <u>BEAUTY</u>",
+            "body_1": "<p>Timeless pieces are more than just garments — they are expressions of personal journeys, woven with threads of power, beauty, and individuality.</p>",
+            "body_2": "<p>Each design in our collection is thoughtfully crafted to honor your unique essence, celebrate your confidence, and elevate your everyday presence. Whether you're dressing for bold first impressions or quiet moments of reflection, these pieces carry the narrative of strength and self-expression in every detail.</p>",
+            "image_alt": "Editorial fashion shot"
+          }
+        },
+        "style_feature": {
+          "type": "style_feature",
+          "settings": {
+            "image_alt": "Street style meets high fashion",
+            "overlay_heading": "WHERE STREET STYLE MEETS HIGH FASHION",
+            "card_title": "Explore Edgy Everyday Wear",
+            "card_text": "<p>Discover bold, street-smart styles crafted for comfort and everyday confidence.</p>",
+            "button_label": "EXPLORE"
+          }
+        },
+        "testimonial_1": {
+          "type": "testimonial",
+          "settings": {
+            "text": "<p>I've been shopping at this store for a few months now, and I can confidently say it's one of the best online shopping experiences I've had. From the seamless ordering process to the fast delivery.</p>",
+            "name": "Sophia M.",
+            "location": "San Francisco, CA"
+          }
+        },
+        "testimonial_2": {
+          "type": "testimonial",
+          "settings": {
+            "text": "<p>I recently ordered a few items and I couldn't be happier. The quality is excellent and I've received so many compliments.</p>",
+            "name": "John P.",
+            "location": "Austin, TX"
+          }
+        },
+        "testimonial_3": {
+          "type": "testimonial",
+          "settings": {
+            "text": "<p>As someone who cares about style and materials, I was thrilled to find a brand that feels elevated without sacrificing comfort.</p>",
+            "name": "Emily R.",
+            "location": "Miami, FL"
+          }
         }
-    },
-    "order": [
-        "main"
-    ]
+      },
+      "block_order": [
+        "story_quote",
+        "mission_story",
+        "style_feature",
+        "testimonial_1",
+        "testimonial_2",
+        "testimonial_3"
+      ]
+    }
+  },
+  "order": [
+    "main"
+  ]
 }

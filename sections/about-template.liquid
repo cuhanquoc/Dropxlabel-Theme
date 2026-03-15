@@ -1,194 +1,763 @@
-{% comment %} ABOUT TEMPLATE — CSS → src/input.css {% endcomment %}
+{%- liquid
+  assign section_bg = section.settings.background_color | default: 'var(--color-base-background-1, #ffffff)'
+  assign card_bg = section.settings.card_background_color | default: 'var(--color-base-background-1, #ffffff)'
+  assign muted_text = section.settings.muted_text_color | default: 'rgba(17, 17, 17, 0.68)'
+  assign hero_overlay = section.settings.hero_overlay_opacity | divided_by: 100.0
+  assign style_overlay = section.settings.style_overlay_opacity | divided_by: 100.0
+-%}
 
-{%- comment -%}
-  ─────────────────────────────────────────
-  ABOUT TEMPLATE SECTION
-  Used in: templates/page.about.json
-  ─────────────────────────────────────────
-{%- endcomment -%}
-
-{%- comment -%} Review data declared within the review loop below using pipe delimiters {%- endcomment -%}
-
-<div id="about-page">
-
-  <!-- ══════════════════════════════════════
-       1. EDITORIAL INTRO
-  ══════════════════════════════════════ -->
-  <section class="pt-40 pb-20 px-6 md:px-10" style="background-color: var(--color-bg);">
-    <div class="max-w-screen-xl mx-auto">
-
-      <span class="at-eyebrow">{{ section.settings.eyebrow }}</span>
-      <p class="at-quote" id="at-quote">
-        {{ section.settings.quote_text }}
-      </p>
-
-    </div>
-  </section>
-
-  <!-- ══════════════════════════════════════
-       2. PARALLAX HERO + FLOATING CARDS
-  ══════════════════════════════════════ -->
-  <div id="at-parallax-wrap">
-
-    <!-- Parallax Background Image -->
-    {% if section.settings.parallax_image != blank %}
-      <img
-        id="at-parallax-img"
-        src="{{ section.settings.parallax_image | image_url: width: 1920 }}"
-        alt="{{ section.settings.parallax_image.alt | default: 'About us hero' }}"
-        loading="lazy"
-        width="1920"
-        height="1280"
-      />
-    {% else %}
-      <div
-        id="at-parallax-img"
-        style="width:100%;height:100%;min-height:600px;background:#1a1a1a;display:block;"
-        aria-hidden="true"
-      ></div>
-    {% endif %}
-
-    <!-- Overlay -->
-    <div id="at-parallax-overlay"></div>
-
-    <!-- Hero Text (bottom-left) -->
-    <div class="at-hero-text">
-      <h2 class="at-hero-headline">
-        {{ section.settings.hero_headline }}
-      </h2>
-    </div>
-
-    <!-- Floating Cards (bottom-right) -->
-    <div class="at-float-stack">
-
-      <!-- Card 1 -->
-      <div class="at-float-card" data-float-card>
-        <p class="at-float-card-tag">Everyday Edit</p>
-        <p class="at-float-card-title">Explore Edgy<br>Everyday Wear</p>
-        <a href="{{ routes.collections_url }}" class="at-float-btn">
-          Explore
-          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
+<section
+  id="AboutTemplate-{{ section.id }}"
+  class="abt"
+  style="
+    --abt-bg: {{ section_bg }};
+    --abt-card-bg: {{ card_bg }};
+    --abt-text: var(--color-base-text, var(--color-text, #111111));
+    --abt-muted: {{ muted_text }};
+    --abt-border: color-mix(in srgb, var(--abt-text) 12%, transparent);
+    --abt-shadow: 0 12px 40px color-mix(in srgb, var(--abt-text) 8%, transparent);
+    --abt-hero-overlay: {{ hero_overlay }};
+    --abt-style-overlay: {{ style_overlay }};
+    --abt-top: {{ section.settings.padding_top }}px;
+    --abt-bottom: {{ section.settings.padding_bottom }}px;
+    --abt-radius-xl: {{ section.settings.card_radius }}px;
+    --abt-radius-lg: {{ section.settings.inner_radius }}px;
+    --abt-button-radius: {{ section.settings.button_radius }}px;
+  "
+>
+  <div class="abt__shell">
+    <header class="abt__hero abt-reveal" role="banner">
+      <div class="abt__hero-media">
+        {%- if section.settings.hero_image != blank -%}
+          {{
+            section.settings.hero_image
+            | image_url: width: 1600
+            | image_tag:
+              class: 'abt__hero-image',
+              loading: 'eager',
+              fetchpriority: 'high',
+              widths: '480, 720, 960, 1200, 1600',
+              sizes: '(max-width: 767px) 100vw, 480px',
+              alt: section.settings.hero_image_alt
+          }}
+        {%- else -%}
+          <div class="abt__hero-placeholder" aria-hidden="true"></div>
+        {%- endif -%}
+        <div class="abt__hero-overlay" aria-hidden="true"></div>
       </div>
 
-      <!-- Card 2 -->
-      <div class="at-float-card" data-float-card>
-        <p class="at-float-card-tag">Signature Collection</p>
-        <p class="at-float-card-title">The Tailored<br>Wardrobe Essentials</p>
-        <a href="{{ routes.collections_url }}" class="at-float-btn">
-          Shop Now
-          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
+      <div class="abt__hero-copy">
+        {%- if section.settings.hero_heading != blank -%}
+          <h1 class="abt__hero-heading">{{ section.settings.hero_heading }}</h1>
+        {%- endif -%}
+        {%- if section.settings.hero_subheading != blank -%}
+          <p class="abt__hero-subheading">{{ section.settings.hero_subheading }}</p>
+        {%- endif -%}
       </div>
+    </header>
 
-    </div>
-    <!-- / Floating Cards -->
+    <div class="abt__content">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'story_quote' -%}
+            <section class="abt-story abt-reveal" {{ block.shopify_attributes }}>
+              {%- if block.settings.text != blank -%}
+                <div class="abt-story__text rte">{{ block.settings.text }}</div>
+              {%- endif -%}
 
-  </div>
-  <!-- / Parallax Section -->
+              <div class="abt-story__media abt-reveal-soft">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1200
+                    | image_tag:
+                      class: 'abt-story__image',
+                      loading: 'lazy',
+                      widths: '480, 720, 960, 1200',
+                      sizes: '(max-width: 767px) 100vw, 480px',
+                      alt: block.settings.image_alt
+                  }}
+                {%- else -%}
+                  <div class="abt-story__placeholder" aria-hidden="true"></div>
+                {%- endif -%}
+              </div>
+            </section>
 
-  <!-- ══════════════════════════════════════
-       3. BRAND VALUES STRIP
-  ══════════════════════════════════════ -->
-  <div class="at-values-strip px-0" style="background-color: var(--color-bg);">
-    {% for block in section.blocks %}
-      {% if block.type == 'value_item' %}
-        <div class="at-value-item" {{ block.shopify_attributes }}>
-          <p class="at-value-number">{{ block.settings.number }}<span style="color: var(--color-accent);">{{ block.settings.suffix }}</span></p>
-          <p class="at-value-label">{{ block.settings.label }}</p>
-        </div>
-      {% endif %}
-    {% endfor %}
-  </div>
+          {%- when 'mission_story' -%}
+            <section class="abt-mission abt-reveal" {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <div class="abt-mission__heading">{{ block.settings.heading }}</div>
+              {%- endif -%}
 
-  <!-- ══════════════════════════════════════
-       4. CUSTOMER REVIEWS (Horizontal)
-  ══════════════════════════════════════ -->
-  <section class="py-24" style="background-color: var(--color-bg);">
-    <div class="max-w-screen-xl mx-auto">
+              {%- if block.settings.body_1 != blank -%}
+                <div class="abt-mission__body rte">{{ block.settings.body_1 }}</div>
+              {%- endif -%}
 
-      <!-- Heading row -->
-      <div class="flex justify-between items-end gap-8 px-6 md:px-10 mb-10">
-        <h2 class="at-reviews-heading" id="at-reviews-head">
-          {{ section.settings.reviews_heading }}
-        </h2>
+              {%- if block.settings.body_2 != blank -%}
+                <div class="abt-mission__body rte">{{ block.settings.body_2 }}</div>
+              {%- endif -%}
 
-        <!-- Scroll arrows -->
-        <div class="hidden md:flex gap-3" style="flex-shrink: 0;">
-          <button class="at-scroll-arrow" data-scroll-dir="-1" aria-label="Previous reviews">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          </button>
-          <button class="at-scroll-arrow" data-scroll-dir="1" aria-label="Next reviews">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
-        </div>
-      </div>
+              <div class="abt-mission__media abt-reveal-soft">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1400
+                    | image_tag:
+                      class: 'abt-mission__image',
+                      loading: 'lazy',
+                      widths: '480, 720, 960, 1200, 1400',
+                      sizes: '(max-width: 767px) 100vw, 480px',
+                      alt: block.settings.image_alt
+                  }}
+                {%- else -%}
+                  <div class="abt-mission__placeholder" aria-hidden="true"></div>
+                {%- endif -%}
+              </div>
+            </section>
 
-      <!-- Horizontal review strip -->
-      <div class="at-reviews-strip px-6 md:px-10" id="at-reviews-strip">
-
-        {% for block in section.blocks %}
-          {% if block.type == 'review_card' %}
-            <article class="at-review-card" data-review-card {{ block.shopify_attributes }}>
-
-              <!-- Stars -->
-              <p class="at-review-stars" aria-label="{{ block.settings.stars }} stars">
-                {% for i in (1..5) %}{% if i <= block.settings.stars %}★{% else %}☆{% endif %}{% endfor %}
-              </p>
-
-              <!-- Review text -->
-              <blockquote class="at-review-text">"{{ block.settings.text }}"</blockquote>
-
-              <!-- Author -->
-              <div class="at-review-author">
-                {% if block.settings.avatar != blank %}
-                  <img
-                    src="{{ block.settings.avatar | image_url: width: 80 }}"
-                    alt="{{ block.settings.name }}"
-                    class="at-review-avatar"
-                    loading="lazy"
-                    width="40"
-                    height="40"
-                  />
-                {% else %}
-                  <div class="at-review-avatar" style="background: var(--color-border); display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--color-muted);">{{ block.settings.name | slice: 0 }}</div>
-                {% endif %}
-                <div>
-                  <p class="at-review-name">{{ block.settings.name }}</p>
-                  <p class="at-review-location">{{ block.settings.location }}</p>
-                </div>
+          {%- when 'style_feature' -%}
+            <section class="abt-style abt-reveal" {{ block.shopify_attributes }}>
+              <div class="abt-style__hero">
+                {%- if block.settings.image != blank -%}
+                  {{
+                    block.settings.image
+                    | image_url: width: 1400
+                    | image_tag:
+                      class: 'abt-style__image',
+                      loading: 'lazy',
+                      widths: '480, 720, 960, 1200, 1400',
+                      sizes: '(max-width: 767px) 100vw, 480px',
+                      alt: block.settings.image_alt
+                  }}
+                {%- else -%}
+                  <div class="abt-style__placeholder" aria-hidden="true"></div>
+                {%- endif -%}
+                <div class="abt-style__overlay" aria-hidden="true"></div>
+                {%- if block.settings.overlay_heading != blank -%}
+                  <div class="abt-style__headline-wrap">
+                    <h2 class="abt-style__headline">{{ block.settings.overlay_heading }}</h2>
+                  </div>
+                {%- endif -%}
               </div>
 
-            </article>
-          {% endif %}
-        {% endfor %}
+              <div class="abt-style__card abt-reveal-soft">
+                {%- if block.settings.card_title != blank -%}
+                  <h3 class="abt-style__card-title">{{ block.settings.card_title }}</h3>
+                {%- endif -%}
 
-      </div>
-      <!-- / Review strip -->
+                {%- if block.settings.card_text != blank -%}
+                  <div class="abt-style__card-text rte">{{ block.settings.card_text }}</div>
+                {%- endif -%}
 
+                {%- if block.settings.button_label != blank -%}
+                  <a class="abt-style__button" href="{{ block.settings.button_link | default: routes.collections_url }}">
+                    <span>{{ block.settings.button_label }}</span>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                  </a>
+                {%- endif -%}
+              </div>
+            </section>
+        {%- endcase -%}
+      {%- endfor -%}
+
+      <section class="abt-testimonials" aria-labelledby="abt-testimonials-title-{{ section.id }}">
+        <div class="abt-testimonials__inner">
+          {%- if section.settings.testimonials_eyebrow != blank -%}
+            <p class="abt-testimonials__eyebrow abt-reveal">{{ section.settings.testimonials_eyebrow }}</p>
+          {%- endif -%}
+
+          {%- if section.settings.testimonials_heading != blank -%}
+            <h2 id="abt-testimonials-title-{{ section.id }}" class="abt-testimonials__heading abt-reveal">
+              {{ section.settings.testimonials_heading }}
+            </h2>
+          {%- endif -%}
+
+          <div class="abt-testimonials__track abt-reveal" data-abt-track>
+            {%- assign has_testimonials = false -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'testimonial' -%}
+                {%- assign has_testimonials = true -%}
+                <article class="abt-testimonials__card" data-abt-card {{ block.shopify_attributes }}>
+                  {%- if block.settings.text != blank -%}
+                    <div class="abt-testimonials__text rte">{{ block.settings.text }}</div>
+                  {%- endif -%}
+
+                  <div class="abt-testimonials__author">
+                    <div class="abt-testimonials__avatar-wrap">
+                      {%- if block.settings.avatar != blank -%}
+                        {{
+                          block.settings.avatar
+                          | image_url: width: 160
+                          | image_tag:
+                            class: 'abt-testimonials__avatar',
+                            loading: 'lazy',
+                            widths: '80, 120, 160',
+                            sizes: '56px',
+                            alt: block.settings.name
+                        }}
+                      {%- else -%}
+                        <div class="abt-testimonials__avatar-placeholder" aria-hidden="true">
+                          {{ block.settings.name | default: 'A' | slice: 0 }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+
+                    <div class="abt-testimonials__author-copy">
+                      {%- if block.settings.name != blank -%}
+                        <p class="abt-testimonials__name">{{ block.settings.name }}</p>
+                      {%- endif -%}
+                      {%- if block.settings.location != blank -%}
+                        <p class="abt-testimonials__location">{{ block.settings.location }}</p>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </article>
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- unless has_testimonials -%}
+              <article class="abt-testimonials__card">
+                <p class="abt-testimonials__empty">Add testimonial blocks in the Theme Editor.</p>
+              </article>
+            {%- endunless -%}
+          </div>
+
+          <div class="abt-testimonials__dots" role="tablist" aria-label="Testimonial pagination">
+            {%- assign testimonial_count = 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'testimonial' -%}
+                <button
+                  class="abt-testimonials__dot{% if testimonial_count == 0 %} is-active{% endif %}"
+                  type="button"
+                  role="tab"
+                  aria-selected="{% if testimonial_count == 0 %}true{% else %}false{% endif %}"
+                  aria-label="Go to testimonial {{ testimonial_count | plus: 1 }}"
+                  data-abt-dot
+                  data-abt-index="{{ testimonial_count }}"
+                ></button>
+                {%- assign testimonial_count = testimonial_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </section>
     </div>
-  </section>
+  </div>
+</section>
 
-</div>
-<!-- / #about-page -->
+<style>
+  #AboutTemplate-{{ section.id }} {
+    padding-top: var(--abt-top);
+    padding-bottom: var(--abt-bottom);
+    background: var(--abt-bg);
+    color: var(--abt-text);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__shell {
+    width: 100%;
+    max-width: 480px;
+    margin-inline: auto;
+    background: var(--abt-bg);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__content {
+    display: grid;
+    gap: 0;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__hero {
+    position: relative;
+    width: 100%;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__hero-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__hero-image,
+  #AboutTemplate-{{ section.id }} .abt__hero-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__hero-placeholder,
+  #AboutTemplate-{{ section.id }} .abt-story__placeholder,
+  #AboutTemplate-{{ section.id }} .abt-mission__placeholder,
+  #AboutTemplate-{{ section.id }} .abt-style__placeholder {
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--abt-text) 10%, transparent), transparent),
+      color-mix(in srgb, var(--abt-card-bg) 88%, var(--abt-text) 5%);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__hero-image {
+    transform: scale(1.12);
+    animation: abtHeroZoom-{{ section.id }} 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__hero-overlay,
+  #AboutTemplate-{{ section.id }} .abt-style__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--abt-hero-overlay));
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__hero-copy {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    text-align: center;
+    color: var(--color-base-solid-button-labels, #ffffff);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__hero-heading,
+  #AboutTemplate-{{ section.id }} .abt__hero-subheading {
+    margin: 0;
+    opacity: 0;
+    transform: translateY(24px);
+    animation: abtHeroText-{{ section.id }} 0.9s ease-out forwards;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__hero-heading {
+    font-size: clamp(1.75rem, 6vw, 2.3rem);
+    line-height: 1.15;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    animation-delay: 0.5s;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt__hero-subheading {
+    max-width: 30ch;
+    margin-top: 16px;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    opacity: 0;
+    animation-delay: 0.85s;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-story,
+  #AboutTemplate-{{ section.id }} .abt-mission,
+  #AboutTemplate-{{ section.id }} .abt-style,
+  #AboutTemplate-{{ section.id }} .abt-testimonials {
+    padding-inline: 20px;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-story {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-story__text {
+    color: var(--abt-text);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-story__text p {
+    margin: 0;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-story__media,
+  #AboutTemplate-{{ section.id }} .abt-mission__media {
+    margin-top: 40px;
+    overflow: hidden;
+    margin-inline: -20px;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-story__image,
+  #AboutTemplate-{{ section.id }} .abt-mission__image {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    display: block;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-story__placeholder,
+  #AboutTemplate-{{ section.id }} .abt-mission__placeholder {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-mission {
+    padding-bottom: 40px;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-mission__heading {
+    margin: 0;
+    font-size: 1.375rem;
+    line-height: 1.25;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-mission__heading u {
+    text-underline-offset: 0.12em;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-mission__body {
+    margin-top: 20px;
+    color: var(--abt-muted);
+    font-size: 0.95rem;
+    line-height: 1.72;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-mission__body p {
+    margin: 0;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style {
+    padding-inline: 0;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__hero {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__image,
+  #AboutTemplate-{{ section.id }} .abt-style__placeholder {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__image {
+    transform: scale(1.12);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style.is-visible .abt-style__image {
+    animation: abtHeroZoom-{{ section.id }} 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__overlay {
+    background: rgba(0, 0, 0, var(--abt-style-overlay));
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__headline-wrap {
+    position: absolute;
+    top: 24px;
+    left: 20px;
+    right: 20px;
+    z-index: 1;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__headline {
+    margin: 0;
+    color: var(--color-base-solid-button-labels, #ffffff);
+    font-size: 1.5rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__card {
+    margin: 0 20px;
+    margin-top: -16px;
+    position: relative;
+    z-index: 1;
+    background: var(--abt-card-bg);
+    border: 1px solid var(--abt-border);
+    border-radius: var(--abt-radius-lg);
+    padding: 24px;
+    box-shadow: var(--abt-shadow);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__card-title {
+    margin: 0;
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__card-text {
+    margin-top: 12px;
+    color: var(--abt-muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__card-text p {
+    margin: 0;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__button {
+    margin-top: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 28px;
+    border-radius: var(--abt-button-radius);
+    border: 2px solid var(--abt-text);
+    background: var(--abt-text);
+    color: var(--color-base-background-1, #ffffff);
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.8125rem;
+    transition:
+      transform 180ms ease,
+      background-color 180ms ease,
+      color 180ms ease,
+      border-color 180ms ease;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__button:hover {
+    background: transparent;
+    color: var(--abt-text);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__button:active {
+    transform: scale(0.97);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-style__button svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials {
+    padding-top: 48px;
+    padding-bottom: 48px;
+    background: color-mix(in srgb, var(--abt-bg) 92%, var(--abt-text) 4%);
+    overflow: hidden;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__eyebrow {
+    margin: 0;
+    color: var(--abt-muted);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__heading {
+    margin: 8px 0 0;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    margin-top: 32px;
+    padding-bottom: 4px;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__card {
+    flex: 0 0 82%;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    scroll-snap-align: center;
+    background: var(--abt-card-bg);
+    border: 1px solid var(--abt-border);
+    border-radius: var(--abt-radius-xl);
+    padding: 24px;
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--abt-text) 6%, transparent);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__text {
+    color: color-mix(in srgb, var(--abt-text) 88%, transparent);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__text p {
+    margin: 0;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__author {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__avatar,
+  #AboutTemplate-{{ section.id }} .abt-testimonials__avatar-placeholder {
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    display: block;
+    object-fit: cover;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__avatar-placeholder {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in srgb, var(--abt-text) 10%, var(--abt-card-bg));
+    color: var(--abt-muted);
+    font-weight: 600;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__name,
+  #AboutTemplate-{{ section.id }} .abt-testimonials__location,
+  #AboutTemplate-{{ section.id }} .abt-testimonials__empty {
+    margin: 0;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__name {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    font-weight: 600;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__location,
+  #AboutTemplate-{{ section.id }} .abt-testimonials__empty {
+    margin-top: 2px;
+    color: var(--abt-muted);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__dots {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    border: 0;
+    padding: 0;
+    background: color-mix(in srgb, var(--abt-text) 16%, transparent);
+    transition:
+      width 280ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 280ms ease;
+    cursor: pointer;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-testimonials__dot.is-active {
+    width: 28px;
+    background: var(--abt-text);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-reveal,
+  #AboutTemplate-{{ section.id }} .abt-reveal-soft {
+    opacity: 0;
+    transform: translateY(32px);
+    transition:
+      opacity 720ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 720ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-reveal-soft {
+    transform: translateY(24px);
+    transition-duration: 620ms;
+  }
+
+  #AboutTemplate-{{ section.id }} .abt-reveal.is-visible,
+  #AboutTemplate-{{ section.id }} .abt-reveal-soft.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @keyframes abtHeroZoom-{{ section.id }} {
+    from { transform: scale(1.12); }
+    to { transform: scale(1); }
+  }
+
+  @keyframes abtHeroText-{{ section.id }} {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
 
 <script>
   (function () {
-    function scrollReviews(dir) {
-      var strip = document.getElementById('at-reviews-strip');
-      if (!strip) return;
-      strip.scrollBy({ left: dir * 320, behavior: 'smooth' });
+    var root = document.getElementById('AboutTemplate-{{ section.id }}');
+    if (!root || root.dataset.abtInit === 'true') return;
+    root.dataset.abtInit = 'true';
+
+    var revealItems = root.querySelectorAll('.abt-reveal, .abt-reveal-soft');
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
+
+      revealItems.forEach(function (item) { observer.observe(item); });
+    } else {
+      revealItems.forEach(function (item) { item.classList.add('is-visible'); });
     }
 
-    /* Event delegation — scroll arrows */
-    document.addEventListener('click', function (e) {
-      var btn = e.target.closest('[data-scroll-dir]');
-      if (!btn) return;
-      scrollReviews(Number(btn.dataset.scrollDir));
+    var track = root.querySelector('[data-abt-track]');
+    var dots = Array.prototype.slice.call(root.querySelectorAll('[data-abt-dot]'));
+    if (!track || !dots.length) return;
+
+    function setActive(index) {
+      dots.forEach(function (dot, dotIndex) {
+        var active = dotIndex === index;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+
+    function getIndexFromScroll() {
+      var cards = track.querySelectorAll('[data-abt-card]');
+      if (!cards.length) return 0;
+      var cardWidth = cards[0].offsetWidth + 16;
+      if (!cardWidth) return 0;
+      return Math.max(0, Math.min(cards.length - 1, Math.round(track.scrollLeft / cardWidth)));
+    }
+
+    var rafId = null;
+    track.addEventListener('scroll', function () {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(function () {
+        setActive(getIndexFromScroll());
+      });
+    }, { passive: true });
+
+    dots.forEach(function (dot, index) {
+      dot.addEventListener('click', function () {
+        var cards = track.querySelectorAll('[data-abt-card]');
+        var target = cards[index];
+        if (!target) return;
+        track.scrollTo({
+          left: target.offsetLeft - track.offsetLeft,
+          behavior: 'smooth'
+        });
+        setActive(index);
+      });
     });
   })();
 </script>
@@ -197,127 +766,319 @@
 {
   "name": "About Page",
   "tag": "section",
+  "class": "about-template-section",
   "settings": [
     {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "muted_text_color",
+      "label": "Muted text color",
+      "default": "rgba(17,17,17,0.68)"
+    },
+    {
       "type": "header",
-      "content": "Editorial Intro"
-    },
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow Text",
-      "default": "The Journey of Style"
-    },
-    {
-      "type": "textarea",
-      "id": "quote_text",
-      "label": "Quote Text",
-      "default": "From the soft drape of a blouse to the structured silhouette of a tailored jacket, every element is curated to empower you — not define you."
-    },
-    {
-      "type": "header",
-      "content": "Parallax Hero"
+      "content": "Hero"
     },
     {
       "type": "image_picker",
-      "id": "parallax_image",
-      "label": "Hero Image",
-      "info": "Recommended: 1920×1280px"
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "hero_image_alt",
+      "label": "Hero image alt text",
+      "default": "Fashion hero banner"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "label": "Hero heading",
+      "default": "THE JOURNEY OF STYLE"
     },
     {
       "type": "textarea",
-      "id": "hero_headline",
-      "label": "Hero Headline",
-      "default": "Where Street Style<br>Meets High Fashion."
+      "id": "hero_subheading",
+      "label": "Hero subheading",
+      "default": "A timeless exploration of fashion that evolves with you at every step."
+    },
+    {
+      "type": "range",
+      "id": "hero_overlay_opacity",
+      "label": "Hero overlay opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 40
     },
     {
       "type": "header",
-      "content": "Reviews Section"
+      "content": "Style feature overlay"
     },
     {
-      "type": "textarea",
-      "id": "reviews_heading",
-      "label": "Reviews Heading",
-      "default": "Success Stories That Inspire —<br><em style=\"font-weight: 400;\">See What Real Customers Say</em>"
+      "type": "range",
+      "id": "style_overlay_opacity",
+      "label": "Style image overlay opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    },
+    {
+      "type": "header",
+      "content": "Testimonials"
+    },
+    {
+      "type": "text",
+      "id": "testimonials_eyebrow",
+      "label": "Testimonials eyebrow",
+      "default": "SUCCESS STORIES THAT INSPIRE"
+    },
+    {
+      "type": "text",
+      "id": "testimonials_heading",
+      "label": "Testimonials heading",
+      "default": "SEE WHAT REAL CUSTOMER SAY"
+    },
+    {
+      "type": "header",
+      "content": "Shape"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "inner_radius",
+      "label": "Inner card radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "button_radius",
+      "label": "Button radius",
+      "min": 0,
+      "max": 999,
+      "step": 4,
+      "unit": "px",
+      "default": 999
     }
   ],
   "blocks": [
     {
-      "type": "value_item",
-      "name": "Brand Value",
+      "type": "story_quote",
+      "name": "Story quote",
+      "limit": 2,
       "settings": [
         {
-          "type": "text",
-          "id": "number",
-          "label": "Number",
-          "default": "200"
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>From the soft drape of a blouse to the structured silhouette of a tailored jacket, every element is curated to empower you—inside and out. Our garments are more than just fashion; they are a celebration of individuality, resilience, and the beauty of authenticity.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
         },
         {
           "type": "text",
-          "id": "suffix",
-          "label": "Suffix (e.g. +)",
-          "default": "+"
-        },
-        {
-          "type": "text",
-          "id": "label",
-          "label": "Label",
-          "default": "Curated Pieces"
+          "id": "image_alt",
+          "label": "Image alt text",
+          "default": "Fashion model portrait"
         }
       ]
     },
     {
-      "type": "review_card",
-      "name": "Customer Review",
+      "type": "mission_story",
+      "name": "Mission story",
+      "limit": 3,
       "settings": [
         {
-          "type": "range",
-          "id": "stars",
-          "min": 1,
-          "max": 5,
-          "step": 1,
-          "default": 5,
-          "label": "Star Rating"
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "TIMELESS PIECES THAT TELL STORIES OF POWER, <u>BEAUTY</u>"
         },
         {
-          "type": "textarea",
+          "type": "richtext",
+          "id": "body_1",
+          "label": "Body 1",
+          "default": "<p>Timeless pieces are more than just garments — they are expressions of personal journeys, woven with threads of power, beauty, and individuality.</p>"
+        },
+        {
+          "type": "richtext",
+          "id": "body_2",
+          "label": "Body 2",
+          "default": "<p>Each design in our collection is thoughtfully crafted to honor your unique essence, celebrate your confidence, and elevate your everyday presence. Whether you're dressing for bold first impressions or quiet moments of reflection, these pieces carry the narrative of strength and self-expression in every detail.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text",
+          "default": "Editorial fashion shot"
+        }
+      ]
+    },
+    {
+      "type": "style_feature",
+      "name": "Style feature",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "image_alt",
+          "label": "Image alt text",
+          "default": "Street style meets high fashion"
+        },
+        {
+          "type": "text",
+          "id": "overlay_heading",
+          "label": "Overlay heading",
+          "default": "WHERE STREET STYLE MEETS HIGH FASHION"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "Card title",
+          "default": "Explore Edgy Everyday Wear"
+        },
+        {
+          "type": "richtext",
+          "id": "card_text",
+          "label": "Card text",
+          "default": "<p>Discover bold, street-smart styles crafted for comfort and everyday confidence.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "EXPLORE"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    },
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "richtext",
           "id": "text",
-          "label": "Review Text",
-          "default": "The quality of the fabric is unlike anything I have found at this price point."
+          "label": "Text",
+          "default": "<p>I've been shopping at this store for a few months now, and I can confidently say it's one of the best online shopping experiences I've had. From the seamless ordering process to the fast delivery.</p>"
         },
         {
           "type": "text",
           "id": "name",
-          "label": "Customer Name",
-          "default": "Customer Name"
+          "label": "Name",
+          "default": "Sophia M."
         },
         {
           "type": "text",
           "id": "location",
           "label": "Location",
-          "default": "City"
+          "default": "San Francisco, CA"
         },
         {
           "type": "image_picker",
           "id": "avatar",
-          "label": "Avatar Photo",
-          "info": "Recommended: 80 × 80px (square). Displayed as circular."
+          "label": "Avatar"
         }
       ]
     }
   ],
+  "max_blocks": 12,
   "presets": [
     {
       "name": "About Page",
       "blocks": [
-        { "type": "value_item", "settings": { "number": "200", "suffix": "+", "label": "Curated Pieces" } },
-        { "type": "value_item", "settings": { "number": "12", "suffix": "", "label": "Collections" } },
-        { "type": "value_item", "settings": { "number": "5K", "suffix": "+", "label": "Happy Clients" } },
-        { "type": "value_item", "settings": { "number": "4", "suffix": "", "label": "Years of Craft" } },
-        { "type": "review_card", "settings": { "text": "The quality of the fabric is unlike anything I have found at this price point. Minimal, considered, and completely my style.", "name": "Linh N.", "location": "Hà Nội" } },
-        { "type": "review_card", "settings": { "text": "Wearing Dropxlabel feels like wearing confidence. The linen coat fits perfectly and drapes beautifully.", "name": "Anh T.", "location": "TP. Hồ Chí Minh" } },
-        { "type": "review_card", "settings": { "text": "Every piece I have ordered has exceeded expectations. The attention to detail is evident in every seam.", "name": "Mai P.", "location": "Đà Nẵng" } },
-        { "type": "review_card", "settings": { "text": "Understated, sophisticated, timeless. Exactly what I was looking for. The silk edit is perfection.", "name": "Thanh H.", "location": "Hà Nội" } }
+        {
+          "type": "story_quote"
+        },
+        {
+          "type": "mission_story"
+        },
+        {
+          "type": "style_feature"
+        },
+        {
+          "type": "testimonial"
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "text": "<p>I recently ordered a few items and I couldn't be happier. The quality is excellent and I've received so many compliments.</p>",
+            "name": "John P.",
+            "location": "Austin, TX"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "text": "<p>As someone who cares about style and materials, I was thrilled to find a brand that feels elevated without sacrificing comfort.</p>",
+            "name": "Emily R.",
+            "location": "Miami, FL"
+          }
+        }
       ]
     }
   ]
