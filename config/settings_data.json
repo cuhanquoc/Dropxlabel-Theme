@@ -501,7 +501,7 @@
             "type": "collection_group",
             "settings": {
               "number": "02",
-              "title": "",
+              "title": "by items",
               "collection_1": "dress",
               "collection_2": "top",
               "collection_3": "bodysuits",
