@@ -496,37 +496,13 @@
               "collection_5": "skirt",
               "collection_6": "bikini"
             }
-          },
-          "category_tab_DJkwVi": {
-            "type": "category_tab",
-            "name": "ALL",
-            "settings": {
-              "label": "All",
-              "banner_link": "shopify://collections/all",
-              "banner_alt": "sadkjfgbas,zbfklsd"
-            }
-          },
-          "collection_group_KL8ejJ": {
-            "type": "collection_group",
-            "settings": {
-              "number": "01",
-              "title": "New",
-              "collection_1": "best-sellers",
-              "collection_2": "",
-              "collection_3": "bikini",
-              "collection_4": "",
-              "collection_5": "",
-              "collection_6": ""
-            }
           }
         },
         "block_order": [
           "category_tab_VLmX8q",
           "collection_group_eTi3KA",
           "category_tab_azqAL9",
-          "collection_group_r7nA4U",
-          "category_tab_DJkwVi",
-          "collection_group_KL8ejJ"
+          "collection_group_r7nA4U"
         ],
         "settings": {
           "menu_title": "Menu",
