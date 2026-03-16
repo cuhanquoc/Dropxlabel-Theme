@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "colors_background": "#ffffff",
     "favicon": "shopify://shop_images/rmbglogo.png",
     "sections": {
       "announcement-bar": {
