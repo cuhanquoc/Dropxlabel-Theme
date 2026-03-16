@@ -484,30 +484,12 @@
               "banner_link": "",
               "banner_alt": ""
             }
-          },
-          "category_tab_azqAL9": {
-            "type": "category_tab",
-            "settings": {
-              "label": "Women",
-              "banner_link": "",
-              "banner_alt": ""
-            }
-          },
-          "category_tab_gMYFER": {
-            "type": "category_tab",
-            "settings": {
-              "label": "Men",
-              "banner_link": "",
-              "banner_alt": ""
-            }
           }
         },
         "block_order": [
           "category_tab_DJkwVi",
           "collection_group_KL8ejJ",
-          "category_tab_VLmX8q",
-          "category_tab_azqAL9",
-          "category_tab_gMYFER"
+          "category_tab_VLmX8q"
         ],
         "settings": {
           "menu_title": "Menu",
