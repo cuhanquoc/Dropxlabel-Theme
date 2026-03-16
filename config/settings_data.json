@@ -497,6 +497,19 @@
               "banner_alt": ""
             }
           },
+          "collection_group_r7nA4U": {
+            "type": "collection_group",
+            "settings": {
+              "number": "02",
+              "title": "",
+              "collection_1": "dress",
+              "collection_2": "top",
+              "collection_3": "bodysuits",
+              "collection_4": "jeans",
+              "collection_5": "skirt",
+              "collection_6": "bikini"
+            }
+          },
           "category_tab_DJkwVi": {
             "type": "category_tab",
             "name": "ALl",
@@ -512,6 +525,7 @@
           "category_tab_VLmX8q",
           "collection_group_eTi3KA",
           "category_tab_azqAL9",
+          "collection_group_r7nA4U",
           "category_tab_DJkwVi"
         ],
         "settings": {
