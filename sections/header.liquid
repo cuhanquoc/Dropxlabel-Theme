@@ -98,9 +98,9 @@
       </nav>
     </div>
 
-    <a href="{{ routes.root_url }}" class="dx-logo" style="--dx-logo-width: {{ section.settings.logo_width | default: 120 }}px;">
+    <a href="{{ routes.root_url }}" class="dx-logo" style="--dx-logo-width: {{ section.settings.logo_width | default: 180 }}px;">
       {% if section.settings.logo_image != blank %}
-        {{ section.settings.logo_image | image_url: width: 420 | image_tag: class: 'dx-logo__image', loading: 'eager', alt: shop.name }}
+        {{ section.settings.logo_image | image_url: width: 1200 | image_tag: class: 'dx-logo__image', loading: 'eager', alt: shop.name }}
       {% else %}
         <span class="dx-logo__text">{{ section.settings.logo_text | default: shop.name }}</span>
       {% endif %}
@@ -256,13 +256,13 @@
     {
       "type": "range",
       "id": "logo_width",
-      "min": 60,
-      "max": 300,
+      "min": 80,
+      "max": 500,
       "step": 10,
-      "default": 120,
+      "default": 180,
       "unit": "px",
       "label": "Logo Max Width",
-      "info": "Controls the maximum width of the logo image on desktop"
+      "info": "Controls the maximum width of the logo image. Use a tightly cropped transparent PNG for best results."
     },
     {
       "type": "text",
