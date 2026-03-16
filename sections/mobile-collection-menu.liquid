@@ -379,6 +379,7 @@
                           <h3 class="mcm-group-title">{{ block.settings.title | default: 'Collections' }}</h3>
                           {%- liquid
                             assign has_group_collections = false
+                            assign has_child_collection_blocks = false
                             if block.settings.collection_1 != blank
                               assign has_group_collections = true
                             elsif block.settings.collection_2 != blank
@@ -392,8 +393,50 @@
                             elsif block.settings.collection_6 != blank
                               assign has_group_collections = true
                             endif
+
+                            assign inside_group = false
+                            for child_block in section.blocks
+                              if child_block.id == block.id
+                                assign inside_group = true
+                                continue
+                              endif
+                              if inside_group
+                                if child_block.type == 'category_tab' or child_block.type == 'collection_group'
+                                  break
+                                endif
+                                if child_block.type == 'shopify_collection' and child_block.settings.collection != blank
+                                  assign has_child_collection_blocks = true
+                                  break
+                                endif
+                              endif
+                            endfor
                           -%}
-                          {%- if has_group_collections -%}
+                          {%- if has_child_collection_blocks -%}
+                            <ul class="mcm-links">
+                              {%- assign inside_group = false -%}
+                              {%- for child_block in section.blocks -%}
+                                {%- if child_block.id == block.id -%}
+                                  {%- assign inside_group = true -%}
+                                  {%- continue -%}
+                                {%- endif -%}
+                                {%- if inside_group -%}
+                                  {%- if child_block.type == 'category_tab' or child_block.type == 'collection_group' -%}
+                                    {%- break -%}
+                                  {%- endif -%}
+                                  {%- if child_block.type == 'shopify_collection' and child_block.settings.collection != blank -%}
+                                    <li {{ child_block.shopify_attributes }}>
+                                      <a class="mcm-link{% if child_block.settings.collection.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ child_block.settings.collection.url }}">
+                                        <span>{{ child_block.settings.collection.title }}</span>
+                                        {%- if child_block.settings.collection.all_products_count > 0 and section.settings.show_collection_count -%}
+                                          <span class="mcm-link-badge">{{ child_block.settings.collection.all_products_count }}</span>
+                                        {%- endif -%}
+                                      </a>
+                                    </li>
+                                  {%- endif -%}
+                                {%- endif -%}
+                              {%- endfor -%}
+                            </ul>
+                          {%- elsif has_group_collections -%}
                             <ul class="mcm-links">
                               {%- if block.settings.collection_1 != blank -%}
                                 <li>
@@ -660,7 +703,7 @@
         },
         {
           "type": "paragraph",
-          "content": "Choose the Shopify collections for this group below. Leave unused slots empty."
+          "content": "After creating this group, use Add block > Shopify collection to add unlimited collections under it. The old Collection 1-6 slots remain below only for compatibility."
         },
         {
           "type": "collection",
@@ -693,6 +736,21 @@
           "label": "Collection 6"
         }
       ]
+    },
+    {
+      "type": "shopify_collection",
+      "name": "Shopify collection",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Place this block directly under the Collection group it belongs to."
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
     }
   ],
   "presets": [
@@ -701,13 +759,19 @@
       "blocks": [
         { "type": "category_tab", "settings": { "label": "Women" } },
         { "type": "collection_group", "settings": { "number": "01", "title": "New" } },
+        { "type": "shopify_collection" },
+        { "type": "shopify_collection" },
         { "type": "collection_group", "settings": { "number": "02", "title": "Collections" } },
+        { "type": "shopify_collection" },
         { "type": "category_tab", "settings": { "label": "Men" } },
         { "type": "collection_group", "settings": { "number": "01", "title": "New" } },
+        { "type": "shopify_collection" },
         { "type": "category_tab", "settings": { "label": "Kids" } },
         { "type": "collection_group", "settings": { "number": "01", "title": "Collections" } },
+        { "type": "shopify_collection" },
         { "type": "category_tab", "settings": { "label": "Perfume" } },
-        { "type": "collection_group", "settings": { "number": "01", "title": "Fragrance" } }
+        { "type": "collection_group", "settings": { "number": "01", "title": "Fragrance" } },
+        { "type": "shopify_collection" }
       ]
     }
   ]
