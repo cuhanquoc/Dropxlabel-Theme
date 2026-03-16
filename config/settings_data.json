@@ -455,6 +455,14 @@
       "mobile-collection-menu": {
         "type": "mobile-collection-menu",
         "blocks": {
+          "category_tab_AFiygB": {
+            "type": "category_tab",
+            "settings": {
+              "label": "Styles",
+              "banner_link": "",
+              "banner_alt": ""
+            }
+          },
           "category_tab_DJkwVi": {
             "type": "category_tab",
             "name": "ALL",
@@ -480,13 +488,14 @@
           "category_tab_VLmX8q": {
             "type": "category_tab",
             "settings": {
-              "label": "Women Man",
+              "label": "Items",
               "banner_link": "",
               "banner_alt": ""
             }
           }
         },
         "block_order": [
+          "category_tab_AFiygB",
           "category_tab_DJkwVi",
           "collection_group_KL8ejJ",
           "category_tab_VLmX8q"
