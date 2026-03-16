@@ -472,19 +472,6 @@
               "banner_alt": ""
             }
           },
-          "collection_group_KL8ejJ": {
-            "type": "collection_group",
-            "settings": {
-              "number": "01",
-              "title": "New",
-              "collection_1": "best-sellers",
-              "collection_2": "",
-              "collection_3": "bikini",
-              "collection_4": "",
-              "collection_5": "",
-              "collection_6": ""
-            }
-          },
           "category_tab_VLmX8q": {
             "type": "category_tab",
             "settings": {
@@ -497,7 +484,6 @@
         "block_order": [
           "category_tab_DJkwVi",
           "category_tab_AFiygB",
-          "collection_group_KL8ejJ",
           "category_tab_VLmX8q"
         ],
         "settings": {
