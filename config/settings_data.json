@@ -480,13 +480,13 @@
             "type": "collection_group",
             "settings": {
               "number": "01",
-              "title": "New",
-              "collection_1": "",
-              "collection_2": "",
-              "collection_3": "",
-              "collection_4": "",
-              "collection_5": "",
-              "collection_6": ""
+              "title": "",
+              "collection_1": "cottage",
+              "collection_2": "old-money",
+              "collection_3": "vintage",
+              "collection_4": "elegant",
+              "collection_5": "dark-light-academia",
+              "collection_6": "sexy"
             }
           },
           "category_tab_azqAL9": {
