@@ -455,15 +455,6 @@
       "mobile-collection-menu": {
         "type": "mobile-collection-menu",
         "blocks": {
-          "category_tab_DJkwVi": {
-            "type": "category_tab",
-            "name": "ALl",
-            "settings": {
-              "label": "All",
-              "banner_link": "",
-              "banner_alt": ""
-            }
-          },
           "collection_group_KL8ejJ": {
             "type": "collection_group",
             "settings": {
@@ -492,13 +483,22 @@
               "banner_link": "",
               "banner_alt": ""
             }
+          },
+          "category_tab_DJkwVi": {
+            "type": "category_tab",
+            "name": "ALl",
+            "settings": {
+              "label": "All",
+              "banner_link": "",
+              "banner_alt": ""
+            }
           }
         },
         "block_order": [
-          "category_tab_DJkwVi",
           "collection_group_KL8ejJ",
           "category_tab_VLmX8q",
-          "category_tab_azqAL9"
+          "category_tab_azqAL9",
+          "category_tab_DJkwVi"
         ],
         "settings": {
           "menu_title": "Menu",
