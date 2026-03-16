@@ -457,25 +457,46 @@
         "blocks": {
           "category_tab_DJkwVi": {
             "type": "category_tab",
-            "name": "ALL",
+            "name": "ALl",
             "settings": {
               "label": "All",
               "banner_link": "",
               "banner_alt": ""
             }
           },
-          "category_tab_AFiygB": {
-            "type": "category_tab",
+          "collection_group_KL8ejJ": {
+            "type": "collection_group",
             "settings": {
-              "label": "Styles",
-              "banner_link": "",
-              "banner_alt": ""
+              "number": "01",
+              "title": "New",
+              "collection_1": "best-sellers",
+              "collection_2": "",
+              "collection_3": "bikini",
+              "collection_4": "",
+              "collection_5": "",
+              "collection_6": ""
             }
           },
           "category_tab_VLmX8q": {
             "type": "category_tab",
             "settings": {
-              "label": "Items",
+              "label": "Women Man",
+              "banner_link": "",
+              "banner_alt": ""
+            }
+          },
+          "category_tab_azqAL9": {
+            "type": "category_tab",
+            "settings": {
+              "label": "Women",
+              "banner_link": "",
+              "banner_alt": ""
+            }
+          },
+          "category_tab_gMYFER": {
+            "type": "category_tab",
+            "settings": {
+              "label": "Men",
               "banner_link": "",
               "banner_alt": ""
             }
@@ -483,11 +504,13 @@
         },
         "block_order": [
           "category_tab_DJkwVi",
-          "category_tab_AFiygB",
-          "category_tab_VLmX8q"
+          "collection_group_KL8ejJ",
+          "category_tab_VLmX8q",
+          "category_tab_azqAL9",
+          "category_tab_gMYFER"
         ],
         "settings": {
-          "menu_title": "Collections",
+          "menu_title": "Menu",
           "tab_font_size": 12,
           "group_font_size": 11,
           "link_font_size": 14,
