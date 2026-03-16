@@ -1240,15 +1240,115 @@
                       data-option-position="{{ option.position }}"
                       data-option-name="{{ option_name_lower }}"
                     >
-                      {% for value in option.values %}
-                        {%- assign swatch_color = value | downcase | replace: ' ', '-' -%}
-                        <button
-                          type="button"
-                          class="color-swatch"
-                          style="background-color: {{ value | downcase }}; border: 1px solid #ddd;"
-                          title="{{ value }}"
-                          aria-label="{{ option.name }}: {{ value }}"
-                          aria-pressed="false"
+                          {% for value in option.values %}
+                            {%- assign swatch_name = value | downcase | strip -%}
+                            {%- assign swatch_color = swatch_name | replace: ' ', '-' -%}
+                            {%- assign swatch_background = '#f5f5f5' -%}
+
+                            {%- case swatch_name -%}
+                              {%- when 'black', 'đen' -%}
+                                {%- assign swatch_background = '#1f1f1f' -%}
+                              {%- when 'white', 'trắng' -%}
+                                {%- assign swatch_background = '#f5f5f5' -%}
+                              {%- when 'red', 'đỏ' -%}
+                                {%- assign swatch_background = '#d33636' -%}
+                              {%- when 'blue', 'xanh dương' -%}
+                                {%- assign swatch_background = '#3b82f6' -%}
+                              {%- when 'green', 'xanh lá' -%}
+                                {%- assign swatch_background = '#2e7d32' -%}
+                              {%- when 'yellow', 'vàng' -%}
+                                {%- assign swatch_background = '#f4d03f' -%}
+                              {%- when 'orange', 'cam' -%}
+                                {%- assign swatch_background = '#f97316' -%}
+                              {%- when 'purple', 'tím' -%}
+                                {%- assign swatch_background = '#8b5cf6' -%}
+                              {%- when 'pink', 'hồng' -%}
+                                {%- assign swatch_background = '#ec4899' -%}
+                              {%- when 'brown', 'nâu' -%}
+                                {%- assign swatch_background = '#8b5a2b' -%}
+                              {%- when 'coffee', 'coffee brown', 'nâu cà phê', 'coffee-brown' -%}
+                                {%- assign swatch_background = '#6f4e37' -%}
+                              {%- when 'grey', 'gray', 'xám' -%}
+                                {%- assign swatch_background = '#9ca3af' -%}
+                              {%- when 'navy' -%}
+                                {%- assign swatch_background = '#1e3a8a' -%}
+                              {%- when 'beige' -%}
+                                {%- assign swatch_background = '#d6c6a8' -%}
+                              {%- when 'cream', 'kem' -%}
+                                {%- assign swatch_background = '#f5f1e6' -%}
+                              {%- when 'khaki' -%}
+                                {%- assign swatch_background = '#c3b091' -%}
+                              {%- when 'olive' -%}
+                                {%- assign swatch_background = '#6b8e23' -%}
+                              {%- when 'teal' -%}
+                                {%- assign swatch_background = '#0f766e' -%}
+                              {%- when 'cyan' -%}
+                                {%- assign swatch_background = '#06b6d4' -%}
+                              {%- when 'maroon' -%}
+                                {%- assign swatch_background = '#7f1d1d' -%}
+                              {%- when 'burgundy', 'wine' -%}
+                                {%- assign swatch_background = '#7c2d12' -%}
+                              {%- when 'coral' -%}
+                                {%- assign swatch_background = '#fb7185' -%}
+                              {%- when 'salmon' -%}
+                                {%- assign swatch_background = '#fda4af' -%}
+                              {%- when 'gold' -%}
+                                {%- assign swatch_background = '#d4af37' -%}
+                              {%- when 'silver' -%}
+                                {%- assign swatch_background = '#c0c0c0' -%}
+                              {%- when 'tan' -%}
+                                {%- assign swatch_background = '#d2b48c' -%}
+                              {%- when 'ivory' -%}
+                                {%- assign swatch_background = '#fffff0' -%}
+                              {%- when 'lavender' -%}
+                                {%- assign swatch_background = '#c4b5fd' -%}
+                              {%- when 'mint' -%}
+                                {%- assign swatch_background = '#a7f3d0' -%}
+                              {%- when 'charcoal' -%}
+                                {%- assign swatch_background = '#36454f' -%}
+                              {%- when 'ash' -%}
+                                {%- assign swatch_background = '#b2beb5' -%}
+                              {%- when 'sand' -%}
+                                {%- assign swatch_background = '#c2b280' -%}
+                              {%- when 'sage' -%}
+                                {%- assign swatch_background = '#9caf88' -%}
+                            {%- endcase -%}
+
+                            {%- if swatch_background == '#f5f5f5' -%}
+                              {%- if swatch_name contains 'brown' or swatch_name contains 'nâu' or swatch_name contains 'coffee' -%}
+                                {%- assign swatch_background = '#6f4e37' -%}
+                              {%- elsif swatch_name contains 'black' or swatch_name contains 'đen' -%}
+                                {%- assign swatch_background = '#1f1f1f' -%}
+                              {%- elsif swatch_name contains 'white' or swatch_name contains 'trắng' -%}
+                                {%- assign swatch_background = '#f5f5f5' -%}
+                              {%- elsif swatch_name contains 'blue' or swatch_name contains 'xanh dương' -%}
+                                {%- assign swatch_background = '#3b82f6' -%}
+                              {%- elsif swatch_name contains 'green' or swatch_name contains 'xanh lá' -%}
+                                {%- assign swatch_background = '#2e7d32' -%}
+                              {%- elsif swatch_name contains 'red' or swatch_name contains 'đỏ' -%}
+                                {%- assign swatch_background = '#d33636' -%}
+                              {%- elsif swatch_name contains 'pink' or swatch_name contains 'hồng' -%}
+                                {%- assign swatch_background = '#ec4899' -%}
+                              {%- elsif swatch_name contains 'purple' or swatch_name contains 'tím' -%}
+                                {%- assign swatch_background = '#8b5cf6' -%}
+                              {%- elsif swatch_name contains 'yellow' or swatch_name contains 'vàng' -%}
+                                {%- assign swatch_background = '#f4d03f' -%}
+                              {%- elsif swatch_name contains 'orange' or swatch_name contains 'cam' -%}
+                                {%- assign swatch_background = '#f97316' -%}
+                              {%- elsif swatch_name contains 'gray' or swatch_name contains 'grey' or swatch_name contains 'xám' -%}
+                                {%- assign swatch_background = '#9ca3af' -%}
+                              {%- elsif swatch_name contains 'beige' or swatch_name contains 'cream' or swatch_name contains 'kem' -%}
+                                {%- assign swatch_background = '#f5f1e6' -%}
+                              {%- endif -%}
+                            {%- endif -%}
+
+                            <button
+                              type="button"
+                              class="color-swatch"
+                              style="background-color: {{ swatch_background }}; border: 1px solid #ddd;"
+                              title="{{ value }}"
+                              aria-label="{{ option.name }}: {{ value }}"
+                              aria-pressed="false"
                           data-option-position="{{ option.position }}"
                           data-option-value="{{ value }}"
                         ></button>
