@@ -1,774 +1,1062 @@
-{% comment %} FEATURED COLLECTION — Trending Products Carousel + Quick View Modal {% endcomment %}
+{% comment %} Featured Collection — Revamped Trending Products UI {% endcomment %}
 
-{%- assign fc_title_size   = section.settings.title_font_size   | default: '1.4rem' -%}
-{%- assign fc_title_color  = section.settings.title_color        | default: '#111111' -%}
-{%- assign fc_title_weight = section.settings.title_font_weight  | default: '500' -%}
-{%- assign fc_price_color  = section.settings.price_color        | default: '#111111' -%}
-{%- assign fc_compare_color = section.settings.compare_color     | default: '#999999' -%}
+{%- liquid
+  assign fc_section_id = 'fcv2-' | append: section.id
+  assign fc_source = section.settings.product_list
+  assign fc_limit = section.settings.max_products | default: 12
+  if fc_source == blank and section.settings.collection != blank
+    assign fc_source = section.settings.collection.products
+  endif
 
-<featured-collection class="block relative w-full overflow-hidden bg-white">
+  assign fc_initial = section.settings.items_initial | default: 4
+  assign fc_per_load = section.settings.items_per_load | default: 4
+  assign fc_more_label = section.settings.more_label | default: 'More'
+  assign fc_heading_line_1 = section.settings.heading_line_1 | default: 'TRENDING'
+  assign fc_heading_line_2 = section.settings.heading_line_2 | default: 'PRODUCTS'
+  assign fc_eyebrow = section.settings.eyebrow | default: 'Redesign Proposal — Celisira Trending Products'
+  assign fc_helper_text = section.settings.helper_text | default: 'Hover cards to reveal Quick View • Tap thumbnails to switch color'
+-%}
 
-  <!-- ── Firework Canvas (triggered on scroll) ── -->
-  <canvas id="fc-fireworks" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:10;"></canvas>
+<featured-collection class="fcv2 block relative overflow-hidden bg-white text-[#0a0a0a]" data-section-id="{{ section.id }}">
+  <div class="fcv2__eyebrow-bar">
+    <p class="fcv2__eyebrow">{{ fc_eyebrow }}</p>
+  </div>
 
-  <!-- ── Section Header ── -->
-  <div class="pt-14 pb-6 px-5 md:px-10 text-center" style="max-width: 100%; overflow: hidden;">
-    <h2
-      class="font-body font-black uppercase leading-[0.88] tracking-[-0.02em]"
-      style="font-size: {{ section.settings.heading_size | default: 'clamp(2.8rem,11vw,7.5rem)' }}; color: {{ section.settings.heading_color | default: '#0a0a0a' }}; word-break: keep-all; overflow-wrap: normal;"
-    >
-      <span class="fc-heading-motion" style="display: inline-block;">
-        {{ section.settings.heading | default: 'TRENDING PRODUCTS' }}
-      </span>
+  <div class="fcv2__header">
+    <h2 class="fcv2__heading" aria-label="{{ fc_heading_line_1 }} {{ fc_heading_line_2 }}">
+      <span class="fcv2__heading-line fcv2__heading-line--top">{{ fc_heading_line_1 }}</span>
+      <span class="fcv2__heading-line fcv2__heading-line--bottom">{{ fc_heading_line_2 }}</span>
     </h2>
   </div>
 
-  {%- assign fc_initial = section.settings.items_initial | default: 6 -%}
-  {%- assign fc_per_load = section.settings.items_per_load | default: 4 -%}
-  {%- assign fc_more_label = section.settings.more_label | default: 'More' -%}
-
-  <!-- ── Carousel ── -->
-  <div class="relative pb-16">
+  <div class="fcv2__body">
     <div
-      class="fc-track flex gap-3 md:gap-4 overflow-x-auto snap-x snap-mandatory pb-3 px-5 md:px-10 scroll-px-5 md:scroll-px-10" style="scroll-behavior: smooth; -webkit-overflow-scrolling: touch;"
-      id="fc-track"
+      class="fcv2__track"
+      id="fcv2-track"
       role="list"
       aria-label="Trending products"
       data-fc-initial="{{ fc_initial }}"
       data-fc-per-load="{{ fc_per_load }}"
     >
-
-      {%- comment -%} Data source: product_list (individual picks) OR collection picker {%- endcomment -%}
-      {%- assign fc_source = section.settings.product_list -%}
-      {%- assign fc_limit   = section.settings.max_products | default: 12 -%}
-      {%- if fc_source == blank and section.settings.collection != blank -%}
-        {%- assign fc_source = section.settings.collection.products -%}
-      {%- endif -%}
-
       {%- if fc_source != blank -%}
         {%- for product in fc_source limit: fc_limit -%}
+          {%- assign product_subtitle = product.metafields.custom.card_subtitle.value | default: product.metafields.custom.subtitle.value | default: '' -%}
 
-          {%- comment -%} Build variant JSON for JS {%- endcomment -%}
-          {%- assign v_json = '[' -%}
-          {%- for v in product.variants -%}
-            {%- assign v_img_url = '' -%}
-            {%- if v.featured_image != blank -%}
-              {%- assign v_img_url = v.featured_image | image_url: width: 900 -%}
+          {%- assign variants_json = '[' -%}
+          {%- for variant in product.variants -%}
+            {%- assign variant_img = '' -%}
+            {%- assign variant_swatch = '' -%}
+            {%- if variant.featured_image != blank -%}
+              {%- assign variant_img = variant.featured_image | image_url: width: 900 -%}
+              {%- assign variant_swatch = variant.featured_image | image_url: width: 120 -%}
             {%- elsif product.images[forloop.index0] != blank -%}
-              {%- assign v_img_url = product.images[forloop.index0] | image_url: width: 900 -%}
+              {%- assign variant_img = product.images[forloop.index0] | image_url: width: 900 -%}
+              {%- assign variant_swatch = product.images[forloop.index0] | image_url: width: 120 -%}
             {%- elsif product.featured_image != blank -%}
-              {%- assign v_img_url = product.featured_image | image_url: width: 900 -%}
+              {%- assign variant_img = product.featured_image | image_url: width: 900 -%}
+              {%- assign variant_swatch = product.featured_image | image_url: width: 120 -%}
             {%- endif -%}
-            {%- assign v_swatch_url = '' -%}
-            {%- if v.featured_image != blank -%}
-              {%- assign v_swatch_url = v.featured_image | image_url: width: 120 -%}
-            {%- elsif product.images[forloop.index0] != blank -%}
-              {%- assign v_swatch_url = product.images[forloop.index0] | image_url: width: 120 -%}
-            {%- elsif product.featured_image != blank -%}
-              {%- assign v_swatch_url = product.featured_image | image_url: width: 120 -%}
-            {%- endif -%}
-            {%- assign v_compare = v.compare_at_price | default: 0 -%}
-            {%- capture v_entry -%}{"id":{{ v.id }},"title":{{ v.title | json }},"price":{{ v.price }},"compare":{{ v_compare }},"available":{{ v.available }},"img":{{ v_img_url | json }},"swatch":{{ v_swatch_url | json }},"option1":{{ v.option1 | json }},"option2":{{ v.option2 | json }},"option3":{{ v.option3 | json }}}{%- endcapture -%}
-            {%- assign v_json = v_json | append: v_entry -%}
-            {%- unless forloop.last -%}{%- assign v_json = v_json | append: ',' -%}{%- endunless -%}
+            {%- assign variant_compare = variant.compare_at_price | default: 0 -%}
+            {%- capture variant_entry -%}
+              {"id":{{ variant.id }},"title":{{ variant.title | json }},"price":{{ variant.price }},"compare":{{ variant_compare }},"available":{{ variant.available }},"img":{{ variant_img | json }},"swatch":{{ variant_swatch | json }},"option1":{{ variant.option1 | json }},"option2":{{ variant.option2 | json }},"option3":{{ variant.option3 | json }}}
+            {%- endcapture -%}
+            {%- assign variants_json = variants_json | append: variant_entry | strip_newlines -%}
+            {%- unless forloop.last -%}{%- assign variants_json = variants_json | append: ',' -%}{%- endunless -%}
           {%- endfor -%}
-          {%- assign v_json = v_json | append: ']' -%}
+          {%- assign variants_json = variants_json | append: ']' -%}
 
-          {%- comment -%} Build images JSON {%- endcomment -%}
-          {%- assign imgs_json = '[' -%}
-          {%- for img in product.images limit: 8 -%}
-            {%- capture img_entry -%}{{ img | image_url: width: 900 | json }}{%- endcapture -%}
-            {%- assign imgs_json = imgs_json | append: img_entry -%}
-            {%- unless forloop.last -%}{%- assign imgs_json = imgs_json | append: ',' -%}{%- endunless -%}
+          {%- assign images_json = '[' -%}
+          {%- for image in product.images limit: 8 -%}
+            {%- capture image_entry -%}{{ image | image_url: width: 900 | json }}{%- endcapture -%}
+            {%- assign images_json = images_json | append: image_entry -%}
+            {%- unless forloop.last -%}{%- assign images_json = images_json | append: ',' -%}{%- endunless -%}
           {%- endfor -%}
-          {%- assign imgs_json = imgs_json | append: ']' -%}
+          {%- assign images_json = images_json | append: ']' -%}
 
-          {%- assign main_img = product.featured_image | image_url: width: 800 -%}
-          {%- assign truncated_title = product.title -%}
+          {%- assign featured_variant = product.selected_or_first_available_variant -%}
+          {%- assign main_image = featured_variant.featured_media.preview_image | default: product.featured_media.preview_image -%}
+          {%- assign badge_label = '' -%}
+          {%- if product.compare_at_price_max > product.price -%}
+            {%- assign badge_label = 'SALE' -%}
+          {%- elsif product.tags contains 'new' or product.tags contains 'NEW' -%}
+            {%- assign badge_label = 'NEW' -%}
+          {%- endif -%}
 
-          <!-- Card -->
-          <div
-            class="fc-card snap-start flex-none flex flex-col"
+          <article
+            class="fcv2__card"
             role="listitem"
-            data-fc-card
+            data-fcv2-card
             data-product-id="{{ product.id }}"
             data-product-title="{{ product.title | escape }}"
-            data-product-sku="{{ product.variants.first.sku | escape }}"
+            data-product-subtitle="{{ product_subtitle | escape }}"
             data-product-url="{{ product.url }}"
-            data-product-price="{{ product.price }}"
-            data-product-compare="{{ product.compare_at_price_min | default: 0 }}"
             data-product-money="{{ product.price | money }}"
             data-product-compare-money="{{ product.compare_at_price_min | money }}"
-            data-product-variants="{{ v_json | escape }}"
-            data-product-images="{{ imgs_json | escape }}"
+            data-product-variants="{{ variants_json | escape }}"
+            data-product-images="{{ images_json | escape }}"
           >
+            <div class="fcv2__media-wrap">
+              <a href="{{ product.url }}" class="fcv2__image-link" tabindex="-1" aria-hidden="true">
+                {% if main_image != blank %}
+                  {{ main_image | image_url: width: 900 | image_tag:
+                    class: 'fcv2__image',
+                    loading: 'lazy',
+                    widths: '300, 450, 600, 900',
+                    sizes: '(max-width: 767px) 72vw, (max-width: 1023px) 40vw, 300px',
+                    alt: product.title,
+                    width: main_image.width,
+                    height: main_image.height
+                  }}
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag: 'fcv2__image fcv2__image--placeholder' }}
+                {% endif %}
+              </a>
 
-            <!-- Image container -->
-            <div class="fc-card-img-wrap relative rounded-2xl overflow-hidden bg-[#f2f2f2]" style="aspect-ratio:3/4; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 24px rgba(0,0,0,0.06);">
-
-              {% if product.featured_image != blank %}
-                <a href="{{ product.url }}" class="absolute inset-0 w-full h-full z-0 cursor-pointer" tabindex="-1" style="display: block;">
-                  <img
-                    src="{{ main_img }}"
-                    alt="{{ product.featured_image.alt | default: product.title | escape }}"
-                    class="fc-img w-full h-full object-cover" draggable="false"
-                    loading="{% if forloop.index <= 2 %}eager{% else %}lazy{% endif %}"
-                    width="800" height="1067"
-                    style="width: 100%; height: 100%; object-fit: cover;"
-                  />
-                </a>
-              {% else %}
-                <div class="absolute inset-0 flex items-center justify-center opacity-30">
-                  {{ 'product-1' | placeholder_svg_tag: 'w-24 h-24' }}
+              {% if badge_label != blank %}
+                <div class="fcv2__badge{% if badge_label == 'SALE' %} is-sale{% else %} is-new{% endif %}">
+                  {% if badge_label == 'SALE' %}<span class="fcv2__badge-ring" aria-hidden="true"></span>{% endif %}
+                  <span class="fcv2__badge-pill">{{ badge_label }}</span>
+                  {% if badge_label == 'NEW' %}<span class="fcv2__badge-shimmer" aria-hidden="true"></span>{% endif %}
                 </div>
               {% endif %}
 
-              <!-- QUICK VIEW button -->
-              <button
-                class="fc-qv-trigger"
-                aria-label="Quick view {{ product.title | escape }}"
-                data-card-id="{{ product.id }}"
-              >
-                <span class="fc-qv-label">QUICK VIEW</span>
-                <span class="fc-qv-plus" aria-hidden="true">+</span>
+              <button type="button" class="fcv2__wishlist" aria-label="Wishlist" data-fcv2-wishlist>
+                <span class="fcv2__wishlist-burst" aria-hidden="true"></span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 21-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18Z"/></svg>
               </button>
 
+              <button type="button" class="fcv2__quick-view" data-card-id="{{ product.id }}" aria-label="Quick view {{ product.title | escape }}">
+                <span>Quick View</span>
+                <span class="fcv2__quick-view-plus" aria-hidden="true">+</span>
+              </button>
             </div>
-            <!-- /Image container -->
 
-            <!-- Product info -->
-            <div class="mt-3 px-0.5 text-left">
+            <div class="fcv2__content">
+              <a href="{{ product.url }}" class="fcv2__title-row">
+                <span class="fcv2__title">{{ product.title }}</span>
+                {% if product_subtitle != blank %}
+                  <span class="fcv2__subtitle">— {{ product_subtitle }}</span>
+                {% endif %}
+              </a>
 
-              <!-- Name -->
-              <a
-                href="{{ product.url }}"
-                class="fc-product-name block font-body leading-tight hover:underline underline-offset-2"
-                style="font-size:{{ fc_title_size }};color:{{ fc_title_color }};font-weight:{{ fc_title_weight }};"
-                title="{{ product.title | escape }}"
-              >{{ truncated_title }}</a>
-
-              <!-- Price row -->
-              <div class="flex items-center justify-start gap-2 mt-1 flex-wrap">
-                <span class="fc-price font-body font-semibold" style="font-size:calc({{ fc_title_size }} * 1.15);color:{{ fc_price_color }};">
-                  {{ product.price | money }}
-                </span>
-                {%- if product.compare_at_price_min > product.price -%}
-                  <span class="fc-compare font-body line-through opacity-70" style="font-size:calc({{ fc_title_size }} * 0.7); color:{{ fc_compare_color }}; text-decoration: line-through !important; margin-left: 4px;">
-                    {{ product.compare_at_price_min | money }}
-                  </span>
-                {%- endif -%}
+              <div class="fcv2__price-row">
+                <span class="fcv2__price">{{ product.price | money }}</span>
+                {% if product.compare_at_price_min > product.price %}
+                  <span class="fcv2__compare">{{ product.compare_at_price_min | money }}</span>
+                {% endif %}
               </div>
 
-              <!-- Variant swatches -->
-              {%- if product.variants.size > 1 -%}
-                <div class="fc-swatches flex items-center justify-start gap-2 mt-2 flex-wrap">
-                  {%- for variant in product.variants limit: 6 -%}
-                    {%- assign sw_img = '' -%}
-                    {%- if variant.featured_image != blank -%}
-                      {%- assign sw_img = variant.featured_image | image_url: width: 120 -%}
-                    {%- elsif product.images[forloop.index0] != blank -%}
-                      {%- assign sw_img = product.images[forloop.index0] | image_url: width: 120 -%}
-                    {%- elsif product.featured_image != blank -%}
-                      {%- assign sw_img = product.featured_image | image_url: width: 120 -%}
-                    {%- endif -%}
+              {% if product.variants.size > 1 %}
+                <div class="fcv2__swatches">
+                  {% for variant in product.variants limit: 6 %}
+                    {% liquid
+                      assign swatch_image = variant.featured_media.preview_image | default: product.images[forloop.index0] | default: product.featured_media.preview_image
+                    %}
                     <button
-                      class="fc-swatch{% if forloop.first %} active{% endif %}"
+                      type="button"
+                      class="fcv2__swatch{% if forloop.first %} is-active{% endif %}"
                       aria-label="{{ variant.title | escape }}"
                       data-variant-id="{{ variant.id }}"
-                      data-card="{{ product.id }}"
-                      {% if sw_img != blank %}
-                        style="background-image:url('{{ sw_img }}');"
-                      {% endif %}
                     >
-                      {%- if sw_img == blank -%}
-                        <span class="sr-only">{{ variant.option1 }}</span>
-                      {%- endif -%}
+                      {% if swatch_image != blank %}
+                        {{ swatch_image | image_url: width: 120 | image_tag:
+                          class: 'fcv2__swatch-image',
+                          loading: 'lazy',
+                          alt: variant.title,
+                          width: swatch_image.width,
+                          height: swatch_image.height
+                        }}
+                      {% else %}
+                        <span class="fcv2__swatch-fallback">{{ variant.option1 | default: variant.title | slice: 0, 1 }}</span>
+                      {% endif %}
                     </button>
-                  {%- endfor -%}
-                  {%- if product.variants.size > 6 -%}
-                    <span class="fc-swatch-more font-body text-[10px] text-[#999]">+{{ product.variants.size | minus: 6 }}</span>
-                  {%- endif -%}
+                  {% endfor %}
                 </div>
-              {%- endif -%}
-
+              {% endif %}
             </div>
-            <!-- /Product info -->
-
-          </div>
-          <!-- /Card -->
-
+          </article>
         {%- endfor -%}
-
-      {%- else -%}
-
-        <!-- Placeholder cards -->
-        {%- assign ph_names  = "Full Sleeve Round Neck T-shirt|Distressed Knit Crewneck|Oversized Cargo Jacket|Minimal Linen Trousers|Ribbed Tank Essential|Wide-leg Denim|Tailored Bomber|Relaxed Polo" | split: "|" -%}
-        {%- assign ph_prices = "$45.00|$68.00|$110.00|$72.00|$38.00|$88.00|$125.00|$55.00" | split: "|" -%}
-        {%- assign ph_cmp    = "$0|$90.00|$0|$95.00|$0|$0|$160.00|$0" | split: "|" -%}
-        {%- assign ph_imgs   = "photo-1515886657613-9f3515b0c78f|photo-1558769132-cb1aea458c5e|photo-1539109136881-3be0616acf4b|photo-1509631179647-0177331693ae|photo-1485968579580-b6d095142e6e|photo-1472396961693-142e6e269027|photo-1490481651871-ab68de25d43d|photo-1469334031218-e382a71b716b" | split: "|" -%}
-        {%- assign ph_colors = "#5B5B4A,#8B7355,#3A3A3A,#1A1A1A|#8B7355,#3A3A3A|#4A6741,#101010|#F5F0E8,#C5A880|#FFFFFF,#1A1A1A|#3A3A3A,#1A1A1A|#101010,#4A6741|#FFFFFF,#3A3A3A" | split: "|" -%}
-
-        {%- for i in (1..8) -%}
-          {%- assign idx = forloop.index0 -%}
-          {%- assign ph_name  = ph_names[idx]  -%}
-          {%- assign ph_price = ph_prices[idx] -%}
-          {%- assign ph_c     = ph_cmp[idx]    -%}
-          {%- assign ph_img   = ph_imgs[idx]   -%}
-          {%- assign ph_color = ph_colors[idx] | split: "," -%}
-          {%- comment -%} placeholder card — no external image {%- endcomment -%}
-
-          <div
-            class="fc-card snap-start flex-none flex flex-col"
-            role="listitem"
-            data-fc-card
-            data-product-id="{{ forloop.index }}"
-            data-product-title="{{ ph_name }}"
-            data-product-sku="DEMO-{{ forloop.index }}"
-            data-product-url="#"
-            data-product-money="{{ ph_price }}"
-            data-product-compare-money="{{ ph_c }}"
-            data-product-variants="[]"
-            data-product-images='[]'
-          >
-            <div class="fc-card-img-wrap relative rounded-2xl overflow-hidden bg-[#f2f2f2]" style="aspect-ratio:3/4; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 24px rgba(0,0,0,0.06);">
-              <a href="#" class="absolute inset-0 w-full h-full z-0 cursor-pointer" tabindex="-1" style="display: block;">
-                <div
-                  style="width:100%;height:100%;background:#e8e8e8;display:block;"
-                  aria-hidden="true"
-                ></div>
-              </a>
-              <button class="fc-qv-trigger" aria-label="Quick view {{ ph_name }}" data-card-id="{{ forloop.index }}">
-                <span class="fc-qv-label">QUICK VIEW</span>
-                <span class="fc-qv-plus" aria-hidden="true">+</span>
-              </button>
-            </div>
-
-            <div class="mt-3 px-0.5 text-left">
-              <p class="fc-product-name font-body leading-tight" style="font-size:{{ fc_title_size }};color:{{ fc_title_color }};font-weight:{{ fc_title_weight }};">{{ ph_name }}</p>
-              <div class="flex items-center justify-start gap-2 mt-1 flex-wrap">
-                <span class="fc-price font-body font-semibold" style="font-size:calc({{ fc_title_size }} * 1.15);color:{{ fc_price_color }};">{{ ph_price }}</span>
-                {%- if ph_c != '$0' and ph_c != '' -%}
-                  <span class="fc-compare font-body line-through opacity-70" style="font-size:calc({{ fc_title_size }} * 0.7); color:{{ fc_compare_color }}; text-decoration: line-through !important; margin-left: 4px;">{{ ph_c }}</span>
-                {%- endif -%}
-              </div>
-              <!-- Demo swatches -->
-              <div class="fc-swatches flex items-center justify-start gap-2 mt-2 flex-wrap">
-                {%- for col in ph_color -%}
-                  <button
-                    class="fc-swatch{% if forloop.first %} active{% endif %}"
-                    aria-label="Color {{ forloop.index }}"
-                    style="background-color:{{ col }};"
-                  ></button>
-                {%- endfor -%}
-              </div>
-            </div>
-          </div>
-
-        {%- endfor -%}
-
       {%- endif -%}
-
     </div>
-    <!-- /Carousel track -->
 
-    <!-- More Button -->
-    <div class="fc-more-wrap" id="fc-more-wrap" style="display:none;">
-      <button type="button" class="fc-more-btn" id="fc-more-btn" aria-label="{{ fc_more_label }}">
-        <span class="fc-more-text">{{ fc_more_label }}</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+    <div class="fcv2__progress-wrap">
+      <div class="fcv2__progress-track"><div class="fcv2__progress-fill" id="{{ fc_section_id }}-progress-fill"></div></div>
+      <div class="fcv2__progress-value" id="{{ fc_section_id }}-progress-value">0%</div>
+    </div>
+
+    <div class="fcv2__more-wrap" id="{{ fc_section_id }}-more-wrap"{% if fc_source == blank %} style="display:none"{% endif %}>
+      <button type="button" class="fcv2__more-btn" id="{{ fc_section_id }}-more-btn" aria-label="{{ fc_more_label }}">
+        <span>{{ fc_more_label }}</span>
+        <span class="fcv2__more-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+        </span>
       </button>
     </div>
 
-    <!-- Load More Grid (revealed below) -->
-    <div class="fc-more-grid" id="fc-more-grid" aria-label="Additional products"></div>
+    <div class="fcv2__more-grid" id="{{ fc_section_id }}-more-grid" aria-label="Additional products"></div>
+
+    <p class="fcv2__helper">{{ fc_helper_text }}</p>
   </div>
-
-
-
 </featured-collection>
 
-<!-- ══════════════════════════════════════════════
-     QUICK VIEW MODAL (global, single instance)
-══════════════════════════════════════════════ -->
-<div id="fc-qv-modal" class="fc-qv-modal" role="dialog" aria-modal="true" aria-label="Quick view" aria-hidden="true">
-  <!-- Top overlay — click to close -->
-  <div class="fc-qv-overlay-top" id="fc-qv-backdrop" aria-label="Close quick view"></div>
-
-  <!-- Bottom panel -->
-  <div class="fc-qv-panel" id="fc-qv-panel" role="document">
-    
-    <!-- Top Handle & Close -->
-    <div class="fc-qv-header">
-      <div class="fc-qv-handle"></div>
-      <button class="fc-qv-close-new" id="fc-qv-close-btn" aria-label="Close">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+<div id="{{ fc_section_id }}-qv-modal" class="fcv2-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Quick view">
+  <button class="fcv2-modal__backdrop" id="{{ fc_section_id }}-qv-backdrop" aria-label="Close quick view"></button>
+  <div class="fcv2-modal__panel" id="{{ fc_section_id }}-qv-panel" role="document">
+    <div class="fcv2-modal__header">
+      <div class="fcv2-modal__handle"></div>
+      <button class="fcv2-modal__close" id="{{ fc_section_id }}-qv-close-btn" aria-label="Close quick view">×</button>
     </div>
-
-    <!-- Inner Scroll Area -->
-    <div class="fc-qv-scroll-area disable-scrollbars">
-      
-      <!-- Gallery -->
-      <div class="fc-qv-gallery">
-        <div class="fc-qv-gallery-track" id="fc-qv-gallery-track"></div>
-        <button class="fc-qv-arrow fc-qv-arrow-prev" id="fc-qv-prev" aria-label="Previous image">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="fc-qv-arrow fc-qv-arrow-next" id="fc-qv-next" aria-label="Next image">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-        <div class="fc-qv-dots" id="fc-qv-dots"></div>
+    <div class="fcv2-modal__scroll">
+      <div class="fcv2-modal__gallery-shell">
+        <div class="fcv2-modal__gallery-track" id="{{ fc_section_id }}-qv-gallery-track"></div>
+        <button class="fcv2-modal__arrow is-prev" id="{{ fc_section_id }}-qv-prev" aria-label="Previous image">‹</button>
+        <button class="fcv2-modal__arrow is-next" id="{{ fc_section_id }}-qv-next" aria-label="Next image">›</button>
+        <div class="fcv2-modal__dots" id="{{ fc_section_id }}-qv-dots"></div>
       </div>
-
-      <!-- Product details -->
-      <div class="fc-qv-info">
-        <a class="fc-qv-title" id="fc-qv-title" href="#"></a>
-        
-        <div class="fc-qv-price-wrapper">
-          <span class="fc-qv-price" id="fc-qv-price"></span>
-          <span class="fc-qv-compare" id="fc-qv-compare"></span>
+      <div class="fcv2-modal__info">
+        <a href="#" class="fcv2-modal__title" id="{{ fc_section_id }}-qv-title"></a>
+        <div class="fcv2-modal__price-row">
+          <span class="fcv2-modal__price" id="{{ fc_section_id }}-qv-price"></span>
+          <span class="fcv2-modal__compare hidden" id="{{ fc_section_id }}-qv-compare"></span>
         </div>
-
-        <div class="fc-qv-variants" id="fc-qv-variants"></div>
-
-        <!-- Quantity -->
-        <div class="fc-qv-qty-row hidden" id="fc-qv-qty-row">
-          <div class="fc-qv-qty-label">Quantity</div>
-          <div class="fc-qv-qty-ctrl-new">
-            <button class="fc-qv-qty-btn-new" id="fc-qv-qty-dec" aria-label="Decrease">−</button>
-            <span class="fc-qv-qty-val-new" id="fc-qv-qty-val">1</span>
-            <button class="fc-qv-qty-btn-new" id="fc-qv-qty-inc" aria-label="Increase">+</button>
+        <div class="fcv2-modal__variants" id="{{ fc_section_id }}-qv-variants"></div>
+        <div class="fcv2-modal__qty-row" id="{{ fc_section_id }}-qv-qty-row">
+          <span class="fcv2-modal__qty-label">Quantity</span>
+          <div class="fcv2-modal__qty-ctrl">
+            <button type="button" id="{{ fc_section_id }}-qv-qty-dec" aria-label="Decrease quantity">−</button>
+            <span id="{{ fc_section_id }}-qv-qty-val">1</span>
+            <button type="button" id="{{ fc_section_id }}-qv-qty-inc" aria-label="Increase quantity">+</button>
           </div>
         </div>
-
-        <!-- Trust Badges -->
-        <div class="fc-qv-badges">
-          <div class="fc-qv-badge-card">
-            <svg class="fc-qv-badge-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle><path d="M12 22s-2-3.5-3-6"></path></svg>
-            <div class="fc-qv-badge-text-wrap">
-               <div class="fc-qv-badge-title">Pickup available at California Warehouse</div>
-               <div class="fc-qv-badge-subtitle">Usually ready in 24 hours</div>
-            </div>
-          </div>
-
-          <div class="fc-qv-shipping-info">
-            <div class="fc-qv-ship-item">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
-               <span>Free delivery on <strong>February 7th - 13th</strong></span>
-            </div>
-            <div class="fc-qv-ship-item">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-               <span>Free + easy returns</span>
-            </div>
-          </div>
-        </div>
-
       </div>
-    </div> <!-- /Scroll Area -->
-
-    <!-- Sticky Buttons -->
-    <div class="fc-qv-sticky-footer">
-      <div class="fc-qv-fade"></div>
-      <button class="fc-qv-atc-new" id="fc-qv-atc">Add to Cart</button>
-      <button class="fc-qv-bin-new" id="fc-qv-bin">Buy it now</button>
     </div>
-
+    <div class="fcv2-modal__footer">
+      <button type="button" class="fcv2-modal__button is-secondary" id="{{ fc_section_id }}-qv-atc">Add to cart</button>
+      <button type="button" class="fcv2-modal__button is-primary" id="{{ fc_section_id }}-qv-bin">Buy it now</button>
+    </div>
   </div>
 </div>
 
-
-
-
-<!-- ══════════════════════════════════════════════
-     STYLES
-══════════════════════════════════════════════ -->
 <style>
-/* ── Heading Motion ── */
-@keyframes fcHeadingFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-.fc-heading-motion {
-  display: inline-block;
-  animation: fcHeadingFloat 4.5s ease-in-out infinite;
-  will-change: transform;
+.fcv2 {
+  background: #fff;
+  color: #0a0a0a;
 }
 
-/* ── Carousel track ── */
-#fc-track {
-  display: flex !important;
-  flex-wrap: nowrap !important;
-  overflow-x: auto !important;
-  padding-left: 20px !important;
-  padding-right: 20px !important;
-  
-  overflow-y: hidden !important;
-  
-  scroll-behavior: smooth !important;
-  -webkit-overflow-scrolling: touch !important;
-  overscroll-behavior-x: auto !important;
+.fcv2__eyebrow-bar {
+  background: #000;
+  padding: 13px 20px 11px;
+}
+
+.fcv2__eyebrow {
+  margin: 0;
+  color: #fff;
+  font-family: var(--font-body-family);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  line-height: 1.35;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.fcv2__header {
+  padding: 40px 24px 32px;
+  text-align: center;
+}
+
+.fcv2__heading {
+  margin: 0;
+  color: #0a0a0a;
+  font-family: var(--font-body-family);
+  font-size: clamp(3.15rem, 11vw, 5.25rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.fcv2__heading-line {
+  display: block;
+}
+
+.fcv2__heading-line--top {
+  animation: fcv2-heading-drift 5s ease-in-out infinite;
+}
+
+.fcv2__heading-line--bottom {
+  animation: fcv2-heading-drift 5s ease-in-out infinite reverse;
+}
+
+@keyframes fcv2-heading-drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.fcv2__body {
+  padding: 0 0 40px;
+}
+
+.fcv2__track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0 20px 8px;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-@media (min-width: 768px) {
-  #fc-track {
-    padding-left: 40px !important;
-    padding-right: 40px !important;
-    
-  }
-}
-#fc-track::-webkit-scrollbar { display: none; }
 
-/* ── Card sizing ── */
-.fc-card {
-  flex: 0 0 auto !important; /* Đảm bảo thẻ KHÔNG bị bóp méo khi không đủ chỗ */
-  width: 72vw !important;    /* Mobile: Hiện đúng 1 thẻ và 1 góc của thẻ tiếp theo */
-  max-width: none !important;
-  
-  
-}
-@media (min-width: 640px) {
-  .fc-card { width: calc(50% - 12px) !important; } /* Tablet: 2 thẻ + 1 góc */
-}
-@media (min-width: 1024px) {
-  .fc-card { width: calc(33.333% - 16px) !important; } /* Desktop: 3 thẻ + 1 góc */
-}
-@media (min-width: 1280px) {
-  .fc-card { width: calc(25% - 16px) !important; } /* Màn to: 4 thẻ + 1 góc */
+.fcv2__track::-webkit-scrollbar {
+  display: none;
 }
 
-/* ── Card image zoom ── */
-.fc-img {
-  transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94);
-  will-change: transform;
+.fcv2__card {
+  flex: 0 0 auto;
+  width: 300px;
+  max-width: calc(100vw - 44px);
+  scroll-snap-align: start;
 }
-.fc-card-img-wrap:hover .fc-img { transform: scale(1.04); }
 
-/* ── Quick View trigger ── */
-.fc-qv-trigger {
+.fcv2__media-wrap {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #f3f4f6;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.fcv2__image-link,
+.fcv2__image,
+.fcv2__image--placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.fcv2__image {
+  object-fit: cover;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.fcv2__card:hover .fcv2__image,
+.fcv2__card:focus-within .fcv2__image {
+  transform: scale(1.035);
+}
+
+.fcv2__badge {
   position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+}
+
+.fcv2__badge-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 23px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-family: var(--font-body-family);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.fcv2__badge.is-sale .fcv2__badge-pill {
+  background: #000;
+  color: #fff;
+}
+
+.fcv2__badge-ring {
+  position: absolute;
+  inset: -11px -26px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.58);
+  animation: fcv2-sale-ring 2.4s ease-out infinite;
+}
+
+@keyframes fcv2-sale-ring {
+  0% { transform: scale(0.8); opacity: 0.9; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+.fcv2__badge.is-new {
+  overflow: hidden;
+  border-radius: 999px;
+}
+
+.fcv2__badge.is-new .fcv2__badge-pill {
+  background: #fff;
+  color: #000;
+}
+
+.fcv2__badge-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 42%, rgba(255,255,255,0.75) 50%, transparent 58%);
+  animation: fcv2-shimmer 2.2s ease-in-out infinite 1.2s;
+}
+
+@keyframes fcv2-shimmer {
+  from { transform: translateX(-140%); }
+  to { transform: translateX(180%); }
+}
+
+.fcv2__wishlist {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  color: #0a0a0a;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.fcv2__wishlist-burst,
+.fcv2__wishlist-burst::before,
+.fcv2__wishlist-burst::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #ef4444;
+  opacity: 0;
+}
+
+.fcv2__wishlist.is-liked .fcv2__wishlist-burst {
+  animation: fcv2-burst-1 0.55s ease-out;
+}
+.fcv2__wishlist.is-liked .fcv2__wishlist-burst::before {
+  animation: fcv2-burst-2 0.55s ease-out;
+}
+.fcv2__wishlist.is-liked .fcv2__wishlist-burst::after {
+  animation: fcv2-burst-3 0.55s ease-out;
+}
+
+@keyframes fcv2-burst-1 {
+  0% { opacity: 1; transform: translate(0,0) scale(0); }
+  100% { opacity: 0; transform: translate(16px,-14px) scale(1); }
+}
+@keyframes fcv2-burst-2 {
+  0% { opacity: 1; transform: translate(0,0) scale(0); }
+  100% { opacity: 0; transform: translate(-17px,-10px) scale(1); }
+}
+@keyframes fcv2-burst-3 {
+  0% { opacity: 1; transform: translate(0,0) scale(0); }
+  100% { opacity: 0; transform: translate(0,18px) scale(1); }
+}
+
+.fcv2__wishlist.is-liked svg {
+  fill: #ef4444;
+  stroke: #ef4444;
+  animation: fcv2-heart-pop 0.45s ease-out;
+}
+
+@keyframes fcv2-heart-pop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+.fcv2__quick-view {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  border: none;
+  padding: 11px 14px;
+  border: 0;
   border-radius: 999px;
+  background: rgba(248,248,248,0.88);
+  color: #0a0a0a;
   cursor: pointer;
-  background: rgba(248,248,248,0.85);
+  font-family: var(--font-body-family);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.24s ease, transform 0.24s ease, background 0.2s ease;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  font-family: var(--font-body, 'Inter', sans-serif);
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #0a0a0a;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.26s ease, transform 0.26s ease;
-}
-.fc-card-img-wrap:hover .fc-qv-trigger,
-.fc-card-img-wrap:focus-within .fc-qv-trigger { opacity: 1; transform: translateY(0); }
-@media (hover: none) { .fc-qv-trigger { opacity: 1; transform: translateY(0); } }
-.fc-qv-trigger:hover { background: rgba(255,255,255,0.97); }
-.fc-qv-plus { font-size: 1.2rem; font-weight: 300; line-height: 1; }
-
-/* ── Product text truncation ── */
-.fc-product-name {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: normal;
-  max-width: 100%;
-}
-/* ── Variant swatches ── */
-.fc-swatch {
-  width: 34px;
-  height: 44px;
-  border-radius: 6px;
-  border: 2px solid transparent;
-  cursor: pointer;
-  background-size: cover;
-  background-position: center;
-  background-color: #ddd;
-  transition: border-color 0.2s, transform 0.2s;
-  flex-shrink: 0;
-}
-.fc-swatch.active,
-.fc-swatch:hover { border-color: #0a0a0a; transform: scale(1.12); }
-.fc-swatch-more { line-height: 26px; }
-
-
-
-/* ── Quick View Modal ── */
-.fc-qv-modal {
-  position: fixed; inset: 0; z-index: 99999;
-  display: flex; flex-direction: column;
-  pointer-events: none; opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.fc-qv-modal.fc-qv-open { opacity: 1; pointer-events: auto; }
-
-.fc-qv-overlay-top {
-  flex: 1;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(4px);
-  cursor: pointer;
 }
 
-.fc-qv-panel {
-  flex: 0 0 auto;
-  max-height: 94vh;
-  background: #fff;
-  border-radius: 20px 20px 0 0;
-  transform: translateY(100%);
-  transition: transform 0.42s cubic-bezier(0.32,0.72,0,1);
-  display: flex; flex-direction: column;
-  overflow: hidden;
-}
-.fc-qv-modal.fc-qv-open .fc-qv-panel { transform: translateY(0); }
-
-/* Header */
-.fc-qv-header {
-  flex-shrink: 0; width: 100%; position: relative;
-  display: flex; justify-content: center; padding: 16px 0; z-index: 10;
-}
-.fc-qv-handle { width: 48px; height: 5px; border-radius: 99px; background: #e4e4e4; }
-.fc-qv-close-new {
-  position: absolute; top: 12px; right: 16px;
-  width: 32px; height: 32px; border-radius: 50%;
-  background: #f4f4f4; border: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-}
-
-/* Scroll area */
-.fc-qv-scroll-area {
-  flex: 1; overflow-y: auto; padding: 0 20px 24px;
-  overscroll-behavior: contain;
-  scrollbar-width: none; -ms-overflow-style: none;
-}
-.fc-qv-scroll-area::-webkit-scrollbar { display: none; }
-
-/* Gallery */
-.fc-qv-gallery {
-  position: relative; background: #f4f4f4; border-radius: 12px;
-  aspect-ratio: 3/4; width: 100%; overflow: hidden;
-}
-.fc-qv-gallery-track {
-  display: flex; height: 100%; transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
-}
-.fc-qv-gallery-track img {
-  flex: 0 0 100%; width: 100%; height: 100%; object-fit: cover;
-}
-.fc-qv-arrow {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  width: 36px; height: 36px; border-radius: 50%; border: none;
-  background: rgba(255,255,255,0.85); color: #0a0a0a; z-index: 2;
-  display: flex; align-items: center; justify-content: center; cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-.fc-qv-arrow-prev { left: 12px; }
-.fc-qv-arrow-next { right: 12px; }
-
-/* Dots */
-.fc-qv-dots {
-  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
-  display: flex; gap: 6px;
-}
-.fc-qv-dot {
-  width: 6px; height: 6px; border-radius: 50%; border: none;
-  background: rgba(0,0,0,0.2); transition: background-color 0.2s ease, opacity 0.2s ease; cursor: pointer;
-}
-.fc-qv-dot.active { background: #0a0a0a; transform: scale(1.3); }
-
-/* Typography */
-.fc-qv-title {
-  font-family: var(--font-body-family, 'Inter', sans-serif);
-  font-weight: 700; color: #0a0a0a; font-size: 1.15rem; line-height: 1.3;
-  text-decoration: none; display: block; margin-top: 16px;
-}
-.fc-qv-price-wrapper { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-.fc-qv-price { font-family: var(--font-body-family); font-weight: 700; font-size: 1.1rem; color: #0a0a0a; }
-.fc-qv-compare { font-family: var(--font-body-family); font-size: 0.8rem; color: #999; text-decoration: line-through; display: none; }
-
-
-/* Variant buttons in modal */
-.fc-qv-variants { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; padding-top: 20px; border-top: 1px solid #f0f0f0; }
-.fc-qv-v-btn {
-  display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 5px;
-  border: 1.5px solid #e0e0e0; border-radius: 999px; background: transparent; cursor: pointer;
-  font-family: var(--font-body-family, 'Inter', sans-serif); font-size: 0.7rem; font-weight: 500; color: #0a0a0a;
-  transition: border-color 0.2s, background 0.2s;
-}
-.fc-qv-v-btn.active { border-color: #0a0a0a; background: #f8f8f8; }
-.fc-qv-v-btn.unavailable { opacity: 0.38; cursor: not-allowed; }
-.fc-qv-v-btn img { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; }
-.fc-qv-v-btn .fc-qv-v-dot { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; }
-
-
-/* Quantity */
-.fc-qv-qty-row { margin-top: 24px; }
-.fc-qv-qty-label { font-family: var(--font-body-family); font-size: 1rem; font-weight: 700; color: #0a0a0a; margin-bottom: 12px; }
-.fc-qv-qty-ctrl-new {
-  display: flex; align-items: center; justify-content: space-between;
-  border: 1px solid #d1d5db; border-radius: 10px; width: 130px; height: 48px; padding: 0 4px;
-}
-.fc-qv-qty-btn-new {
-  width: 40px; height: 100%; border: none; background: none; cursor: pointer;
-  font-size: 24px; color: #555; display: flex; align-items: center; justify-content: center;
-}
-.fc-qv-qty-val-new { font-family: var(--font-body-family); font-weight: 600; font-size: 1.1rem; color: #0a0a0a; }
-
-/* Setup & Badges */
-.fc-qv-badges { margin-top: 32px; }
-.fc-qv-badge-card {
-  background: #f2fcf5; padding: 16px; border-radius: 12px; display: flex; gap: 12px;
-  border: 1px solid #e1f5e8; margin-bottom: 24px;
-}
-.fc-qv-badge-icon { width: 20px; height: 20px; flex-shrink: 0; margin-top: 2px; color: #0a0a0a; }
-.fc-qv-badge-title { font-weight: 700; color: #0a0a0a; font-size: 0.85rem; line-height: 1.2; font-family: var(--font-body-family); }
-.fc-qv-badge-subtitle { color: #333; margin-top: 4px; font-size: 0.8rem; font-family: var(--font-body-family); }
-
-.fc-qv-shipping-info { font-family: var(--font-body-family); font-size: 0.875rem; color: #333; margin-bottom: 32px; display: flex; flex-direction: column; gap: 16px; }
-.fc-qv-ship-item { display: flex; align-items: center; gap: 12px; }
-.fc-qv-ship-item svg { width: 24px; height: 24px; flex-shrink: 0; }
-.fc-qv-ship-item strong { font-weight: 700; color: #0a0a0a; }
-
-/* Sticky Footer */
-.fc-qv-sticky-footer {
-  flex-shrink: 0; background: #fff; padding: 16px 20px 32px;
-  border-top: 1px solid #f0f0f0; position: relative;
-  display: flex; flex-direction: column; gap: 10px;
-}
-.fc-qv-fade {
-  position: absolute; bottom: 100%; left: 0; width: 100%; height: 24px;
-  background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0)); pointer-events: none;
-}
-.fc-qv-atc-new, .fc-qv-bin-new {
-  width: 100%; padding: 14px 0; border-radius: 99px; font-family: var(--font-body-family); font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.8rem; cursor: pointer; transition: opacity 0.2s; border: 1px solid #0a0a0a;
-}
-.fc-qv-atc-new { background: #fff; color: #0a0a0a; }
-.fc-qv-bin-new { background: #0a0a0a; color: #fff; }
-.fc-qv-atc-new:hover, .fc-qv-bin-new:hover { opacity: 0.8; }
-
-/* ── Load More ── */
-.fc-more-wrap {
-  text-align: center;
-  padding: 24px 20px 8px;
-}
-.fc-more-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 32px;
-  border: 1.5px solid #0a0a0a;
-  border-radius: 999px;
-  background: transparent;
-  color: #0a0a0a;
-  font-family: var(--font-body, sans-serif);
-  font-size: .72rem;
-  font-weight: 700;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background .2s ease, color .2s ease, transform .15s ease;
-  -webkit-tap-highlight-color: transparent;
-}
-.fc-more-btn:hover { background: #0a0a0a; color: #fff; }
-.fc-more-btn:active { transform: scale(.95); }
-
-.fc-more-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  padding: 0 20px;
-  overflow: hidden;
-}
-@media (min-width: 640px) { .fc-more-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 0 40px; } }
-@media (min-width: 1024px) { .fc-more-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
-
-.fc-more-grid .fc-card {
-  width: 100% !important;
-  flex: none !important;
-}
-.fc-more-card-enter {
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity .4s ease, transform .4s ease;
-}
-.fc-more-card-enter.fc-more-card-visible {
+.fcv2__card:hover .fcv2__quick-view,
+.fcv2__card:focus-within .fcv2__quick-view {
   opacity: 1;
   transform: translateY(0);
 }
-@media (prefers-reduced-motion: reduce) {
-  .fc-more-card-enter { transition: none; opacity: 1; transform: none; }
+
+@media (hover: none) {
+  .fcv2__quick-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
+.fcv2__quick-view-plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1.75px solid currentColor;
+  border-radius: 999px;
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.fcv2__content {
+  padding: 12px 4px 0;
+}
+
+.fcv2__title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  color: inherit;
+  text-decoration: none;
+  line-height: 1.35;
+}
+
+.fcv2__title {
+  font-family: var(--font-body-family);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.fcv2__subtitle {
+  color: #99a1af;
+  font-family: var(--font-body-family);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.fcv2__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.fcv2__price {
+  font-family: var(--font-body-family);
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+.fcv2__compare {
+  color: #99a1af;
+  font-family: var(--font-body-family);
+  font-size: 12px;
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.fcv2__swatches {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+.fcv2__swatch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: #f3f4f6;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fcv2__swatch.is-active {
+  box-shadow: inset 0 0 0 1.75px #0a0a0a;
+}
+
+.fcv2__swatch-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fcv2__swatch-fallback {
+  font-family: var(--font-body-family);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.fcv2__progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px 0;
+}
+
+.fcv2__progress-track {
+  flex: 1;
+  height: 2px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+
+.fcv2__progress-fill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #000 0%, #555 100%);
+  transition: width 0.24s ease;
+}
+
+.fcv2__progress-value {
+  color: #d1d5dc;
+  font-family: var(--font-body-family);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.fcv2__more-wrap {
+  padding: 34px 20px 10px;
+  text-align: center;
+}
+
+.fcv2__more-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 60px;
+  padding: 0 42px;
+  border: 1.75px solid #000;
+  border-radius: 999px;
+  background: transparent;
+  color: #000;
+  cursor: pointer;
+  font-family: var(--font-body-family);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  transition: transform 0.16s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.fcv2__more-btn:hover {
+  background: #000;
+  color: #fff;
+}
+
+.fcv2__more-btn:active {
+  transform: scale(0.96);
+}
+
+.fcv2__more-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1.75px solid currentColor;
+  border-radius: 999px;
+}
+
+.fcv2__more-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 0 20px;
+}
+
+.fcv2__more-grid .fcv2__card {
+  width: 100%;
+  max-width: none;
+}
+
+.fcv2__helper {
+  margin: 36px 0 0;
+  padding: 0 20px;
+  color: #d1d5dc;
+  font-family: var(--font-body-family);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.fcv2-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: none;
+}
+
+.fcv2-modal.is-open {
+  display: block;
+}
+
+.fcv2-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0,0,0,0.44);
+}
+
+.fcv2-modal__panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 92vh;
+  background: #fff;
+  border-top-left-radius: 26px;
+  border-top-right-radius: 26px;
+  transform: translateY(100%);
+  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.fcv2-modal.is-open .fcv2-modal__panel {
+  transform: translateY(0);
+}
+
+.fcv2-modal__header {
+  position: relative;
+  padding: 12px 20px 6px;
+}
+
+.fcv2-modal__handle {
+  width: 60px;
+  height: 5px;
+  margin: 0 auto;
+  border-radius: 999px;
+  background: #d6d6d6;
+}
+
+.fcv2-modal__close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.fcv2-modal__scroll {
+  overflow: auto;
+  padding: 0 20px 20px;
+}
+
+.fcv2-modal__gallery-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #f3f4f6;
+  aspect-ratio: 3 / 4;
+}
+
+.fcv2-modal__gallery-track {
+  display: flex;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+.fcv2-modal__gallery-track img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fcv2-modal__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+
+.fcv2-modal__arrow.is-prev { left: 12px; }
+.fcv2-modal__arrow.is-next { right: 12px; }
+
+.fcv2-modal__dots {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.fcv2-modal__dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.56);
+}
+
+.fcv2-modal__dots button.is-active {
+  background: #fff;
+}
+
+.fcv2-modal__info {
+  padding: 18px 0 0;
+}
+
+.fcv2-modal__title {
+  display: block;
+  color: #0a0a0a;
+  text-decoration: none;
+  font-family: var(--font-body-family);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.fcv2-modal__price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.fcv2-modal__price {
+  font-family: var(--font-body-family);
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.fcv2-modal__compare {
+  color: #99a1af;
+  font-family: var(--font-body-family);
+  font-size: 14px;
+  text-decoration: line-through;
+}
+
+.fcv2-modal__variants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.fcv2-modal__variant {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 10px 6px 6px;
+  border: 1px solid #d9d9d9;
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  font-family: var(--font-body-family);
+  font-size: 13px;
+}
+
+.fcv2-modal__variant.is-active {
+  border-color: #0a0a0a;
+}
+
+.fcv2-modal__variant img,
+.fcv2-modal__variant-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #f3f4f6;
+}
+
+.fcv2-modal__qty-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.fcv2-modal__qty-label {
+  font-family: var(--font-body-family);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.fcv2-modal__qty-ctrl {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fcv2-modal__qty-ctrl button,
+.fcv2-modal__qty-ctrl span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  font-family: var(--font-body-family);
+}
+
+.fcv2-modal__qty-ctrl button {
+  border: 1.5px solid #0a0a0a;
+  background: #fff;
+  cursor: pointer;
+}
+
+.fcv2-modal__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 20px 28px;
+  border-top: 1px solid #efefef;
+}
+
+.fcv2-modal__button {
+  min-height: 52px;
+  border-radius: 999px;
+  font-family: var(--font-body-family);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.fcv2-modal__button.is-secondary {
+  border: 1.5px solid #0a0a0a;
+  background: #fff;
+  color: #0a0a0a;
+}
+
+.fcv2-modal__button.is-primary {
+  border: 1.5px solid #0a0a0a;
+  background: #0a0a0a;
+  color: #fff;
+}
+
+.hidden { display: none !important; }
+
+@media (min-width: 768px) {
+  .fcv2__header {
+    padding: 52px 40px 34px;
+  }
+
+  .fcv2__track {
+    padding: 0 40px 8px;
+  }
+
+  .fcv2__card {
+    width: calc(50% - 8px);
+    max-width: 320px;
+  }
+
+  .fcv2__more-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 0 40px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fcv2__card {
+    width: calc(33.333% - 11px);
+    max-width: 320px;
+  }
+
+  .fcv2__more-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
 </style>
 
-<!-- ══════════════════════════════════════════════
-     SCRIPT
-══════════════════════════════════════════════ -->
 <script>
 (function () {
   'use strict';
   if (customElements.get('featured-collection')) return;
 
-  /* ──────────────────────────────────────────
-     State
-  ────────────────────────────────────────── */
-  let currentProduct   = null;
+  let currentProduct = null;
   let currentVariantId = null;
-  let galleryIndex     = 0;
-  let galleryImages    = [];
-  let qty              = 1;
+  let galleryImages = [];
+  let galleryIndex = 0;
+  let quantity = 1;
 
-  /* ──────────────────────────────────────────
-     DOM refs
-  ────────────────────────────────────────── */
-  const modal       = document.getElementById('fc-qv-modal');
-  const panel       = document.getElementById('fc-qv-panel');
-  const backdrop    = document.getElementById('fc-qv-backdrop');
-  const closeBtn    = document.getElementById('fc-qv-close-btn');
-  const galleryTrack= document.getElementById('fc-qv-gallery-track');
-  const dotsWrap    = document.getElementById('fc-qv-dots');
-  const prevBtn     = document.getElementById('fc-qv-prev');
-  const nextBtn     = document.getElementById('fc-qv-next');
-  const titleEl     = document.getElementById('fc-qv-title');
-  const priceEl     = document.getElementById('fc-qv-price');
-  const compareEl   = document.getElementById('fc-qv-compare');
-  const variantsEl  = document.getElementById('fc-qv-variants');
-  const atcBtn      = document.getElementById('fc-qv-atc');
-  const binBtn      = document.getElementById('fc-qv-bin');
-  const qtyRow      = document.getElementById('fc-qv-qty-row');
-  const qtyVal      = document.getElementById('fc-qv-qty-val');
-  const qtyDec      = document.getElementById('fc-qv-qty-dec');
-  const qtyInc      = document.getElementById('fc-qv-qty-inc');
+  const modal = document.getElementById('{{ fc_section_id }}-qv-modal');
+  const panel = document.getElementById('{{ fc_section_id }}-qv-panel');
+  const backdrop = document.getElementById('{{ fc_section_id }}-qv-backdrop');
+  const closeBtn = document.getElementById('{{ fc_section_id }}-qv-close-btn');
+  const galleryTrack = document.getElementById('{{ fc_section_id }}-qv-gallery-track');
+  const dotsWrap = document.getElementById('{{ fc_section_id }}-qv-dots');
+  const prevBtn = document.getElementById('{{ fc_section_id }}-qv-prev');
+  const nextBtn = document.getElementById('{{ fc_section_id }}-qv-next');
+  const titleEl = document.getElementById('{{ fc_section_id }}-qv-title');
+  const priceEl = document.getElementById('{{ fc_section_id }}-qv-price');
+  const compareEl = document.getElementById('{{ fc_section_id }}-qv-compare');
+  const variantsEl = document.getElementById('{{ fc_section_id }}-qv-variants');
+  const qtyRow = document.getElementById('{{ fc_section_id }}-qv-qty-row');
+  const qtyVal = document.getElementById('{{ fc_section_id }}-qv-qty-val');
+  const qtyDec = document.getElementById('{{ fc_section_id }}-qv-qty-dec');
+  const qtyInc = document.getElementById('{{ fc_section_id }}-qv-qty-inc');
+  const atcBtn = document.getElementById('{{ fc_section_id }}-qv-atc');
+  const buyBtn = document.getElementById('{{ fc_section_id }}-qv-bin');
 
-
-  /* ──────────────────────────────────────────
-     Helpers
-  ────────────────────────────────────────── */
   function formatMoney(cents) {
     if (!cents || cents === 0) return '';
     return '$' + (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  function setGalleryIndex(i) {
-    const total = galleryImages.length;
-    if (total === 0) return;
-    galleryIndex = (i + total) % total;
-    galleryTrack.style.transform = `translateX(-${galleryIndex * 100}%)`;
-    document.querySelectorAll('.fc-qv-dot').forEach((d, idx) => {
-      d.classList.toggle('active', idx === galleryIndex);
-    });
+  function updateProgress(track) {
+    const fill = document.getElementById('{{ fc_section_id }}-progress-fill');
+    const value = document.getElementById('{{ fc_section_id }}-progress-value');
+    if (!track || !fill || !value) return;
+    const max = Math.max(track.scrollWidth - track.clientWidth, 1);
+    const progress = Math.min(100, Math.max(0, Math.round((track.scrollLeft / max) * 100)));
+    fill.style.width = progress + '%';
+    value.textContent = progress + '%';
   }
 
   function buildGallery(images) {
@@ -777,423 +1065,344 @@
     galleryTrack.innerHTML = '';
     dotsWrap.innerHTML = '';
 
-    if (galleryImages.length === 0) {
-      galleryTrack.innerHTML = '<div style="width:100%;height:100%;background:#eee;"></div>';
+    if (!galleryImages.length) {
+      galleryTrack.innerHTML = '<div style="width:100%;height:100%;background:#f3f4f6;"></div>';
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
       return;
     }
 
-    galleryImages.forEach((src, i) => {
-      const img = document.createElement('img');
+    galleryImages.forEach(function (src, index) {
+      var img = document.createElement('img');
       img.src = src;
       img.alt = '';
-      img.loading = i === 0 ? 'eager' : 'lazy';
-      img.style.cssText = 'flex:0 0 100%;width:100%;height:100%;object-fit:cover;';
+      img.loading = index === 0 ? 'eager' : 'lazy';
       galleryTrack.appendChild(img);
 
       if (galleryImages.length > 1) {
-        const dot = document.createElement('button');
-        dot.className = 'fc-qv-dot' + (i === 0 ? ' active' : '');
-        dot.setAttribute('aria-label', `Image ${i + 1}`);
-        dot.addEventListener('click', () => setGalleryIndex(i));
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = index === 0 ? 'is-active' : '';
+        dot.setAttribute('aria-label', 'Image ' + (index + 1));
+        dot.addEventListener('click', function () {
+          setGalleryIndex(index);
+        });
         dotsWrap.appendChild(dot);
       }
     });
 
-    prevBtn.style.display = galleryImages.length > 1 ? 'flex' : 'none';
-    nextBtn.style.display = galleryImages.length > 1 ? 'flex' : 'none';
+    prevBtn.style.display = galleryImages.length > 1 ? 'inline-flex' : 'none';
+    nextBtn.style.display = galleryImages.length > 1 ? 'inline-flex' : 'none';
+    setGalleryIndex(0);
+  }
+
+  function setGalleryIndex(index) {
+    if (!galleryImages.length) return;
+    galleryIndex = (index + galleryImages.length) % galleryImages.length;
+    galleryTrack.style.transform = 'translateX(-' + (galleryIndex * 100) + '%)';
+    dotsWrap.querySelectorAll('button').forEach(function (dot, dotIndex) {
+      dot.classList.toggle('is-active', dotIndex === galleryIndex);
+    });
+  }
+
+  function selectVariant(variant, button) {
+    currentVariantId = variant.id;
+    variantsEl.querySelectorAll('.fcv2-modal__variant').forEach(function (el) {
+      el.classList.remove('is-active');
+    });
+    if (button) button.classList.add('is-active');
+
+    priceEl.textContent = formatMoney(variant.price);
+    if (variant.compare && variant.compare > variant.price) {
+      compareEl.textContent = formatMoney(variant.compare);
+      compareEl.classList.remove('hidden');
+    } else {
+      compareEl.classList.add('hidden');
+      compareEl.textContent = '';
+    }
+
+    if (variant.img && galleryImages.indexOf(variant.img) !== -1) {
+      setGalleryIndex(galleryImages.indexOf(variant.img));
+    }
+
+    atcBtn.disabled = variant.available === false;
+    atcBtn.textContent = variant.available === false ? 'Sold out' : 'Add to cart';
   }
 
   function buildVariants(variants) {
     variantsEl.innerHTML = '';
     if (!variants || variants.length <= 1) return;
 
-    variants.forEach((v, i) => {
-      const btn = document.createElement('button');
-      btn.className = 'fc-qv-v-btn' + (i === 0 ? ' active' : '') + (v.available === false ? ' unavailable' : '');
-      btn.setAttribute('data-variant-id', v.id);
-      btn.setAttribute('aria-label', v.title);
+    variants.forEach(function (variant, index) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'fcv2-modal__variant' + (index === 0 ? ' is-active' : '');
+      button.setAttribute('aria-label', variant.title || 'Variant');
 
-      if (v.swatch) {
-        const img = document.createElement('img');
-        img.src = v.swatch;
-        img.alt = v.option1 || '';
+      if (variant.swatch) {
+        var img = document.createElement('img');
+        img.src = variant.swatch;
+        img.alt = variant.option1 || variant.title || '';
         img.loading = 'lazy';
-        btn.appendChild(img);
-      } else if (v.option1) {
-        const dot = document.createElement('span');
-        dot.className = 'fc-qv-v-dot';
-        dot.style.background = '#ddd';
-        btn.appendChild(dot);
+        button.appendChild(img);
+      } else {
+        var swatch = document.createElement('span');
+        swatch.className = 'fcv2-modal__variant-swatch';
+        button.appendChild(swatch);
       }
 
-      const label = document.createElement('span');
-      label.textContent = v.option1 || v.title;
-      btn.appendChild(label);
+      var label = document.createElement('span');
+      label.textContent = variant.option1 || variant.title || 'Option';
+      button.appendChild(label);
 
-      btn.addEventListener('click', () => selectVariant(v, btn));
-      variantsEl.appendChild(btn);
+      button.addEventListener('click', function () {
+        selectVariant(variant, button);
+      });
+      variantsEl.appendChild(button);
     });
   }
 
-  function selectVariant(v, clickedBtn) {
-    currentVariantId = v.id;
-
-    // Update active state
-    document.querySelectorAll('.fc-qv-v-btn').forEach(b => b.classList.remove('active'));
-    if (clickedBtn) clickedBtn.classList.add('active');
-
-    // Update price
-    priceEl.textContent = formatMoney(v.price);
-    if (v.compare && v.compare > v.price) {
-      compareEl.textContent = formatMoney(v.compare);
-      compareEl.classList.remove('hidden');
-    } else {
-      compareEl.classList.add('hidden');
-    }
-
-    // Switch gallery image if variant has its own image
-    if (v.img && galleryImages.includes(v.img)) {
-      setGalleryIndex(galleryImages.indexOf(v.img));
-    } else if (v.img && galleryImages.length > 0) {
-      setGalleryIndex(0);
-    }
-
-    // Update ATC
-    atcBtn.disabled = v.available === false;
-    atcBtn.textContent = v.available === false ? 'Sold Out' : 'Add to Cart';
-  }
-
-  function openModal(cardEl) {
-    if (!cardEl) return;
+  function openModal(card) {
+    if (!card) return;
     currentProduct = {
-      id:       cardEl.dataset.productId,
-      title:    cardEl.dataset.productTitle || '',
-      sku:      cardEl.dataset.productSku   || '',
-      url:      cardEl.dataset.productUrl   || '#',
-      money:    cardEl.dataset.productMoney || '',
-      compare:  cardEl.dataset.productCompareMoney || '',
-      variants: JSON.parse(cardEl.dataset.productVariants || '[]'),
-      images:   JSON.parse(cardEl.dataset.productImages   || '[]'),
+      id: card.dataset.productId,
+      title: card.dataset.productTitle || '',
+      subtitle: card.dataset.productSubtitle || '',
+      url: card.dataset.productUrl || '#',
+      money: card.dataset.productMoney || '',
+      compare: card.dataset.productCompareMoney || '',
+      variants: JSON.parse(card.dataset.productVariants || '[]'),
+      images: JSON.parse(card.dataset.productImages || '[]')
     };
-    qty = 1;
-    qtyVal.textContent = 1;
 
-    // Populate
-    titleEl.textContent = currentProduct.title;
-    titleEl.href        = currentProduct.url;
+    currentVariantId = currentProduct.variants[0] ? currentProduct.variants[0].id : null;
+    quantity = 1;
+    qtyVal.textContent = '1';
+
+    titleEl.textContent = currentProduct.subtitle ? currentProduct.title + ' — ' + currentProduct.subtitle : currentProduct.title;
+    titleEl.href = currentProduct.url;
     priceEl.textContent = currentProduct.money;
 
     if (currentProduct.compare && currentProduct.compare !== currentProduct.money && currentProduct.compare !== '$0.00') {
       compareEl.textContent = currentProduct.compare;
       compareEl.classList.remove('hidden');
     } else {
-      compareEl.textContent = '';
       compareEl.classList.add('hidden');
+      compareEl.textContent = '';
     }
 
     buildGallery(currentProduct.images);
 
     if (currentProduct.variants.length > 0) {
-      currentVariantId = currentProduct.variants[0].id;
-      atcBtn.disabled  = currentProduct.variants[0].available === false;
-      atcBtn.textContent = currentProduct.variants[0].available === false ? 'Sold Out' : 'Add to Cart';
       buildVariants(currentProduct.variants);
-      qtyRow.classList.remove('hidden');
+      selectVariant(currentProduct.variants[0], variantsEl.querySelector('.fcv2-modal__variant'));
+      qtyRow.style.display = 'flex';
     } else {
-      currentVariantId = null;
       variantsEl.innerHTML = '';
+      qtyRow.style.display = 'none';
       atcBtn.disabled = false;
-      atcBtn.textContent = 'Add to Cart';
-      qtyRow.classList.add('hidden');
+      atcBtn.textContent = 'Add to cart';
     }
 
-    modal.classList.add('fc-qv-open');
+    modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    setTimeout(() => closeBtn.focus(), 420);
   }
 
   function closeModal() {
-    modal.classList.remove('fc-qv-open');
+    modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
   }
 
-  /* ──────────────────────────────────────────
-     Add to Cart (Shopify AJAX)
-  ────────────────────────────────────────── */
-  atcBtn && atcBtn.addEventListener('click', async () => {
-    if (!currentVariantId && (!currentProduct || !currentProduct.id)) {
-      closeModal();
-      return;
-    }
-    const variantId = currentVariantId || (currentProduct.variants[0] && currentProduct.variants[0].id);
-    if (!variantId) return;
-
-    atcBtn.textContent = 'Adding…';
-    atcBtn.disabled = true;
-
+  async function syncCartCount() {
     try {
-      const res = await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ id: variantId, quantity: qty }),
+      const response = await fetch('/cart.js');
+      const cart = await response.json();
+      document.querySelectorAll('.cart-count').forEach(function (el) {
+        el.textContent = cart.item_count;
+        el.style.display = cart.item_count > 0 ? '' : 'none';
       });
-      if (res.ok) {
-        atcBtn.textContent = '✓ Added';
-        setTimeout(() => {
-          atcBtn.textContent = 'Add to Cart';
-          atcBtn.disabled = false;
-          fetch('/cart.js')
-            .then(r => r.json())
-            .then(c => {
-              document.querySelectorAll('.cart-count').forEach(el => {
-                el.textContent = c.item_count;
-                el.style.display = c.item_count > 0 ? '' : 'none';
-              });
-              const mobBadge = document.getElementById('mob-nav-cart-badge');
-              if (mobBadge) {
-                mobBadge.textContent = c.item_count;
-                mobBadge.style.display = c.item_count > 0 ? '' : 'none';
-              }
-              document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: c } }));
-            })
-            .catch(() => {});
-          closeModal();
-        }, 1200);
-      } else {
-        throw new Error('Failed');
+      var mobBadge = document.getElementById('mob-nav-cart-badge');
+      if (mobBadge) {
+        mobBadge.textContent = cart.item_count;
+        mobBadge.style.display = cart.item_count > 0 ? '' : 'none';
       }
-    } catch {
-      atcBtn.textContent = 'Error — try again';
-      atcBtn.disabled = false;
-      setTimeout(() => { atcBtn.textContent = 'Add to Cart'; }, 1800);
-    }
+      document.dispatchEvent(new CustomEvent('cart:updated', { detail: { cart: cart } }));
+    } catch (error) {}
+  }
+
+  if (atcBtn) {
+    atcBtn.addEventListener('click', async function () {
+      const variantId = currentVariantId || (currentProduct && currentProduct.variants[0] && currentProduct.variants[0].id);
+      if (!variantId) return;
+      atcBtn.disabled = true;
+      atcBtn.textContent = 'Adding…';
+      try {
+        const res = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ id: variantId, quantity: quantity })
+        });
+        if (!res.ok) throw new Error('Failed');
+        atcBtn.textContent = '✓ Added';
+        await syncCartCount();
+        setTimeout(function () {
+          atcBtn.textContent = 'Add to cart';
+          atcBtn.disabled = false;
+          closeModal();
+        }, 900);
+      } catch (error) {
+        atcBtn.textContent = 'Error — try again';
+        atcBtn.disabled = false;
+        setTimeout(function () { atcBtn.textContent = 'Add to cart'; }, 1200);
+      }
+    });
+  }
+
+  if (buyBtn) {
+    buyBtn.addEventListener('click', async function () {
+      const variantId = currentVariantId || (currentProduct && currentProduct.variants[0] && currentProduct.variants[0].id);
+      if (!variantId) return;
+      buyBtn.textContent = 'Processing…';
+      try {
+        await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ id: variantId, quantity: quantity })
+        });
+        window.location.href = '/checkout';
+      } catch (error) {
+        buyBtn.textContent = 'Buy it now';
+      }
+    });
+  }
+
+  qtyDec && qtyDec.addEventListener('click', function () {
+    if (quantity > 1) quantity -= 1;
+    qtyVal.textContent = String(quantity);
   });
 
-  /* Buy it now */
-  binBtn && binBtn.addEventListener('click', async () => {
-    const variantId = currentVariantId || (currentProduct && currentProduct.variants[0] && currentProduct.variants[0].id);
-    if (!variantId) return;
-    binBtn.textContent = 'Processing…';
-    try {
-      await fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: variantId, quantity: qty }),
-      });
-      window.location.href = '/checkout';
-    } catch {
-      binBtn.textContent = 'Buy it now';
-    }
+  qtyInc && qtyInc.addEventListener('click', function () {
+    quantity += 1;
+    qtyVal.textContent = String(quantity);
   });
 
-  /* Qty controls */
-  qtyDec && qtyDec.addEventListener('click', () => {
-    if (qty > 1) { qty--; qtyVal.textContent = qty; }
-  });
-  qtyInc && qtyInc.addEventListener('click', () => {
-    qty++;
-    qtyVal.textContent = qty;
-  });
-
-  /* Gallery arrows */
-  prevBtn && prevBtn.addEventListener('click', () => setGalleryIndex(galleryIndex - 1));
-  nextBtn && nextBtn.addEventListener('click', () => setGalleryIndex(galleryIndex + 1));
-
-  /* Close */
+  prevBtn && prevBtn.addEventListener('click', function () { setGalleryIndex(galleryIndex - 1); });
+  nextBtn && nextBtn.addEventListener('click', function () { setGalleryIndex(galleryIndex + 1); });
   backdrop && backdrop.addEventListener('click', closeModal);
-  closeBtn && closeBtn.addEventListener('click', e => { e.stopPropagation(); closeModal(); });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && modal.classList.contains('fc-qv-open')) closeModal();
-    if (!modal.classList.contains('fc-qv-open')) return;
-    if (e.key === 'ArrowLeft') setGalleryIndex(galleryIndex - 1);
-    if (e.key === 'ArrowRight') setGalleryIndex(galleryIndex + 1);
+  closeBtn && closeBtn.addEventListener('click', closeModal);
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
   });
 
-  /* Swipe on gallery */
-  let touchStartX = 0;
-  galleryTrack && galleryTrack.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
-  galleryTrack && galleryTrack.addEventListener('touchend', e => {
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) > 40) setGalleryIndex(dx < 0 ? galleryIndex + 1 : galleryIndex - 1);
-  });
-
-  /* ──────────────────────────────────────────
-     Web Component
-  ────────────────────────────────────────── */
   class FeaturedCollection extends HTMLElement {
     connectedCallback() {
-      this._initCards();
-      this._initLoadMore();
-      this._initGSAP();
+      this.track = this.querySelector('#fcv2-track');
+      this.moreWrap = this.querySelector('#{{ fc_section_id }}-more-wrap');
+      this.moreBtn = this.querySelector('#{{ fc_section_id }}-more-btn');
+      this.moreGrid = this.querySelector('#{{ fc_section_id }}-more-grid');
+      this.cards = Array.from(this.querySelectorAll('[data-fcv2-card]'));
+      this.initial = parseInt(this.track.dataset.fcInitial, 10) || 4;
+      this.perLoad = parseInt(this.track.dataset.fcPerLoad, 10) || 4;
+      this.revealed = 0;
+
+      this.initCards();
+      this.initLoadMore();
+      updateProgress(this.track);
+      this.track.addEventListener('scroll', this.handleScroll, { passive: true });
+      window.addEventListener('resize', this.handleResize, { passive: true });
     }
 
     disconnectedCallback() {
-
-      window.removeEventListener('scroll', this._scrollHandler);
-      if (this._gsapCtx) this._gsapCtx.revert();
+      this.track && this.track.removeEventListener('scroll', this.handleScroll);
+      window.removeEventListener('resize', this.handleResize);
     }
 
+    handleScroll = () => updateProgress(this.track);
+    handleResize = () => updateProgress(this.track);
 
+    initCards(scope) {
+      const root = scope || this;
 
-    _initLoadMore() {
-      var track = this.querySelector('#fc-track');
-      var moreWrap = document.getElementById('fc-more-wrap');
-      var moreBtn = document.getElementById('fc-more-btn');
-      var moreGrid = document.getElementById('fc-more-grid');
-      if (!track || !moreBtn || !moreGrid) return;
+      root.querySelectorAll('[data-fcv2-wishlist]').forEach(function (button) {
+        if (button.dataset.fcv2WishlistBound === 'true') return;
+        button.dataset.fcv2WishlistBound = 'true';
+        button.addEventListener('click', function () {
+          button.classList.toggle('is-liked');
+          if (button.classList.contains('is-liked')) {
+            setTimeout(function () {
+              button.classList.remove('is-liked');
+              button.classList.add('is-persist');
+            }, 560);
+          } else {
+            button.classList.remove('is-persist');
+          }
+        });
+      });
 
-      var cards = Array.from(track.querySelectorAll('[data-fc-card]'));
-      var initial = parseInt(track.dataset.fcInitial, 10) || 6;
-      var perLoad = parseInt(track.dataset.fcPerLoad, 10) || 4;
+      root.querySelectorAll('.fcv2__quick-view').forEach(function (button) {
+        if (button.dataset.fcv2QuickviewBound === 'true') return;
+        button.dataset.fcv2QuickviewBound = 'true';
+        button.addEventListener('click', function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          openModal(button.closest('[data-fcv2-card]'));
+        });
+      });
 
-      if (cards.length <= initial) return;
+      root.querySelectorAll('.fcv2__swatch[data-variant-id]').forEach(function (button) {
+        if (button.dataset.fcv2SwatchBound === 'true') return;
+        button.dataset.fcv2SwatchBound = 'true';
+        button.addEventListener('click', function () {
+          const card = button.closest('[data-fcv2-card]');
+          if (!card) return;
+          const variants = JSON.parse(card.dataset.productVariants || '[]');
+          const variant = variants.find(function (item) { return String(item.id) === String(button.dataset.variantId); });
+          const image = card.querySelector('.fcv2__image');
+          if (variant && variant.img && image) image.src = variant.img;
+          card.querySelectorAll('.fcv2__swatch').forEach(function (swatch) { swatch.classList.remove('is-active'); });
+          button.classList.add('is-active');
+        });
+      });
+    }
 
-      var hiddenCards = cards.slice(initial);
-      hiddenCards.forEach(function (c) { c.style.display = 'none'; });
-      moreWrap.style.display = '';
+    initLoadMore() {
+      if (!this.moreBtn || !this.moreGrid || this.cards.length <= this.initial) {
+        if (this.moreWrap) this.moreWrap.style.display = this.cards.length > this.initial ? '' : 'none';
+        return;
+      }
 
-      var revealed = 0;
-      moreBtn.addEventListener('click', function () {
-        var batch = hiddenCards.slice(revealed, revealed + perLoad);
-        if (batch.length === 0) return;
+      this.hiddenCards = this.cards.slice(this.initial);
+      this.hiddenCards.forEach(function (card) { card.style.display = 'none'; });
+      this.moreWrap.style.display = '';
 
-        batch.forEach(function (card, i) {
-          var clone = card.cloneNode(true);
+      this.moreBtn.addEventListener('click', () => {
+        const batch = this.hiddenCards.slice(this.revealed, this.revealed + this.perLoad);
+        if (!batch.length) return;
+        batch.forEach((card, index) => {
+          const clone = card.cloneNode(true);
           clone.style.display = '';
           clone.style.width = '100%';
-          clone.classList.add('fc-more-card-enter');
-          moreGrid.appendChild(clone);
-          setTimeout(function () { clone.classList.add('fc-more-card-visible'); }, 50 + i * 60);
+          clone.style.opacity = '0';
+          clone.style.transform = 'translateY(18px)';
+          this.moreGrid.appendChild(clone);
+          this.initCards(clone);
+          setTimeout(() => {
+            clone.style.transition = 'opacity .35s ease, transform .35s ease';
+            clone.style.opacity = '1';
+            clone.style.transform = 'translateY(0)';
+          }, 40 + index * 60);
         });
-
-        revealed += batch.length;
-        if (revealed >= hiddenCards.length) {
-          moreWrap.style.display = 'none';
+        this.revealed += batch.length;
+        if (this.revealed >= this.hiddenCards.length) {
+          this.moreWrap.style.display = 'none';
         }
       });
     }
-
-    _initCards() {
-      this.querySelectorAll('.fc-qv-trigger').forEach(btn => {
-        btn.addEventListener('click', e => {
-          e.preventDefault(); e.stopPropagation();
-          const card = btn.closest('[data-fc-card]');
-          openModal(card);
-        });
-      });
-
-      // Card-level swatch hover: update card image preview
-      this.querySelectorAll('.fc-swatch[data-variant-id]').forEach(sw => {
-        sw.addEventListener('click', () => {
-          const card   = sw.closest('[data-fc-card]');
-          if (!card) return;
-          const cardImg = card.querySelector('.fc-img');
-          if (!cardImg) return;
-          const variants = JSON.parse(card.dataset.productVariants || '[]');
-          const v = variants.find(x => String(x.id) === sw.dataset.variantId);
-          if (v && v.img) cardImg.src = v.img;
-          card.querySelectorAll('.fc-swatch').forEach(s => s.classList.remove('active'));
-          sw.classList.add('active');
-        });
-      });
-    }
-
-
-    _initGSAP() {
-      if (typeof gsap === 'undefined') return;
-      if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
-      this._gsapCtx = gsap.context(() => {
-        const heading = this.querySelector('h2');
-        if (heading) {
-          gsap.from(heading, { scrollTrigger: { trigger: heading, start: 'top 88%', once: true }, opacity: 0, y: 36, duration: 0.85, ease: 'power3.out' });
-        }
-        const cards = this.querySelectorAll('[data-fc-card]');
-        if (cards.length) {
-          gsap.from(cards, {
-            scrollTrigger: { trigger: this.querySelector('#fc-track'), start: 'top 82%', once: true },
-            opacity: 0, x: 40, duration: 0.7, ease: 'power2.out', stagger: 0.09,
-          });
-        }
-      }, this);
-    }
   }
 
-  if (!customElements.get('featured-collection')) {
-    customElements.define('featured-collection', FeaturedCollection);
-  }
-})();
-
-/* ── Firework burst on scroll into view ── */
-(function() {
-  var canvas = document.getElementById('fc-fireworks');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var particles = [];
-  var fired = false;
-  var COLORS = ['#C5A880','#E8C97E','#F5E6CC','#FFD700','#FFF8E1','#D4AF37','#E6BE8A'];
-
-  function resize() {
-    var section = canvas.closest('featured-collection');
-    if (!section) return;
-    canvas.width = section.offsetWidth;
-    canvas.height = section.offsetHeight;
-  }
-
-  function Particle(x, y) {
-    this.x = x; this.y = y;
-    this.vx = (Math.random() - 0.5) * 8;
-    this.vy = -Math.random() * 10 - 4;
-    this.gravity = 0.18;
-    this.alpha = 1;
-    this.decay = 0.012 + Math.random() * 0.015;
-    this.size = 2 + Math.random() * 3;
-    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
-  }
-
-  function burst(x, y, count) {
-    for (var i = 0; i < count; i++) particles.push(new Particle(x, y));
-  }
-
-  function fire() {
-    if (fired) return;
-    fired = true;
-    resize();
-    var h = canvas.height * 0.35;
-    burst(0, h, 35); burst(canvas.width, h, 35);
-    setTimeout(function() { burst(0, h * 0.6, 25); burst(canvas.width, h * 0.6, 25); }, 200);
-    setTimeout(function() { burst(0, h * 1.1, 20); burst(canvas.width, h * 1.1, 20); }, 400);
-    animate();
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    var alive = false;
-    for (var i = particles.length - 1; i >= 0; i--) {
-      var p = particles[i];
-      p.vy += p.gravity; p.x += p.vx; p.y += p.vy; p.alpha -= p.decay;
-      if (p.alpha <= 0) { particles.splice(i, 1); continue; }
-      alive = true;
-      ctx.globalAlpha = p.alpha;
-      ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-    if (alive) requestAnimationFrame(animate);
-  }
-
-  if (typeof IntersectionObserver !== 'undefined') {
-    var section = canvas.closest('featured-collection');
-    if (section) {
-      new IntersectionObserver(function(entries, obs) {
-        if (entries[0].isIntersecting) { fire(); obs.disconnect(); }
-      }, { threshold: 0.25 }).observe(section);
-    }
-  }
-  window.addEventListener('resize', resize);
+  customElements.define('featured-collection', FeaturedCollection);
 })();
 </script>
 
@@ -1205,31 +1414,29 @@
   "settings": [
     {
       "type": "header",
+      "content": "Top Bar"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Top bar text",
+      "default": "Redesign Proposal — Celisira Trending Products"
+    },
+    {
+      "type": "header",
       "content": "Heading"
     },
     {
       "type": "text",
-      "id": "heading",
-      "label": "Section Heading",
-      "default": "TRENDING PRODUCTS"
+      "id": "heading_line_1",
+      "label": "Heading line 1",
+      "default": "TRENDING"
     },
     {
-      "type": "color",
-      "id": "heading_color",
-      "label": "Heading Color",
-      "default": "#0a0a0a"
-    },
-    {
-      "type": "select",
-      "id": "heading_size",
-      "label": "Heading Size",
-      "options": [
-        { "value": "clamp(2rem,8vw,5rem)",    "label": "Small" },
-        { "value": "clamp(2.8rem,11vw,7.5rem)", "label": "Default" },
-        { "value": "clamp(3.5rem,13vw,9rem)",  "label": "Large" },
-        { "value": "clamp(4rem,16vw,11rem)",   "label": "Extra Large" }
-      ],
-      "default": "clamp(2.8rem,11vw,7.5rem)"
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading line 2",
+      "default": "PRODUCTS"
     },
     {
       "type": "header",
@@ -1274,7 +1481,7 @@
       "min": 2,
       "max": 12,
       "step": 1,
-      "default": 6
+      "default": 4
     },
     {
       "type": "range",
@@ -1287,49 +1494,13 @@
     },
     {
       "type": "header",
-      "content": "Card Typography"
+      "content": "Footer Note"
     },
     {
-      "type": "select",
-      "id": "title_font_size",
-      "label": "Product Name Size",
-      "options": [
-        { "value": "1.0rem", "label": "Small (16px)" },
-        { "value": "1.2rem", "label": "Medium (19px)" },
-        { "value": "1.4rem", "label": "Large (22px)" },
-        { "value": "1.65rem", "label": "Extra Large (26px)" }
-      ],
-      "default": "1.4rem"
-    },
-    {
-      "type": "color",
-      "id": "title_color",
-      "label": "Name Color",
-      "default": "#111111"
-    },
-    {
-      "type": "select",
-      "id": "title_font_weight",
-      "label": "Name Weight",
-      "options": [
-        { "value": "400", "label": "Regular" },
-        { "value": "500", "label": "Medium" },
-        { "value": "600", "label": "Semi-bold" },
-        { "value": "700", "label": "Bold" }
-      ],
-      "default": "500"
-    },
-    {
-      "type": "color",
-      "id": "price_color",
-      "label": "Price Color",
-      "default": "#111111"
-    },
-    {
-      "type": "color",
-      "id": "compare_color",
-      "label": "Compare-at (strikethrough) Color",
-      "default": "#999999"
+      "type": "text",
+      "id": "helper_text",
+      "label": "Helper text",
+      "default": "Hover cards to reveal Quick View • Tap thumbnails to switch color"
     }
   ],
   "presets": [
