@@ -16,7 +16,6 @@
       >
         <span class="dx-menu-btn__line"></span>
         <span class="dx-menu-btn__line"></span>
-        <span class="dx-menu-btn__line"></span>
       </button>
 
       <nav class="dx-nav-desktop" aria-label="Primary">
@@ -114,7 +113,7 @@
         </svg>
       </button>
 
-      <a href="{{ routes.account_url }}" class="dx-icon-btn icon-btn" aria-label="My Account">
+      <a href="{{ routes.account_url }}" class="dx-icon-btn dx-icon-btn--account icon-btn" aria-label="My Account">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="12" cy="8" r="4"/>
           <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
@@ -173,6 +172,11 @@
   }
 
   @media (max-width: 767px) {
+    .dx-header {
+      background: #000;
+      color: #fff;
+    }
+
     .dx-header__inner {
       display: grid;
       grid-template-columns: 44px minmax(0, 1fr) 108px;
@@ -191,6 +195,37 @@
       z-index: 2;
     }
 
+    .dx-nav-desktop {
+      display: none;
+    }
+
+    .dx-menu-btn {
+      display: inline-flex;
+      width: 26px;
+      flex-direction: column;
+      gap: 5px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .dx-menu-btn__line {
+      display: block;
+      height: 1.5px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .dx-menu-btn__line:first-child {
+      width: 100%;
+    }
+
+    .dx-menu-btn__line:last-child {
+      width: 18px;
+    }
+
     .dx-logo {
       position: static;
       left: auto;
@@ -198,10 +233,11 @@
       justify-self: center;
       max-width: min(100%, var(--dx-logo-width, 180px));
       width: min(100%, var(--dx-logo-width, 180px));
-      height: 28px;
+      height: 32px;
       padding-inline: 0.25rem;
       overflow: hidden;
       z-index: 1;
+      color: #fff;
     }
 
     .dx-logo__image {
@@ -211,15 +247,66 @@
       max-height: none;
       object-fit: cover;
       object-position: center;
+      filter: invert(1) brightness(2);
+    }
+
+    .dx-logo__text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      color: #fff;
+      font-size: 20px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
     }
 
     .dx-header__right {
       width: 108px;
       min-width: 108px;
+      display: flex;
+      align-items: center;
       justify-self: end;
       justify-content: flex-end;
       gap: 0.5rem;
       z-index: 2;
+    }
+
+    .dx-icon-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #fff;
+    }
+
+    .dx-icon-btn--account {
+      display: none;
+    }
+
+    .dx-icon-btn--cart {
+      position: relative;
+    }
+
+    .dx-icon-btn--cart .cart-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 14px;
+      height: 14px;
+      padding: 0 3px;
+      border-radius: 999px;
+      background: #fff;
+      color: #000;
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 14px;
+      text-align: center;
     }
   }
 </style>
