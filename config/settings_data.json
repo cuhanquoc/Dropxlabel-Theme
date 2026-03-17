@@ -24,8 +24,8 @@
           "link": "",
           "font_size": 12,
           "padding": 10,
-          "bg_color": "#1a1a1a",
-          "text_color": "#f9efde",
+          "bg_color": "#fdfbf7",
+          "text_color": "#1a1a1a",
           "animation": "marquee"
         }
       },
