@@ -435,8 +435,7 @@
       <div class="mps-section">
         <p class="mps-heading">You may also like</p>
         <div class="mps-products-scroll" id="mps-featured-products">
-          {%- assign featured_products = collections.all.products | limit: 8 -%}
-          {%- for product in featured_products -%}
+          {%- for product in collections.all.products limit: 8 -%}
             <a href="{{ product.url }}" class="mps-product-card">
               <div class="mps-product-img">
                 {%- if product.compare_at_price > product.price -%}

@@ -1109,7 +1109,7 @@
         <!-- Main Image -->
         <div class="product-main-image-wrap" style="width: 100%; position: relative; background-color: #f5f4f1; display: block; overflow: hidden; border: 1px solid #e5e5e5; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border-radius: 8px; box-sizing: border-box;">
           {% if product.featured_image %}
-            <img id="ProductMainImage" src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.title | escape }}" style="width: 100%; height: auto; display: block; margin: 0 auto;">
+            <img id="ProductMainImage" src="{{ product.featured_image | image_url: width: 1200 }}" alt="{{ product.title | escape }}" width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}" style="width: 100%; height: auto; display: block; margin: 0 auto;">
           {% else %}
             <div style="width: 100%; aspect-ratio: 3/4; background-color: #f5f4f1; display: flex; align-items: center; justify-content: center;">
                {{ 'product-1' | placeholder_svg_tag: 'w-full h-full text-gray-300 object-contain' }}
@@ -1125,7 +1125,7 @@
               <button type="button" aria-label="Thumbnail {{ forloop.index }}" class="product-thumbnail-btn"
                       data-thumb-url="{{ media.preview_image | image_url: width: 1200 }}"
                       style="flex: 0 0 calc(25% - {{ gap_compensate }}px); min-width: 0; border: 1px solid #e5e5e5; background-color: #f5f4f1; padding: 0; cursor: pointer; aspect-ratio: 4/5; overflow: hidden; display: block; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-radius: 6px; box-sizing: border-box;">
-                <img src="{{ media.preview_image | image_url: width: 400 }}" alt="{{ media.alt | escape }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <img src="{{ media.preview_image | image_url: width: 400 }}" alt="{{ media.alt | escape }}" width="{{ media.preview_image.width }}" height="{{ media.preview_image.height }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
               </button>
             {% endfor %}
           </div>
@@ -1686,7 +1686,7 @@
                     >
                       <div style="aspect-ratio: 3/4; background: #f7f7f7;">
                         {%- if p.featured_image -%}
-                          <img src="{{ p.featured_image | image_url: width: 420 }}" alt="{{ p.title | escape }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                          <img src="{{ p.featured_image | image_url: width: 420 }}" alt="{{ p.title | escape }}" loading="lazy" width="{{ p.featured_image.width }}" height="{{ p.featured_image.height }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                         {%- else -%}
                           {{ 'product-1' | placeholder_svg_tag: 'w-full h-full text-gray-300 object-contain' }}
                         {%- endif -%}
