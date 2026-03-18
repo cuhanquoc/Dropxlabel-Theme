@@ -9,16 +9,17 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                bg: '#F9F8F6',
-                text: '#222222',
-                accent: '#C5A880',
-                muted: '#8A8A8A',
+                bg: '#F8F6F1',
+                background: '#F8F6F1',
+                text: '#0C0C0B',
+                accent: '#C4A882',
+                muted: '#8C8880',
                 surface: '#FFFFFF',
-                border: '#E8E5DF',
+                border: '#E5E2D9',
             },
             fontFamily: {
-                heading: ['"Playfair Display"', 'serif'],
-                body: ['Inter', 'sans-serif'],
+                heading: ['"Cormorant Garamond"', 'serif'],
+                body: ['"DM Sans"', 'sans-serif'],
             },
         },
     },

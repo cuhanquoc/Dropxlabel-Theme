@@ -10,26 +10,39 @@
 
   assign fc_initial = section.settings.items_initial | default: 4
   assign fc_per_load = section.settings.items_per_load | default: 4
-  assign fc_more_label = section.settings.more_label | default: 'More'
-  assign fc_heading_line_1 = section.settings.heading_line_1 | default: 'TRENDING'
-  assign fc_heading_line_2 = section.settings.heading_line_2 | default: 'PRODUCTS'
-  assign fc_eyebrow = section.settings.eyebrow | default: 'Redesign Proposal — Celisira Trending Products'
-  assign fc_helper_text = section.settings.helper_text | default: 'Hover cards to reveal Quick View • Tap thumbnails to switch color'
+  assign fc_total_products = fc_source | size
+  assign fc_remaining = fc_total_products | minus: fc_initial
+  assign fc_more_label = section.settings.more_label | default: 'Load more'
+  assign fc_heading_line_1 = section.settings.heading_line_1 | default: 'Featured'
+  assign fc_heading_line_2 = section.settings.heading_line_2 | default: 'pieces'
+  assign fc_eyebrow = section.settings.eyebrow | default: 'Curated selection'
+  assign fc_helper_text = section.settings.helper_text | default: 'Scroll the rail for the full edit, or open Quick view for more detail.'
 -%}
 
 <featured-collection class="fcv2 block relative overflow-hidden bg-white text-[#0a0a0a]" data-section-id="{{ section.id }}">
-  <div class="fcv2__eyebrow-bar">
-    <p class="fcv2__eyebrow">{{ fc_eyebrow }}</p>
-  </div>
+  <div class="fcv2__surface">
+    <div class="fcv2__shell">
+      <header class="fcv2__header">
+        <p class="fcv2__eyebrow">{{ fc_eyebrow }}</p>
+        <div class="fcv2__header-grid">
+          <h2 class="fcv2__heading" aria-label="{{ fc_heading_line_1 }} {{ fc_heading_line_2 }}">
+            <span class="fcv2__heading-line">{{ fc_heading_line_1 }}</span>
+            <span class="fcv2__heading-line fcv2__heading-line--muted">{{ fc_heading_line_2 }}</span>
+          </h2>
+          <div class="fcv2__header-copy">
+            <p class="fcv2__helper">{{ fc_helper_text }}</p>
+            <p class="fcv2__count">
+              {% if fc_total_products > 0 %}
+                {{ fc_total_products }} pieces in this edit
+              {% else %}
+                Curated products will appear here
+              {% endif %}
+            </p>
+          </div>
+        </div>
+      </header>
 
-  <div class="fcv2__header">
-    <h2 class="fcv2__heading" aria-label="{{ fc_heading_line_1 }} {{ fc_heading_line_2 }}">
-      <span class="fcv2__heading-line fcv2__heading-line--top">{{ fc_heading_line_1 }}</span>
-      <span class="fcv2__heading-line fcv2__heading-line--bottom">{{ fc_heading_line_2 }}</span>
-    </h2>
-  </div>
-
-  <div class="fcv2__body">
+      <div class="fcv2__body">
     <div
       class="fcv2__track"
       id="fcv2-track"
@@ -120,14 +133,14 @@
                 </div>
               {% endif %}
 
-              <button type="button" class="fcv2__wishlist" aria-label="Wishlist" data-fcv2-wishlist>
+              <button type="button" class="fcv2__wishlist" aria-label="Save for later" data-fcv2-wishlist>
                 <span class="fcv2__wishlist-burst" aria-hidden="true"></span>
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 21-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.18Z"/></svg>
               </button>
 
               <button type="button" class="fcv2__quick-view" data-card-id="{{ product.id }}" aria-label="Quick view {{ product.title | escape }}">
-                <span>Quick View</span>
-                <span class="fcv2__quick-view-plus" aria-hidden="true">+</span>
+                <span class="fcv2__quick-view-label">Quick view</span>
+                <span class="fcv2__quick-view-arrow" aria-hidden="true">↗</span>
               </button>
             </div>
 
@@ -184,7 +197,17 @@
       <div class="fcv2__progress-value" id="{{ fc_section_id }}-progress-value">0%</div>
     </div>
 
-    <div class="fcv2__more-wrap" id="{{ fc_section_id }}-more-wrap"{% if fc_source == blank %} style="display:none"{% endif %}>
+    <div class="fcv2__more-wrap" id="{{ fc_section_id }}-more-wrap"{% if fc_source == blank or fc_total_products <= fc_initial %} style="display:none"{% endif %}>
+      <div class="fcv2__more-copy">
+        <p class="fcv2__more-title">More products</p>
+        <p class="fcv2__more-subtitle">
+          {% if fc_remaining > 0 %}
+            {{ fc_remaining }} remaining in this edit
+          {% else %}
+            All products are already visible
+          {% endif %}
+        </p>
+      </div>
       <button type="button" class="fcv2__more-btn" id="{{ fc_section_id }}-more-btn" aria-label="{{ fc_more_label }}">
         <span>{{ fc_more_label }}</span>
         <span class="fcv2__more-icon" aria-hidden="true">
@@ -194,8 +217,8 @@
     </div>
 
     <div class="fcv2__more-grid" id="{{ fc_section_id }}-more-grid" aria-label="Additional products"></div>
-
-    <p class="fcv2__helper">{{ fc_helper_text }}</p>
+    </div>
+  </div>
   </div>
 </featured-collection>
 
@@ -239,74 +262,105 @@
 
 <style>
 .fcv2 {
-  background: #fff;
-  color: #0a0a0a;
+  position: relative;
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.82), transparent 34%),
+    radial-gradient(circle at top right, rgba(255, 245, 232, 0.82), transparent 30%),
+    linear-gradient(180deg, #f6f1e9 0%, #fbf9f4 38%, #f7f3ec 100%);
+  color: #111111;
 }
 
-.fcv2__eyebrow-bar {
-  background: #000;
-  padding: 13px 20px 11px;
+.fcv2__surface {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 28px 0 40px;
+}
+
+.fcv2__shell {
+  padding: 0 20px;
+}
+
+.fcv2__header {
+  display: grid;
+  gap: 18px;
+  padding: 18px 0 26px;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
 }
 
 .fcv2__eyebrow {
   margin: 0;
-  color: #fff;
-  font-family: var(--font-body-family);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  line-height: 1.35;
-  text-align: center;
+  color: rgba(17, 17, 17, 0.56);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  line-height: 1.4;
   text-transform: uppercase;
 }
 
-.fcv2__header {
-  padding: 40px 24px 32px;
-  text-align: center;
+.fcv2__header-grid {
+  display: grid;
+  gap: 18px;
 }
 
 .fcv2__heading {
   margin: 0;
-  color: #0a0a0a;
-  font-family: var(--font-body-family);
-  font-size: clamp(3.15rem, 11vw, 5.25rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
+  display: grid;
+  gap: 0.04em;
+  max-width: 12ch;
+  color: #111111;
+  font-family: var(--font-heading);
+  font-size: clamp(2.8rem, 8vw, 6rem);
+  font-weight: 600;
+  letter-spacing: -0.05em;
   line-height: 0.9;
+  text-wrap: balance;
+}
+
+.fcv2__heading-line--muted {
+  color: rgba(17, 17, 17, 0.46);
+}
+
+.fcv2__header-copy {
+  display: grid;
+  gap: 10px;
+  max-width: 520px;
+}
+
+.fcv2__helper {
+  margin: 0;
+  color: rgba(17, 17, 17, 0.66);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.fcv2__count {
+  margin: 0;
+  color: rgba(17, 17, 17, 0.44);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.5;
   text-transform: uppercase;
 }
 
-.fcv2__heading-line {
-  display: block;
-}
-
-.fcv2__heading-line--top {
-  animation: fcv2-heading-drift 5s ease-in-out infinite;
-}
-
-.fcv2__heading-line--bottom {
-  animation: fcv2-heading-drift 5s ease-in-out infinite reverse;
-}
-
-@keyframes fcv2-heading-drift {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
-
 .fcv2__body {
-  padding: 0 0 40px;
+  padding: 24px 0 0;
 }
 
 .fcv2__track {
   display: flex;
-  gap: 16px;
+  gap: 18px;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 0 20px 8px;
+  padding: 6px 0 10px;
   scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: x proximity;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  mask-image: linear-gradient(to right, transparent 0%, #000 4%, #000 96%, transparent 100%);
 }
 
 .fcv2__track::-webkit-scrollbar {
@@ -315,18 +369,27 @@
 
 .fcv2__card {
   flex: 0 0 auto;
-  width: 300px;
-  max-width: calc(100vw - 44px);
+  width: min(340px, 84vw);
   scroll-snap-align: start;
 }
 
 .fcv2__media-wrap {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
   overflow: hidden;
-  border-radius: 20px;
-  background: #f3f4f6;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-radius: 28px;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  background: linear-gradient(180deg, #ece5db 0%, #f4efe8 100%);
+  box-shadow: 0 24px 52px -30px rgba(31, 24, 16, 0.28);
+}
+
+.fcv2__media-wrap::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 42%;
+  background: linear-gradient(180deg, transparent 0%, rgba(17, 17, 17, 0.06) 100%);
+  pointer-events: none;
 }
 
 .fcv2__image-link,
@@ -339,18 +402,19 @@
 
 .fcv2__image {
   object-fit: cover;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), filter 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fcv2__card:hover .fcv2__image,
 .fcv2__card:focus-within .fcv2__image {
-  transform: scale(1.035);
+  transform: scale(1.03);
+  filter: saturate(0.96) contrast(1.01);
 }
 
 .fcv2__badge {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 16px;
+  left: 16px;
   z-index: 2;
 }
 
@@ -359,32 +423,26 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 23px;
-  padding: 0 10px;
+  min-height: 24px;
+  padding: 0 11px;
   border-radius: 999px;
-  font-family: var(--font-body-family);
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  background: rgba(255, 255, 255, 0.88);
+  color: #111111;
+  font-family: var(--font-body);
   font-size: 10px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0.16em;
+  line-height: 1;
   text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .fcv2__badge.is-sale .fcv2__badge-pill {
-  background: #000;
-  color: #fff;
-}
-
-.fcv2__badge-ring {
-  position: absolute;
-  inset: -11px -26px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.58);
-  animation: fcv2-sale-ring 2.4s ease-out infinite;
-}
-
-@keyframes fcv2-sale-ring {
-  0% { transform: scale(0.8); opacity: 0.9; }
-  100% { transform: scale(1.15); opacity: 0; }
+  border-color: transparent;
+  background: rgba(17, 17, 17, 0.92);
+  color: #ffffff;
 }
 
 .fcv2__badge.is-new {
@@ -392,114 +450,82 @@
   border-radius: 999px;
 }
 
-.fcv2__badge.is-new .fcv2__badge-pill {
-  background: #fff;
-  color: #000;
-}
-
+.fcv2__badge-ring,
 .fcv2__badge-shimmer {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(110deg, transparent 42%, rgba(255,255,255,0.75) 50%, transparent 58%);
-  animation: fcv2-shimmer 2.2s ease-in-out infinite 1.2s;
-}
-
-@keyframes fcv2-shimmer {
-  from { transform: translateX(-140%); }
-  to { transform: translateX(180%); }
+  display: none;
 }
 
 .fcv2__wishlist {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 16px;
+  right: 16px;
   z-index: 2;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid rgba(17, 17, 17, 0.08);
   border-radius: 999px;
-  background: rgba(255,255,255,0.85);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
-  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.88);
+  color: #111111;
   cursor: pointer;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), background 0.22s ease, border-color 0.22s ease, color 0.22s ease;
+}
+
+.fcv2__wishlist svg {
+  transition: transform 0.2s ease, fill 0.2s ease, stroke 0.2s ease;
+}
+
+.fcv2__wishlist:hover,
+.fcv2__wishlist:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(17, 17, 17, 0.14);
 }
 
 .fcv2__wishlist-burst,
 .fcv2__wishlist-burst::before,
 .fcv2__wishlist-burst::after {
-  content: '';
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: #ef4444;
-  opacity: 0;
+  display: none;
 }
 
-.fcv2__wishlist.is-liked .fcv2__wishlist-burst {
-  animation: fcv2-burst-1 0.55s ease-out;
-}
-.fcv2__wishlist.is-liked .fcv2__wishlist-burst::before {
-  animation: fcv2-burst-2 0.55s ease-out;
-}
-.fcv2__wishlist.is-liked .fcv2__wishlist-burst::after {
-  animation: fcv2-burst-3 0.55s ease-out;
-}
-
-@keyframes fcv2-burst-1 {
-  0% { opacity: 1; transform: translate(0,0) scale(0); }
-  100% { opacity: 0; transform: translate(16px,-14px) scale(1); }
-}
-@keyframes fcv2-burst-2 {
-  0% { opacity: 1; transform: translate(0,0) scale(0); }
-  100% { opacity: 0; transform: translate(-17px,-10px) scale(1); }
-}
-@keyframes fcv2-burst-3 {
-  0% { opacity: 1; transform: translate(0,0) scale(0); }
-  100% { opacity: 0; transform: translate(0,18px) scale(1); }
-}
-
-.fcv2__wishlist.is-liked svg {
-  fill: #ef4444;
-  stroke: #ef4444;
-  animation: fcv2-heart-pop 0.45s ease-out;
-}
-
-@keyframes fcv2-heart-pop {
-  0% { transform: scale(1); }
-  35% { transform: scale(1.35); }
-  100% { transform: scale(1); }
+.fcv2__wishlist.is-liked svg,
+.fcv2__wishlist.is-persist svg {
+  fill: currentColor;
+  stroke: currentColor;
+  transform: scale(1.04);
 }
 
 .fcv2__quick-view {
   position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 12px;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 11px 14px;
-  border: 0;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(17, 17, 17, 0.08);
   border-radius: 999px;
-  background: rgba(248,248,248,0.88);
-  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111111;
   cursor: pointer;
-  font-family: var(--font-body-family);
+  font-family: var(--font-body);
   font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1;
   text-transform: uppercase;
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity 0.24s ease, transform 0.24s ease, background 0.2s ease;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  transition: opacity 0.24s ease, transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), background 0.24s ease, border-color 0.24s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .fcv2__card:hover .fcv2__quick-view,
@@ -515,95 +541,102 @@
   }
 }
 
-.fcv2__quick-view-plus {
+.fcv2__quick-view-arrow {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 24px;
   height: 24px;
-  border: 1.75px solid currentColor;
+  border: 1px solid currentColor;
   border-radius: 999px;
-  font-size: 16px;
+  font-size: 11px;
   line-height: 1;
-  font-weight: 300;
 }
 
 .fcv2__content {
-  padding: 12px 4px 0;
+  display: grid;
+  gap: 10px;
+  padding: 14px 2px 0;
 }
 
 .fcv2__title-row {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
+  display: grid;
+  gap: 4px;
   color: inherit;
   text-decoration: none;
   line-height: 1.35;
 }
 
 .fcv2__title {
-  font-family: var(--font-body-family);
-  font-size: 13px;
-  font-weight: 900;
+  color: #111111;
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
+  font-weight: 600;
   letter-spacing: -0.03em;
-  text-transform: uppercase;
+  line-height: 1.25;
+  text-wrap: balance;
 }
 
 .fcv2__subtitle {
-  color: #99a1af;
-  font-family: var(--font-body-family);
-  font-size: 13px;
+  color: rgba(17, 17, 17, 0.5);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
   font-weight: 400;
-  letter-spacing: -0.03em;
+  line-height: 1.45;
 }
 
 .fcv2__price-row {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-top: 6px;
 }
 
 .fcv2__price {
-  font-family: var(--font-body-family);
-  font-size: 18px;
-  font-weight: 900;
-  letter-spacing: -0.03em;
+  color: #111111;
+  font-family: var(--font-body);
+  font-size: 1.08rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .fcv2__compare {
-  color: #99a1af;
-  font-family: var(--font-body-family);
-  font-size: 12px;
+  color: rgba(17, 17, 17, 0.44);
+  font-family: var(--font-body);
+  font-size: 0.86rem;
   font-weight: 400;
   text-decoration: line-through;
 }
 
 .fcv2__swatches {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 14px;
   flex-wrap: wrap;
+  gap: 8px;
 }
 
 .fcv2__swatch {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   padding: 0;
-  border: 0;
-  border-radius: 14px;
-  background: #f3f4f6;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fcv2__swatch:hover,
+.fcv2__swatch:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(17, 17, 17, 0.16);
 }
 
 .fcv2__swatch.is-active {
-  box-shadow: inset 0 0 0 1.75px #0a0a0a;
+  border-color: rgba(17, 17, 17, 0.86);
+  box-shadow: inset 0 0 0 1px rgba(17, 17, 17, 0.86);
 }
 
 .fcv2__swatch-image {
@@ -613,7 +646,7 @@
 }
 
 .fcv2__swatch-fallback {
-  font-family: var(--font-body-family);
+  font-family: var(--font-body);
   font-size: 12px;
   font-weight: 700;
 }
@@ -622,14 +655,14 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 18px 20px 0;
+  padding: 22px 0 0;
 }
 
 .fcv2__progress-track {
   flex: 1;
   height: 2px;
   border-radius: 999px;
-  background: #f3f4f6;
+  background: rgba(17, 17, 17, 0.08);
   overflow: hidden;
 }
 
@@ -637,58 +670,90 @@
   width: 0;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #000 0%, #555 100%);
+  background: linear-gradient(90deg, rgba(17, 17, 17, 0.35) 0%, rgba(17, 17, 17, 0.76) 100%);
   transition: width 0.24s ease;
 }
 
 .fcv2__progress-value {
-  color: #d1d5dc;
-  font-family: var(--font-body-family);
+  color: rgba(17, 17, 17, 0.42);
+  font-family: var(--font-body);
   font-size: 10px;
   font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .fcv2__more-wrap {
-  padding: 34px 20px 10px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16px;
+  padding: 28px 0 12px;
+}
+
+.fcv2__more-copy {
+  display: grid;
+  gap: 5px;
+}
+
+.fcv2__more-title {
+  margin: 0;
+  color: #111111;
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.fcv2__more-subtitle {
+  margin: 0;
+  color: rgba(17, 17, 17, 0.46);
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  line-height: 1.45;
 }
 
 .fcv2__more-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  min-height: 60px;
-  padding: 0 42px;
-  border: 1.75px solid #000;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 22px;
+  border: 1px solid rgba(17, 17, 17, 0.14);
   border-radius: 999px;
-  background: transparent;
-  color: #000;
+  background: rgba(255, 255, 255, 0.7);
+  color: #111111;
   cursor: pointer;
-  font-family: var(--font-body-family);
-  font-size: 14px;
-  font-weight: 900;
-  letter-spacing: 0.09em;
+  width: fit-content;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
   text-transform: uppercase;
-  transition: transform 0.16s ease, background 0.2s ease, color 0.2s ease;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), background 0.18s ease, border-color 0.18s ease;
 }
 
-.fcv2__more-btn:hover {
-  background: #000;
-  color: #fff;
+.fcv2__more-btn:hover,
+.fcv2__more-btn:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(17, 17, 17, 0.22);
 }
 
 .fcv2__more-btn:active {
-  transform: scale(0.96);
+  transform: translateY(0) scale(0.98);
 }
 
 .fcv2__more-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  border: 1.75px solid currentColor;
+  width: 22px;
+  height: 22px;
+  border: 1px solid currentColor;
   border-radius: 999px;
 }
 
@@ -696,24 +761,12 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
-  padding: 0 20px;
+  padding: 0;
 }
 
 .fcv2__more-grid .fcv2__card {
   width: 100%;
   max-width: none;
-}
-
-.fcv2__helper {
-  margin: 36px 0 0;
-  padding: 0 20px;
-  color: #d1d5dc;
-  font-family: var(--font-body-family);
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.025em;
-  line-height: 1.4;
-  text-align: center;
 }
 
 .fcv2-modal {
@@ -731,7 +784,7 @@
   position: absolute;
   inset: 0;
   border: 0;
-  background: rgba(0,0,0,0.44);
+  background: rgba(17, 17, 17, 0.44);
 }
 
 .fcv2-modal__panel {
@@ -739,14 +792,16 @@
   left: 0;
   right: 0;
   bottom: 0;
-  max-height: 92vh;
-  background: #fff;
-  border-top-left-radius: 26px;
-  border-top-right-radius: 26px;
-  transform: translateY(100%);
-  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
   display: flex;
   flex-direction: column;
+  max-height: 92vh;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  background: rgba(255, 255, 255, 0.96);
+  transform: translateY(100%);
+  transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .fcv2-modal.is-open .fcv2-modal__panel {
@@ -755,7 +810,7 @@
 
 .fcv2-modal__header {
   position: relative;
-  padding: 12px 20px 6px;
+  padding: 12px 20px 8px;
 }
 
 .fcv2-modal__handle {
@@ -763,7 +818,7 @@
   height: 5px;
   margin: 0 auto;
   border-radius: 999px;
-  background: #d6d6d6;
+  background: rgba(17, 17, 17, 0.14);
 }
 
 .fcv2-modal__close {
@@ -774,6 +829,7 @@
   height: 32px;
   border: 0;
   background: transparent;
+  color: #111111;
   font-size: 28px;
   line-height: 1;
   cursor: pointer;
@@ -787,15 +843,16 @@
 .fcv2-modal__gallery-shell {
   position: relative;
   overflow: hidden;
-  border-radius: 20px;
-  background: #f3f4f6;
-  aspect-ratio: 3 / 4;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  border-radius: 24px;
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(180deg, #ece5db 0%, #f6f2ec 100%);
 }
 
 .fcv2-modal__gallery-track {
   display: flex;
   height: 100%;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .fcv2-modal__gallery-track img {
@@ -805,17 +862,24 @@
   object-fit: cover;
 }
 
+.fcv2-modal__empty-state {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #e8e2d7 0%, #f3eee6 100%);
+}
+
 .fcv2-modal__arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   width: 36px;
   height: 36px;
-  border: 0;
+  border: 1px solid rgba(17, 17, 17, 0.08);
   border-radius: 999px;
-  background: rgba(255,255,255,0.92);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  background: rgba(255, 255, 255, 0.92);
+  color: #111111;
   cursor: pointer;
+  box-shadow: 0 8px 24px -16px rgba(17, 17, 17, 0.36);
 }
 
 .fcv2-modal__arrow.is-prev { left: 12px; }
@@ -825,9 +889,9 @@
   position: absolute;
   left: 50%;
   bottom: 14px;
-  transform: translateX(-50%);
   display: flex;
   gap: 6px;
+  transform: translateX(-50%);
 }
 
 .fcv2-modal__dots button {
@@ -836,11 +900,11 @@
   padding: 0;
   border: 0;
   border-radius: 999px;
-  background: rgba(255,255,255,0.56);
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .fcv2-modal__dots button.is-active {
-  background: #fff;
+  background: #ffffff;
 }
 
 .fcv2-modal__info {
@@ -849,11 +913,11 @@
 
 .fcv2-modal__title {
   display: block;
-  color: #0a0a0a;
+  color: #111111;
   text-decoration: none;
-  font-family: var(--font-body-family);
-  font-size: 22px;
-  font-weight: 900;
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 600;
   line-height: 1.1;
 }
 
@@ -865,15 +929,17 @@
 }
 
 .fcv2-modal__price {
-  font-family: var(--font-body-family);
-  font-size: 22px;
-  font-weight: 900;
+  color: #111111;
+  font-family: var(--font-body);
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .fcv2-modal__compare {
-  color: #99a1af;
-  font-family: var(--font-body-family);
-  font-size: 14px;
+  color: rgba(17, 17, 17, 0.46);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
   text-decoration: line-through;
 }
 
@@ -890,16 +956,24 @@
   gap: 8px;
   min-height: 44px;
   padding: 6px 10px 6px 6px;
-  border: 1px solid #d9d9d9;
+  border: 1px solid rgba(17, 17, 17, 0.08);
   border-radius: 14px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.88);
+  color: #111111;
   cursor: pointer;
-  font-family: var(--font-body-family);
+  font-family: var(--font-body);
   font-size: 13px;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.fcv2-modal__variant:hover,
+.fcv2-modal__variant:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(17, 17, 17, 0.18);
 }
 
 .fcv2-modal__variant.is-active {
-  border-color: #0a0a0a;
+  border-color: rgba(17, 17, 17, 0.88);
 }
 
 .fcv2-modal__variant img,
@@ -908,7 +982,7 @@
   height: 32px;
   border-radius: 10px;
   object-fit: cover;
-  background: #f3f4f6;
+  background: #f3f0ea;
 }
 
 .fcv2-modal__qty-row {
@@ -920,7 +994,7 @@
 }
 
 .fcv2-modal__qty-label {
-  font-family: var(--font-body-family);
+  font-family: var(--font-body);
   font-size: 14px;
   font-weight: 700;
 }
@@ -939,12 +1013,13 @@
   width: 38px;
   height: 38px;
   border-radius: 999px;
-  font-family: var(--font-body-family);
+  font-family: var(--font-body);
 }
 
 .fcv2-modal__qty-ctrl button {
-  border: 1.5px solid #0a0a0a;
-  background: #fff;
+  border: 1px solid rgba(17, 17, 17, 0.14);
+  background: #ffffff;
+  color: #111111;
   cursor: pointer;
 }
 
@@ -953,63 +1028,103 @@
   flex-direction: column;
   gap: 10px;
   padding: 16px 20px 28px;
-  border-top: 1px solid #efefef;
+  border-top: 1px solid rgba(17, 17, 17, 0.08);
 }
 
 .fcv2-modal__button {
   min-height: 52px;
   border-radius: 999px;
-  font-family: var(--font-body-family);
+  font-family: var(--font-body);
   font-size: 12px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 0.12em;
+  line-height: 1;
   text-transform: uppercase;
   cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.fcv2-modal__button:hover,
+.fcv2-modal__button:focus-visible {
+  transform: translateY(-1px);
 }
 
 .fcv2-modal__button.is-secondary {
-  border: 1.5px solid #0a0a0a;
-  background: #fff;
-  color: #0a0a0a;
+  border: 1px solid rgba(17, 17, 17, 0.14);
+  background: rgba(255, 255, 255, 0.88);
+  color: #111111;
 }
 
 .fcv2-modal__button.is-primary {
-  border: 1.5px solid #0a0a0a;
-  background: #0a0a0a;
-  color: #fff;
+  border: 1px solid rgba(17, 17, 17, 0.88);
+  background: #111111;
+  color: #ffffff;
 }
 
 .hidden { display: none !important; }
 
 @media (min-width: 768px) {
+  .fcv2__surface {
+    padding: 34px 0 48px;
+  }
+
+  .fcv2__shell {
+    padding: 0 40px;
+  }
+
   .fcv2__header {
-    padding: 52px 40px 34px;
+    padding: 22px 0 30px;
+  }
+
+  .fcv2__header-grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(240px, 0.8fr);
+    align-items: end;
+  }
+
+  .fcv2__header-copy {
+    justify-self: end;
   }
 
   .fcv2__track {
-    padding: 0 40px 8px;
+    padding: 8px 0 12px;
   }
 
   .fcv2__card {
-    width: calc(50% - 8px);
-    max-width: 320px;
+    width: min(360px, 42vw);
   }
 
   .fcv2__more-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    padding: 0 40px;
+    gap: 18px;
+  }
+
+  .fcv2__more-wrap {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 30px 0 14px;
   }
 }
 
 @media (min-width: 1024px) {
   .fcv2__card {
-    width: calc(33.333% - 11px);
-    max-width: 320px;
+    width: min(380px, 31vw);
   }
 
   .fcv2__more-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fcv2 *,
+  .fcv2-modal * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 </style>
@@ -1026,7 +1141,6 @@
   let quantity = 1;
 
   const modal = document.getElementById('{{ fc_section_id }}-qv-modal');
-  const panel = document.getElementById('{{ fc_section_id }}-qv-panel');
   const backdrop = document.getElementById('{{ fc_section_id }}-qv-backdrop');
   const closeBtn = document.getElementById('{{ fc_section_id }}-qv-close-btn');
   const galleryTrack = document.getElementById('{{ fc_section_id }}-qv-gallery-track');
@@ -1066,7 +1180,7 @@
     dotsWrap.innerHTML = '';
 
     if (!galleryImages.length) {
-      galleryTrack.innerHTML = '<div style="width:100%;height:100%;background:#f3f4f6;"></div>';
+      galleryTrack.innerHTML = '<div class="fcv2-modal__empty-state"></div>';
       prevBtn.style.display = 'none';
       nextBtn.style.display = 'none';
       return;
@@ -1328,9 +1442,11 @@
       root.querySelectorAll('[data-fcv2-wishlist]').forEach(function (button) {
         if (button.dataset.fcv2WishlistBound === 'true') return;
         button.dataset.fcv2WishlistBound = 'true';
+        button.setAttribute('aria-pressed', 'false');
         button.addEventListener('click', function () {
-          button.classList.toggle('is-liked');
-          if (button.classList.contains('is-liked')) {
+          const liked = button.classList.toggle('is-liked');
+          button.setAttribute('aria-pressed', liked ? 'true' : 'false');
+          if (liked) {
             setTimeout(function () {
               button.classList.remove('is-liked');
               button.classList.add('is-persist');
@@ -1420,7 +1536,7 @@
       "type": "text",
       "id": "eyebrow",
       "label": "Top bar text",
-      "default": "Redesign Proposal — Celisira Trending Products"
+      "default": "Curated selection"
     },
     {
       "type": "header",
@@ -1430,13 +1546,13 @@
       "type": "text",
       "id": "heading_line_1",
       "label": "Heading line 1",
-      "default": "TRENDING"
+      "default": "Featured"
     },
     {
       "type": "text",
       "id": "heading_line_2",
       "label": "Heading line 2",
-      "default": "PRODUCTS"
+      "default": "pieces"
     },
     {
       "type": "header",
@@ -1472,7 +1588,7 @@
       "type": "text",
       "id": "more_label",
       "label": "More Button Label",
-      "default": "More"
+      "default": "Load more"
     },
     {
       "type": "range",
@@ -1500,7 +1616,7 @@
       "type": "text",
       "id": "helper_text",
       "label": "Helper text",
-      "default": "Hover cards to reveal Quick View • Tap thumbnails to switch color"
+      "default": "Scroll the rail for the full edit, or open Quick view for more detail."
     }
   ],
   "presets": [

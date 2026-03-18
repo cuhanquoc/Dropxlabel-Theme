@@ -1,101 +1,92 @@
-{% comment %} BRAND STORY BENTO — Swipeable Card Carousel {% endcomment %}
+{% liquid
+  assign header_align_class = 'items-start text-left'
+  if section.settings.title_align == 'center'
+    assign header_align_class = 'items-center text-center'
+  elsif section.settings.title_align == 'right'
+    assign header_align_class = 'items-end text-right'
+  endif
+%}
 
-<section class="bsb-section" id="brand-story-bento" style="background-color: {{ section.settings.bg_color | default: '#f2f0ec' }}; {% if section.settings.bg_image != blank %}background-image: url('{{ section.settings.bg_image | image_url: width: 1920 }}'); background-size: cover; background-position: center;{% else %}background-image: url('{{ 'paper-texture-bg.png' | asset_url }}'); background-size: cover; background-position: center;{% endif %}">
+<section
+  id="brand-story-bento"
+  class="relative overflow-hidden bg-[#f6f1ea] text-[#0c0c0b]"
+  style="background-color: {{ section.settings.bg_color | default: '#f6f1ea' }}; {% if section.settings.bg_image != blank %}background-image: url('{{ section.settings.bg_image | image_url: width: 1920 }}'); background-size: cover; background-position: center;{% else %}background-image: url('{{ 'paper-texture-bg.png' | asset_url }}'); background-size: cover; background-position: center;{% endif %}"
+>
+  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(246,241,234,0.92)_0%,rgba(246,241,234,0.78)_36%,rgba(246,241,234,0.95)_100%)]"></div>
 
-  {%- if section.settings.title != blank -%}
-    <div style="padding: 2.5rem 1.5rem 0; text-align: {{ section.settings.title_align | default: 'left' }};">
-      <h2 style="font-family: var(--font-heading); font-size: clamp(1.8rem,6vw,3rem); font-weight: 800; color: {{ section.settings.title_color | default: '#0a0a0a' }}; letter-spacing: -0.02em; line-height: 1.1; margin: 0;">
-        {{ section.settings.title }}
-      </h2>
-      {%- if section.settings.subtitle != blank -%}
-        <p style="font-family: var(--font-body); font-size: 0.95rem; color: {{ section.settings.title_color | default: '#0a0a0a' }}; opacity: 0.6; margin-top: 0.5rem;">{{ section.settings.subtitle }}</p>
-      {%- endif -%}
+  <div class="relative mx-auto max-w-7xl px-5 py-16 md:px-8 md:py-24">
+    <div class="mb-10 flex max-w-3xl flex-col gap-4 {{ header_align_class }}">
+      <p class="inline-flex rounded-full border border-black/10 bg-white/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#6f6558] backdrop-blur-sm">
+        Brand story
+      </p>
+
+      <div>
+        <h2 class="font-heading text-[clamp(2.6rem,6vw,4.8rem)] leading-[0.95] tracking-[-0.05em] text-[#0c0c0b]" style="color: {{ section.settings.title_color | default: '#0c0c0b' }};">
+          {{ section.settings.title }}
+        </h2>
+        {%- if section.settings.subtitle != blank -%}
+          <p class="mt-4 max-w-2xl font-body text-base leading-7 text-[#5f5a52]" style="color: {{ section.settings.title_color | default: '#0c0c0b' }}; opacity: 0.68;">
+            {{ section.settings.subtitle }}
+          </p>
+        {%- endif -%}
+      </div>
     </div>
-  {%- endif -%}
 
-  <div class="bsb-carousel-wrap" style="overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 3rem 1.5rem 2rem; scroll-snap-type: x mandatory;" id="bsb-carousel">
-    <div class="flex gap-4 md:gap-8" style="width: max-content;">
-
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
       {% for block in section.blocks %}
         {% if block.type == 'story_card' %}
-          <a href="{{ block.settings.link_url | default: '#' }}"
-             class="bsb-card block flex-shrink-0 group"
-             style="width: 78vw; max-width: 420px; scroll-snap-align: center;"
-             {{ block.shopify_attributes }}>
-
-            <!-- Image with floating tag -->
-            <div style="position: relative; width: 100%; aspect-ratio: 4/3; border-radius: 16px; overflow: hidden; border: 4px solid rgba(255,255,255,0.85); box-shadow: 0 4px 24px rgba(0,0,0,0.06); background: #e8e5e0;">
+          <a
+            href="{{ block.settings.link_url | default: '#' }}"
+            class="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-black/5 bg-white/80 shadow-[0_18px_44px_-30px_rgba(12,12,11,0.45)] transition-transform duration-500 ease-out hover:-translate-y-1"
+            {{ block.shopify_attributes }}
+          >
+            <div class="relative aspect-[4/5] overflow-hidden bg-[#ece7de]">
               {% if block.settings.image != blank %}
-                <img src="{{ block.settings.image | image_url: width: 800 }}"
-                     alt="{{ block.settings.title | escape }}"
-                     class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                     loading="lazy" width="800" height="600">
+                <img
+                  src="{{ block.settings.image | image_url: width: 900 }}"
+                  alt="{{ block.settings.title | escape }}"
+                  class="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  loading="lazy"
+                  width="900"
+                  height="1125"
+                >
               {% else %}
-                {{ 'collection-' | append: forloop.index | placeholder_svg_tag: 'w-full h-full object-cover' }}
+                {{ 'collection-' | append: forloop.index | placeholder_svg_tag: 'h-full w-full object-cover' }}
               {% endif %}
 
-              <!-- Floating tag -->
               {% if block.settings.tag_text != blank %}
-                <div style="position: absolute; bottom: 0.75rem; left: 0.75rem; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 0.5rem 1rem; border-radius: 8px; font-family: var(--font-body); font-size: 0.78rem; font-weight: 600; color: #0a0a0a; line-height: 1.4; max-width: 220px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                <span class="absolute left-4 top-4 inline-flex max-w-[80%] rounded-full bg-white/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#6f6558] shadow-[0_10px_24px_-18px_rgba(12,12,11,0.45)] backdrop-blur-sm">
                   {{ block.settings.tag_text }}
-                </div>
+                </span>
               {% endif %}
             </div>
 
-            <!-- Title + Button -->
-            <div style="padding: 1.25rem 0.25rem 0.5rem;">
-              {% if block.settings.title != blank %}
-                <p style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: #0a0a0a; letter-spacing: -0.02em; margin-bottom: 0.75rem; line-height: 1.25;">
-                  {{ block.settings.title }}
-                </p>
-              {% endif %}
+            <div class="flex flex-1 flex-col gap-4 p-5 md:p-6">
+              <div>
+                {% if block.settings.title != blank %}
+                  <p class="font-heading text-[1.55rem] leading-[1.05] tracking-[-0.04em] text-[#0c0c0b]">
+                    {{ block.settings.title }}
+                  </p>
+                {% endif %}
+              </div>
+
               {% if block.settings.button_text != blank %}
-                <span class="bsb-card-btn" style="display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.5rem; min-height: 44px; border: 2px solid #0a0a0a; border-radius: 9999px; font-family: var(--font-body); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #0a0a0a; transition: background-color 0.3s ease, color 0.3s ease;">
-                  {{ block.settings.button_text }}
+                <span class="mt-auto inline-flex items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-[#6f6558] transition-colors duration-300 group-hover:text-[#0c0c0b]">
+                  <span>{{ block.settings.button_text }}</span>
+                  <span class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-black/10 bg-white/70 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:bg-[#0c0c0b] group-hover:text-[#f8f6f1]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M7 17 17 7M7 7h10v10"/>
+                    </svg>
+                  </span>
                 </span>
               {% endif %}
             </div>
           </a>
         {% endif %}
       {% endfor %}
-
     </div>
   </div>
-
-  <!-- Scroll Progress Bar -->
-  <div id="bsb-scroll-bar" style="margin: 0 1.5rem 2rem; height: 3px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
-    <div id="bsb-scroll-thumb" style="height: 100%; background: #0a0a0a; border-radius: 4px; width: 33%; transition: transform 120ms ease;"></div>
-  </div>
-
 </section>
-
-<!-- Hide scrollbar -->
-<style>
-  #bsb-carousel::-webkit-scrollbar { display: none; }
-  #bsb-carousel { -ms-overflow-style: none; scrollbar-width: none; }
-  .bsb-card-btn:hover { background-color: #0a0a0a; color: #fff; }
-</style>
-
-<script>
-  (function() {
-    var carousel = document.getElementById('bsb-carousel');
-    var thumb = document.getElementById('bsb-scroll-thumb');
-    if (!carousel || !thumb) return;
-
-    function update() {
-      var max = carousel.scrollWidth - carousel.clientWidth;
-      if (max <= 0) return;
-      var pct = carousel.scrollLeft / max;
-      var track = thumb.parentElement.clientWidth;
-      var tw = thumb.clientWidth;
-      thumb.style.transform = 'translateX(' + (pct * (track - tw)) + 'px)';
-    }
-
-    carousel.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  })();
-</script>
 
 {% schema %}
 {
@@ -110,12 +101,13 @@
       "type": "text",
       "id": "title",
       "label": "Section Title",
-      "default": "Our Story"
+      "default": "Curated moods"
     },
     {
       "type": "text",
       "id": "subtitle",
-      "label": "Subtitle (optional)"
+      "label": "Subtitle (optional)",
+      "default": "A quieter way to shop by feeling, silhouette, and occasion."
     },
     {
       "type": "select",
@@ -148,7 +140,7 @@
       "type": "color",
       "id": "bg_color",
       "label": "Background Color (fallback)",
-      "default": "#f2f0ec"
+      "default": "#f6f1ea"
     }
   ],
   "max_blocks": 10,
@@ -167,19 +159,19 @@
           "type": "text",
           "id": "tag_text",
           "label": "Floating Tag Text",
-          "default": "Grace, Glamour, Style, Confidence"
+          "default": "Quiet edit"
         },
         {
           "type": "text",
           "id": "title",
           "label": "Title",
-          "default": "Elegant Evening Wear"
+          "default": "Everyday tailoring"
         },
         {
           "type": "text",
           "id": "button_text",
           "label": "Button Text",
-          "default": "SHOP NOW"
+          "default": "View edit"
         },
         {
           "type": "url",
@@ -193,9 +185,9 @@
     {
       "name": "Brand Story Bento",
       "blocks": [
-        { "type": "story_card", "settings": { "tag_text": "Grace, Glamour, Style, Confidence", "title": "Elegant Evening Wear", "button_text": "SHOP NOW" } },
-        { "type": "story_card", "settings": { "tag_text": "Bold, Modern, Effortless", "title": "Urban Street Style", "button_text": "SHOP NOW" } },
-        { "type": "story_card", "settings": { "tag_text": "Timeless, Refined, Classic", "title": "Heritage Collection", "button_text": "SHOP NOW" } }
+        { "type": "story_card", "settings": { "tag_text": "Soft countryside", "title": "Weekend ease", "button_text": "View edit" } },
+        { "type": "story_card", "settings": { "tag_text": "Tailored calm", "title": "Elegant layers", "button_text": "View edit" } },
+        { "type": "story_card", "settings": { "tag_text": "Resort light", "title": "Beach evenings", "button_text": "View edit" } }
       ]
     }
   ]

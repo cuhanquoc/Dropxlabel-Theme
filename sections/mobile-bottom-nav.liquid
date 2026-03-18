@@ -46,19 +46,24 @@
     .mob-nav {
       display: block;
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
+      bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+      left: 0.75rem;
+      right: 0.75rem;
+      width: auto;
       z-index: 10000;
-      background: {{ bg_color }};
-      border-top: 1px solid rgba(0, 0, 0, 0.07);
-      box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.06);
+      margin: 0 auto;
+      max-width: 680px;
+      background: color-mix(in srgb, {{ bg_color }} 90%, #f6f1ea 10%);
+      border: 1px solid rgba(23, 20, 18, 0.1);
+      border-radius: 24px;
+      box-shadow: 0 18px 45px rgba(23, 20, 18, 0.16);
+      backdrop-filter: blur(18px) saturate(155%);
+      -webkit-backdrop-filter: blur(18px) saturate(155%);
       /* iOS safe area (home indicator) */
       padding-bottom: env(safe-area-inset-bottom, 0px);
       /* Slide-in animation */
-      transform: translateY(100%);
-      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translateY(120%);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
       will-change: transform;
     }
     .mob-nav.visible {
@@ -70,10 +75,11 @@
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       align-items: stretch;
-      padding: 6px 0 4px;
+      padding: 6px 8px 8px;
+      gap: 4px;
       /* Prevent text/icon from creeping to edges */
-      padding-left: env(safe-area-inset-left, 0px);
-      padding-right: env(safe-area-inset-right, 0px);
+      padding-left: calc(env(safe-area-inset-left, 0px) + 8px);
+      padding-right: calc(env(safe-area-inset-right, 0px) + 8px);
     }
 
     /* ── Each tab item ── */
@@ -82,18 +88,20 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 3px;
+      gap: 2px;
       text-decoration: none;
       color: {{ icon_color }};
       /* WCAG 2.1 — min 44×44px touch target */
       min-height: 44px;
-      padding: 4px 0;
+      padding: 0.45rem 0 0.4rem;
       position: relative;
       cursor: pointer;
       border: none;
       background: transparent;
+      border-radius: 16px;
       /* Smooth state transitions */
       transition:
+        background-color 0.2s ease,
         color 0.2s ease,
         transform 0.15s ease;
       -webkit-tap-highlight-color: transparent;
@@ -104,7 +112,12 @@
 
     /* Tap feedback */
     .mob-nav__item:active {
-      transform: scale(0.88);
+      transform: scale(0.96);
+    }
+
+    .mob-nav__item:hover,
+    .mob-nav__item:focus-visible {
+      background: rgba(23, 20, 18, 0.04);
     }
 
     /* Active state */
@@ -115,9 +128,9 @@
 
     /* Focus-visible (keyboard / accessibility) */
     .mob-nav__item:focus-visible {
-      outline: 2px solid {{ active_color }};
-      outline-offset: -2px;
-      border-radius: 8px;
+      outline: 2px solid rgba(23, 20, 18, 0.34);
+      outline-offset: 1px;
+      border-radius: 16px;
     }
     .mob-nav__item:focus:not(:focus-visible) {
       outline: none;
@@ -127,7 +140,7 @@
     .mob-nav__icon {
       width: {{ icon_px }}px;
       height: {{ icon_px }}px;
-      stroke-width: 1.6;
+      stroke-width: 1.75;
       flex-shrink: 0;
       display: block;
       /* Prevent sub-pixel jitter */
@@ -138,7 +151,7 @@
     .mob-nav__label {
       font-size: {{ label_px }}px;
       font-weight: 500;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.06em;
       line-height: 1;
       white-space: nowrap;
       font-family: var(--font-body-family, system-ui, sans-serif);
@@ -150,25 +163,27 @@
       top: 2px;
       /* Centre over icon */
       left: 50%;
-      transform: translateX(4px);
-      min-width: 16px;
-      height: 16px;
-      padding: 0 4px;
+      transform: translateX(6px);
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
       border-radius: 999px;
-      background: {{ badge_bg }};
-      color: {{ badge_color }};
+      background: #171412;
+      color: #ffffff;
       font-size: 9px;
       font-weight: 700;
-      line-height: 16px;
+      line-height: 18px;
       text-align: center;
       pointer-events: none;
       font-family: system-ui, sans-serif;
       /* Smooth count updates */
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 18px rgba(23, 20, 18, 0.18);
       transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     /* Pop animation when count changes */
     .mob-nav__badge.pop {
-      transform: translateX(4px) scale(1.4);
+      transform: translateX(6px) scale(1.35);
     }
 
   } /* end @media */

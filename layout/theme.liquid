@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="{{ page_description | default: shop.description | escape }}" />
+  <meta name="theme-color" content="#F8F6F1" />
+  <meta name="color-scheme" content="light" />
   <title>{{ page_title | default: shop.name }}</title>
 
   {%- if settings.favicon != blank -%}
@@ -14,11 +16,11 @@
   <!-- Shopify Required -->
   {{ content_for_header }}
 
-  <!-- Google Fonts: Playfair Display (Serif) + Inter (Sans-serif) -->
+  <!-- Google Fonts: Cormorant Garamond (Serif) + DM Sans (Sans-serif) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
     rel="stylesheet"
   />
 
@@ -34,125 +36,148 @@
 
   <!-- Global CSS: Quiet Luxury Design System -->
   <style>
-    /* ─── CSS Custom Properties ─── */
     :root {
-      /* Colour Palette */
-      --color-bg:        #F9F8F6; /* Trắng ngà      */
-      --color-text:      #222222; /* Xám than        */
-      --color-accent:    #C5A880; /* Vàng đồng       */
-      --color-muted:     #8A8A8A; /* Xám nhạt phụ    */
-      --color-surface:   #FFFFFF; /* Bề mặt card     */
-      --color-border:    #E8E5DF; /* Viền tinh tế    */
+      --color-bg: #f8f6f1;
+      --color-background: var(--color-bg);
+      --color-text: #0c0c0b;
+      --color-base-text: var(--color-text);
+      --color-foreground: var(--color-text);
+      --color-accent: #c4a882;
+      --color-muted: #8c8880;
+      --color-surface: #ffffff;
+      --color-border: #e5e2d9;
+      --color-border-subtle: rgba(12, 12, 11, 0.08);
+      --color-elevated: #fcfbf8;
 
-      /* Typography */
-      --font-heading:    'Playfair Display', serif;
-      --font-body:       'Inter', sans-serif;
+      --font-heading: "Cormorant Garamond", serif;
+      --font-heading-family: var(--font-heading);
+      --font-body: "DM Sans", sans-serif;
+      --font-body-family: var(--font-body);
 
-      /* Spacing Scale */
-      --space-xs:  4px;
-      --space-sm:  8px;
-      --space-md:  16px;
-      --space-lg:  32px;
-      --space-xl:  64px;
-      --space-2xl: 128px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 16px;
+      --space-lg: 32px;
+      --space-xl: 64px;
+      --space-2xl: 112px;
+      --space-3xl: 160px;
 
-      /* Transitions */
-      --transition-base:   250ms ease;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+
+      --shadow-soft: 0 18px 44px rgba(12, 12, 11, 0.06);
+      --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+
+      --transition-base: 240ms cubic-bezier(0.16, 1, 0.3, 1);
       --transition-smooth: 600ms cubic-bezier(0.16, 1, 0.3, 1);
+      --z-skip-link: 80;
     }
 
-    /* ─── Base Reset & Body ─── */
     *,
     *::before,
     *::after {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     html {
+      color-scheme: light;
       scroll-behavior: smooth;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
     body {
-      background-color: var(--color-bg);
-      color:            var(--color-text);
-      font-family:      var(--font-body);
-      font-size:        16px;
-      line-height:      1.7;
-      min-height:       100dvh;
+      margin: 0;
+      min-height: 100dvh;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.75;
+      text-rendering: optimizeLegibility;
     }
 
-    /* ─── Heading Typography ─── */
     h1, h2, h3, h4, h5, h6 {
       font-family: var(--font-heading);
-      line-height: 1.2;
+      line-height: 1.08;
       font-weight: 600;
-      color:       var(--color-text);
+      letter-spacing: -0.02em;
+      text-wrap: balance;
+      color: var(--color-text);
     }
 
-    /* ─── Link Base ─── */
+    p, li {
+      text-wrap: pretty;
+    }
+
     a {
-      color:           var(--color-accent);
-      text-decoration: none;
-      transition:      opacity var(--transition-base);
+      color: inherit;
+      text-decoration-thickness: 0.08em;
+      text-underline-offset: 0.16em;
+      transition: color var(--transition-base), opacity var(--transition-base), transform var(--transition-base);
     }
+
     a:hover {
-      opacity: 0.75;
+      color: var(--color-accent);
     }
 
-    /* ─── Accent Utilities ─── */
-    .text-accent  { color:            var(--color-accent); }
-    .bg-accent    { background-color: var(--color-accent); }
-    .border-accent{ border-color:     var(--color-accent); }
-
-    /* ─── Global Layout Utilities ─── */
-
-    /* Section Padding — consistent vertical rhythm */
-    .section-padding {
-      padding-top: var(--space-xl);
-      padding-bottom: var(--space-xl);
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+      color: inherit;
     }
 
-    /* Container — constrained width + responsive horizontal padding */
-    .container {
-      width: 100%;
-      max-width: 1280px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
+    button {
+      cursor: pointer;
     }
 
-    /* Responsive Grid — auto-fit columns */
-    .responsive-grid {
-      display: grid;
-      gap: 1.5rem;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    img,
+    video,
+    svg,
+    canvas {
+      display: block;
+      max-width: 100%;
     }
 
-    /* ─── Focus Visible — global keyboard nav ring ─── */
-    /* Remove default outline for mouse/touch users */
-    :focus:not(:focus-visible) { outline: none; }
+    ::selection {
+      background: rgba(196, 168, 130, 0.24);
+      color: var(--color-text);
+    }
 
-    /* Visible ring only for keyboard navigation */
+    :focus:not(:focus-visible) {
+      outline: none;
+    }
+
     :focus-visible {
       outline: 2px solid var(--color-accent);
-      outline-offset: 2px;
-      border-radius: 2px;
+      outline-offset: 4px;
+      border-radius: 4px;
     }
 
-    /* Special: inputs that use border-bottom as focus indicator */
-    input:focus-visible,
-    textarea:focus-visible,
-    select:focus-visible {
-      outline: none;
-      box-shadow: 0 2px 0 0 var(--color-accent);
+    .font-heading {
+      font-family: var(--font-heading) !important;
     }
 
-    /* Screen-reader only */
+    .font-body {
+      font-family: var(--font-body) !important;
+    }
+
+    .text-accent {
+      color: var(--color-accent) !important;
+    }
+
+    .bg-accent {
+      background-color: var(--color-accent) !important;
+    }
+
+    .border-accent {
+      border-color: var(--color-accent) !important;
+    }
+
     .sr-only {
       position: absolute;
       width: 1px;
@@ -165,26 +190,84 @@
       border: 0;
     }
 
-    /* ─── Tablet + Desktop overrides (≥ 768px) ─── */
+    .skip-link {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: var(--z-skip-link);
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0.875rem 1rem;
+      border: 1px solid var(--color-border);
+      border-radius: 9999px;
+      background: var(--color-surface);
+      color: var(--color-text);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      box-shadow: var(--shadow-soft);
+      transform: translateY(-180%);
+      transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+    }
+
+    .skip-link:focus,
+    .skip-link:focus-visible {
+      transform: translateY(0);
+    }
+
+    .section-padding {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-2xl);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .responsive-grid {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    }
+
+    .surface-panel {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .quiet-divider {
+      border-color: var(--color-border-subtle);
+    }
+
     @media (min-width: 768px) {
       .section-padding {
-        padding-top: calc(var(--space-xl) * 1.5);
-        padding-bottom: calc(var(--space-xl) * 1.5);
+        padding-top: calc(var(--space-2xl) * 1.1);
+        padding-bottom: calc(var(--space-2xl) * 1.1);
       }
       .container {
-        padding-left: 2.5rem;
-        padding-right: 2.5rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
       }
       .responsive-grid {
         gap: 2rem;
       }
     }
 
-    /* ─── Large Desktop overrides (≥ 1024px) ─── */
     @media (min-width: 1024px) {
       .section-padding {
-        padding-top: calc(var(--space-xl) * 2);
-        padding-bottom: calc(var(--space-xl) * 2);
+        padding-top: var(--space-3xl);
+        padding-bottom: var(--space-3xl);
       }
       .container {
         padding-left: 4rem;
@@ -201,7 +284,7 @@
 
 <body>
 <!-- Skip to main content link — visible on keyboard focus only -->
-<a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-[--color-accent] focus:text-white focus:rounded focus:font-body focus:text-sm focus:no-underline">
+<a href="#main-content" class="skip-link">
   Skip to content
 </a>
 

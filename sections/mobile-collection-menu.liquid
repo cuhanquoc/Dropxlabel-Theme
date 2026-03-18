@@ -5,20 +5,20 @@
 
 <style>
   #mobile-collection-menu {
-    --mcm-bg: var(--color-background, var(--color-base-background-1, #fffdf9));
-    --mcm-surface: color-mix(in srgb, var(--mcm-bg) 92%, var(--color-foreground, var(--color-base-text, #111)) 8%);
-    --mcm-text: var(--color-foreground, var(--color-base-text, #111111));
-    --mcm-muted: color-mix(in srgb, var(--mcm-text) 38%, transparent);
+    --mcm-bg: var(--color-background, #f6f1ea);
+    --mcm-surface: color-mix(in srgb, var(--mcm-bg) 88%, #ffffff 12%);
+    --mcm-text: var(--color-foreground, #171412);
+    --mcm-muted: color-mix(in srgb, var(--mcm-text) 44%, transparent);
     --mcm-line: color-mix(in srgb, var(--mcm-text) 12%, transparent);
-    --mcm-accent: color-mix(in srgb, var(--mcm-text) 86%, #7c6046 14%);
-    --mcm-sale: color-mix(in srgb, #b0134f 86%, var(--mcm-text) 14%);
+    --mcm-accent: color-mix(in srgb, var(--mcm-text) 76%, #6b4f35 24%);
+    --mcm-sale: color-mix(in srgb, #8c1f45 82%, var(--mcm-text) 18%);
     --mcm-tab-size: {{ section.settings.tab_font_size }}px;
     --mcm-group-size: {{ section.settings.group_font_size }}px;
     --mcm-link-size: {{ section.settings.link_font_size }}px;
     position: fixed;
     inset: 0;
     z-index: 9998;
-    background: var(--mcm-bg);
+    background: linear-gradient(180deg, rgba(250, 247, 242, 0.985) 0%, rgba(245, 239, 231, 0.985) 100%);
     color: var(--mcm-text);
     opacity: 0;
     visibility: hidden;
@@ -38,7 +38,8 @@
     flex-direction: column;
     height: 100%;
     background:
-      linear-gradient(180deg, color-mix(in srgb, var(--mcm-bg) 96%, var(--mcm-text) 4%) 0%, var(--mcm-bg) 14rem);
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.65), transparent 42%),
+      linear-gradient(180deg, color-mix(in srgb, var(--mcm-bg) 98%, #ffffff 2%) 0%, var(--mcm-bg) 14rem);
   }
 
   #mobile-collection-menu .mcm-topbar {
@@ -46,24 +47,24 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.9rem 1.1rem 0.35rem;
+    padding: 1rem 1.1rem 0.45rem;
     flex-shrink: 0;
   }
 
   #mobile-collection-menu .mcm-kicker {
     margin: 0;
     font-size: 0.7rem;
-    letter-spacing: 0.24em;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
     color: var(--mcm-muted);
   }
 
   #mobile-collection-menu .mcm-close {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2.75rem;
+    height: 2.75rem;
     border: 1px solid var(--mcm-line);
     border-radius: 999px;
-    background: color-mix(in srgb, var(--mcm-bg) 90%, var(--mcm-text) 10%);
+    background: rgba(255, 255, 255, 0.62);
     color: var(--mcm-text);
     display: inline-flex;
     align-items: center;
@@ -71,6 +72,7 @@
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 8px 18px rgba(23, 20, 18, 0.06);
   }
 
   #mobile-collection-menu .mcm-close:active {
@@ -81,9 +83,11 @@
     position: sticky;
     top: 0;
     z-index: 2;
-    padding: 0 1.1rem;
-    background: linear-gradient(180deg, var(--mcm-bg) 0%, color-mix(in srgb, var(--mcm-bg) 90%, transparent) 100%);
+    padding: 0.2rem 1.1rem 0.6rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.74) 0%, rgba(255, 255, 255, 0.22) 100%);
     border-bottom: 1px solid var(--mcm-line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     overflow-x: auto;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
@@ -95,33 +99,35 @@
 
   #mobile-collection-menu .mcm-tabs {
     display: flex;
-    gap: 1.35rem;
+    gap: 0.55rem;
     min-width: max-content;
+    padding-bottom: 0.25rem;
   }
 
   #mobile-collection-menu .mcm-tab {
     position: relative;
-    padding: 0.95rem 0 0.9rem;
+    padding: 0.85rem 1rem;
     border: 0;
+    border-radius: 999px;
     background: transparent;
     color: var(--mcm-muted);
     font: inherit;
     font-size: var(--mcm-tab-size);
     font-weight: 600;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     white-space: nowrap;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: color 0.18s ease;
+    transition: color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
   }
 
   #mobile-collection-menu .mcm-tab::after {
     content: "";
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
+    left: 18%;
+    right: 18%;
+    bottom: -0.35rem;
     height: 2px;
     transform: scaleX(0);
     transform-origin: center;
@@ -130,7 +136,10 @@
   }
 
   #mobile-collection-menu .mcm-tab--active {
-    color: var(--mcm-text);
+    color: var(--mcm-bg);
+    background: var(--mcm-text);
+    box-shadow: 0 10px 24px rgba(23, 20, 18, 0.12);
+    transform: translateY(-1px);
   }
 
   #mobile-collection-menu .mcm-tab--active::after {
@@ -149,7 +158,7 @@
 
   #mobile-collection-menu .mcm-panel--active {
     display: block;
-    animation: mcmPanelIn 0.24s ease;
+    animation: mcmPanelIn 0.26s ease;
   }
 
   #mobile-collection-menu .mcm-banner-link,
@@ -159,45 +168,62 @@
     text-decoration: none;
     overflow: hidden;
     border-bottom: 1px solid var(--mcm-line);
+    margin: 0.2rem 1rem 0;
+    border-radius: 24px;
+    background: var(--mcm-surface);
+    box-shadow: 0 10px 26px rgba(23, 20, 18, 0.05);
   }
 
   #mobile-collection-menu .mcm-banner-image {
     width: 100%;
     height: auto;
-    max-height: 16.25rem;
+    max-height: 15.5rem;
     object-fit: cover;
     display: block;
     background: var(--mcm-surface);
   }
 
   #mobile-collection-menu .mcm-banner-placeholder {
-    height: 11rem;
+    height: 12rem;
     background:
-      linear-gradient(135deg, color-mix(in srgb, var(--mcm-bg) 80%, var(--mcm-text) 20%) 0%, color-mix(in srgb, var(--mcm-bg) 96%, #c3a991 4%) 100%);
+      linear-gradient(135deg, color-mix(in srgb, var(--mcm-bg) 82%, var(--mcm-text) 18%) 0%, color-mix(in srgb, var(--mcm-bg) 96%, #c3a991 4%) 100%);
   }
 
   #mobile-collection-menu .mcm-groups {
-    padding: 0 1.1rem 2rem;
+    padding: 0.9rem 1rem 2rem;
   }
 
   #mobile-collection-menu .mcm-group {
-    display: flex;
+    display: grid;
+    grid-template-columns: 2.8rem minmax(0, 1fr);
     align-items: flex-start;
-    gap: 0.95rem;
-    padding: 1.2rem 0;
-    border-bottom: 1px solid var(--mcm-line);
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: 0.85rem;
+    border: 1px solid var(--mcm-line);
+    border-radius: 24px;
+    background: color-mix(in srgb, var(--mcm-bg) 86%, #ffffff 14%);
+    box-shadow: 0 12px 28px rgba(23, 20, 18, 0.04);
   }
 
   #mobile-collection-menu .mcm-group:last-child {
-    border-bottom: 0;
+    margin-bottom: 0;
   }
 
   #mobile-collection-menu .mcm-group-num {
-    flex: 0 0 2.6rem;
-    padding-top: 0.12rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    padding-top: 0;
     font-size: 0.64rem;
-    letter-spacing: 0.08em;
-    color: color-mix(in srgb, var(--mcm-text) 28%, transparent);
+    letter-spacing: 0.14em;
+    color: color-mix(in srgb, var(--mcm-text) 32%, transparent);
+    border: 1px solid var(--mcm-line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
   }
 
   #mobile-collection-menu .mcm-group-body {
@@ -208,7 +234,7 @@
   #mobile-collection-menu .mcm-group-title {
     margin: 0 0 0.72rem;
     font-size: var(--mcm-group-size);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--mcm-accent);
   }
@@ -220,21 +246,22 @@
   }
 
   #mobile-collection-menu .mcm-links li + li {
-    margin-top: 0.1rem;
+    margin-top: 0.18rem;
   }
 
   #mobile-collection-menu .mcm-link {
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    gap: 0.45rem;
-    padding: 0.38rem 0;
-    color: color-mix(in srgb, var(--mcm-text) 80%, transparent);
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.55rem 0;
+    color: color-mix(in srgb, var(--mcm-text) 82%, transparent);
     text-decoration: none;
     font-size: var(--mcm-link-size);
-    line-height: 1.28;
-    letter-spacing: 0.04em;
-    transition: color 0.18s ease;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    transition: color 0.18s ease, transform 0.18s ease;
   }
 
   #mobile-collection-menu .mcm-link--sale {
@@ -245,7 +272,7 @@
     display: inline-flex;
     align-items: center;
     min-height: 1.15rem;
-    padding: 0.1rem 0.36rem;
+    padding: 0.12rem 0.44rem;
     border: 1px solid currentColor;
     border-radius: 999px;
     font-size: 0.5rem;
@@ -255,10 +282,13 @@
   }
 
   #mobile-collection-menu .mcm-empty {
-    padding: 2.6rem 1.1rem;
+    padding: 2.2rem 1rem;
     color: var(--mcm-muted);
     font-size: 0.86rem;
     line-height: 1.6;
+    border: 1px dashed var(--mcm-line);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.5);
   }
 
   @keyframes mcmPanelIn {

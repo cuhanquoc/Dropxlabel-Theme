@@ -1,6 +1,12 @@
 {
     "general": {
-        "welcome": "Welcome to Dropxlabel"
+        "welcome": "Welcome to Dropxlabel",
+        "navigation": {
+            "mobile_nav": "Mobile navigation"
+        }
+    },
+    "accessibility": {
+        "cart_count": "items"
     },
     "products": {
         "product": {
@@ -15,6 +21,11 @@
         "empty": "Your bag is empty.",
         "checkout": "Checkout",
         "subtotal": "Subtotal"
+    },
+    "footer": {
+        "newsletter": {
+            "success": "Thanks for subscribing."
+        }
     },
     "search": {
         "placeholder": "Search for pieces...",

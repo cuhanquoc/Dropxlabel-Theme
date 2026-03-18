@@ -1,104 +1,158 @@
+{%- liquid
+  assign help_section_id = 'hc-' | append: section.id
+-%}
+
 <help-center-section class="block">
-  <!-- ── Section with white bg and generous padding ── -->
-  <div style="background-color: {{ section.settings.bg_color | default: '#ffffff' }}; padding-top: 3.5rem; padding-bottom: 3.5rem;" class="md:py-20">
-    <div class="max-w-[720px] mx-auto px-5 md:px-8">
+  <div
+    class="relative overflow-hidden py-16 md:py-24"
+    style="background-color: {{ section.settings.bg_color | default: '#f8f6f1' }}; color: #0c0c0b;"
+  >
+    <div class="absolute inset-x-0 top-0 h-24" style="background: linear-gradient(180deg, rgba(255,255,255,0.68), transparent);"></div>
 
-      <!-- ── Heading ── -->
-      <h2 style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 800; line-height: 1.1; color: #0a0a0a; margin-bottom: 1rem; font-family: var(--font-heading, 'Playfair Display', serif);">
-        {{ section.settings.heading | default: 'Customer Help Center' }}
-      </h2>
-      <p style="font-size: 0.92rem; line-height: 1.75; color: #666; margin-bottom: 2.5rem; max-width: 600px; font-family: var(--font-body, 'Inter', sans-serif);">
-        {{ section.settings.description | default: "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here." }}
-      </p>
+    <div class="relative mx-auto max-w-3xl px-5 md:px-8">
+      <div class="mb-10 md:mb-12">
+        <p
+          class="mb-4 inline-flex rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] backdrop-blur-sm"
+          style="border-color: rgba(12,12,11,0.08); background-color: rgba(255,255,255,0.7); color: #6f6558; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);"
+        >
+          Help center
+        </p>
+        <h2 class="font-heading text-[clamp(2.3rem,6vw,4rem)] leading-[0.95] tracking-[-0.05em]" style="color: #0c0c0b;">
+          {{ section.settings.heading | default: 'Need a hand?' }}
+        </h2>
+        <p class="mt-4 max-w-2xl font-body text-[0.98rem] leading-7 md:text-[1.02rem]" style="color: #645c50;">
+          {{ section.settings.description | default: "Find clear answers about shipping, returns, payments, and order support. If you still need help, reach out and we'll point you to the right next step." }}
+        </p>
+      </div>
 
-      <!-- ── FAQ Items ── -->
-      <div class="hc-faq-list" style="overflow: hidden;">
-
+      <div
+        class="overflow-hidden rounded-2xl border backdrop-blur-sm"
+        style="border-color: rgba(12,12,11,0.08); background-color: rgba(255,255,255,0.8); box-shadow: 0 22px 60px -42px rgba(12,12,11,0.28); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);"
+      >
         {%- if section.blocks.size > 0 -%}
-          {%- comment -%} Block-based rendering — merchant adds FAQ items via Theme Editor {%- endcomment -%}
           {%- for block in section.blocks -%}
-            {%- if block.type == "category_header" -%}
-              <div class="hc-category-header" {{ block.shopify_attributes }} style="padding: 2rem 0 0.5rem; border-bottom: 2px solid #0a0a0a; margin-bottom: 0.5rem;">
-                <h3 style="font-family: var(--font-heading, 'Playfair Display', serif); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #0a0a0a;">
-                  {{ block.settings.title }}
-                </h3>
+            {%- if block.type == 'category_header' -%}
+              <div class="border-b px-5 py-4 md:px-7 md:py-5" style="border-color: rgba(12,12,11,0.06); background-color: #f8f4ee;" {{ block.shopify_attributes }}>
+                <p class="font-body text-[10px] font-semibold uppercase tracking-[0.28em]" style="color: #6f6558;">
+                  {{ block.settings.title | default: 'General' }}
+                </p>
               </div>
-
-            {%- elsif block.type == "faq_item" -%}
-              {%- if block.settings.question != blank -%}
-                <div class="hc-faq-item" {{ block.shopify_attributes }} style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease, border-radius 0.4s ease;">
-                  <button class="hc-faq-btn" aria-expanded="false"
-                          style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
-                    <span class="hc-faq-question" style="font-family: var(--font-heading, 'Playfair Display', serif); font-weight: 700; font-size: 1.1rem; line-height: 1.3; color: #0a0a0a; transition: color 0.3s ease;">
+            {%- elsif block.type == 'faq_item' and block.settings.question != blank -%}
+              {%- assign faq_uid = help_section_id | append: '-' | append: forloop.index0 -%}
+              <div class="hc-faq-item border-b last:border-b-0" style="border-color: rgba(12,12,11,0.06);" data-open="false" {{ block.shopify_attributes }}>
+                <button
+                  type="button"
+                  id="{{ faq_uid }}-button"
+                  aria-expanded="false"
+                  aria-controls="{{ faq_uid }}-panel"
+                  class="flex w-full items-center gap-4 px-5 py-5 text-left transition-colors duration-300 md:px-7 md:py-6"
+                  style="background-color: transparent;"
+                  data-open="false"
+                  data-faq-trigger
+                >
+                  <span class="min-w-0 flex-1">
+                    <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.24em]" style="color: rgba(111,101,88,0.78);">Question</span>
+                    <span class="block font-heading text-[1.03rem] leading-[1.45] tracking-[-0.03em] md:text-[1.08rem]" style="color: #0c0c0b;">
                       {{ block.settings.question }}
                     </span>
-                    <span class="hc-faq-icon" style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
-                      <svg class="hc-icon-plus" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="transition: transform 0.3s ease;">
-                        <line x1="8" y1="3" x2="8" y2="13"/>
-                        <line x1="3" y1="8" x2="13" y2="8"/>
-                      </svg>
-                      <svg class="hc-icon-close" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="display: none; transition: transform 0.3s ease;">
-                        <line x1="4" y1="4" x2="12" y2="12"/>
-                        <line x1="12" y1="4" x2="4" y2="12"/>
-                      </svg>
-                    </span>
-                  </button>
-                  <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;">
-                    <div style="padding: 0 0.5rem 1.25rem 0.5rem;">
-                      <p style="font-family: var(--font-body, 'Inter', sans-serif); font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.75); transition: color 0.3s ease;">
-                        {{ block.settings.answer }}
-                      </p>
-                    </div>
+                  </span>
+
+                  <span
+                    class="hc-faq-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition duration-300 ease-out"
+                    style="border-color: rgba(12,12,11,0.08); background-color: #f4efe7; color: #0c0c0b;"
+                    aria-hidden="true"
+                  >
+                    <svg class="hc-icon hc-icon--plus block h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                      <line x1="8" y1="3" x2="8" y2="13"></line>
+                      <line x1="3" y1="8" x2="13" y2="8"></line>
+                    </svg>
+                    <svg class="hc-icon hc-icon--close hidden h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                      <line x1="4" y1="4" x2="12" y2="12"></line>
+                      <line x1="12" y1="4" x2="4" y2="12"></line>
+                    </svg>
+                  </span>
+                </button>
+
+                <div
+                  id="{{ faq_uid }}-panel"
+                  role="region"
+                  aria-labelledby="{{ faq_uid }}-button"
+                  aria-hidden="true"
+                  class="overflow-hidden"
+                  style="max-height: 0; opacity: 0; transition: max-height 500ms cubic-bezier(0.22,1,0.36,1), opacity 300ms ease;"
+                  data-open="false"
+                >
+                  <div class="px-5 pb-5 md:px-7 md:pb-6">
+                    <p class="max-w-2xl font-body text-[0.94rem] leading-7" style="color: #5f564b;">
+                      {{ block.settings.answer | default: 'We keep the answer brief here so the page stays easy to scan.' }}
+                    </p>
                   </div>
                 </div>
-              {%- endif -%}
+              </div>
             {%- endif -%}
           {%- endfor -%}
-
         {%- else -%}
-          {%- comment -%} Legacy fallback — settings q1..q8 / a1..a8 {%- endcomment -%}
           {%- for i in (1..8) -%}
             {%- assign q_key = 'q' | append: i -%}
             {%- assign a_key = 'a' | append: i -%}
             {%- assign question = section.settings[q_key] -%}
             {%- assign answer = section.settings[a_key] -%}
             {%- if question != blank -%}
-              <div class="hc-faq-item" style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease, border-radius 0.4s ease;">
-
-                <button class="hc-faq-btn" aria-expanded="false"
-                        style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
-                  <span class="hc-faq-question" style="font-family: var(--font-heading, 'Playfair Display', serif); font-weight: 700; font-size: 1.1rem; line-height: 1.3; color: #0a0a0a; transition: color 0.3s ease;">
-                    {{ question }}
+              {%- assign faq_uid = help_section_id | append: '-legacy-' | append: i -%}
+              <div class="hc-faq-item border-b last:border-b-0" style="border-color: rgba(12,12,11,0.06);" data-open="false">
+                <button
+                  type="button"
+                  id="{{ faq_uid }}-button"
+                  aria-expanded="false"
+                  aria-controls="{{ faq_uid }}-panel"
+                  class="flex w-full items-center gap-4 px-5 py-5 text-left transition-colors duration-300 md:px-7 md:py-6"
+                  style="background-color: transparent;"
+                  data-open="false"
+                  data-faq-trigger
+                >
+                  <span class="min-w-0 flex-1">
+                    <span class="mb-1 block text-[10px] font-semibold uppercase tracking-[0.24em]" style="color: rgba(111,101,88,0.78);">Question</span>
+                    <span class="block font-heading text-[1.03rem] leading-[1.45] tracking-[-0.03em] md:text-[1.08rem]" style="color: #0c0c0b;">
+                      {{ question }}
+                    </span>
                   </span>
-                  <span class="hc-faq-icon" style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
-                    <!-- Plus icon -->
-                    <svg class="hc-icon-plus" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="transition: transform 0.3s ease;">
-                      <line x1="8" y1="3" x2="8" y2="13"/>
-                      <line x1="3" y1="8" x2="13" y2="8"/>
+
+                  <span
+                    class="hc-faq-icon flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition duration-300 ease-out"
+                    style="border-color: rgba(12,12,11,0.08); background-color: #f4efe7; color: #0c0c0b;"
+                    aria-hidden="true"
+                  >
+                    <svg class="hc-icon hc-icon--plus block h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                      <line x1="8" y1="3" x2="8" y2="13"></line>
+                      <line x1="3" y1="8" x2="13" y2="8"></line>
                     </svg>
-                    <!-- Close icon -->
-                    <svg class="hc-icon-close" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="display: none; transition: transform 0.3s ease;">
-                      <line x1="4" y1="4" x2="12" y2="12"/>
-                      <line x1="12" y1="4" x2="4" y2="12"/>
+                    <svg class="hc-icon hc-icon--close hidden h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
+                      <line x1="4" y1="4" x2="12" y2="12"></line>
+                      <line x1="12" y1="4" x2="4" y2="12"></line>
                     </svg>
                   </span>
                 </button>
 
-                <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;">
-                  <div style="padding: 0 0.5rem 1.25rem 0.5rem;">
-                    <p style="font-family: var(--font-body, 'Inter', sans-serif); font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.75); transition: color 0.3s ease;">
-                      {{ answer }}
+                <div
+                  id="{{ faq_uid }}-panel"
+                  role="region"
+                  aria-labelledby="{{ faq_uid }}-button"
+                  aria-hidden="true"
+                  class="overflow-hidden"
+                  style="max-height: 0; opacity: 0; transition: max-height 500ms cubic-bezier(0.22,1,0.36,1), opacity 300ms ease;"
+                  data-open="false"
+                >
+                  <div class="px-5 pb-5 md:px-7 md:pb-6">
+                    <p class="max-w-2xl font-body text-[0.94rem] leading-7" style="color: #5f564b;">
+                      {{ answer | default: 'We keep the answer brief here so the page stays easy to scan.' }}
                     </p>
                   </div>
                 </div>
-
               </div>
             {%- endif -%}
           {%- endfor -%}
         {%- endif -%}
-
       </div>
-
     </div>
   </div>
 </help-center-section>
@@ -106,88 +160,127 @@
 <script>
   if (!customElements.get('help-center-section')) {
     class HelpCenterSection extends HTMLElement {
-      constructor() {
-        super();
-        this._buttons = [];
-      }
-
       connectedCallback() {
-        this._buttons = [...this.querySelectorAll('.hc-faq-btn')];
-        this._buttons.forEach(btn => {
-          btn._handler = () => this.toggle(btn);
-          btn.addEventListener('click', btn._handler);
+        this._reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        this._triggers = [...this.querySelectorAll('[data-faq-trigger]')];
+        this._handlers = new Map();
+        this._resizeHandler = () => this.updateOpenPanels();
+
+        this._triggers.forEach((trigger) => {
+          const handler = () => this.toggle(trigger);
+          this._handlers.set(trigger, handler);
+          trigger.addEventListener('click', handler);
         });
+
+        window.addEventListener('resize', this._resizeHandler, { passive: true });
       }
 
       disconnectedCallback() {
-        this._buttons.forEach(btn => {
-          btn.removeEventListener('click', btn._handler);
+        this._triggers?.forEach((trigger) => {
+          const handler = this._handlers?.get(trigger);
+          if (handler) trigger.removeEventListener('click', handler);
         });
-        this._buttons = [];
+
+        window.removeEventListener('resize', this._resizeHandler);
+        this._triggers = [];
+        this._handlers = new Map();
+        this._resizeHandler = null;
       }
 
-      toggle(btn) {
-        const item = btn.closest('.hc-faq-item');
-        const answer = item.querySelector('.hc-faq-answer');
-        const question = btn.querySelector('.hc-faq-question');
-        const icon = btn.querySelector('.hc-faq-icon');
-        const iconPlus = btn.querySelector('.hc-icon-plus');
-        const iconClose = btn.querySelector('.hc-icon-close');
-        const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      toggle(trigger) {
+        const item = trigger.closest('.hc-faq-item');
+        if (!item) return;
 
-        /* Spin the icon circle */
-        icon.style.transition = 'background-color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
-        icon.style.transform = 'rotate(360deg)';
-        setTimeout(() => { icon.style.transform = ''; }, 450);
+        const isOpen = item.dataset.open === 'true';
+        this.closeAll();
 
-        if (isOpen) {
-          /* ── Close ── */
-          answer.style.maxHeight = '0';
-          answer.style.opacity = '0';
-          item.style.backgroundColor = 'transparent';
-          item.style.borderRadius = '0';
-          item.style.margin = '0';
-          question.style.color = '#0a0a0a';
-          icon.style.backgroundColor = '#0a0a0a';
-          iconPlus.style.display = '';
-          iconClose.style.display = 'none';
-          btn.setAttribute('aria-expanded', 'false');
-        } else {
-          /* ── Close all others first ── */
-          this._buttons.forEach(otherBtn => {
-            if (otherBtn !== btn && otherBtn.getAttribute('aria-expanded') === 'true') {
-              const otherItem = otherBtn.closest('.hc-faq-item');
-              const otherAnswer = otherItem.querySelector('.hc-faq-answer');
-              const otherQuestion = otherBtn.querySelector('.hc-faq-question');
-              const otherIcon = otherBtn.querySelector('.hc-faq-icon');
-              const otherPlus = otherBtn.querySelector('.hc-icon-plus');
-              const otherClose = otherBtn.querySelector('.hc-icon-close');
-              otherAnswer.style.maxHeight = '0';
-              otherAnswer.style.opacity = '0';
-              otherItem.style.backgroundColor = 'transparent';
-              otherItem.style.borderRadius = '0';
-              otherItem.style.margin = '0';
-              otherQuestion.style.color = '#0a0a0a';
-              otherIcon.style.backgroundColor = '#0a0a0a';
-              otherPlus.style.display = '';
-              otherClose.style.display = 'none';
-              otherBtn.setAttribute('aria-expanded', 'false');
-            }
-          });
-
-          /* ── Open ── */
-          item.style.backgroundColor = '#0a0a0a';
-          item.style.borderRadius = '12px';
-          item.style.margin = '0 -0.5rem';
-          item.style.padding = '0 0.5rem';
-          question.style.color = '#ffffff';
-          icon.style.backgroundColor = '#333333';
-          iconPlus.style.display = 'none';
-          iconClose.style.display = '';
-          answer.style.maxHeight = answer.scrollHeight + 'px';
-          answer.style.opacity = '1';
-          btn.setAttribute('aria-expanded', 'true');
+        if (!isOpen) {
+          this.openItem(trigger);
         }
+      }
+
+      openItem(trigger) {
+        const item = trigger.closest('.hc-faq-item');
+        const panel = this.getPanel(trigger);
+        const icon = item?.querySelector('.hc-faq-icon');
+        const plus = item?.querySelector('.hc-icon--plus');
+        const close = item?.querySelector('.hc-icon--close');
+
+        if (!item || !panel) return;
+
+        item.dataset.open = 'true';
+        trigger.dataset.open = 'true';
+        trigger.setAttribute('aria-expanded', 'true');
+        panel.dataset.open = 'true';
+        panel.setAttribute('aria-hidden', 'false');
+
+        item.style.backgroundColor = '#f7f3ec';
+        trigger.style.backgroundColor = '#f7f3ec';
+        if (icon) {
+          icon.style.backgroundColor = '#0c0c0b';
+          icon.style.color = '#f8f6f1';
+        }
+        if (plus) plus.style.display = 'none';
+        if (close) close.style.display = 'block';
+
+        panel.style.maxHeight = `${panel.scrollHeight}px`;
+        panel.style.opacity = '1';
+
+        if (this._reduceMotion) {
+          panel.style.transition = 'none';
+        }
+      }
+
+      closeAll() {
+        this._triggers.forEach((trigger) => {
+          const item = trigger.closest('.hc-faq-item');
+          const panel = this.getPanel(trigger);
+          const icon = item?.querySelector('.hc-faq-icon');
+          const plus = item?.querySelector('.hc-icon--plus');
+          const close = item?.querySelector('.hc-icon--close');
+
+          if (item) {
+            item.dataset.open = 'false';
+            item.style.backgroundColor = 'transparent';
+          }
+
+          trigger.dataset.open = 'false';
+          trigger.setAttribute('aria-expanded', 'false');
+          trigger.style.backgroundColor = 'transparent';
+
+          if (icon) {
+            icon.style.backgroundColor = '#f4efe7';
+            icon.style.color = '#0c0c0b';
+          }
+          if (plus) plus.style.display = 'block';
+          if (close) close.style.display = 'none';
+
+          if (panel) {
+            panel.dataset.open = 'false';
+            panel.setAttribute('aria-hidden', 'true');
+            panel.style.maxHeight = '0px';
+            panel.style.opacity = '0';
+            if (this._reduceMotion) {
+              panel.style.transition = 'none';
+            }
+          }
+        });
+      }
+
+      updateOpenPanels() {
+        this._triggers.forEach((trigger) => {
+          const item = trigger.closest('.hc-faq-item');
+          const panel = this.getPanel(trigger);
+          if (!item || !panel || item.dataset.open !== 'true') return;
+          panel.style.maxHeight = `${panel.scrollHeight}px`;
+        });
+      }
+
+      getPanel(trigger) {
+        const panelId = trigger.getAttribute('aria-controls');
+        if (!panelId) return null;
+
+        return this.querySelector(`#${CSS.escape(panelId)}`);
       }
     }
 
@@ -205,19 +298,19 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Customer Help Center"
+      "default": "Need a hand?"
     },
     {
       "type": "textarea",
       "id": "description",
       "label": "Description",
-      "default": "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here."
+      "default": "Find clear answers about shipping, returns, payments, and order support. If you still need help, reach out and we'll point you to the right next step."
     },
     {
       "type": "color",
       "id": "bg_color",
       "label": "Background Color",
-      "default": "#ffffff"
+      "default": "#f8f6f1"
     },
     {
       "type": "header",
@@ -231,13 +324,13 @@
       "type": "text",
       "id": "q1",
       "label": "Question 1",
-      "default": "What is your return and exchange policy?"
+      "default": "What is your return policy?"
     },
     {
       "type": "textarea",
       "id": "a1",
       "label": "Answer 1",
-      "default": "We offer a hassle-free return and exchange policy within 30 days of delivery. Items must be unused, in original packaging, and with tags intact. For exchanges, simply initiate a request through our return portal or contact support."
+      "default": "We accept returns within 30 days of delivery for unworn items in original condition."
     },
     {
       "type": "header",
@@ -247,13 +340,13 @@
       "type": "text",
       "id": "q2",
       "label": "Question 2",
-      "default": "What if I received a damaged or incorrect item?"
+      "default": "What if my order arrives damaged?"
     },
     {
       "type": "textarea",
       "id": "a2",
       "label": "Answer 2",
-      "default": "If you receive a damaged or incorrect item, please contact our support team within 48 hours of delivery with photos of the issue. We'll arrange a replacement or full refund as quickly as possible."
+      "default": "Contact us within 48 hours with photos and we'll review the issue and guide the next step."
     },
     {
       "type": "header",
@@ -263,13 +356,13 @@
       "type": "text",
       "id": "q3",
       "label": "Question 3",
-      "default": "How can I track my order?"
+      "default": "How do I track my order?"
     },
     {
       "type": "textarea",
       "id": "a3",
       "label": "Answer 3",
-      "default": "Once your order is shipped, you'll receive a confirmation email with a tracking number. You can use this number on our website or the carrier's site to track your package in real time."
+      "default": "When your order ships, we'll email a tracking link you can use at any time."
     },
     {
       "type": "header",
@@ -279,13 +372,13 @@
       "type": "text",
       "id": "q4",
       "label": "Question 4",
-      "default": "What payment methods do you accept?"
+      "default": "Which payment methods do you accept?"
     },
     {
       "type": "textarea",
       "id": "a4",
       "label": "Answer 4",
-      "default": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, Google Pay, and Shop Pay. All transactions are secured with SSL encryption."
+      "default": "We accept major credit cards, PayPal, Apple Pay, Google Pay, and Shop Pay."
     },
     {
       "type": "header",
@@ -295,13 +388,13 @@
       "type": "text",
       "id": "q5",
       "label": "Question 5",
-      "default": "Can I modify or cancel my order after placing it?"
+      "default": "Can I edit or cancel my order?"
     },
     {
       "type": "textarea",
       "id": "a5",
       "label": "Answer 5",
-      "default": "You can modify or cancel your order within 1 hour of placing it by contacting our support team. After that window, orders enter processing and cannot be changed."
+      "default": "If you need a change, contact us within 1 hour of placing the order."
     },
     {
       "type": "header",
@@ -355,7 +448,7 @@
           "type": "text",
           "id": "title",
           "label": "Category Title",
-          "default": "Shipping & Delivery"
+          "default": "Shipping and delivery"
         }
       ]
     },
@@ -373,7 +466,7 @@
           "type": "textarea",
           "id": "answer",
           "label": "Answer",
-          "default": "We offer a hassle-free 30-day return policy."
+          "default": "We accept returns within 30 days of delivery for unworn items in original condition."
         }
       ]
     }
@@ -385,22 +478,22 @@
         {
           "type": "faq_item",
           "settings": {
-            "question": "What is your return and exchange policy?",
-            "answer": "We offer a hassle-free return and exchange policy within 30 days of delivery. Items must be unused, in original packaging, and with tags intact."
+            "question": "What is your return policy?",
+            "answer": "We accept returns within 30 days of delivery for unworn items in original condition."
           }
         },
         {
           "type": "faq_item",
           "settings": {
-            "question": "What if I received a damaged or incorrect item?",
-            "answer": "If you receive a damaged or incorrect item, please contact our support team within 48 hours of delivery with photos of the issue."
+            "question": "What if my order arrives damaged?",
+            "answer": "Contact us within 48 hours with photos and we'll review the issue and guide the next step."
           }
         },
         {
           "type": "faq_item",
           "settings": {
-            "question": "How can I track my order?",
-            "answer": "Once your order is shipped, you'll receive a confirmation email with a tracking number."
+            "question": "How do I track my order?",
+            "answer": "When your order ships, we'll email a tracking link you can use at any time."
           }
         }
       ]
