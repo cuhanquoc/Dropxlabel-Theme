@@ -10,8 +10,6 @@
   assign bg_color     = section.settings.bg_color     | default: '#ffffff'
   assign icon_color   = section.settings.icon_color   | default: '#6b7280'
   assign active_color = section.settings.active_color | default: '#111111'
-  assign badge_bg     = section.settings.badge_bg     | default: '#111111'
-  assign badge_color  = section.settings.badge_color  | default: '#ffffff'
   assign icon_px      = section.settings.icon_size    | default: 24
   assign label_px     = section.settings.label_size   | default: 10
 
@@ -238,13 +236,13 @@
 
     {%- comment -%} ── 4. ACCOUNT ── {%- endcomment -%}
     {%- if customer -%}
-      {%- assign _acct_href = account_url -%}
+      {%- assign acct_href = account_url -%}
     {%- else -%}
-      {%- assign _acct_href = routes.account_login_url -%}
+      {%- assign acct_href = routes.account_login_url -%}
     {%- endif -%}
     <a
       class="mob-nav__item"
-      href="{{ _acct_href }}"
+      href="{{ acct_href }}"
       aria-label="{{ section.settings.account_label | default: 'Account' }}"
       {%- if request.path contains '/account' %} aria-current="page"{%- endif -%}
     >
