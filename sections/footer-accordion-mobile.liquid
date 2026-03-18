@@ -304,13 +304,11 @@
       <ul> wrapper opens/closes automatically around consecutive groups.
     {%- endcomment -%}
 
-    {%- assign fam2_in_list = false -%}
+    {%- assign fam2_list_items = '' -%}
     {%- for block in section.blocks -%}
 
       {%- if block.type == 'accordion_group' -%}
         {%- comment -%} ── Accordion group (new system) ── {%- endcomment -%}
-        {%- unless fam2_in_list -%}<ul class="fam2__list" role="list">{%- assign fam2_in_list = true -%}{%- endunless -%}
-
         {%- assign panel_id   = 'fam2-panel-'   | append: block.id -%}
         {%- assign trigger_id = 'fam2-trigger-' | append: block.id -%}
         {%- assign group_key  = block.settings.group_key | strip -%}
@@ -325,36 +323,119 @@
           {%- endif -%}
         {%- endfor -%}
 
-        <li class="fam2__item" {{ block.shopify_attributes }}>
-          <button
-            id="{{ trigger_id }}"
-            class="fam2__trigger"
-            type="button"
-            aria-expanded="{% if block.settings.default_open %}true{% else %}false{% endif %}"
-            aria-controls="{{ panel_id }}"
-          >
-            <span class="fam2__title">{{- block.settings.heading | escape -}}</span>
-            <span class="fam2__icon" aria-hidden="true">
-              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line class="fam2__bar fam2__bar--h" x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                <line class="fam2__bar fam2__bar--v" x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-              </svg>
-            </span>
-          </button>
+        {%- capture fam2_list_item -%}
+          <li class="fam2__item" {{ block.shopify_attributes }}>
+            <button
+              id="{{ trigger_id }}"
+              class="fam2__trigger"
+              type="button"
+              aria-expanded="{% if block.settings.default_open %}true{% else %}false{% endif %}"
+              aria-controls="{{ panel_id }}"
+            >
+              <span class="fam2__title">{{- block.settings.heading | escape -}}</span>
+              <span class="fam2__icon" aria-hidden="true">
+                <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <line class="fam2__bar fam2__bar--h" x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <line class="fam2__bar fam2__bar--v" x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </button>
 
-          <div
-            id="{{ panel_id }}"
-            class="fam2__panel{% if block.settings.default_open %} fam2__panel--open{% endif %}"
-            role="region"
-            aria-labelledby="{{ trigger_id }}"
-          >
-            {%- if child_count > 0 -%}
-              <ul class="fam2__links" role="list">
-                {%- for cb in section.blocks -%}
-                  {%- if cb.type == 'accordion_link' -%}
-                    {%- assign ck  = cb.settings.parent_group_key | strip -%}
-                    {%- assign lbl = cb.settings.label -%}
-                    {%- if ck == group_key and lbl != blank -%}
+            <div
+              id="{{ panel_id }}"
+              class="fam2__panel{% if block.settings.default_open %} fam2__panel--open{% endif %}"
+              role="region"
+              aria-labelledby="{{ trigger_id }}"
+            >
+              {%- if child_count > 0 -%}
+                <ul class="fam2__links" role="list">
+                  {%- for cb in section.blocks -%}
+                    {%- if cb.type == 'accordion_link' -%}
+                      {%- assign ck  = cb.settings.parent_group_key | strip -%}
+                      {%- assign lbl = cb.settings.label -%}
+                      {%- if ck == group_key and lbl != blank -%}
+                        {%- assign lbl_down = lbl | strip | downcase -%}
+                        {%- assign auto_url = '' -%}
+                        {%- if lbl_down == 'home' -%}
+                          {%- assign auto_url = routes.root_url -%}
+                        {%- elsif lbl_down == 'search' -%}
+                          {%- assign auto_url = routes.search_url -%}
+                        {%- elsif lbl_down == 'collections' or lbl_down == 'all products' -%}
+                          {%- assign auto_url = routes.collections_url -%}
+                        {%- elsif lbl_down == 'about us' or lbl_down == 'about' -%}
+                          {%- assign auto_url = '/pages/about-us' -%}
+                        {%- elsif lbl_down == 'news' -%}
+                          {%- assign auto_url = '/pages/news' -%}
+                        {%- elsif lbl_down == 'privacy policy' -%}
+                          {%- assign auto_url = shop.privacy_policy.url | default: '/policies/privacy-policy' -%}
+                        {%- elsif lbl_down == 'refund policy' -%}
+                          {%- assign auto_url = shop.refund_policy.url | default: '/policies/refund-policy' -%}
+                        {%- elsif lbl_down == 'shipping policy' -%}
+                          {%- assign auto_url = shop.shipping_policy.url | default: '/policies/shipping-policy' -%}
+                        {%- elsif lbl_down == 'terms of service' -%}
+                          {%- assign auto_url = shop.terms_of_service.url | default: '/policies/terms-of-service' -%}
+                        {%- elsif lbl_down == 'contact' or lbl_down == 'contact us' -%}
+                          {%- assign auto_url = '/pages/contact' -%}
+                        {%- elsif lbl_down == 'faq' -%}
+                          {%- assign auto_url = '/pages/faq' -%}
+                        {%- elsif lbl_down == 'track order' -%}
+                          {%- assign auto_url = '/pages/track-order' -%}
+                        {%- endif -%}
+                        {%- assign resolved_url = cb.settings.url -%}
+                        {%- if resolved_url == blank and auto_url != blank -%}
+                          {%- assign resolved_url = auto_url -%}
+                        {%- endif -%}
+                        <li class="fam2__link-item" {{ cb.shopify_attributes }}>
+                          {%- if resolved_url != blank -%}
+                            <a class="fam2__link" href="{{ resolved_url }}"
+                              {%- if cb.settings.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{%- endif -%}
+                            >{{- lbl | escape -}}</a>
+                          {%- else -%}
+                            <span class="fam2__link fam2__link--placeholder" aria-disabled="true">{{- lbl | escape -}}</span>
+                          {%- endif -%}
+                        </li>
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+              {%- else -%}
+                <p class="fam2__empty">Chưa có liên kết.</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endcapture -%}
+        {%- assign fam2_list_items = fam2_list_items | append: fam2_list_item -%}
+
+      {%- elsif block.type == 'link_group' -%}
+        {%- comment -%} ── Legacy link_group (deprecated, backward-compat) ── {%- endcomment -%}
+        {%- assign panel_id   = 'fam2-panel-'   | append: block.id -%}
+        {%- assign trigger_id = 'fam2-trigger-' | append: block.id -%}
+        {%- assign has_links = false -%}
+        {%- for i in (1..8) -%}
+          {%- assign lbl_key = 'link_' | append: i | append: '_label' -%}
+          {%- if block.settings[lbl_key] != blank -%}{%- assign has_links = true -%}{%- endif -%}
+        {%- endfor -%}
+
+        {%- capture fam2_list_item -%}
+          <li class="fam2__item" {{ block.shopify_attributes }}>
+            <button id="{{ trigger_id }}" class="fam2__trigger" type="button" aria-expanded="false" aria-controls="{{ panel_id }}">
+              <span class="fam2__title">{{- block.settings.group_title | escape -}}</span>
+              <span class="fam2__icon" aria-hidden="true">
+                <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <line class="fam2__bar fam2__bar--h" x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <line class="fam2__bar fam2__bar--v" x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </button>
+            <div id="{{ panel_id }}" class="fam2__panel" role="region" aria-labelledby="{{ trigger_id }}">
+              {%- if has_links -%}
+                <ul class="fam2__links" role="list">
+                  {%- for i in (1..8) -%}
+                    {%- assign lbl_key = 'link_' | append: i | append: '_label' -%}
+                    {%- assign url_key = 'link_' | append: i | append: '_url' -%}
+                    {%- assign lbl = block.settings[lbl_key] -%}
+                    {%- assign url = block.settings[url_key] -%}
+                    {%- if lbl != blank -%}
                       {%- assign lbl_down = lbl | strip | downcase -%}
                       {%- assign auto_url = '' -%}
                       {%- if lbl_down == 'home' -%}
@@ -382,110 +463,36 @@
                       {%- elsif lbl_down == 'track order' -%}
                         {%- assign auto_url = '/pages/track-order' -%}
                       {%- endif -%}
-                      {%- assign resolved_url = cb.settings.url -%}
+                      {%- assign resolved_url = url -%}
                       {%- if resolved_url == blank and auto_url != blank -%}
                         {%- assign resolved_url = auto_url -%}
                       {%- endif -%}
-                      <li class="fam2__link-item" {{ cb.shopify_attributes }}>
+                      <li class="fam2__link-item">
                         {%- if resolved_url != blank -%}
-                          <a class="fam2__link" href="{{ resolved_url }}"
-                            {%- if cb.settings.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{%- endif -%}
-                          >{{- lbl | escape -}}</a>
+                          <a class="fam2__link" href="{{ resolved_url }}">{{- lbl | escape -}}</a>
                         {%- else -%}
                           <span class="fam2__link fam2__link--placeholder" aria-disabled="true">{{- lbl | escape -}}</span>
                         {%- endif -%}
                       </li>
                     {%- endif -%}
-                  {%- endif -%}
-                {%- endfor -%}
-              </ul>
-            {%- else -%}
-              <p class="fam2__empty">Chưa có liên kết.</p>
-            {%- endif -%}
-          </div>
-        </li>
-
-      {%- elsif block.type == 'link_group' -%}
-        {%- comment -%} ── Legacy link_group (deprecated, backward-compat) ── {%- endcomment -%}
-        {%- unless fam2_in_list -%}<ul class="fam2__list" role="list">{%- assign fam2_in_list = true -%}{%- endunless -%}
-
-        {%- assign panel_id   = 'fam2-panel-'   | append: block.id -%}
-        {%- assign trigger_id = 'fam2-trigger-' | append: block.id -%}
-        {%- assign has_links = false -%}
-        {%- for i in (1..8) -%}
-          {%- assign lbl_key = 'link_' | append: i | append: '_label' -%}
-          {%- if block.settings[lbl_key] != blank -%}{%- assign has_links = true -%}{%- endif -%}
-        {%- endfor -%}
-
-        <li class="fam2__item" {{ block.shopify_attributes }}>
-          <button id="{{ trigger_id }}" class="fam2__trigger" type="button" aria-expanded="false" aria-controls="{{ panel_id }}">
-            <span class="fam2__title">{{- block.settings.group_title | escape -}}</span>
-            <span class="fam2__icon" aria-hidden="true">
-              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <line class="fam2__bar fam2__bar--h" x1="2" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                <line class="fam2__bar fam2__bar--v" x1="9" y1="2" x2="9" y2="16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-              </svg>
-            </span>
-          </button>
-          <div id="{{ panel_id }}" class="fam2__panel" role="region" aria-labelledby="{{ trigger_id }}">
-            {%- if has_links -%}
-              <ul class="fam2__links" role="list">
-                {%- for i in (1..8) -%}
-                  {%- assign lbl_key = 'link_' | append: i | append: '_label' -%}
-                  {%- assign url_key = 'link_' | append: i | append: '_url' -%}
-                  {%- assign lbl = block.settings[lbl_key] -%}
-                  {%- assign url = block.settings[url_key] -%}
-                  {%- if lbl != blank -%}
-                    {%- assign lbl_down = lbl | strip | downcase -%}
-                    {%- assign auto_url = '' -%}
-                    {%- if lbl_down == 'home' -%}
-                      {%- assign auto_url = routes.root_url -%}
-                    {%- elsif lbl_down == 'search' -%}
-                      {%- assign auto_url = routes.search_url -%}
-                    {%- elsif lbl_down == 'collections' or lbl_down == 'all products' -%}
-                      {%- assign auto_url = routes.collections_url -%}
-                    {%- elsif lbl_down == 'about us' or lbl_down == 'about' -%}
-                      {%- assign auto_url = '/pages/about-us' -%}
-                    {%- elsif lbl_down == 'news' -%}
-                      {%- assign auto_url = '/pages/news' -%}
-                    {%- elsif lbl_down == 'privacy policy' -%}
-                      {%- assign auto_url = shop.privacy_policy.url | default: '/policies/privacy-policy' -%}
-                    {%- elsif lbl_down == 'refund policy' -%}
-                      {%- assign auto_url = shop.refund_policy.url | default: '/policies/refund-policy' -%}
-                    {%- elsif lbl_down == 'shipping policy' -%}
-                      {%- assign auto_url = shop.shipping_policy.url | default: '/policies/shipping-policy' -%}
-                    {%- elsif lbl_down == 'terms of service' -%}
-                      {%- assign auto_url = shop.terms_of_service.url | default: '/policies/terms-of-service' -%}
-                    {%- elsif lbl_down == 'contact' or lbl_down == 'contact us' -%}
-                      {%- assign auto_url = '/pages/contact' -%}
-                    {%- elsif lbl_down == 'faq' -%}
-                      {%- assign auto_url = '/pages/faq' -%}
-                    {%- elsif lbl_down == 'track order' -%}
-                      {%- assign auto_url = '/pages/track-order' -%}
-                    {%- endif -%}
-                    {%- assign resolved_url = url -%}
-                    {%- if resolved_url == blank and auto_url != blank -%}
-                      {%- assign resolved_url = auto_url -%}
-                    {%- endif -%}
-                    <li class="fam2__link-item">
-                      {%- if resolved_url != blank -%}
-                        <a class="fam2__link" href="{{ resolved_url }}">{{- lbl | escape -}}</a>
-                      {%- else -%}
-                        <span class="fam2__link fam2__link--placeholder" aria-disabled="true">{{- lbl | escape -}}</span>
-                      {%- endif -%}
-                    </li>
-                  {%- endif -%}
-                {%- endfor -%}
-              </ul>
-            {%- else -%}
-              <p class="fam2__empty">Chưa có liên kết.</p>
-            {%- endif -%}
-          </div>
-        </li>
+                  {%- endfor -%}
+                </ul>
+              {%- else -%}
+                <p class="fam2__empty">Chưa có liên kết.</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endcapture -%}
+        {%- assign fam2_list_items = fam2_list_items | append: fam2_list_item -%}
 
       {%- elsif block.type == 'newsletter' -%}
         {%- comment -%} ── Premium Newsletter: Marquee + Capsule Form ── {%- endcomment -%}
-        {%- if fam2_in_list -%}</ul>{%- assign fam2_in_list = false -%}{%- endif -%}
+        {%- if fam2_list_items != blank -%}
+          <ul class="fam2__list" role="list">
+            {{- fam2_list_items -}}
+          </ul>
+          {%- assign fam2_list_items = '' -%}
+        {%- endif -%}
 
         {%- assign nl_id = 'fam2-nl-' | append: block.id -%}
         {%- assign mq_text = block.settings.nl_marquee_text | default: block.settings.nl_heading | default: 'JOIN THE DROP' -%}
@@ -571,7 +578,11 @@
       {%- endif -%}
 
     {%- endfor -%}
-    {%- if fam2_in_list -%}</ul>{%- endif -%}
+    {%- if fam2_list_items != blank -%}
+      <ul class="fam2__list" role="list">
+        {{- fam2_list_items -}}
+      </ul>
+    {%- endif -%}
 
     {%- comment -%} ── Social Icons ── {%- endcomment -%}
     {%- assign has_social = false -%}

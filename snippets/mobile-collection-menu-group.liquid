@@ -1,0 +1,270 @@
+{%- liquid
+  assign has_group_collections = false
+  if block.settings.collection_1 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_2 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_3 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_4 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_5 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_6 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_7 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_8 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_9 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_10 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_11 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_12 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_13 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_14 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_15 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_16 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_17 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_18 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_19 != blank
+    assign has_group_collections = true
+  elsif block.settings.collection_20 != blank
+    assign has_group_collections = true
+  endif
+-%}
+
+<div class="mcm-group" {{ block.shopify_attributes }}>
+  <div class="mcm-group-num">|{{ block.settings.number | default: '01' }}|</div>
+  <div class="mcm-group-body">
+    <h3 class="mcm-group-title">{{ block.settings.title | default: 'Collections' }}</h3>
+    {%- if has_group_collections -%}
+      <ul class="mcm-links">
+        {%- if block.settings.collection_1 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_1.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_1.url }}">
+              <span>{{ block.settings.collection_1.title }}</span>
+              {%- if block.settings.collection_1.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_1.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_2 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_2.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_2.url }}">
+              <span>{{ block.settings.collection_2.title }}</span>
+              {%- if block.settings.collection_2.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_2.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_3 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_3.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_3.url }}">
+              <span>{{ block.settings.collection_3.title }}</span>
+              {%- if block.settings.collection_3.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_3.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_4 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_4.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_4.url }}">
+              <span>{{ block.settings.collection_4.title }}</span>
+              {%- if block.settings.collection_4.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_4.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_5 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_5.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_5.url }}">
+              <span>{{ block.settings.collection_5.title }}</span>
+              {%- if block.settings.collection_5.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_5.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_6 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_6.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_6.url }}">
+              <span>{{ block.settings.collection_6.title }}</span>
+              {%- if block.settings.collection_6.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_6.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_7 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_7.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_7.url }}">
+              <span>{{ block.settings.collection_7.title }}</span>
+              {%- if block.settings.collection_7.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_7.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_8 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_8.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_8.url }}">
+              <span>{{ block.settings.collection_8.title }}</span>
+              {%- if block.settings.collection_8.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_8.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_9 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_9.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_9.url }}">
+              <span>{{ block.settings.collection_9.title }}</span>
+              {%- if block.settings.collection_9.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_9.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_10 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_10.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_10.url }}">
+              <span>{{ block.settings.collection_10.title }}</span>
+              {%- if block.settings.collection_10.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_10.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_11 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_11.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_11.url }}">
+              <span>{{ block.settings.collection_11.title }}</span>
+              {%- if block.settings.collection_11.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_11.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_12 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_12.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_12.url }}">
+              <span>{{ block.settings.collection_12.title }}</span>
+              {%- if block.settings.collection_12.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_12.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_13 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_13.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_13.url }}">
+              <span>{{ block.settings.collection_13.title }}</span>
+              {%- if block.settings.collection_13.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_13.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_14 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_14.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_14.url }}">
+              <span>{{ block.settings.collection_14.title }}</span>
+              {%- if block.settings.collection_14.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_14.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_15 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_15.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_15.url }}">
+              <span>{{ block.settings.collection_15.title }}</span>
+              {%- if block.settings.collection_15.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_15.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_16 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_16.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_16.url }}">
+              <span>{{ block.settings.collection_16.title }}</span>
+              {%- if block.settings.collection_16.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_16.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_17 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_17.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_17.url }}">
+              <span>{{ block.settings.collection_17.title }}</span>
+              {%- if block.settings.collection_17.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_17.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_18 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_18.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_18.url }}">
+              <span>{{ block.settings.collection_18.title }}</span>
+              {%- if block.settings.collection_18.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_18.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_19 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_19.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_19.url }}">
+              <span>{{ block.settings.collection_19.title }}</span>
+              {%- if block.settings.collection_19.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_19.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+        {%- if block.settings.collection_20 != blank -%}
+          <li>
+            <a class="mcm-link{% if block.settings.collection_20.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ block.settings.collection_20.url }}">
+              <span>{{ block.settings.collection_20.title }}</span>
+              {%- if block.settings.collection_20.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ block.settings.collection_20.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endif -%}
+      </ul>
+    {%- elsif block.settings.collections != blank and block.settings.collections.size > 0 -%}
+      <ul class="mcm-links">
+        {%- for collection in block.settings.collections -%}
+          <li>
+            <a class="mcm-link{% if collection.all_products_count == 0 %} mcm-link--sale{% endif %}" href="{{ collection.url }}">
+              <span>{{ collection.title }}</span>
+              {%- if collection.all_products_count > 0 and show_collection_count -%}
+                <span class="mcm-link-badge">{{ collection.all_products_count }}</span>
+              {%- endif -%}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <div class="mcm-empty">Choose one or more Shopify collections in the right sidebar for this group.</div>
+    {%- endif -%}
+  </div>
+</div>
