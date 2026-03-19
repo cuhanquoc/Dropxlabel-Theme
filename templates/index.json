@@ -172,40 +172,40 @@
         "product_card_YqGwLD": {
           "type": "product_card",
           "settings": {
-            "product": "azure-dress™-hem-dress",
-            "custom_title": "JESSEY DRESS™",
-            "card_color": "#c6e4e3"
+            "product": "esme-bikini™-tie-side-triangle-bikini",
+            "custom_title": "ESME BIKINI™ ",
+            "card_color": "#e9d4b6"
           }
         },
         "product_card_ceXyFx": {
           "type": "product_card",
           "settings": {
-            "product": "alys-dress™-solid-white-sexy-deep-v-neck-dress",
-            "custom_title": "ALYS DRESS™",
-            "card_color": "#e3cde9"
+            "product": "lyra-bikini™-adjustable-strappy-crisscross-bikini",
+            "custom_title": "LYRA BIKINI™",
+            "card_color": "#e8cde9"
           }
         },
         "product_card_imJtbT": {
           "type": "product_card",
           "settings": {
-            "product": "esme-bikini™-tie-side-triangle-bikini",
-            "custom_title": "ESME BIKINI™",
-            "card_color": "#c2e4cc"
+            "product": "sylvie-bikini™-holiday-party-date-bikini",
+            "custom_title": "SYLVIE BIKINI™",
+            "card_color": "#c5e4c2"
           }
         },
         "product_card_ndBeix": {
           "type": "product_card",
           "settings": {
-            "product": "clarisse-top™-casual-commuting-contrast-top",
-            "custom_title": "CLARISSE TOP™",
+            "product": "celine-bikini™-halter-triangle-bikini",
+            "custom_title": "CÉLINE BIKINI™",
             "card_color": "#e7e2bd"
           }
         },
         "card_5": {
           "type": "product_card",
           "settings": {
-            "product": "azure-dress™-hem-dress",
-            "custom_title": "AZURE DRESS™",
+            "product": "vivienne-bikini™-stripe-sexy-bikini",
+            "custom_title": "VIVIENNE BIKINI™",
             "card_color": "#e2c9ce"
           }
         }
@@ -218,11 +218,11 @@
         "card_5"
       ],
       "settings": {
-        "heading": "TRENDING STYLES YOU CAN'T MISS!",
+        "heading": "bikinies",
         "description_1": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers.",
         "description_2": "",
         "cta_text": "SHOP NOW",
-        "cta_url": "",
+        "cta_url": "shopify://collections/bikini",
         "bg_color": "#0a0a0a"
       }
     },
