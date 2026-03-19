@@ -15,7 +15,7 @@
         "background_video": "shopify://files/videos/hf_20260311_073759_4f7a9f9f-0d9a-4b40-9272-79cfef9c6dff.mp4",
         "eyebrow_text": "buy 2 get 3",
         "headline": "Small Pieces Of Art You Can Wear",
-        "subheadline": "Summer is waiting for you",
+        "subheadline": "Designed to elevate your everyday wardrobe",
         "cta_text": "Explore Now",
         "cta_url": "shopify://products/aurelie-dress™-floral-printed-dress",
         "marquee_text": "ORIGINAL",
@@ -27,9 +27,9 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "heading": "Trending Products",
-        "heading_color": "#2e2d2d",
-        "heading_size": "clamp(2rem,8vw,5rem)",
+        "eyebrow": "Redesign Proposal — Celisira Trending Products",
+        "heading_line_1": "TRENDING",
+        "heading_line_2": "PRODUCTS",
         "collection": "",
         "max_products": 12,
         "product_list": [
@@ -47,11 +47,7 @@
         "more_label": "More",
         "items_initial": 6,
         "items_per_load": 4,
-        "title_font_size": "1.2rem",
-        "title_color": "#999999",
-        "title_font_weight": "500",
-        "price_color": "#111111",
-        "compare_color": "#999999"
+        "helper_text": "Hover cards to reveal Quick View • Tap thumbnails to switch color"
       }
     },
     "brand-story-bento": {
