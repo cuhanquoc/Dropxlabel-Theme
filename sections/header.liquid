@@ -1,5 +1,7 @@
 {%- liquid
   assign nav_link_blocks = section.blocks | where: 'type', 'nav_link'
+  assign logo_width = section.settings.logo_width | default: 180
+  assign logo_width_desktop = logo_width | at_most: 280
 -%}
 
 <header class="dx-header" data-section-id="{{ section.id }}">
@@ -97,7 +99,11 @@
       </nav>
     </div>
 
-    <a href="{{ routes.root_url }}" class="dx-logo" style="--dx-logo-width: {{ section.settings.logo_width | default: 180 }}px;">
+    <a
+      href="{{ routes.root_url }}"
+      class="dx-logo"
+      style="--dx-logo-mobile-width: {{ logo_width }}px; --dx-logo-desktop-width: {{ logo_width_desktop }}px;"
+    >
       {% if section.settings.logo_image != blank %}
         {{ section.settings.logo_image | image_url: width: 1200 | image_tag: class: 'dx-logo__image', loading: 'eager', alt: shop.name }}
       {% else %}
@@ -231,8 +237,8 @@
       left: auto;
       transform: none;
       justify-self: center;
-      max-width: min(100%, var(--dx-logo-width, 180px));
-      width: min(100%, var(--dx-logo-width, 180px));
+      max-width: min(100%, var(--dx-logo-mobile-width, 180px));
+      width: min(100%, var(--dx-logo-mobile-width, 180px));
       height: 32px;
       padding-inline: 0.25rem;
       overflow: hidden;
