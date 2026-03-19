@@ -1,36 +1,33 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "about-template",
-      "settings": {
-        "hero_heading": "THE JOURNEY OF STYLE",
-        "hero_subheading": "<p>A timeless exploration of fashion that evolves with you at every step.</p>",
-        "brand_text": "<p>From the soft drape of a blouse to the structured silhouette of a tailored jacket, every element is curated to empower you inside and out. Our garments are more than just fashion; they are a celebration of individuality, resilience, and the beauty of authenticity.</p>",
-        "mission_heading": "TIMELESS PIECES THAT TELL STORIES OF POWER, <u>BEAUTY</u>",
-        "mission_text_1": "<p>Timeless pieces are more than just garments. They are expressions of personal journeys, woven with threads of power, beauty, and individuality.</p>",
-        "mission_text_2": "<p>Each design in our collection is thoughtfully crafted to honor your unique essence, celebrate your confidence, and elevate your everyday presence. Whether you're dressing for bold first impressions or quiet moments of reflection, these pieces carry the narrative of strength and self-expression in every detail.</p>",
-        "street_heading": "WHERE STREET STYLE MEETS HIGH FASHION",
-        "street_card_title": "Explore Edgy Everyday Wear",
-        "street_card_text": "<p>Discover bold, street-smart styles crafted for comfort and everyday confidence.</p>",
-        "street_cta_text": "EXPLORE",
-        "testimonials_subtitle": "SUCCESS STORIES THAT INSPIRE",
-        "testimonials_heading": "SEE WHAT REAL CUSTOMER SAY"
-      },
       "blocks": {
         "testimonial_1": {
           "type": "testimonial",
           "settings": {
             "review_text": "<p>I've been shopping at this store for a few months now, and I can confidently say it's one of the best online shopping experiences I've had. From the seamless ordering process to the fast delivery.</p>",
             "name": "Sophia M.",
-            "location": "San Francisco, CA"
+            "location": "San Francisco, CA",
+            "avatar": "shopify://shop_images/265971085_102319818976864_7086135371599847389_n.jpg"
           }
         },
         "testimonial_2": {
           "type": "testimonial",
           "settings": {
             "review_text": "<p>I recently ordered a few items and I couldn't be happier. The quality is excellent and I've received so many compliments.</p>",
-            "name": "John P.",
-            "location": "Austin, TX"
+            "name": "Jane P.",
+            "location": "Austin, TX",
+            "avatar": "shopify://shop_images/118314578_3525936430752559_3998191302560680357_n.jpg"
           }
         },
         "testimonial_3": {
@@ -38,7 +35,8 @@
           "settings": {
             "review_text": "<p>As someone who cares about style and materials, I was thrilled to find a brand that feels elevated without sacrificing comfort.</p>",
             "name": "Emily R.",
-            "location": "Miami, FL"
+            "location": "Miami, FL",
+            "avatar": "shopify://shop_images/431964548_427637276292780_8705155440450624304_n.jpg"
           }
         }
       },
@@ -46,7 +44,39 @@
         "testimonial_1",
         "testimonial_2",
         "testimonial_3"
-      ]
+      ],
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "card_background_color": "#ffffff",
+        "muted_text_color": "#666666",
+        "card_radius": 16,
+        "button_radius": 100,
+        "hero_image": "shopify://shop_images/hf_20260317_041035_011070bf-477e-4894-83a1-3854f730b972.png",
+        "hero_heading": "THE JOURNEY OF STYLE",
+        "hero_subheading": "<p>Celisira was created for women who want to look effortlessly refined — without overthinking their outfits.</p>",
+        "hero_overlay_opacity": 40,
+        "brand_text": "<p>We noticed how hard it is to find pieces that feel feminine, flattering, and elevated — without looking overly trendy or cheaply made.</p>",
+        "brand_image": "shopify://shop_images/hf_20260312_100754_b83a368d-33b6-4afc-969e-da506940f748.jpg",
+        "brand_image_alt": "Brand story",
+        "mission_heading": "That’s why we design pieces that balance softness, structure, and simplicity — made to elevate your everyday wardrobe.",
+        "mission_text_1": "<p>We believe elegance should feel natural, not forced.</p>",
+        "mission_text_2": "<p>From brunch dates to weekend getaways, Celisira pieces are made to move with you — and make you feel quietly confident.</p>",
+        "mission_image": "shopify://shop_images/hf_20260311_063831_a3ba6aeb-254b-4237-b118-da4b74340486.png",
+        "mission_image_alt": "Editorial fashion",
+        "street_image": "shopify://shop_images/hf_20260312_081639_861c821f-91d8-46c0-aff5-264eb940cf95.jpg",
+        "street_image_alt": "Street style",
+        "street_heading": "WHERE STREET STYLE MEETS HIGH FASHION",
+        "street_overlay_opacity": 30,
+        "street_card_title": "Explore Edgy Everyday Wear",
+        "street_card_text": "<p>Discover bold, street-smart styles crafted for comfort and everyday confidence.</p>",
+        "street_cta_text": "EXPLORE",
+        "street_cta_link": "shopify://collections/all",
+        "testimonials_subtitle": "SUCCESS STORIES THAT INSPIRE",
+        "testimonials_heading": "SEE WHAT REAL CUSTOMER SAY",
+        "testimonials_empty_text": "Add testimonial blocks in the Theme Editor."
+      }
     }
   },
   "order": [
