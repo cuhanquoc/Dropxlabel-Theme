@@ -17,7 +17,7 @@
     --mcm-link-size: {{ section.settings.link_font_size }}px;
     position: fixed;
     inset: 0;
-    z-index: 9998;
+    z-index: 220;
     background: linear-gradient(180deg, rgba(250, 247, 242, 0.985) 0%, rgba(245, 239, 231, 0.985) 100%);
     color: var(--mcm-text);
     opacity: 0;
@@ -31,6 +31,10 @@
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+  }
+
+  body.mcm-open {
+    overflow: hidden;
   }
 
   #mobile-collection-menu .mcm-shell {
@@ -320,11 +324,11 @@
   }
 </style>
 
-<div id="mobile-collection-menu" aria-hidden="true" role="dialog" aria-modal="true" aria-label="{{ menu_title }}">
+<div id="mobile-collection-menu" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="mobile-collection-menu-title">
   <div class="mcm-shell">
     <div class="mcm-topbar">
-      <p class="mcm-kicker">{{ menu_title }}</p>
-      <button class="mcm-close" type="button" data-mcm-close aria-label="Close menu">
+      <h2 class="mcm-kicker" id="mobile-collection-menu-title">{{ menu_title }}</h2>
+      <button class="mcm-close" type="button" data-mcm-close aria-label="Close categories">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
@@ -416,6 +420,16 @@
     var tabs = Array.prototype.slice.call(overlay.querySelectorAll('[data-mcm-tab]'));
     var panels = Array.prototype.slice.call(overlay.querySelectorAll('[data-mcm-panel]'));
     var scrollArea = overlay.querySelector('[data-mcm-scroll]');
+    var closeButton = overlay.querySelector('[data-mcm-close]');
+    var lastTrigger = null;
+    var focusableSelectors = [
+      'a[href]',
+      'button:not([disabled])',
+      'input:not([disabled])',
+      'select:not([disabled])',
+      'textarea:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])'
+    ].join(', ');
 
     function switchTab(idx) {
       tabs.forEach(function (tab) {
@@ -431,6 +445,42 @@
       if (scrollArea) scrollArea.scrollTop = 0;
     }
 
+    function updateTriggerState(open) {
+      window.dispatchEvent(new CustomEvent('mobile-collection-menu:change', {
+        detail: { open: open }
+      }));
+    }
+
+    function focusFirstElement() {
+      var focusables = Array.prototype.slice.call(overlay.querySelectorAll(focusableSelectors));
+      if (focusables.length > 0) {
+        focusables[0].focus();
+      } else if (closeButton) {
+        closeButton.focus();
+      }
+    }
+
+    function trapFocus(event) {
+      if (!overlay.classList.contains('mcm-open') || event.key !== 'Tab') return;
+
+      var focusables = Array.prototype.slice.call(overlay.querySelectorAll(focusableSelectors));
+      if (focusables.length === 0) {
+        event.preventDefault();
+        if (closeButton) closeButton.focus();
+        return;
+      }
+
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
     tabs.forEach(function (tab) {
       tab.addEventListener('click', function () {
         switchTab(tab.getAttribute('data-mcm-tab'));
@@ -439,14 +489,29 @@
 
     window.MobileCollectionMenu = {
       open: function () {
+        if (overlay.classList.contains('mcm-open')) return;
+        lastTrigger = document.activeElement;
         overlay.classList.add('mcm-open');
         overlay.setAttribute('aria-hidden', 'false');
+        overlay.removeAttribute('inert');
+        document.body.classList.add('mcm-open');
         document.body.style.overflow = 'hidden';
+        updateTriggerState(true);
+        window.requestAnimationFrame(focusFirstElement);
       },
       close: function () {
+        if (!overlay.classList.contains('mcm-open')) return;
         overlay.classList.remove('mcm-open');
         overlay.setAttribute('aria-hidden', 'true');
+        overlay.setAttribute('inert', '');
+        document.body.classList.remove('mcm-open');
         document.body.style.overflow = '';
+        updateTriggerState(false);
+        if (lastTrigger && typeof lastTrigger.focus === 'function') {
+          window.requestAnimationFrame(function () {
+            lastTrigger.focus();
+          });
+        }
       },
       toggle: function () {
         if (overlay.classList.contains('mcm-open')) {
@@ -467,6 +532,7 @@
       if (event.key === 'Escape' && overlay.classList.contains('mcm-open')) {
         window.MobileCollectionMenu.close();
       }
+      trapFocus(event);
     });
   })();
 </script>

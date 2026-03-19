@@ -1,8 +1,8 @@
-<hero-banner class="relative block min-h-[100dvh] overflow-hidden bg-[#f8f6f1] text-[#0c0c0b]">
+<hero-banner class="relative block min-h-[100dvh] overflow-hidden bg-[#f6f2eb] text-[#11100f]">
   <div class="absolute inset-0 overflow-hidden">
     {% if section.settings.background_video != blank %}
       <video
-        class="hero-video h-full w-full object-cover object-center opacity-70"
+        class="hero-video h-full w-full object-cover object-center opacity-60"
         autoplay
         muted
         loop
@@ -18,51 +18,47 @@
       <img
         src="{{ section.settings.background_image | image_url: width: 1920 }}"
         alt="{{ section.settings.background_image.alt | default: 'Hero background' }}"
-        class="hero-image h-full w-full object-cover object-center opacity-75"
+        class="hero-image h-full w-full object-cover object-center opacity-68"
         loading="eager"
         fetchpriority="high"
         width="1920"
         height="1080"
       />
     {% else %}
-      <div
-        class="hero-image h-full w-full bg-[radial-gradient(circle_at_top_left,rgba(196,168,130,0.18),transparent_34%),linear-gradient(180deg,#fbf8f3_0%,#f4efe6_100%)]"
-        role="img"
-        aria-label="Hero background"
-      ></div>
+      <div class="hero-image h-full w-full bg-[radial-gradient(circle_at_top_left,rgba(183,157,123,0.15),transparent_34%),linear-gradient(180deg,#f8f5ef_0%,#f1eadf_100%)]" role="img" aria-label="Hero background"></div>
     {% endif %}
   </div>
 
-  <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(248,246,241,0.86)_0%,rgba(248,246,241,0.54)_45%,rgba(248,246,241,0.08)_100%)]"></div>
-  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,246,241,0.04)_0%,rgba(248,246,241,0.18)_64%,rgba(248,246,241,0.78)_100%)]"></div>
+  <div class="absolute inset-0 bg-[linear-gradient(90deg,rgba(246,242,235,0.92)_0%,rgba(246,242,235,0.66)_42%,rgba(246,242,235,0.18)_100%)]"></div>
+  <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(246,242,235,0.08)_0%,rgba(246,242,235,0.18)_70%,rgba(246,242,235,0.88)_100%)]"></div>
 
-  <div class="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-7xl items-end px-5 pb-16 pt-24 md:px-8 lg:items-center lg:px-12 lg:py-20">
-    <div class="max-w-[42rem]">
+  <div class="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-7xl items-end px-4 pb-14 pt-24 sm:px-6 md:px-8 lg:items-center lg:px-12 lg:py-20">
+    <div class="max-w-[36rem]">
       {% if section.blocks.size > 0 %}
         {% for block in section.blocks %}
           {% case block.type %}
             {% when 'eyebrow' %}
-              <p {{ block.shopify_attributes }} class="mb-6 inline-flex rounded-full border border-black/10 bg-white/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#6f6558] backdrop-blur-sm">
+              <p {{ block.shopify_attributes }} class="mb-5 inline-flex min-h-11 items-center rounded-full border border-black/8 bg-white/65 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#6f6558] backdrop-blur-sm">
                 {{ block.settings.text }}
               </p>
             {% when 'heading' %}
-              <h1 {{ block.shopify_attributes }} class="hero-headline font-heading text-[clamp(3rem,11vw,8.5rem)] leading-[0.88] tracking-[-0.05em] text-[#0c0c0b]">
+              <h1 {{ block.shopify_attributes }} class="hero-headline font-heading text-[clamp(2.75rem,9.5vw,7rem)] leading-[0.92] tracking-[-0.055em] text-[#11100f]">
                 {{ block.settings.text }}
               </h1>
             {% when 'subheadline' %}
-              <p {{ block.shopify_attributes }} class="mt-6 max-w-[34rem] font-body text-[0.98rem] leading-[1.8] text-[#5f5a52] md:text-[1.05rem]">
+              <p {{ block.shopify_attributes }} class="mt-5 max-w-[30rem] font-body text-[0.96rem] leading-[1.78] text-[#666056] md:text-[1.03rem]">
                 {{ block.settings.text }}
               </p>
             {% when 'button' %}
               <a
                 {{ block.shopify_attributes }}
                 href="{{ block.settings.url | default: '#' }}"
-                class="group mt-8 inline-flex items-center gap-3 rounded-full border border-black/10 bg-[#0c0c0b] px-4 py-3 text-[#f8f6f1] shadow-[0_18px_40px_-24px_rgba(12,12,11,0.55)] transition-transform duration-300 ease-out hover:-translate-y-0.5 active:translate-y-px"
+                class="group mt-8 inline-flex min-h-11 items-center gap-3 rounded-full border border-black/10 bg-[#11100f] px-4 py-3 text-[#f6f2eb] shadow-[0_18px_36px_-26px_rgba(17,16,15,0.42)] transition-[transform,background-color,border-color,box-shadow] duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:bg-[#161514] active:translate-y-px"
               >
-                <span class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] md:text-[0.78rem]">
+                <span class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.22em] md:text-[0.78rem]">
                   {{ block.settings.label }}
                 </span>
-                <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-inset ring-white/15 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:scale-105">
+                <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-inset ring-white/15 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5 group-hover:scale-105">
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M7 17 17 7M7 7h10v10"/>
                   </svg>
@@ -71,26 +67,26 @@
           {% endcase %}
         {% endfor %}
       {% else %}
-        <p class="mb-6 inline-flex rounded-full border border-black/10 bg-white/70 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#6f6558] backdrop-blur-sm">
+        <p class="mb-5 inline-flex min-h-11 items-center rounded-full border border-black/8 bg-white/65 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#6f6558] backdrop-blur-sm">
           {{ section.settings.eyebrow_text }}
         </p>
 
-        <h1 class="hero-headline font-heading text-[clamp(3rem,11vw,8.5rem)] leading-[0.88] tracking-[-0.05em] text-[#0c0c0b]">
+        <h1 class="hero-headline font-heading text-[clamp(2.75rem,9.5vw,7rem)] leading-[0.92] tracking-[-0.055em] text-[#11100f]">
           {{ section.settings.headline }}
         </h1>
 
-        <p class="mt-6 max-w-[34rem] font-body text-[0.98rem] leading-[1.8] text-[#5f5a52] md:text-[1.05rem]">
+        <p class="mt-5 max-w-[30rem] font-body text-[0.96rem] leading-[1.78] text-[#666056] md:text-[1.03rem]">
           {{ section.settings.subheadline }}
         </p>
 
         <a
           href="{{ section.settings.cta_url }}"
-          class="group mt-8 inline-flex items-center gap-3 rounded-full border border-black/10 bg-[#0c0c0b] px-4 py-3 text-[#f8f6f1] shadow-[0_18px_40px_-24px_rgba(12,12,11,0.55)] transition-transform duration-300 ease-out hover:-translate-y-0.5 active:translate-y-px"
+          class="group mt-8 inline-flex min-h-11 items-center gap-3 rounded-full border border-black/10 bg-[#11100f] px-4 py-3 text-[#f6f2eb] shadow-[0_18px_36px_-26px_rgba(17,16,15,0.42)] transition-[transform,background-color,border-color,box-shadow] duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:bg-[#161514] active:translate-y-px"
         >
-          <span class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.24em] md:text-[0.78rem]">
+          <span class="font-body text-[0.72rem] font-semibold uppercase tracking-[0.22em] md:text-[0.78rem]">
             {{ section.settings.cta_text }}
           </span>
-          <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-inset ring-white/15 transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:scale-105">
+          <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-inset ring-white/15 transition-transform duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5 group-hover:scale-105">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M7 17 17 7M7 7h10v10"/>
             </svg>
@@ -98,18 +94,16 @@
         </a>
       {% endif %}
 
-      <div class="mt-8 flex flex-wrap gap-2">
-        <span class="rounded-full border border-black/10 bg-white/70 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#6f6558] backdrop-blur-sm">Curated silhouettes</span>
-        <span class="rounded-full border border-black/10 bg-white/70 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#6f6558] backdrop-blur-sm">Seasonal texture</span>
-        <span class="rounded-full border border-black/10 bg-white/70 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#6f6558] backdrop-blur-sm">Quiet confidence</span>
-      </div>
+      <p class="mt-6 max-w-[22rem] text-[0.7rem] font-medium uppercase tracking-[0.24em] text-[#7b7367]">
+        Quietly edited for a slower first glance.
+      </p>
     </div>
   </div>
 
   {%- assign marquee_speed_val = section.settings.marquee_speed | default: 22 -%}
   {%- assign marquee_dir = section.settings.marquee_direction | default: 'left' -%}
-  <div class="absolute inset-x-0 bottom-6 z-10 px-5 md:px-8 lg:px-12">
-    <div class="overflow-hidden border-y border-black/10 bg-white/60 backdrop-blur-md">
+  <div class="absolute inset-x-0 bottom-4 z-10 hidden px-4 sm:block md:px-8 lg:px-12">
+    <div class="mx-auto max-w-7xl overflow-hidden rounded-full border border-black/8 bg-white/58 px-4 py-2.5 shadow-[0_14px_30px_-24px_rgba(17,16,15,0.25)] backdrop-blur-md">
       <div
         class="marquee-track"
         style="
@@ -119,7 +113,7 @@
         aria-hidden="true"
       >
         {% for i in (1..4) %}
-          <span class="marquee-text text-[10px] tracking-[0.34em] text-[#6f6558]" style="color: {{ section.settings.marquee_color | default: 'rgba(111, 101, 88, 0.7)' }};">
+          <span class="marquee-text text-[9px] font-medium tracking-[0.32em] text-[#6f6558]" style="color: {{ section.settings.marquee_color | default: 'rgba(111, 101, 88, 0.62)' }};">
             {{ section.settings.marquee_text }}&nbsp;
           </span>
         {% endfor %}
@@ -154,26 +148,26 @@
       "type": "text",
       "id": "eyebrow_text",
       "label": "Eyebrow Text",
-      "default": "New Collection 2025"
+      "default": "New collection"
     },
     {
       "type": "textarea",
       "id": "headline",
       "label": "Headline",
-      "default": "Timeless<br>Fashion Essence",
+      "default": "Timeless pieces<br>with room to breathe",
       "info": "Use <br> for line breaks"
     },
     {
       "type": "textarea",
       "id": "subheadline",
       "label": "Sub-headline",
-      "default": "Curated pieces that transcend seasons — wear what endures beyond trends."
+      "default": "Curated pieces that hold their shape, their finish, and their place in the day."
     },
     {
       "type": "text",
       "id": "cta_text",
       "label": "Button Text",
-      "default": "Explore Now"
+      "default": "View collection"
     },
     {
       "type": "url",
@@ -189,15 +183,15 @@
       "type": "text",
       "id": "marquee_text",
       "label": "Marquee Text",
-      "default": "Elegance • Style • Luxury • Forever •",
-      "info": "Scrolling text at the bottom"
+      "default": "Quiet detail • clean lines • lasting shape •",
+      "info": "Subtle scrolling text at the bottom"
     },
     {
       "type": "color",
       "id": "marquee_color",
       "label": "Marquee Text Color",
       "default": "#ffffff99",
-      "info": "Supports opacity (e.g. rgba)"
+      "info": "Supports opacity (for example, rgba)"
     },
     {
       "type": "range",
@@ -205,10 +199,10 @@
       "min": 5,
       "max": 60,
       "step": 1,
-      "default": 22,
+      "default": 24,
       "unit": "s",
       "label": "Marquee Speed",
-      "info": "Lower = faster. Default: 22s"
+      "info": "Lower = faster. Default: 24s"
     },
     {
       "type": "select",
@@ -231,7 +225,7 @@
           "type": "text",
           "id": "text",
           "label": "Text",
-          "default": "New Collection 2025"
+          "default": "New collection"
         }
       ]
     },
@@ -243,7 +237,7 @@
           "type": "textarea",
           "id": "text",
           "label": "Text",
-          "default": "Timeless<br>Fashion Essence",
+          "default": "Timeless pieces<br>with room to breathe",
           "info": "Use <br> for line breaks"
         }
       ]
@@ -256,7 +250,7 @@
           "type": "textarea",
           "id": "text",
           "label": "Text",
-          "default": "Curated pieces that transcend seasons — wear what endures beyond trends."
+          "default": "Curated pieces that hold their shape, their finish, and their place in the day."
         }
       ]
     },
@@ -268,7 +262,7 @@
           "type": "text",
           "id": "label",
           "label": "Label",
-          "default": "Explore Now"
+          "default": "View collection"
         },
         {
           "type": "url",

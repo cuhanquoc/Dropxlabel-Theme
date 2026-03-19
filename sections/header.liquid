@@ -9,10 +9,12 @@
         id="hamburger-btn"
         type="button"
         class="dx-menu-btn"
-        aria-label="Open menu"
+        aria-label="Open categories"
+        aria-haspopup="dialog"
         aria-expanded="false"
         aria-controls="mobile-collection-menu"
-        data-action="open-collection-menu"
+        data-action="toggle-collection-menu"
+        data-mobile-collection-menu-trigger
       >
         <span class="dx-menu-btn__line"></span>
         <span class="dx-menu-btn__line"></span>
@@ -723,6 +725,12 @@
       display: flex;
     }
 
+    body.mcm-open .dx-mobile-menu {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
     .dx-mega {
       display: none;
     }
@@ -769,15 +777,27 @@
   window[KEY] = true;
 
   function setHamburgerExpanded(expanded) {
-    var btn = document.getElementById('hamburger-btn');
-    if (btn) btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    var buttons = document.querySelectorAll('[data-mobile-collection-menu-trigger]');
+    buttons.forEach(function (btn) {
+      btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
+  }
+
+  function syncMobileMenuState(open) {
+    document.body.classList.toggle('mcm-open', open);
+    setHamburgerExpanded(open);
   }
 
   function closeAllMenus() {
     if (typeof window.MobileMenu !== 'undefined') window.MobileMenu.close();
     if (typeof window.MobileCollectionMenu !== 'undefined') window.MobileCollectionMenu.close();
-    setHamburgerExpanded(false);
+    syncMobileMenuState(false);
   }
+
+  window.addEventListener('mobile-collection-menu:change', function (event) {
+    if (!event || !event.detail) return;
+    syncMobileMenuState(!!event.detail.open);
+  });
 
   document.addEventListener('click', function (event) {
     var trigger = event.target.closest('[data-action]');
@@ -790,13 +810,23 @@
         return;
       }
 
-      if (action === 'open-collection-menu') {
+      if (action === 'open-collection-menu' || action === 'toggle-collection-menu') {
+        var isOpen = document.body.classList.contains('mcm-open');
         if (typeof window.MobileCollectionMenu !== 'undefined') {
-          window.MobileCollectionMenu.open();
+          if (action === 'toggle-collection-menu' && isOpen) {
+            window.MobileCollectionMenu.close();
+          } else if (action === 'toggle-collection-menu') {
+            window.MobileCollectionMenu.open();
+          } else {
+            window.MobileCollectionMenu.open();
+          }
         } else if (typeof window.MobileMenu !== 'undefined') {
-          window.MobileMenu.open();
+          if (action === 'toggle-collection-menu' && isOpen) {
+            window.MobileMenu.close();
+          } else {
+            window.MobileMenu.open();
+          }
         }
-        setHamburgerExpanded(true);
         return;
       }
 

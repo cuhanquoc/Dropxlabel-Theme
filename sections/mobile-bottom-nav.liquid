@@ -1,6 +1,6 @@
 {%- comment -%}
   mobile-bottom-nav.liquid
-  5 fixed tabs: Home · Menu · Shop · Account · Cart
+  5 fixed tabs: Home · Categories · Shop · Account · Cart
   — Shopify 2026 standards: HTML-first, Vanilla JS Web Component
   — WCAG 2.1: 44×44px touch targets, focus-visible, ARIA
   — Safe-area (notch/home indicator) support
@@ -48,7 +48,7 @@
       left: 0.75rem;
       right: 0.75rem;
       width: auto;
-      z-index: 10000;
+      z-index: 55;
       margin: 0 auto;
       max-width: 680px;
       background: color-mix(in srgb, {{ bg_color }} 90%, #f6f1ea 10%);
@@ -66,6 +66,13 @@
     }
     .mob-nav.visible {
       transform: translateY(0);
+    }
+
+    body.mcm-open .mob-nav {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(140%);
     }
 
     /* ── Track (5 equal columns) ── */
@@ -106,6 +113,10 @@
       user-select: none;
       /* Full-width within column */
       width: 100%;
+    }
+
+    .mob-nav__item[aria-controls="mobile-collection-menu"] {
+      position: relative;
     }
 
     /* Tap feedback */
@@ -208,7 +219,10 @@
     <button
       type="button"
       class="mob-nav__item"
-      aria-label="{{ section.settings.menu_label | default: 'Menu' }}"
+      aria-label="{{ section.settings.menu_label | default: 'Categories' }}"
+      aria-haspopup="dialog"
+      aria-controls="mobile-collection-menu"
+      aria-expanded="false"
       data-mob-menu-open
     >
       <svg class="mob-nav__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -216,7 +230,7 @@
         <line x1="3" y1="12" x2="21" y2="12"/>
         <line x1="3" y1="18" x2="21" y2="18"/>
       </svg>
-      <span class="mob-nav__label">{{ section.settings.menu_label | default: 'Menu' }}</span>
+      <span class="mob-nav__label">{{ section.settings.menu_label | default: 'Categories' }}</span>
     </button>
 
     {%- comment -%} ── 3. SHOP ── {%- endcomment -%}
@@ -297,6 +311,7 @@
       this._initCartBadge();
       this._initMenuButton();
       this._initActiveState();
+      this._syncMenuState();
     }
 
     disconnectedCallback() {
@@ -305,6 +320,9 @@
       }
       if (this._onVisibilityChange) {
         document.removeEventListener('visibilitychange', this._onVisibilityChange);
+      }
+      if (this._onMenuStateChange) {
+        window.removeEventListener('mobile-collection-menu:change', this._onMenuStateChange);
       }
       if (this._menuBtn && this._onMenuClick) {
         this._menuBtn.removeEventListener('click', this._onMenuClick);
@@ -366,7 +384,12 @@
       this._menuBtn = this.querySelector('[data-mob-menu-open]');
       if (this._menuBtn) {
         this._onMenuClick = function () {
-          if (typeof MobileCollectionMenu !== 'undefined') MobileCollectionMenu.open();
+          if (typeof MobileCollectionMenu === 'undefined') return;
+          if (document.body.classList.contains('mcm-open')) {
+            MobileCollectionMenu.close();
+          } else {
+            MobileCollectionMenu.open();
+          }
         };
         this._menuBtn.addEventListener('click', this._onMenuClick);
       }
@@ -385,6 +408,17 @@
         };
         this._cartLink.addEventListener('click', this._onCartClick, true);
       }
+    }
+
+    _syncMenuState() {
+      this._menuStateButtons = this._menuStateButtons || document.querySelectorAll('[data-mobile-collection-menu-trigger]');
+      this._onMenuStateChange = (event) => {
+        const isOpen = !!event?.detail?.open;
+        this._menuStateButtons.forEach((button) => {
+          button.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+      };
+      window.addEventListener('mobile-collection-menu:change', this._onMenuStateChange);
     }
 
     /* Mark current page item active based on URL */
@@ -495,7 +529,7 @@
       "type": "text",
       "id": "menu_label",
       "label": "Menu label",
-      "default": "Menu"
+      "default": "Categories"
     },
     {
       "type": "text",

@@ -13,15 +13,75 @@
       "type": "hero-banner",
       "settings": {
         "background_video": "shopify://files/videos/hf_20260311_073759_4f7a9f9f-0d9a-4b40-9272-79cfef9c6dff.mp4",
-        "eyebrow_text": "buy 2 get 3",
-        "headline": "Small Pieces Of Art You Can Wear",
-        "subheadline": "Summer is waiting for you",
-        "cta_text": "Explore Now",
+        "eyebrow_text": "New collection",
+        "headline": "Timeless pieces<br>with room to breathe",
+        "subheadline": "Curated pieces that hold their shape, their finish, and their place in the day.",
+        "cta_text": "View collection",
         "cta_url": "shopify://products/aurelie-dress™-floral-printed-dress",
-        "marquee_text": "ORIGINAL",
+        "marquee_text": "Quiet detail • clean lines • lasting shape •",
         "marquee_color": "#ffffff99",
-        "marquee_speed": 19,
+        "marquee_speed": 24,
         "marquee_direction": "left"
+      }
+    },
+    "marquee_ticker_6CKgye": {
+      "type": "marquee-ticker",
+      "blocks": {
+        "product_card_YqGwLD": {
+          "type": "product_card",
+          "settings": {
+            "product": "azure-dress™-hem-dress",
+            "custom_title": "JESSEY DRESS™",
+            "card_color": "#c6e4e3"
+          }
+        },
+        "product_card_ceXyFx": {
+          "type": "product_card",
+          "settings": {
+            "product": "alys-dress™-solid-white-sexy-deep-v-neck-dress",
+            "custom_title": "ALYS DRESS™",
+            "card_color": "#e3cde9"
+          }
+        },
+        "product_card_imJtbT": {
+          "type": "product_card",
+          "settings": {
+            "product": "esme-bikini™-tie-side-triangle-bikini",
+            "custom_title": "ESME BIKINI™",
+            "card_color": "#c2e4cc"
+          }
+        },
+        "product_card_ndBeix": {
+          "type": "product_card",
+          "settings": {
+            "product": "clarisse-top™-casual-commuting-contrast-top",
+            "custom_title": "CLARISSE TOP™",
+            "card_color": "#e7e2bd"
+          }
+        },
+        "card_5": {
+          "type": "product_card",
+          "settings": {
+            "product": "azure-dress™-hem-dress",
+            "custom_title": "AZURE DRESS™",
+            "card_color": "#e2c9ce"
+          }
+        }
+      },
+      "block_order": [
+        "product_card_YqGwLD",
+        "product_card_ceXyFx",
+        "product_card_imJtbT",
+        "product_card_ndBeix",
+        "card_5"
+      ],
+      "settings": {
+        "heading": "A quieter product edit",
+        "description_1": "Selected pieces from the current assortment, presented with a softer hand and a clearer hierarchy.",
+        "description_2": "",
+        "cta_text": "Browse edit",
+        "cta_url": "",
+        "bg_color": "#f5f0e8"
       }
     },
     "featured-collection": {
@@ -156,66 +216,6 @@
         "bg_color": "#f2f0ec"
       }
     },
-    "marquee_ticker_6CKgye": {
-      "type": "marquee-ticker",
-      "blocks": {
-        "product_card_YqGwLD": {
-          "type": "product_card",
-          "settings": {
-            "product": "azure-dress™-hem-dress",
-            "custom_title": "JESSEY DRESS™",
-            "card_color": "#c6e4e3"
-          }
-        },
-        "product_card_ceXyFx": {
-          "type": "product_card",
-          "settings": {
-            "product": "alys-dress™-solid-white-sexy-deep-v-neck-dress",
-            "custom_title": "ALYS DRESS™",
-            "card_color": "#e3cde9"
-          }
-        },
-        "product_card_imJtbT": {
-          "type": "product_card",
-          "settings": {
-            "product": "esme-bikini™-tie-side-triangle-bikini",
-            "custom_title": "ESME BIKINI™",
-            "card_color": "#c2e4cc"
-          }
-        },
-        "product_card_ndBeix": {
-          "type": "product_card",
-          "settings": {
-            "product": "clarisse-top™-casual-commuting-contrast-top",
-            "custom_title": "CLARISSE TOP™",
-            "card_color": "#e7e2bd"
-          }
-        },
-        "card_5": {
-          "type": "product_card",
-          "settings": {
-            "product": "azure-dress™-hem-dress",
-            "custom_title": "AZURE DRESS™",
-            "card_color": "#e2c9ce"
-          }
-        }
-      },
-      "block_order": [
-        "product_card_YqGwLD",
-        "product_card_ceXyFx",
-        "product_card_imJtbT",
-        "product_card_ndBeix",
-        "card_5"
-      ],
-      "settings": {
-        "heading": "TRENDING STYLES YOU CAN'T MISS!",
-        "description_1": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers.",
-        "description_2": "",
-        "cta_text": "SHOP NOW",
-        "cta_url": "",
-        "bg_color": "#0a0a0a"
-      }
-    },
     "customer-help-center": {
       "type": "customer-help-center",
       "settings": {
@@ -243,9 +243,9 @@
   },
   "order": [
     "hero-banner",
+    "marquee_ticker_6CKgye",
     "featured-collection",
     "brand-story-bento",
-    "marquee_ticker_6CKgye",
     "customer-help-center"
   ]
 }

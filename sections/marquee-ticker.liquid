@@ -1,32 +1,33 @@
-{% comment %} Featured Edit — Product Cards with Blocks {% endcomment %}
+{% comment %} Featured Edit - Product Cards with Blocks {% endcomment %}
 
 <section
-  class="relative overflow-hidden"
+  class="relative overflow-hidden bg-[#f5f0e8] text-[#111111]"
   id="mt-firework-section"
-  style="background-color: {{ section.settings.bg_color | default: '#f5f1ea' }};"
+  style="background-color: {{ section.settings.bg_color | default: '#f5f0e8' }};"
 >
+  <div class="pointer-events-none absolute inset-0">
+    <div class="absolute inset-x-0 top-0 h-56 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.72),transparent_48%),radial-gradient(circle_at_80%_12%,rgba(205,196,183,0.2),transparent_42%)]"></div>
+    <div class="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(180deg,rgba(245,240,232,0)_0%,rgba(245,240,232,0.58)_100%)]"></div>
+  </div>
 
-  <!-- Quiet ambient canvas behind the content -->
-  <canvas id="mt-firework-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;opacity:0.9;"></canvas>
+  <div class="relative z-10 mx-auto max-w-6xl px-4 pb-14 pt-10 sm:px-6 md:px-8 md:pb-20 md:pt-12 lg:py-20">
 
-  <div class="relative z-10 mx-auto max-w-[720px] px-4 pb-16 pt-8 md:px-8 md:pb-24 md:pt-10">
-
-    <div class="mb-8 max-w-[34rem]">
-      <p class="mb-3 inline-flex rounded-full border border-black/10 bg-white/75 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#6f6558] backdrop-blur-sm">
+    <div class="mb-8 max-w-[34rem] md:mb-10">
+      <p class="mb-3 inline-flex min-h-11 items-center rounded-full border border-black/8 bg-white/72 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#73695d] backdrop-blur-sm">
         Featured edit
       </p>
-      <h2 style="font-family: var(--font-heading); font-size: clamp(2rem, 6vw, 3.4rem); font-weight: 700; line-height: 1.02; letter-spacing: -0.04em; color: #111111; margin-bottom: 1rem;">
+      <h2 style="font-family: var(--font-heading); font-size: clamp(1.9rem, 4.6vw, 3.1rem); font-weight: 700; line-height: 1.05; letter-spacing: -0.045em; color: #111111; margin-bottom: 0.85rem;">
         {{ section.settings.heading | default: 'A quieter product edit' }}
       </h2>
 
     {% if section.settings.description_1 != blank %}
-      <p style="font-family: var(--font-body); font-size: 0.98rem; line-height: 1.75; color: rgba(17,17,17,0.62); margin-bottom: 1rem; max-width: 560px;">
+      <p style="font-family: var(--font-body); font-size: 0.98rem; line-height: 1.75; color: rgba(17,17,17,0.62); margin-bottom: 0.85rem; max-width: 560px;">
         {{ section.settings.description_1 }}
       </p>
     {% endif %}
 
     {% if section.settings.description_2 != blank %}
-      <p style="font-family: var(--font-body); font-size: 0.98rem; line-height: 1.75; color: rgba(17,17,17,0.62); margin-bottom: 2rem; max-width: 560px;">
+      <p style="font-family: var(--font-body); font-size: 0.98rem; line-height: 1.75; color: rgba(17,17,17,0.62); margin-bottom: 1.5rem; max-width: 560px;">
         {{ section.settings.description_2 }}
       </p>
     {% endif %}
@@ -35,14 +36,14 @@
     {% if section.settings.cta_text != blank %}
       <a
         href="{{ section.settings.cta_url | default: '/collections/all' }}"
-        class="group mb-12 inline-flex min-h-[48px] items-center gap-3 rounded-full border border-black/10 bg-white/70 px-2 py-1.5 pr-6 transition-[background-color,border-color,transform] duration-300 hover:-translate-y-[1px] hover:bg-white/90 md:mb-16"
+        class="group mb-10 inline-flex min-h-11 items-center gap-3 rounded-full border border-black/10 bg-white/72 px-2 py-1.5 pr-6 shadow-[0_12px_28px_-24px_rgba(17,17,17,0.35)] transition-[transform,background-color,border-color,box-shadow] duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:bg-white/88 md:mb-12"
       >
-        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#111111] text-[#f5f1ea] transition-transform duration-300 group-hover:scale-[1.03]">
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#111111] text-[#f5f0e8] transition-transform duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]">
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9">
             <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/>
           </svg>
         </span>
-        <span style="font-family: var(--font-body); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #111111;">
+        <span style="font-family: var(--font-body); font-size: 0.76rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #111111;">
           {{ section.settings.cta_text }}
         </span>
       </a>
@@ -50,7 +51,7 @@
 
     <!-- ── Product Cards from Blocks ── -->
     {% if section.blocks.size > 0 %}
-      <div class="flex flex-col gap-3 rounded-[1.5rem] border border-black/5 bg-white/70 p-3 md:gap-4 md:p-4">
+      <div class="flex flex-col gap-3 rounded-[1.75rem] border border-black/6 bg-white/72 p-3 shadow-[0_22px_60px_-44px_rgba(17,17,17,0.35)] md:gap-4 md:p-4">
         {% for block in section.blocks %}
           {% if block.type == 'product_card' %}
             {% assign product = block.settings.product %}
@@ -58,10 +59,10 @@
 
             {% if product != blank %}
               <a href="{{ product.url }}"
-                 class="group flex min-h-[100px] items-center gap-4 rounded-xl border border-black/5 p-3 transition-[transform,border-color,background-color] duration-300 hover:-translate-y-[1px] md:gap-5 md:rounded-2xl md:p-4"
+                 class="group flex min-h-[96px] items-center gap-4 rounded-xl border border-black/5 p-3 transition-[transform,border-color,background-color,box-shadow] duration-300 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[1px] hover:border-black/8 hover:shadow-[0_14px_30px_-26px_rgba(17,17,17,0.28)] md:gap-5 md:rounded-2xl md:p-4"
                  style="background-color: {{ bg }};"
                  {{ block.shopify_attributes }}>
-                <div class="h-[100px] w-[100px] shrink-0 overflow-hidden rounded-lg bg-white/20 md:h-[120px] md:w-[120px] md:rounded-xl">
+                <div class="h-[96px] w-[96px] shrink-0 overflow-hidden rounded-lg bg-white/20 md:h-[112px] md:w-[112px] md:rounded-xl">
                   {% if product.featured_image != blank %}
                     <img src="{{ product.featured_image | image_url: width: 280 }}"
                          alt="{{ product.title | escape }}"
@@ -71,7 +72,7 @@
                 </div>
 
                 <div class="flex-1 min-w-0">
-                  <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1.02rem; line-height: 1.35; color: #111111; margin-bottom: 0.35rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                  <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1rem; line-height: 1.35; color: #111111; margin-bottom: 0.35rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                     {% if block.settings.custom_title != blank %}{{ block.settings.custom_title }}{% else %}{{ product.title }}{% endif %}
                   </p>
                   <div style="display: flex; align-items: center; gap: 0.5rem;">
@@ -89,14 +90,14 @@
                 </span>
               </a>
             {% else %}
-              <div class="flex items-center gap-4 md:gap-5 rounded-xl md:rounded-2xl p-3 md:p-4 min-h-[100px]"
+              <div class="flex min-h-[96px] items-center gap-4 rounded-xl p-3 md:gap-5 md:rounded-2xl md:p-4"
                    style="background-color: {{ bg }};"
                    {{ block.shopify_attributes }}>
-                <div class="w-[100px] h-[100px] md:w-[120px] md:h-[120px] rounded-lg md:rounded-xl overflow-hidden shrink-0 bg-white/30">
+                <div class="h-[96px] w-[96px] shrink-0 overflow-hidden rounded-lg bg-white/30 md:h-[112px] md:w-[112px] md:rounded-xl">
                   {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'placeholder-svg' }}
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1.02rem; line-height: 1.35; color: #111111; margin-bottom: 0.35rem;">
+                  <p style="font-family: var(--font-heading); font-weight: 700; font-size: 1rem; line-height: 1.35; color: #111111; margin-bottom: 0.35rem;">
                     Select a product
                   </p>
                   <p style="font-family: var(--font-body); font-weight: 600; font-size: 0.88rem; color: #0a0a0a;">
@@ -118,93 +119,6 @@
   </div>
 </section>
 
-<script>
-(function() {
-  var canvas = document.getElementById('mt-firework-canvas');
-  var section = document.getElementById('mt-firework-section');
-  if (!canvas || !section) return;
-  var ctx = canvas.getContext('2d');
-  var particles = [];
-  var fired = false;
-  var animId = null;
-  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function resize() {
-    canvas.width = section.offsetWidth;
-    canvas.height = section.offsetHeight;
-  }
-
-  function Particle(x, y, color) {
-    this.x = x;
-    this.y = y;
-    var angle = Math.random() * Math.PI * 2;
-    var speed = Math.random() * 1.4 + 0.35;
-    this.vx = Math.cos(angle) * speed;
-    this.vy = Math.sin(angle) * speed - 0.15;
-    this.alpha = 0.22;
-    this.r = Math.random() * 1.6 + 0.6;
-    this.color = color;
-    this.decay = Math.random() * 0.006 + 0.003;
-    this.gravity = 0.01;
-  }
-
-  function burst(x, y) {
-    var colors = ['rgba(17,17,17,0.20)', 'rgba(111,101,88,0.22)', 'rgba(255,255,255,0.28)'];
-    var count = 10 + Math.floor(Math.random() * 6);
-    for (var i = 0; i < count; i++) {
-      particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)]));
-    }
-  }
-
-  function ambientDrift() {
-    var w = canvas.width;
-    var h = canvas.height;
-    burst(w * 0.08, h * 0.18);
-    burst(w * 0.92, h * 0.24);
-    burst(w * 0.16, h * 0.74);
-  }
-
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (var i = particles.length - 1; i >= 0; i--) {
-      var p = particles[i];
-      p.x += p.vx;
-      p.vy += p.gravity;
-      p.y += p.vy;
-      p.alpha -= p.decay;
-      if (p.alpha <= 0) { particles.splice(i, 1); continue; }
-      ctx.globalAlpha = p.alpha;
-      ctx.fillStyle = p.color;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-    if (particles.length > 0) {
-      animId = requestAnimationFrame(animate);
-    } else {
-      animId = null;
-    }
-  }
-
-  if (!prefersReduced) {
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting && !fired) {
-          fired = true;
-          resize();
-          ambientDrift();
-          animate();
-          observer.disconnect();
-        }
-      });
-    }, { threshold: 0.3 });
-    observer.observe(section);
-    window.addEventListener('resize', resize, { passive: true });
-  }
-})();
-</script>
-
 {% schema %}
 {
   "name": "Featured Edit",
@@ -218,13 +132,13 @@
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "A quieter product edit"
+        "default": "A quieter product edit"
     },
     {
       "type": "textarea",
       "id": "description_1",
       "label": "Description Paragraph 1",
-      "default": "Selected pieces from the current assortment, presented with a quieter hand and a clearer hierarchy."
+        "default": "Selected pieces from the current assortment, presented with a softer hand and a clearer hierarchy."
     },
     {
       "type": "textarea",
@@ -236,7 +150,7 @@
       "type": "text",
       "id": "cta_text",
       "label": "Button Text",
-      "default": "Browse edit"
+        "default": "Browse edit"
     },
     {
       "type": "url",
@@ -251,7 +165,7 @@
       "type": "color",
       "id": "bg_color",
       "label": "Background Color",
-      "default": "#f5f1ea",
+      "default": "#f5f0e8",
       "info": "Warm neutrals keep the section calmer and easier to scan"
     }
   ],
