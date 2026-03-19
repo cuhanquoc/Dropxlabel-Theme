@@ -128,6 +128,17 @@
     object-fit: cover;
   }
 
+  @keyframes heroSlideRight-{{ section.id }} {
+    from {
+      opacity: 0;
+      transform: translate3d(-24px, 0, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
   @media (max-width: 767px) {
     hero-banner[data-section-id="{{ section.id }}"] {
       height: calc(100svh - 148px);
@@ -146,6 +157,8 @@
       font-size: 0.82rem;
       letter-spacing: 0.28em;
       line-height: 1.2;
+      opacity: 0;
+      animation: heroSlideRight-{{ section.id }} 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.08s forwards;
     }
 
     hero-banner[data-section-id="{{ section.id }}"] .hero-headline {
@@ -153,6 +166,8 @@
       margin-bottom: 1.15rem;
       font-size: clamp(3rem, 12vw, 4.7rem);
       line-height: 0.92;
+      opacity: 0;
+      animation: heroSlideRight-{{ section.id }} 0.82s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
     }
 
     hero-banner[data-section-id="{{ section.id }}"] .hero-copy {
@@ -161,11 +176,15 @@
       font-size: 1rem;
       line-height: 1.5;
       color: rgba(255, 255, 255, 0.8);
+      opacity: 0;
+      animation: heroSlideRight-{{ section.id }} 0.78s cubic-bezier(0.22, 1, 0.36, 1) 0.34s forwards;
     }
 
     hero-banner[data-section-id="{{ section.id }}"] .hero-cta {
       margin-bottom: 0;
       align-self: flex-start;
+      opacity: 0;
+      animation: heroSlideRight-{{ section.id }} 0.82s cubic-bezier(0.22, 1, 0.36, 1) 0.48s forwards;
     }
 
     hero-banner[data-section-id="{{ section.id }}"] .marquee-track {
@@ -174,6 +193,17 @@
 
     hero-banner[data-section-id="{{ section.id }}"] .absolute.w-full.overflow-hidden.bottom-10 {
       bottom: 0.35rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    hero-banner[data-section-id="{{ section.id }}"] .hero-eyebrow,
+    hero-banner[data-section-id="{{ section.id }}"] .hero-headline,
+    hero-banner[data-section-id="{{ section.id }}"] .hero-copy,
+    hero-banner[data-section-id="{{ section.id }}"] .hero-cta {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
     }
   }
 </style>
