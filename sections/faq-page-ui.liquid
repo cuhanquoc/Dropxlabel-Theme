@@ -50,13 +50,15 @@
     </div>
 
     <div class="faq-page__body">
-      {%- if section.settings.heading != blank -%}
-        <h2 class="faq-page__heading">{{ section.settings.heading | escape }}</h2>
-      {%- endif -%}
+      <div class="faq-page__intro">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="faq-page__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
 
-      {%- if section.settings.description != blank -%}
-        <div class="faq-page__description">{{ section.settings.description | newline_to_br }}</div>
-      {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <div class="faq-page__description">{{ section.settings.description | newline_to_br }}</div>
+        {%- endif -%}
+      </div>
 
       <div class="faq-page__items" role="list">
         {%- for block in section.blocks -%}
