@@ -27,11 +27,11 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "eyebrow": "Redesign Proposal — Celisira Trending Products",
+        "eyebrow": "Celisira - top selling",
         "heading_line_1": "TRENDING",
         "heading_line_2": "PRODUCTS",
-        "collection": "",
-        "max_products": 12,
+        "collection": "dress",
+        "max_products": 24,
         "product_list": [
           "arden-dress™-asymmetrical-dress",
           "aurelie-dress™-floral-printed-dress",
@@ -40,13 +40,27 @@
           "clarisse-top™-casual-commuting-contrast-top",
           "alys-dress™-solid-white-sexy-deep-v-neck-dress",
           "cordelia-dress™-button-front-dress",
+          "marisol-dress™-cutout-dress",
           "elenie-dress™-neck-chain-dress",
           "evren-dress™-tea-party-dress",
-          "marisol-dress™-cutout-dress"
+          "briar-skirt-short™-fringe-detail-skirt",
+          "calyx-dress™-white-striped-dress",
+          "esme-bikini™-tie-side-triangle-bikini",
+          "fleur-dress™-peplum-dress",
+          "ismerie-dress™-ruffled-sleeve-a-line-dress",
+          "maelle-bikini™-tie-up-women-bikini",
+          "maureen-dress™-summer-vacation-dress",
+          "nyx-dress™-high-neck-dress",
+          "oriel-dress™-hem-spaghetti-dress",
+          "solene-dress™-metal-shell-dress",
+          "veline-dress™-hem-cami-dress",
+          "vesper-dress™-floral-halter-maxi-slit-dress",
+          "vivienne-bikini™-stripe-sexy-bikini",
+          "ysabel-dress™-loose-strap-dress"
         ],
         "more_label": "More",
-        "items_initial": 6,
-        "items_per_load": 4,
+        "items_initial": 12,
+        "items_per_load": 8,
         "helper_text": "Hover cards to reveal Quick View • Tap thumbnails to switch color"
       }
     },
