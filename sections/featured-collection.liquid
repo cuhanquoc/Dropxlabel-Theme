@@ -58,7 +58,7 @@
             {%- endif -%}
             {%- assign variant_compare = variant.compare_at_price | default: 0 -%}
             {%- capture variant_entry -%}
-              {"id":{{ variant.id }},"title":{{ variant.title | json }},"price":{{ variant.price }},"compare":{{ variant_compare }},"available":{{ variant.available }},"img":{{ variant_img | json }},"swatch":{{ variant_swatch | json }},"option1":{{ variant.option1 | json }},"option2":{{ variant.option2 | json }},"option3":{{ variant.option3 | json }}}
+              {"id":{{ variant.id | json }},"title":{{ variant.title | json }},"price":{{ variant.price }},"compare":{{ variant_compare }},"available":{{ variant.available }},"img":{{ variant_img | json }},"swatch":{{ variant_swatch | json }},"option1":{{ variant.option1 | json }},"option2":{{ variant.option2 | json }},"option3":{{ variant.option3 | json }}}
             {%- endcapture -%}
             {%- assign variants_json = variants_json | append: variant_entry | strip_newlines -%}
             {%- unless forloop.last -%}{%- assign variants_json = variants_json | append: ',' -%}{%- endunless -%}
