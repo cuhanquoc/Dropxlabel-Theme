@@ -46,7 +46,7 @@
             loading: 'eager',
             fetchpriority: 'high',
             widths: '480, 720, 960, 1200, 1600',
-            sizes: '(max-width: 767px) 100vw, 430px',
+            sizes: '(max-width: 767px) 100vw, (max-width: 1023px) 430px, 100vw',
             alt: section.settings.hero_image_alt | default: section.settings.hero_title
         }}
       {%- else -%}
@@ -98,7 +98,7 @@
                     class: 'news-card__image',
                     loading: image_loading,
                     widths: '375, 430, 750, 860',
-                    sizes: '(max-width: 430px) 100vw, 430px',
+                    sizes: '(max-width: 767px) 100vw, (max-width: 1023px) 430px, 40vw',
                     alt: article.image.alt | default: article.title
                 }}
               {%- else -%}
@@ -471,6 +471,66 @@
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    #{{ section_id }} .news-page__shell {
+      max-width: min(1240px, calc(100vw - 64px));
+    }
+
+    #{{ section_id }} .news-page__hero {
+      aspect-ratio: 16 / 6.5;
+      border-radius: 0 0 var(--news-card-radius) var(--news-card-radius);
+    }
+
+    #{{ section_id }} .news-page__hero-content {
+      justify-content: flex-end;
+      align-items: flex-start;
+      padding: 0 40px 40px;
+      text-align: left;
+    }
+
+    #{{ section_id }} .news-page__hero-title {
+      font-size: clamp(3rem, 4vw, 4.8rem);
+      max-width: 10ch;
+    }
+
+    #{{ section_id }} .news-page__count {
+      padding: 44px 8px 12px;
+    }
+
+    #{{ section_id }} .news-page__articles {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 40px 28px;
+      padding: 20px 8px 32px;
+    }
+
+    #{{ section_id }} .news-card:first-child {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 28px;
+      align-items: center;
+    }
+
+    #{{ section_id }} .news-card:first-child .news-card__image-wrap {
+      aspect-ratio: 16 / 10;
+    }
+
+    #{{ section_id }} .news-card:first-child .news-card__content {
+      padding: 12px 12px 12px 0;
+      justify-content: center;
+    }
+
+    #{{ section_id }} .news-card__title {
+      font-size: 1.6rem;
+    }
+
+    #{{ section_id }} .news-page__load-more-wrap,
+    #{{ section_id }} .news-page__end {
+      padding: 12px 8px 56px;
     }
   }
 </style>

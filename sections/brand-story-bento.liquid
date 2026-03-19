@@ -74,6 +74,59 @@
   #bsb-carousel::-webkit-scrollbar { display: none; }
   #bsb-carousel { -ms-overflow-style: none; scrollbar-width: none; }
   .bsb-card-btn:hover { background-color: #0a0a0a; color: #fff; }
+
+  @media (min-width: 1024px) {
+    #brand-story-bento {
+      padding-bottom: 2.5rem;
+    }
+
+    #brand-story-bento > div:first-child {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 4rem 2rem 0;
+    }
+
+    #brand-story-bento > div:first-child h2 {
+      font-size: clamp(2.8rem, 4vw, 4.5rem) !important;
+      max-width: 12ch;
+    }
+
+    #brand-story-bento > div:first-child p {
+      max-width: 52ch;
+      font-size: 1rem !important;
+    }
+
+    #bsb-carousel {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 3rem 2rem 0;
+      overflow: visible !important;
+    }
+
+    #bsb-carousel > div {
+      display: grid !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 2rem !important;
+      width: 100% !important;
+    }
+
+    #bsb-carousel .bsb-card {
+      width: auto !important;
+      max-width: none !important;
+    }
+
+    #bsb-carousel .bsb-card > div:last-child {
+      padding-top: 1.5rem !important;
+    }
+
+    #bsb-carousel .bsb-card p[style*="font-size: 1.35rem"] {
+      font-size: 1.55rem !important;
+    }
+
+    #bsb-scroll-bar {
+      display: none;
+    }
+  }
 </style>
 
 <script>

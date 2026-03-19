@@ -5,43 +5,45 @@
   <!-- Firework canvas — positioned behind content -->
   <canvas id="mt-firework-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1;"></canvas>
 
-  <div class="relative z-10 max-w-[640px] mx-auto px-4 md:px-8 pt-2 pb-16 md:pt-4 md:pb-24">
+  <div class="mt-layout relative z-10 max-w-[640px] mx-auto px-4 md:px-8 pt-2 pb-16 md:pt-4 md:pb-24">
 
-    <!-- ── Hero Text ── -->
-    <h2 style="font-family: var(--font-heading); font-size: clamp(2rem, 7vw, 3.2rem); font-weight: 800; line-height: 1.05; letter-spacing: 0.02em; text-transform: uppercase; color: #ffffff; margin-bottom: 2rem;">
-      {{ section.settings.heading | default: "TRENDING STYLES YOU CAN'T MISS!" }}
-    </h2>
+    <div class="mt-copy">
+      <!-- ── Hero Text ── -->
+      <h2 style="font-family: var(--font-heading); font-size: clamp(2rem, 7vw, 3.2rem); font-weight: 800; line-height: 1.05; letter-spacing: 0.02em; text-transform: uppercase; color: #ffffff; margin-bottom: 2rem;">
+        {{ section.settings.heading | default: "TRENDING STYLES YOU CAN'T MISS!" }}
+      </h2>
 
-    {% if section.settings.description_1 != blank %}
-      <p style="font-family: var(--font-body); font-size: 0.92rem; line-height: 1.75; color: rgba(255,255,255,0.6); margin-bottom: 1.25rem; max-width: 560px;">
-        {{ section.settings.description_1 }}
-      </p>
-    {% endif %}
+      {% if section.settings.description_1 != blank %}
+        <p style="font-family: var(--font-body); font-size: 0.92rem; line-height: 1.75; color: rgba(255,255,255,0.6); margin-bottom: 1.25rem; max-width: 560px;">
+          {{ section.settings.description_1 }}
+        </p>
+      {% endif %}
 
-    {% if section.settings.description_2 != blank %}
-      <p style="font-family: var(--font-body); font-size: 0.92rem; line-height: 1.75; color: rgba(255,255,255,0.6); margin-bottom: 2.5rem; max-width: 560px;">
-        {{ section.settings.description_2 }}
-      </p>
-    {% endif %}
+      {% if section.settings.description_2 != blank %}
+        <p style="font-family: var(--font-body); font-size: 0.92rem; line-height: 1.75; color: rgba(255,255,255,0.6); margin-bottom: 2.5rem; max-width: 560px;">
+          {{ section.settings.description_2 }}
+        </p>
+      {% endif %}
 
-    <!-- ── CTA Button ── -->
-    {% if section.settings.cta_text != blank %}
-      <a href="{{ section.settings.cta_url | default: '/collections/all' }}"
-         class="inline-flex items-center gap-3 rounded-full border border-white/20 bg-transparent hover:bg-white/5 transition-[background-color,border-color,opacity] duration-300 pr-6 pl-1.5 py-1.5 mb-12 md:mb-16 min-h-[48px] group">
-        <span class="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0a0a0a" stroke-width="2">
-            <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/>
-          </svg>
-        </span>
-        <span style="font-family: var(--font-body); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #ffffff;">
-          {{ section.settings.cta_text }}
-        </span>
-      </a>
-    {% endif %}
+      <!-- ── CTA Button ── -->
+      {% if section.settings.cta_text != blank %}
+        <a href="{{ section.settings.cta_url | default: '/collections/all' }}"
+           class="inline-flex items-center gap-3 rounded-full border border-white/20 bg-transparent hover:bg-white/5 transition-[background-color,border-color,opacity] duration-300 pr-6 pl-1.5 py-1.5 mb-12 md:mb-16 min-h-[48px] group">
+          <span class="w-10 h-10 rounded-full bg-white flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform duration-300">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#0a0a0a" stroke-width="2">
+              <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10"/>
+            </svg>
+          </span>
+          <span style="font-family: var(--font-body); font-size: 0.82rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #ffffff;">
+            {{ section.settings.cta_text }}
+          </span>
+        </a>
+      {% endif %}
+    </div>
 
     <!-- ── Product Cards from Blocks ── -->
     {% if section.blocks.size > 0 %}
-      <div class="rounded-2xl border border-white/[0.08] p-3 md:p-4 flex flex-col gap-3 md:gap-4">
+      <div class="mt-cards rounded-2xl border border-white/[0.08] p-3 md:p-4 flex flex-col gap-3 md:gap-4">
         {% for block in section.blocks %}
           {% if block.type == 'product_card' %}
             {% assign product = block.settings.product %}
@@ -112,6 +114,45 @@
 
   </div>
 </section>
+
+<style>
+  @media (min-width: 1024px) {
+    #mt-firework-section .mt-layout {
+      max-width: 1280px !important;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr);
+      gap: 3rem;
+      align-items: start;
+      padding: 4.5rem 2rem 5rem !important;
+    }
+
+    #mt-firework-section .mt-copy {
+      position: sticky;
+      top: 7rem;
+    }
+
+    #mt-firework-section .mt-copy h2 {
+      font-size: clamp(3rem, 4vw, 4.5rem) !important;
+      max-width: 9ch;
+      margin-bottom: 2rem !important;
+    }
+
+    #mt-firework-section .mt-copy p {
+      font-size: 1rem !important;
+      max-width: 48ch !important;
+    }
+
+    #mt-firework-section .mt-cards {
+      padding: 1.25rem !important;
+      gap: 1rem !important;
+    }
+
+    #mt-firework-section .mt-cards > a,
+    #mt-firework-section .mt-cards > div {
+      min-height: 132px !important;
+    }
+  }
+</style>
 
 <script>
 (function() {

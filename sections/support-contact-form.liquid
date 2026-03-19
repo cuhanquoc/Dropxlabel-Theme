@@ -35,7 +35,7 @@
             loading: 'eager',
             fetchpriority: 'high',
             widths: '480, 720, 960, 1200, 1600',
-            sizes: '(max-width: 767px) 100vw, 430px',
+            sizes: '(max-width: 767px) 100vw, (max-width: 1023px) 560px, 44vw',
             alt: section.settings.hero_title
         }}
       {%- endif -%}
@@ -495,6 +495,81 @@
   @media (min-width: 768px) {
     #SupportContact-{{ section.id }} .sc-shell {
       max-width: 560px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    #SupportContact-{{ section.id }} .sc-shell {
+      max-width: min(1240px, calc(100vw - 64px));
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(420px, 0.85fr);
+      grid-template-areas:
+        "hero form"
+        "info form";
+      gap: 28px;
+      align-items: start;
+    }
+
+    #SupportContact-{{ section.id }} .sc-hero {
+      grid-area: hero;
+      min-height: 620px;
+    }
+
+    #SupportContact-{{ section.id }} .sc-hero__content {
+      padding: 44px;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    #SupportContact-{{ section.id }} .sc-hero__title {
+      font-size: clamp(2.8rem, 4vw, 4.4rem);
+      max-width: 10ch;
+      margin-bottom: 16px;
+    }
+
+    #SupportContact-{{ section.id }} .sc-hero__description {
+      font-size: 1rem;
+      max-width: 40ch;
+    }
+
+    #SupportContact-{{ section.id }} .sc-form-wrap {
+      grid-area: form;
+      padding: 0;
+      position: sticky;
+      top: 7rem;
+    }
+
+    #SupportContact-{{ section.id }} .sc-card {
+      padding: 40px 32px 32px;
+      border-radius: 28px;
+    }
+
+    #SupportContact-{{ section.id }} .sc-card__title {
+      font-size: clamp(1.75rem, 2.5vw, 2.35rem);
+    }
+
+    #SupportContact-{{ section.id }} .sc-form__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    #SupportContact-{{ section.id }} .sc-field--full {
+      grid-column: 1 / -1;
+    }
+
+    #SupportContact-{{ section.id }} .sc-info {
+      grid-area: info;
+      padding: 8px 0 0;
+    }
+
+    #SupportContact-{{ section.id }} .sc-info__heading {
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      max-width: 14ch;
+    }
+
+    #SupportContact-{{ section.id }} .sc-info__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
     }
   }
 </style>

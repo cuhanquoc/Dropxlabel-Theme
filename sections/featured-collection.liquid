@@ -1002,9 +1002,44 @@
 }
 
 @media (min-width: 1024px) {
+  .fcv2__header {
+    padding: 64px 40px 36px;
+  }
+
+  .fcv2__body {
+    padding-bottom: 56px;
+  }
+
+  .fcv2__heading {
+    font-size: clamp(4rem, 6vw, 6.2rem);
+  }
+
   .fcv2__card {
     width: calc(33.333% - 11px);
     max-width: 320px;
+  }
+
+  .fcv2__track {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    padding: 0 40px 8px;
+    overflow: visible;
+    scroll-snap-type: none;
+    align-items: start;
+  }
+
+  .fcv2__card {
+    width: auto;
+    max-width: none;
+  }
+
+  .fcv2__progress-wrap {
+    display: none;
+  }
+
+  .fcv2__more-wrap {
+    padding-top: 42px;
   }
 
   .fcv2__more-grid {
