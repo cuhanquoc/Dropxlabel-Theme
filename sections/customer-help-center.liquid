@@ -205,7 +205,7 @@
           item.style.borderRadius = '0';
           item.style.marginInline = '0';
           item.style.paddingInline = '0';
-          item.style.zIndex = '0';
+          item.style.zIndex = 'auto';
           question.style.color = '#0a0a0a';
           icon.style.backgroundColor = '#0a0a0a';
           iconPlus.style.display = '';
@@ -227,7 +227,7 @@
               otherItem.style.borderRadius = '0';
               otherItem.style.marginInline = '0';
               otherItem.style.paddingInline = '0';
-              otherItem.style.zIndex = '0';
+              otherItem.style.zIndex = 'auto';
               otherQuestion.style.color = '#0a0a0a';
               otherIcon.style.backgroundColor = '#0a0a0a';
               otherPlus.style.display = '';
@@ -240,10 +240,10 @@
           const shell = item.closest('.hc-shell');
           const sidePad = shell ? getComputedStyle(shell).getPropertyValue('--hc-side-pad').trim() : '1.25rem';
           item.style.backgroundColor = '#0a0a0a';
-          item.style.borderRadius = '12px';
+          item.style.borderRadius = '0';
           item.style.marginInline = `calc(${sidePad} * -1)`;
           item.style.paddingInline = '0';
-          item.style.zIndex = '2';
+          item.style.zIndex = 'auto';
           question.style.color = '#ffffff';
           icon.style.backgroundColor = '#333333';
           iconPlus.style.display = 'none';
