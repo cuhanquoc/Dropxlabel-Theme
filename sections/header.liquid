@@ -4,7 +4,11 @@
   assign logo_width_desktop = logo_width | at_most: 280
 -%}
 
-<header class="dx-header" data-section-id="{{ section.id }}">
+<header
+  class="dx-header"
+  data-section-id="{{ section.id }}"
+  style="--dx-header-desktop-bg: {{ section.settings.desktop_background | default: '#fafaf9' }}; --dx-header-mobile-bg: {{ section.settings.mobile_background | default: '#000000' }};"
+>
   <div class="dx-header__inner">
     <div class="dx-header__left">
       <button
@@ -173,13 +177,17 @@
 </div>
 
 <style>
+  .dx-header[data-section-id="{{ section.id }}"] {
+    background: var(--dx-header-desktop-bg, #fafaf9);
+  }
+
   .dx-header__inner {
     position: relative;
   }
 
   @media (max-width: 767px) {
-    .dx-header {
-      background: #000;
+    .dx-header[data-section-id="{{ section.id }}"] {
+      background: var(--dx-header-mobile-bg, #000);
       color: #fff;
     }
 
@@ -420,6 +428,24 @@
       "label": "Logo Text (fallback)",
       "default": "Dropxlabel",
       "info": "Shown when no logo image is uploaded"
+    },
+    {
+      "type": "header",
+      "content": "Header Colors"
+    },
+    {
+      "type": "color",
+      "id": "desktop_background",
+      "label": "Desktop Background",
+      "default": "#fafaf9",
+      "info": "Use a light color for best results with the current desktop logo asset."
+    },
+    {
+      "type": "color",
+      "id": "mobile_background",
+      "label": "Mobile Background",
+      "default": "#000000",
+      "info": "Use a dark color for best results because the uploaded logo is inverted to white on mobile."
     },
     {
       "type": "header",
