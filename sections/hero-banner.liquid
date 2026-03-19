@@ -200,7 +200,7 @@
   @media (min-width: 768px) {
     hero-banner[data-section-id="{{ section.id }}"] .hero-content-wrap {
       justify-content: flex-end;
-      padding-top: 9.25rem;
+      padding-top: calc(var(--dx-live-header-stack-height, 72px) + clamp(2.75rem, 4vw, 4.5rem));
       padding-bottom: 6.25rem;
     }
 
