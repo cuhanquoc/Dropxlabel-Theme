@@ -4,7 +4,7 @@
 
   <!-- ── Collection Hero Header ── -->
   <div
-    class="pt-24 pb-12 px-6 md:px-10 text-center"
+    class="pt-20 pb-9 px-6 md:px-10 text-center"
     style="background-color: var(--color-bg);"
   >
     <!-- Collection Tag -->
@@ -15,7 +15,7 @@
       letter-spacing: 0.26em;
       text-transform: uppercase;
       color: {{ section.settings.tag_color }};
-      margin-bottom: 1rem;
+      margin-bottom: 0.9rem;
     ">{{ collection.metafields.custom.season | default: section.settings.tag_fallback }}</p>
     {% endif %}
 
@@ -28,7 +28,7 @@
       color: {{ section.settings.heading_color }};
       letter-spacing: -0.02em;
       line-height: 1;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.95rem;
     ">
       {{ collection.title | default: 'All Products' }}
     </h1>
@@ -39,7 +39,7 @@
         <p style="
           font-family: var(--font-body);
           font-size: 0.88rem;
-          line-height: 1.85;
+          line-height: 1.72;
           color: {{ section.settings.desc_color }};
           max-width: 520px;
           margin: 0 auto;
@@ -48,7 +48,7 @@
         <p style="
           font-family: var(--font-body);
           font-size: 0.88rem;
-          line-height: 1.85;
+          line-height: 1.72;
           color: {{ section.settings.desc_color }};
           max-width: 520px;
           margin: 0 auto;
@@ -80,7 +80,7 @@
       </div>
 
       <!-- Toolbar -->
-      <div class="border-y flex justify-between items-center py-4 mb-12" style="border-color: #e5e7eb;">
+      <div class="border-y flex justify-between items-center py-4 mb-9 md:mb-12" style="border-color: #e5e7eb;">
 
         <!-- Left: Filter button + count -->
         <div class="flex items-center gap-5">
@@ -138,7 +138,7 @@
       {%- assign default_cols = section.settings.products_per_row | default: 4 -%}
       <div
         id="mc-grid"
-        class="grid grid-cols-2 md:grid-cols-{{ default_cols }} gap-x-6 gap-y-12"
+        class="grid grid-cols-2 md:grid-cols-{{ default_cols }} gap-x-6 gap-y-9 md:gap-y-12"
         data-default-cols="{{ default_cols }}"
       >
 
@@ -229,18 +229,20 @@
             <!-- / Image Wrapper -->
 
             <!-- Product Info -->
-            <div class="text-center">
+            <div class="mc-card__meta text-left">
               <p class="mc-product-title">{{ product.title }}</p>
-              <p class="mc-product-price">
-                {%- if product.price_varies -%}
-                  From {{ product.price_min | money }}
-                {%- else -%}
-                  {{ product.price | money }}
-                {%- endif -%}
+              <div class="mc-product-price-row">
+                <p class="mc-product-price">
+                  {%- if product.price_varies -%}
+                    From {{ product.price_min | money }}
+                  {%- else -%}
+                    {{ product.price | money }}
+                  {%- endif -%}
+                </p>
                 {%- if product.compare_at_price > product.price -%}
-                  <s style="color:var(--color-muted);margin-left:0.4em;font-size:0.85em;">{{ product.compare_at_price | money }}</s>
+                  <p class="mc-product-compare">{{ product.compare_at_price | money }}</p>
                 {%- endif -%}
-              </p>
+              </div>
             </div>
 
           </a>
@@ -255,6 +257,73 @@
     </div>
   </div>
 </div>
+
+<style>
+  @media (max-width: 767px) {
+    #main-collection .mc-card {
+      display: block;
+    }
+
+    #main-collection .mc-card__meta {
+      padding-inline: 0.15rem;
+    }
+
+    #main-collection .mc-product-title {
+      margin: 0;
+      font-family: var(--font-body-family, system-ui, sans-serif);
+      font-size: 0.98rem;
+      line-height: 1.38;
+      letter-spacing: 0.03em;
+      font-weight: 500;
+      color: #151515;
+      text-align: left;
+      text-wrap: balance;
+    }
+
+    #main-collection .mc-product-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    #main-collection .mc-product-price {
+      margin: 0;
+      font-family: var(--font-body-family, system-ui, sans-serif);
+      font-size: 0.88rem;
+      line-height: 1;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #c5a16d;
+    }
+
+    #main-collection .mc-product-compare {
+      margin: 0;
+      font-family: var(--font-body-family, system-ui, sans-serif);
+      font-size: 0.78rem;
+      line-height: 1;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      color: rgba(74, 74, 74, 0.6);
+      text-decoration: line-through;
+      text-decoration-thickness: 1px;
+      text-decoration-color: rgba(74, 74, 74, 0.48);
+      text-underline-offset: 0.14em;
+    }
+
+    #main-collection .mc-quick-view {
+      bottom: 0.9rem;
+      left: 0.9rem;
+      right: 0.9rem;
+      width: auto;
+      justify-content: center;
+      padding: 0.72rem 1rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+    }
+  }
+</style>
 
 
 <script>

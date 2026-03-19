@@ -1,0 +1,282 @@
+{% liquid
+  assign search_terms = search.terms | default: ''
+  assign result_count = search.results_count | default: 0
+%}
+
+<section id="main-search" class="ms block" style="background:#fff;color:#0a0a0a;">
+  <div class="ms__shell">
+    <header class="ms__hero">
+      <p class="ms__eyebrow">Search</p>
+      <h1 class="ms__title">
+        {% if search.performed %}
+          Results for "{{ search_terms }}"
+        {% else %}
+          Search the collection
+        {% endif %}
+      </h1>
+      <form action="{{ routes.search_url }}" method="get" role="search" class="ms__form">
+        <input type="hidden" name="type" value="product,article,page">
+        <input
+          class="ms__input"
+          type="search"
+          name="q"
+          value="{{ search_terms | escape }}"
+          placeholder="Search dresses, skirts, bikinis..."
+          aria-label="Search store"
+        >
+        <button class="ms__submit" type="submit">Search</button>
+      </form>
+      {% if search.performed %}
+        <p class="ms__count">
+          {{ result_count }} {{ result_count | pluralize: 'result', 'results' }}
+        </p>
+      {% endif %}
+    </header>
+
+    {% if search.performed and result_count == 0 %}
+      <div class="ms__empty">
+        <p class="ms__empty-title">No results found</p>
+        <p class="ms__empty-copy">Try a shorter keyword or search by product type.</p>
+      </div>
+    {% endif %}
+
+    {% if search.performed and result_count > 0 %}
+      <div class="ms__grid" role="list">
+        {% for item in search.results %}
+          {% if item.object_type == 'product' %}
+            <article class="ms-card" role="listitem">
+              <a href="{{ item.url }}" class="ms-card__media">
+                {% if item.featured_image %}
+                  {{ item.featured_image | image_url: width: 900 | image_tag:
+                    class: 'ms-card__image',
+                    loading: 'lazy',
+                    widths: '240, 360, 540, 720, 900',
+                    sizes: '(max-width: 767px) 44vw, 280px',
+                    alt: item.featured_image.alt | default: item.title,
+                    width: item.featured_image.width,
+                    height: item.featured_image.height
+                  }}
+                {% endif %}
+              </a>
+              <div class="ms-card__meta">
+                <a href="{{ item.url }}" class="ms-card__title">{{ item.title }}</a>
+                {% if item.description != blank %}
+                  <p class="ms-card__excerpt">{{ item.description | strip_html | truncatewords: 18 }}</p>
+                {% endif %}
+                <div class="ms-card__price-row">
+                  <span class="ms-card__price">{{ item.price | money }}</span>
+                  {% if item.compare_at_price > item.price %}
+                    <span class="ms-card__compare">{{ item.compare_at_price | money }}</span>
+                  {% endif %}
+                </div>
+              </div>
+            </article>
+          {% else %}
+            <article class="ms-result" role="listitem">
+              <p class="ms-result__type">{{ item.object_type }}</p>
+              <a href="{{ item.url }}" class="ms-result__title">{{ item.title }}</a>
+              {% if item.content != blank %}
+                <p class="ms-result__excerpt">{{ item.content | strip_html | truncatewords: 22 }}</p>
+              {% endif %}
+            </article>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  .ms__shell {
+    width: min(100%, 1180px);
+    margin: 0 auto;
+    padding: 8.5rem 1.25rem 7rem;
+  }
+
+  .ms__hero {
+    display: grid;
+    gap: 0.9rem;
+    margin-bottom: 2rem;
+  }
+
+  .ms__eyebrow {
+    margin: 0;
+    font-family: var(--font-body-family, system-ui, sans-serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #b8956a;
+  }
+
+  .ms__title {
+    margin: 0;
+    font-family: var(--font-heading, serif);
+    font-size: clamp(2.5rem, 8vw, 4.6rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: #0a0a0a;
+  }
+
+  .ms__form {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.65rem;
+    align-items: center;
+  }
+
+  .ms__input {
+    width: 100%;
+    min-height: 52px;
+    border: 1px solid #e5ddd1;
+    border-radius: 999px;
+    padding: 0 1rem;
+    font-size: 1rem;
+    color: #161616;
+    background: #fff;
+  }
+
+  .ms__submit {
+    min-height: 52px;
+    padding: 0 1.15rem;
+    border: 0;
+    border-radius: 999px;
+    background: #0a0a0a;
+    color: #fff;
+    font-size: 0.74rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ms__count,
+  .ms__empty-copy,
+  .ms-card__excerpt,
+  .ms-result__excerpt {
+    margin: 0;
+    font-family: var(--font-body-family, system-ui, sans-serif);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(10, 10, 10, 0.66);
+  }
+
+  .ms__empty {
+    padding: 1.25rem 0 2rem;
+  }
+
+  .ms__empty-title {
+    margin: 0 0 0.45rem;
+    font-family: var(--font-heading, serif);
+    font-size: 1.55rem;
+    color: #0a0a0a;
+  }
+
+  .ms__grid {
+    display: grid;
+    gap: 1.15rem;
+  }
+
+  .ms-card,
+  .ms-result {
+    display: grid;
+    gap: 0.9rem;
+    padding: 1rem 0;
+    border-top: 1px solid #ece7df;
+  }
+
+  .ms-card {
+    grid-template-columns: 104px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .ms-card__media {
+    display: block;
+    border-radius: 6px;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    background: #f4efe7;
+  }
+
+  .ms-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ms-card__meta {
+    display: grid;
+    gap: 0.45rem;
+  }
+
+  .ms-card__title,
+  .ms-result__title {
+    text-decoration: none;
+    color: #131313;
+  }
+
+  .ms-card__title {
+    font-family: var(--font-heading, serif);
+    font-size: 1.15rem;
+    line-height: 1.14;
+  }
+
+  .ms-card__price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .ms-card__price {
+    font-family: var(--font-body-family, system-ui, sans-serif);
+    font-size: 0.92rem;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #c5a16d;
+  }
+
+  .ms-card__compare {
+    font-family: var(--font-body-family, system-ui, sans-serif);
+    font-size: 0.8rem;
+    line-height: 1;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: rgba(74, 74, 74, 0.6);
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+  }
+
+  .ms-result__type {
+    margin: 0;
+    font-family: var(--font-body-family, system-ui, sans-serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #b8956a;
+  }
+
+  .ms-result__title {
+    font-family: var(--font-heading, serif);
+    font-size: 1.15rem;
+    line-height: 1.18;
+  }
+
+  @media (min-width: 768px) {
+    .ms__shell {
+      padding: 10rem 2rem 8rem;
+    }
+
+    .ms__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem 2rem;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Main Search",
+  "tag": "section",
+  "class": "main-search-section",
+  "settings": []
+}
+{% endschema %}
