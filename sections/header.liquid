@@ -300,6 +300,7 @@
     }
 
     .dx-header[data-section-id="{{ section.id }}"] {
+      --dx-mobile-side-width: 88px;
       background: {{ section.settings.mobile_background | default: '#000000' | color_modify: 'alpha', mobile_background_opacity }};
       color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
       border-bottom-color: {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.18 }};
@@ -307,7 +308,7 @@
 
     .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
       display: grid;
-      grid-template-columns: 44px minmax(0, 1fr) 108px;
+      grid-template-columns: var(--dx-mobile-side-width) minmax(0, 1fr) var(--dx-mobile-side-width);
       align-items: center;
       min-height: 56px;
       padding: 0 1rem;
@@ -316,8 +317,8 @@
 
     .dx-header[data-section-id="{{ section.id }}"] .dx-header__left {
       order: initial;
-      width: 44px;
-      min-width: 44px;
+      width: var(--dx-mobile-side-width);
+      min-width: var(--dx-mobile-side-width);
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -411,8 +412,8 @@
 
     .dx-header[data-section-id="{{ section.id }}"] .dx-header__right {
       order: initial;
-      width: 108px;
-      min-width: 108px;
+      width: var(--dx-mobile-side-width);
+      min-width: var(--dx-mobile-side-width);
       display: flex;
       align-items: center;
       justify-self: end;
