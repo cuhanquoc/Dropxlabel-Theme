@@ -186,14 +186,17 @@
 
   .dx-header[data-section-id="{{ section.id }}"] {
     --dx-desktop-header-height: 78px;
-    background: {{ section.settings.desktop_background | default: '#ffffff' | color_modify: 'alpha', desktop_background_opacity }};
+    background: transparent;
     color: {{ section.settings.desktop_text_color | default: '#ffffff' }};
-    border-bottom: 1px solid {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.24 }};
+    border-bottom: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
     box-shadow: none;
   }
 
   .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
-    border-bottom-color: {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.38 }};
+    background: transparent;
+    border-bottom-color: transparent;
     box-shadow: none;
   }
 
@@ -292,7 +295,7 @@
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn:hover {
-    background: {{ section.settings.desktop_text_color | default: '#ffffff' | color_modify: 'alpha', 0.08 }};
+    background: transparent;
   }
 
   @media (max-width: 767px) {
