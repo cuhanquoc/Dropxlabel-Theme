@@ -1,6 +1,7 @@
 {%- liquid
   assign logo_width = section.settings.logo_width | default: 180
   assign logo_width_desktop = section.settings.desktop_logo_width | default: 64
+  assign mobile_side_width = section.settings.mobile_side_width | default: 88
   assign desktop_background_opacity = section.settings.desktop_background_opacity | default: 0 | divided_by: 100.0
   assign mobile_background_opacity = section.settings.mobile_background_opacity | default: 100 | divided_by: 100.0
   assign desktop_logo_image = section.settings.desktop_logo_image
@@ -300,7 +301,7 @@
     }
 
     .dx-header[data-section-id="{{ section.id }}"] {
-      --dx-mobile-side-width: 88px;
+      --dx-mobile-side-width: {{ mobile_side_width }}px;
       background: {{ section.settings.mobile_background | default: '#000000' | color_modify: 'alpha', mobile_background_opacity }};
       color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
       border-bottom-color: {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.18 }};
@@ -585,6 +586,17 @@
       "unit": "px",
       "label": "Logo Max Width",
       "info": "Controls the maximum width of the logo image. Use a tightly cropped transparent PNG for best results."
+    },
+    {
+      "type": "range",
+      "id": "mobile_side_width",
+      "min": 56,
+      "max": 140,
+      "step": 4,
+      "default": 88,
+      "unit": "px",
+      "label": "Mobile Side Spacing",
+      "info": "Controls the equal left and right space around the centered logo on mobile."
     },
     {
       "type": "checkbox",
