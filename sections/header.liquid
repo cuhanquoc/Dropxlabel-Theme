@@ -1,9 +1,11 @@
 {%- liquid
-  assign nav_link_blocks = section.blocks | where: 'type', 'nav_link'
   assign logo_width = section.settings.logo_width | default: 180
-  assign logo_width_desktop = logo_width | at_most: 280
-  assign desktop_background_opacity = section.settings.desktop_background_opacity | default: 96 | divided_by: 100.0
+  assign logo_width_desktop = section.settings.desktop_logo_width | default: 64
+  assign desktop_background_opacity = section.settings.desktop_background_opacity | default: 0 | divided_by: 100.0
   assign mobile_background_opacity = section.settings.mobile_background_opacity | default: 100 | divided_by: 100.0
+  assign desktop_logo_image = section.settings.desktop_logo_image
+  assign mobile_logo_image = section.settings.mobile_logo_image | default: section.settings.logo_image
+  assign privacy_url = shop.privacy_policy.url | default: '/policies/privacy-policy'
 -%}
 
 <header class="dx-header" data-section-id="{{ section.id }}">
@@ -88,28 +90,27 @@
           </div>
         </div>
 
-        {%- if nav_link_blocks.size > 0 -%}
-          {%- for block in nav_link_blocks -%}
-            {%- if block.settings.label != blank -%}
-              <a href="{{ block.settings.url | default: '#' }}" class="dx-nav-link nav-link" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
-            {%- endif -%}
-          {%- endfor -%}
-        {%- else -%}
-          <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="dx-nav-link nav-link">About</a>
-          <a href="{{ routes.blogs_url }}" class="dx-nav-link nav-link">Blogs</a>
-        {%- endif -%}
+        <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="dx-nav-link nav-link">About</a>
+        <a href="{{ routes.blogs_url }}" class="dx-nav-link nav-link">Blogs</a>
+        <a href="{{ privacy_url }}" class="dx-nav-link nav-link">Privacy</a>
       </nav>
     </div>
 
     <a
       href="{{ routes.root_url }}"
-      class="dx-logo"
+      class="dx-logo{% if section.settings.invert_desktop_logo %} dx-logo--invert-desktop{% endif %}{% if section.settings.invert_mobile_logo %} dx-logo--invert-mobile{% endif %}"
       style="--dx-logo-mobile-width: {{ logo_width }}px; --dx-logo-desktop-width: {{ logo_width_desktop }}px;"
     >
-      {% if section.settings.logo_image != blank %}
-        {{ section.settings.logo_image | image_url: width: 1200 | image_tag: class: 'dx-logo__image', loading: 'eager', alt: shop.name }}
+      {% if desktop_logo_image != blank %}
+        {{ desktop_logo_image | image_url: width: 1200 | image_tag: class: 'dx-logo__image dx-logo__image--desktop', loading: 'eager', fetchpriority: 'high', alt: shop.name }}
       {% else %}
-        <span class="dx-logo__text">{{ section.settings.logo_text | default: shop.name }}</span>
+        <span class="dx-logo__text dx-logo__text--desktop">{{ section.settings.logo_text | default: shop.name }}</span>
+      {% endif %}
+
+      {% if mobile_logo_image != blank %}
+        {{ mobile_logo_image | image_url: width: 1200 | image_tag: class: 'dx-logo__image dx-logo__image--mobile', loading: 'eager', fetchpriority: 'high', alt: shop.name }}
+      {% else %}
+        <span class="dx-logo__text dx-logo__text--mobile">{{ section.settings.logo_text | default: shop.name }}</span>
       {% endif %}
     </a>
 
@@ -145,6 +146,7 @@
   <a href="{{ routes.collections_url }}" class="dx-mobile-menu__link" data-action="close-mobile-menu">Catalog</a>
   <a href="{{ pages['about-us'].url | default: '/pages/about' }}" class="dx-mobile-menu__link" data-action="close-mobile-menu">About</a>
   <a href="{{ routes.blogs_url }}" class="dx-mobile-menu__link" data-action="close-mobile-menu">Blogs</a>
+  <a href="{{ privacy_url }}" class="dx-mobile-menu__link" data-action="close-mobile-menu">Privacy</a>
 
   <div class="dx-mobile-menu__icons">
     <button class="dx-mobile-menu__icon-link" data-action="close-mobile-menu open-search" type="button">
@@ -175,40 +177,135 @@
 </div>
 
 <style>
+  #shopify-section-{{ section.id }} {
+    position: relative;
+    z-index: 40;
+    margin-bottom: -78px;
+  }
+
   .dx-header[data-section-id="{{ section.id }}"] {
-    background: {{ section.settings.desktop_background | default: '#fafaf9' | color_modify: 'alpha', desktop_background_opacity }};
-    color: {{ section.settings.desktop_text_color | default: '#0c0a09' }};
-    border-bottom-color: {{ section.settings.border_color | default: '#0c0a09' | color_modify: 'alpha', 0.12 }};
+    --dx-desktop-header-height: 78px;
+    background: {{ section.settings.desktop_background | default: '#ffffff' | color_modify: 'alpha', desktop_background_opacity }};
+    color: {{ section.settings.desktop_text_color | default: '#ffffff' }};
+    border-bottom: 1px solid {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.24 }};
+    box-shadow: none;
   }
 
   .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
-    border-bottom-color: {{ section.settings.border_color | default: '#0c0a09' | color_modify: 'alpha', 0.22 }};
+    border-bottom-color: {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.38 }};
+    box-shadow: none;
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
+    position: relative;
+    max-width: none;
+    min-height: var(--dx-desktop-header-height);
+    padding: 0 clamp(1rem, 2vw, 1.75rem);
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: clamp(1rem, 1.8vw, 2rem);
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-logo,
+  .dx-header[data-section-id="{{ section.id }}"] .dx-logo__text {
+    color: {{ section.settings.desktop_text_color | default: '#ffffff' }};
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-logo {
+    order: 1;
+    justify-self: start;
+    width: min(100%, var(--dx-logo-desktop-width, 64px));
+    max-width: var(--dx-logo-desktop-width, 64px);
+    min-height: auto;
+    padding: 0;
+    overflow: visible;
+    z-index: 2;
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-logo__image {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;
+    object-position: left center;
+    filter: none;
+    mix-blend-mode: normal;
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-logo__image--mobile,
+  .dx-header[data-section-id="{{ section.id }}"] .dx-logo__text--mobile {
+    display: none;
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-logo--invert-desktop .dx-logo__image {
+    filter: invert(1) brightness(2);
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-header__left {
+    order: 2;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 1.75vw, 2rem);
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-nav-link,
-  .dx-header[data-section-id="{{ section.id }}"] .dx-logo,
-  .dx-header[data-section-id="{{ section.id }}"] .dx-logo__text,
   .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn,
   .dx-header[data-section-id="{{ section.id }}"] .dx-menu-btn {
-    color: {{ section.settings.desktop_text_color | default: '#0c0a09' }};
+    color: {{ section.settings.desktop_text_color | default: '#ffffff' }};
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-nav-link {
+    font-size: clamp(0.95rem, 1vw, 1.06rem);
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-nav-link__chevron {
+    width: 14px;
+    height: 14px;
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-header__right {
+    order: 3;
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    z-index: 2;
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn {
+    width: 40px;
+    height: 40px;
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn:hover {
-    background: {{ section.settings.desktop_text_color | default: '#0c0a09' | color_modify: 'alpha', 0.08 }};
-  }
-
-  .dx-header__inner {
-    position: relative;
+    background: {{ section.settings.desktop_text_color | default: '#ffffff' | color_modify: 'alpha', 0.08 }};
   }
 
   @media (max-width: 767px) {
+    #shopify-section-{{ section.id }} {
+      margin-bottom: 0;
+    }
+
     .dx-header[data-section-id="{{ section.id }}"] {
       background: {{ section.settings.mobile_background | default: '#000000' | color_modify: 'alpha', mobile_background_opacity }};
       color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
       border-bottom-color: {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.18 }};
     }
 
-    .dx-header__inner {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
       display: grid;
       grid-template-columns: 44px minmax(0, 1fr) 108px;
       align-items: center;
@@ -217,7 +314,8 @@
       gap: 0.5rem;
     }
 
-    .dx-header__left {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-header__left {
+      order: initial;
       width: 44px;
       min-width: 44px;
       display: flex;
@@ -226,11 +324,11 @@
       z-index: 2;
     }
 
-    .dx-nav-desktop {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-nav-desktop {
       display: none;
     }
 
-    .dx-menu-btn {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-menu-btn {
       display: inline-flex;
       width: 26px;
       flex-direction: column;
@@ -242,22 +340,23 @@
       cursor: pointer;
     }
 
-    .dx-menu-btn__line {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-menu-btn__line {
       display: block;
       height: 1.5px;
       border-radius: 999px;
       background: currentColor;
     }
 
-    .dx-menu-btn__line:first-child {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-menu-btn__line:first-child {
       width: 100%;
     }
 
-    .dx-menu-btn__line:last-child {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-menu-btn__line:last-child {
       width: 18px;
     }
 
-    .dx-logo {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-logo {
+      order: initial;
       position: static;
       left: auto;
       transform: none;
@@ -271,17 +370,34 @@
       color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
     }
 
-    .dx-logo__image {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-logo__image {
       width: 100%;
       max-width: 100%;
       height: 100%;
       max-height: none;
-      object-fit: cover;
+      object-fit: contain;
       object-position: center;
+      filter: none;
+    }
+
+    .dx-header[data-section-id="{{ section.id }}"] .dx-logo__image--desktop,
+    .dx-header[data-section-id="{{ section.id }}"] .dx-logo__text--desktop {
+      display: none;
+    }
+
+    .dx-header[data-section-id="{{ section.id }}"] .dx-logo__image--mobile {
+      display: block;
+    }
+
+    .dx-header[data-section-id="{{ section.id }}"] .dx-logo__text--mobile {
+      display: flex;
+    }
+
+    .dx-header[data-section-id="{{ section.id }}"] .dx-logo--invert-mobile .dx-logo__image {
       filter: invert(1) brightness(2);
     }
 
-    .dx-logo__text {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-logo__text {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -293,7 +409,8 @@
       text-transform: uppercase;
     }
 
-    .dx-header__right {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-header__right {
+      order: initial;
       width: 108px;
       min-width: 108px;
       display: flex;
@@ -304,7 +421,7 @@
       z-index: 2;
     }
 
-    .dx-icon-btn {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -316,15 +433,15 @@
       color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
     }
 
-    .dx-icon-btn--account {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn--account {
       display: none;
     }
 
-    .dx-icon-btn--cart {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn--cart {
       position: relative;
     }
 
-    .dx-icon-btn--cart .cart-count {
+    .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn--cart .cart-count {
       position: absolute;
       top: -4px;
       right: -4px;
@@ -429,6 +546,35 @@
       "info": "Recommended: PNG with transparent background, max 400×100px. If set, replaces text logo."
     },
     {
+      "type": "image_picker",
+      "id": "desktop_logo_image",
+      "label": "Desktop Logo Image",
+      "info": "Recommended for desktop overlay. Use a compact icon or white logo that sits well on top of hero media."
+    },
+    {
+      "type": "range",
+      "id": "desktop_logo_width",
+      "min": 32,
+      "max": 180,
+      "step": 4,
+      "default": 64,
+      "unit": "px",
+      "label": "Desktop Logo Width"
+    },
+    {
+      "type": "checkbox",
+      "id": "invert_desktop_logo",
+      "label": "Invert Desktop Logo",
+      "default": true,
+      "info": "Turn this off if your desktop logo image is already light on a dark or transparent background."
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_logo_image",
+      "label": "Mobile Logo Image",
+      "info": "Optional mobile-specific logo. Leave blank to reuse the main logo image."
+    },
+    {
       "type": "range",
       "id": "logo_width",
       "min": 80,
@@ -438,6 +584,13 @@
       "unit": "px",
       "label": "Logo Max Width",
       "info": "Controls the maximum width of the logo image. Use a tightly cropped transparent PNG for best results."
+    },
+    {
+      "type": "checkbox",
+      "id": "invert_mobile_logo",
+      "label": "Invert Mobile Logo",
+      "default": true,
+      "info": "Turn this off if your mobile logo image is already light on a dark background."
     },
     {
       "type": "text",
@@ -454,14 +607,14 @@
       "type": "color",
       "id": "desktop_background",
       "label": "Desktop Background",
-      "default": "#fafaf9",
-      "info": "Use a light color for best results with the current desktop logo asset."
+      "default": "#ffffff",
+      "info": "For overlay headers, pair this with low transparency so hero media can show through."
     },
     {
       "type": "color",
       "id": "desktop_text_color",
       "label": "Desktop Text & Icons",
-      "default": "#0c0a09",
+      "default": "#ffffff",
       "info": "Affects navigation and icons. Uploaded logo images keep their own color on desktop."
     },
     {
@@ -472,7 +625,7 @@
       "step": 5,
       "unit": "%",
       "label": "Desktop Transparency",
-      "default": 96
+      "default": 0
     },
     {
       "type": "color",
@@ -502,7 +655,7 @@
       "type": "color",
       "id": "border_color",
       "label": "Border Color",
-      "default": "#0c0a09",
+      "default": "#ffffff",
       "info": "Controls the bottom border color for the header."
     },
     {
