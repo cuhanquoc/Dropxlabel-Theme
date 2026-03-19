@@ -1,4 +1,4 @@
-<hero-banner class="block relative w-full h-[100dvh] overflow-hidden bg-black">
+<hero-banner class="hero-banner block relative w-full h-[100dvh] overflow-hidden bg-black" data-section-id="{{ section.id }}">
 
   <!-- Nền: Video hoặc Ảnh (video ưu tiên nếu có) -->
   <div class="absolute inset-0 overflow-hidden">
@@ -119,6 +119,90 @@
   </div>
 
 </hero-banner>
+
+<style>
+  hero-banner[data-section-id="{{ section.id }}"] .hero-video,
+  hero-banner[data-section-id="{{ section.id }}"] .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 767px) {
+    hero-banner[data-section-id="{{ section.id }}"] {
+      height: calc(100svh - 118px);
+      min-height: 520px;
+      max-height: 680px;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .hero-content-wrap {
+      justify-content: flex-end;
+      padding: 0 1.5rem 4.75rem;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .hero-eyebrow {
+      margin-bottom: 1rem;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .hero-headline {
+      max-width: 9ch;
+      margin-bottom: 1rem;
+      font-size: clamp(2.75rem, 11vw, 4.4rem);
+      line-height: 0.94;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .hero-copy {
+      max-width: 28ch;
+      margin-bottom: 1.5rem;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .hero-cta {
+      margin-bottom: 0;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .marquee-track {
+      opacity: 0.82;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .absolute.w-full.overflow-hidden.bottom-10 {
+      bottom: 0.6rem;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.querySelector('hero-banner[data-section-id="{{ section.id }}"]');
+    if (!root || root.dataset.mobileMediaInit === 'true') return;
+    root.dataset.mobileMediaInit = 'true';
+
+    var heroVideo = root.querySelector('.hero-video');
+    if (!heroVideo) return;
+
+    function syncHeroMedia() {
+      var isMobile = window.matchMedia('(max-width: 767px)').matches;
+
+      if (isMobile) {
+        heroVideo.removeAttribute('autoplay');
+        heroVideo.pause();
+        try {
+          heroVideo.currentTime = 0;
+        } catch (e) {}
+      } else if (!heroVideo.hasAttribute('autoplay')) {
+        heroVideo.setAttribute('autoplay', '');
+        var playPromise = heroVideo.play();
+        if (playPromise && typeof playPromise.catch === 'function') {
+          playPromise.catch(function () {});
+        }
+      }
+    }
+
+    syncHeroMedia();
+    window.addEventListener('resize', syncHeroMedia, { passive: true });
+  })();
+</script>
 
 {% schema %}
 {

@@ -299,13 +299,21 @@
       if (this._cartLink && this._onCartClick) {
         this._cartLink.removeEventListener('click', this._onCartClick, true);
       }
+      if (this._onScroll) {
+        window.removeEventListener('scroll', this._onScroll);
+      }
     }
 
-    /* Slide in after 350ms (allow page paint first) */
+    /* Show only after the user starts scrolling */
     _initSlideIn() {
-      requestAnimationFrame(() => {
-        setTimeout(() => this.classList.add('visible'), 350);
-      });
+      this._onScroll = () => {
+        const shouldShow = window.scrollY > 24;
+        this.classList.toggle('visible', shouldShow);
+        applyBodyPadding();
+      };
+
+      this._onScroll();
+      window.addEventListener('scroll', this._onScroll, { passive: true });
     }
 
     /* Sync cart badge with Shopify cart:updated event + fetch */
@@ -400,8 +408,8 @@
       document.body.style.paddingBottom = '';
       return;
     }
-    const h = nav.getBoundingClientRect().height;
-    document.body.style.paddingBottom = h + 'px';
+    const isVisible = nav.classList.contains('visible');
+    document.body.style.paddingBottom = isVisible ? nav.getBoundingClientRect().height + 'px' : '';
   }
   window.addEventListener('resize', applyBodyPadding);
   document.addEventListener('DOMContentLoaded', applyBodyPadding);
