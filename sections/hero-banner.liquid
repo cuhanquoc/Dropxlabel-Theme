@@ -42,6 +42,7 @@
 
   <!-- Gradient Overlay -->
   <div class="absolute inset-0 bg-black/30"></div>
+  <div class="absolute inset-0 hidden md:block bg-[linear-gradient(to_bottom,rgba(0,0,0,0.26)_0%,rgba(0,0,0,0.18)_16%,rgba(0,0,0,0.06)_30%,transparent_44%)]"></div>
   <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0.1)_60%,transparent_100%)]"></div>
   <div class="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.55)_0%,transparent_45%)]"></div>
 
@@ -193,6 +194,27 @@
 
     hero-banner[data-section-id="{{ section.id }}"] .absolute.w-full.overflow-hidden.bottom-10 {
       bottom: 0.35rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    hero-banner[data-section-id="{{ section.id }}"] .hero-content-wrap {
+      justify-content: flex-end;
+      padding-top: 9.25rem;
+      padding-bottom: 6.25rem;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .hero-eyebrow {
+      margin-bottom: 1.25rem;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .hero-headline {
+      max-width: 7.4ch;
+      margin-bottom: 1.35rem;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .hero-copy {
+      margin-bottom: 2.1rem;
     }
   }
 

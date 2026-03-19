@@ -179,9 +179,10 @@
 
 <style>
   #shopify-section-{{ section.id }} {
+    --dx-desktop-overlap: 72px;
     position: relative;
     z-index: 40;
-    margin-bottom: -78px;
+    margin-bottom: calc(var(--dx-desktop-overlap) * -1);
   }
 
   .dx-header[data-section-id="{{ section.id }}"] {
@@ -300,6 +301,7 @@
 
   @media (max-width: 767px) {
     #shopify-section-{{ section.id }} {
+      --dx-desktop-overlap: 0px;
       margin-bottom: 0;
     }
 
