@@ -45,7 +45,7 @@
                       </svg>
                     </span>
                   </button>
-                  <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;">
+                  <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.62s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;">
                     <div class="hc-faq-answer-inner" style="padding: 0 0.5rem 0.65rem 0.5rem;">
                       <p style="font-family: var(--font-body, 'Inter', sans-serif); font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.75); transition: color 0.3s ease;">
                         {{ block.settings.answer }}
@@ -86,7 +86,7 @@
                   </span>
                 </button>
 
-                <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;">
+                <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.62s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;">
                   <div class="hc-faq-answer-inner" style="padding: 0 0.5rem 0.65rem 0.5rem;">
                     <p style="font-family: var(--font-body, 'Inter', sans-serif); font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.75); transition: color 0.3s ease;">
                       {{ answer }}
@@ -226,7 +226,7 @@
       closeItem(btn, { animate = true } = {}) {
         const item = btn.closest('.hc-faq-item');
         const answer = item.querySelector('.hc-faq-answer');
-        const transition = 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease';
+        const transition = 'max-height 0.62s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease';
 
         item.classList.remove('is-open');
         btn.setAttribute('aria-expanded', 'false');
@@ -277,9 +277,9 @@
         const icon = btn.querySelector('.hc-faq-icon');
         const isOpen = btn.getAttribute('aria-expanded') === 'true';
 
-        icon.style.transition = 'background-color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+        icon.style.transition = 'background-color 0.3s ease, transform 0.52s cubic-bezier(0.16, 1, 0.3, 1)';
         icon.style.transform = 'rotate(360deg)';
-        setTimeout(() => { icon.style.transform = ''; }, 450);
+        setTimeout(() => { icon.style.transform = ''; }, 560);
 
         if (isOpen) {
           this.closeItem(btn);
@@ -287,9 +287,11 @@
           const activeBtn = this._buttons.find(otherBtn => otherBtn !== btn && otherBtn.getAttribute('aria-expanded') === 'true');
           if (activeBtn) {
             this.closeItem(activeBtn, { animate: false });
-            requestAnimationFrame(() => {
-              this.openItem(btn);
-            });
+            setTimeout(() => {
+              requestAnimationFrame(() => {
+                this.openItem(btn);
+              });
+            }, 90);
             return;
           }
 
