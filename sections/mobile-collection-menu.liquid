@@ -37,8 +37,15 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    transform: translateX(-100%);
     background:
       linear-gradient(180deg, color-mix(in srgb, var(--mcm-bg) 96%, var(--mcm-text) 4%) 0%, var(--mcm-bg) 14rem);
+    transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  #mobile-collection-menu.mcm-open .mcm-shell {
+    transform: translateX(0);
   }
 
   #mobile-collection-menu .mcm-topbar {
@@ -276,6 +283,7 @@
     #mobile-collection-menu,
     #mobile-collection-menu .mcm-tab,
     #mobile-collection-menu .mcm-close,
+    #mobile-collection-menu .mcm-shell,
     #mobile-collection-menu .mcm-panel--active,
     #mobile-collection-menu .mcm-tab::after {
       transition: none;
