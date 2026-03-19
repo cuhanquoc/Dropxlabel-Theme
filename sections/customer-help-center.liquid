@@ -1,6 +1,6 @@
 <help-center-section class="block">
   <!-- ── Section with white bg and generous padding ── -->
-  <div style="background-color: {{ section.settings.bg_color | default: '#ffffff' }}; padding-top: 3rem; padding-bottom: 2rem;" class="md:py-20">
+  <div style="background-color: {{ section.settings.bg_color | default: '#ffffff' }}; padding-top: 3rem; padding-bottom: 1rem;" class="md:py-20">
     <div class="hc-shell max-w-[720px] mx-auto px-5 md:px-8">
 
       <div class="hc-intro">
@@ -8,7 +8,7 @@
         <h2 style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 800; line-height: 1.1; color: #0a0a0a; margin-bottom: 1rem; font-family: var(--font-heading, 'Playfair Display', serif);">
           {{ section.settings.heading | default: 'Customer Help Center' }}
         </h2>
-        <p style="font-size: 0.92rem; line-height: 1.75; color: #666; margin-bottom: 2.5rem; max-width: 600px; font-family: var(--font-body, 'Inter', sans-serif);">
+        <p style="font-size: 0.92rem; line-height: 1.75; color: #666; margin-bottom: 2rem; max-width: 600px; font-family: var(--font-body, 'Inter', sans-serif);">
           {{ section.settings.description | default: "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here." }}
         </p>
       </div>
@@ -30,23 +30,23 @@
               {%- if block.settings.question != blank -%}
                 <div class="hc-faq-item" {{ block.shopify_attributes }} style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease;">
                   <button class="hc-faq-btn" aria-expanded="false"
-                          style="width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 36px; align-items: center; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
+                          style="width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 32px; align-items: center; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
                     <span class="hc-faq-question" style="font-family: var(--font-heading, 'Playfair Display', serif); font-weight: 700; font-size: 1.1rem; line-height: 1.3; color: #0a0a0a; transition: color 0.3s ease;">
                       {{ block.settings.question }}
                     </span>
-                    <span class="hc-faq-icon" style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
-                      <svg class="hc-icon-plus" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="transition: transform 0.3s ease;">
+                    <span class="hc-faq-icon" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
+                      <svg class="hc-icon-plus" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="transition: transform 0.3s ease;">
                         <line x1="8" y1="3" x2="8" y2="13"/>
                         <line x1="3" y1="8" x2="13" y2="8"/>
                       </svg>
-                      <svg class="hc-icon-close" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="display: none; transition: transform 0.3s ease;">
+                      <svg class="hc-icon-close" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="display: none; transition: transform 0.3s ease;">
                         <line x1="4" y1="4" x2="12" y2="12"/>
                         <line x1="12" y1="4" x2="4" y2="12"/>
                       </svg>
                     </span>
                   </button>
                   <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;">
-                    <div class="hc-faq-answer-inner" style="padding: 0 0.5rem 0.85rem 0.5rem;">
+                    <div class="hc-faq-answer-inner" style="padding: 0 0.5rem 0.65rem 0.5rem;">
                       <p style="font-family: var(--font-body, 'Inter', sans-serif); font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.75); transition: color 0.3s ease;">
                         {{ block.settings.answer }}
                       </p>
@@ -68,18 +68,18 @@
               <div class="hc-faq-item" style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease;">
 
                 <button class="hc-faq-btn" aria-expanded="false"
-                        style="width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 36px; align-items: center; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
+                        style="width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 32px; align-items: center; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
                   <span class="hc-faq-question" style="font-family: var(--font-heading, 'Playfair Display', serif); font-weight: 700; font-size: 1.1rem; line-height: 1.3; color: #0a0a0a; transition: color 0.3s ease;">
                     {{ question }}
                   </span>
-                  <span class="hc-faq-icon" style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
+                  <span class="hc-faq-icon" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
                     <!-- Plus icon -->
-                    <svg class="hc-icon-plus" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="transition: transform 0.3s ease;">
+                    <svg class="hc-icon-plus" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="transition: transform 0.3s ease;">
                       <line x1="8" y1="3" x2="8" y2="13"/>
                       <line x1="3" y1="8" x2="13" y2="8"/>
                     </svg>
                     <!-- Close icon -->
-                    <svg class="hc-icon-close" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="display: none; transition: transform 0.3s ease;">
+                    <svg class="hc-icon-close" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="2" style="display: none; transition: transform 0.3s ease;">
                       <line x1="4" y1="4" x2="12" y2="12"/>
                       <line x1="12" y1="4" x2="4" y2="12"/>
                     </svg>
@@ -87,7 +87,7 @@
                 </button>
 
                 <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;">
-                  <div class="hc-faq-answer-inner" style="padding: 0 0.5rem 0.85rem 0.5rem;">
+                  <div class="hc-faq-answer-inner" style="padding: 0 0.5rem 0.65rem 0.5rem;">
                     <p style="font-family: var(--font-body, 'Inter', sans-serif); font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.75); transition: color 0.3s ease;">
                       {{ answer }}
                     </p>
@@ -116,17 +116,18 @@
 
   .hc-faq-item {
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     background-color: transparent;
     transition: background-color 0.35s ease;
   }
 
   .hc-faq-btn {
-    padding: 1.15rem var(--hc-side-pad) !important;
+    padding: 0.95rem var(--hc-side-pad) !important;
+    gap: 0.85rem !important;
   }
 
   .hc-faq-answer-inner {
-    padding: 0 var(--hc-side-pad) 0.85rem !important;
+    padding: 0 var(--hc-side-pad) 0.35rem !important;
   }
 
   .hc-faq-item.is-open {
@@ -225,18 +226,9 @@
       closeItem(btn, { animate = true } = {}) {
         const item = btn.closest('.hc-faq-item');
         const answer = item.querySelector('.hc-faq-answer');
-        const question = btn.querySelector('.hc-faq-question');
-        const icon = btn.querySelector('.hc-faq-icon');
-        const iconPlus = btn.querySelector('.hc-icon-plus');
-        const iconClose = btn.querySelector('.hc-icon-close');
-        const currentHeight = answer.scrollHeight;
         const transition = 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease';
 
         item.classList.remove('is-open');
-        question.style.color = '#0a0a0a';
-        icon.style.backgroundColor = '#0a0a0a';
-        iconPlus.style.display = '';
-        iconClose.style.display = 'none';
         btn.setAttribute('aria-expanded', 'false');
 
         if (!animate) {
@@ -249,7 +241,7 @@
         }
 
         if (answer.style.maxHeight === 'none' || !answer.style.maxHeight) {
-          answer.style.maxHeight = currentHeight + 'px';
+          answer.style.maxHeight = answer.scrollHeight + 'px';
           answer.offsetHeight;
         }
 
@@ -260,17 +252,9 @@
       openItem(btn) {
         const item = btn.closest('.hc-faq-item');
         const answer = item.querySelector('.hc-faq-answer');
-        const question = btn.querySelector('.hc-faq-question');
-        const icon = btn.querySelector('.hc-faq-icon');
-        const iconPlus = btn.querySelector('.hc-icon-plus');
-        const iconClose = btn.querySelector('.hc-icon-close');
         const targetHeight = answer.scrollHeight;
 
         item.classList.add('is-open');
-        question.style.color = '#ffffff';
-        icon.style.backgroundColor = '#333333';
-        iconPlus.style.display = 'none';
-        iconClose.style.display = '';
         btn.setAttribute('aria-expanded', 'true');
 
         answer.style.maxHeight = '0';
@@ -304,7 +288,7 @@
           if (activeBtn) {
             this.closeItem(activeBtn, { animate: false });
             requestAnimationFrame(() => {
-              requestAnimationFrame(() => this.openItem(btn));
+              this.openItem(btn);
             });
             return;
           }
