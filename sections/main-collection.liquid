@@ -260,51 +260,97 @@
 
 <style>
   @media (max-width: 767px) {
+    #main-collection > div:first-child {
+      padding-top: 4rem !important;
+      padding-bottom: 1.45rem !important;
+    }
+
+    #main-collection > div:first-child > p:first-of-type {
+      margin-bottom: 0.62rem !important;
+      font-size: 0.58rem !important;
+      letter-spacing: 0.22em !important;
+    }
+
+    #main-collection > div:first-child > h1 {
+      margin-bottom: 0.55rem !important;
+      line-height: 0.92 !important;
+    }
+
+    #main-collection > div:first-child > p:last-of-type {
+      max-width: 18ch !important;
+      line-height: 1.5 !important;
+      font-size: 0.8rem !important;
+    }
+
+    #main-collection .border-y {
+      margin-bottom: 1.45rem !important;
+      padding-top: 0.85rem !important;
+      padding-bottom: 0.85rem !important;
+    }
+
+    #main-collection #mc-grid {
+      gap: 1.35rem 0.9rem !important;
+    }
+
     #main-collection .mc-card {
-      display: block;
+      display: grid;
+      align-content: start;
+      gap: 0;
     }
 
     #main-collection .mc-card__meta {
-      padding-inline: 0.15rem;
+      padding-inline: 0.1rem;
+      display: grid;
+      gap: 0.3rem;
+      margin-top: 0.65rem;
+    }
+
+    #main-collection .mc-card > div.relative {
+      margin-bottom: 0 !important;
+      border-radius: 0.35rem !important;
     }
 
     #main-collection .mc-product-title {
       margin: 0;
-      font-family: var(--font-body-family, system-ui, sans-serif);
-      font-size: 0.98rem;
-      line-height: 1.38;
-      letter-spacing: 0.03em;
+      font-family: var(--font-heading, serif);
+      font-size: 0.84rem;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
       font-weight: 500;
       color: #151515;
       text-align: left;
-      text-wrap: balance;
+      text-wrap: pretty;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     #main-collection .mc-product-price-row {
       display: flex;
       align-items: baseline;
-      gap: 0.5rem;
-      margin-top: 0.5rem;
+      gap: 0.56rem;
+      margin-top: 0.02rem;
       flex-wrap: wrap;
     }
 
     #main-collection .mc-product-price {
       margin: 0;
       font-family: var(--font-body-family, system-ui, sans-serif);
-      font-size: 0.88rem;
+      font-size: 0.82rem;
       line-height: 1;
       font-weight: 600;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.015em;
       color: #c5a16d;
     }
 
     #main-collection .mc-product-compare {
       margin: 0;
       font-family: var(--font-body-family, system-ui, sans-serif);
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       line-height: 1;
       font-weight: 500;
-      letter-spacing: 0.03em;
+      letter-spacing: 0.01em;
       color: rgba(74, 74, 74, 0.6);
       text-decoration: line-through;
       text-decoration-thickness: 1px;
@@ -313,14 +359,50 @@
     }
 
     #main-collection .mc-quick-view {
-      bottom: 0.9rem;
-      left: 0.9rem;
-      right: 0.9rem;
+      bottom: 0.7rem;
+      left: 0.75rem;
+      right: 0.75rem;
       width: auto;
       justify-content: center;
-      padding: 0.72rem 1rem;
-      font-size: 0.68rem;
-      letter-spacing: 0.14em;
+      gap: 0.4rem;
+      padding: 0.58rem 0.78rem;
+      min-height: 38px;
+      font-size: 0.58rem;
+      line-height: 1;
+      letter-spacing: 0.11em;
+      white-space: nowrap;
+      border-radius: 999px !important;
+    }
+
+    #main-collection .mc-quick-view svg {
+      width: 11px;
+      height: 11px;
+      flex-shrink: 0;
+    }
+
+    #main-collection .mc-badge {
+      top: 0.6rem !important;
+      left: 0.6rem !important;
+      padding: 0.28rem 0.58rem !important;
+      font-size: 0.56rem !important;
+      letter-spacing: 0.11em !important;
+    }
+
+    #main-collection .mc-toolbar-btn {
+      font-size: 0.62rem !important;
+      letter-spacing: 0.15em !important;
+      gap: 0.5rem !important;
+      min-height: 42px;
+    }
+
+    #main-collection .mc-count {
+      font-size: 0.58rem !important;
+      letter-spacing: 0.1em !important;
+    }
+
+    #main-collection .mc-grid-btn {
+      width: 2.85rem !important;
+      height: 2.85rem !important;
     }
   }
 </style>
