@@ -76,17 +76,21 @@
     }
     .fam2-bar__copyright a:hover { opacity: 1; }
     .fam2-bar__payments {
+      display: flex;
       justify-content: center;
+      width: 100%;
     }
     .fam2-bar__pay-list {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(44px, max-content));
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
       gap: var(--fam2-bar-gap, 6px);
       list-style: none;
-      margin: 0;
+      margin: 0 auto;
       padding: 0;
+      width: min(100%, 420px);
     }
     .fam2-bar__pay-icon {
       display: flex;

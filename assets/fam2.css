@@ -182,9 +182,11 @@
 .fam2__social {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 18px;
   margin-top: 32px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .fam2__social-link {
