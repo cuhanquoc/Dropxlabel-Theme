@@ -47,11 +47,7 @@
 
               <a href="{{ section.settings.mega_video_link | default: routes.collections_url }}" class="dx-mega__card" role="menuitem">
                 {% if section.settings.mega_video != blank %}
-                  <video class="dx-mega__image" autoplay muted loop playsinline preload="metadata">
-                    {% for source in section.settings.mega_video.sources %}
-                      <source src="{{ source.url }}" type="{{ source.mime_type }}">
-                    {% endfor %}
-                  </video>
+                  {{ section.settings.mega_video | video_tag: class: 'dx-mega__image', autoplay: true, muted: true, loop: true, playsinline: true, preload: 'metadata' }}
                 {% else %}
                   <div class="dx-mega__image dx-mega__image--placeholder" role="img" aria-label="{{ section.settings.mega_video_label | default: "Men's Fashion" }}"></div>
                 {% endif %}

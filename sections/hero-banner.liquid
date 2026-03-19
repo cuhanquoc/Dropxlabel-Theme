@@ -1,19 +1,12 @@
 <hero-banner class="relative block min-h-[100dvh] overflow-hidden bg-[#f6f2eb] text-[#11100f]">
   <div class="absolute inset-0 overflow-hidden">
     {% if section.settings.background_video != blank %}
-      <video
-        class="hero-video h-full w-full object-cover object-center opacity-60"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="metadata"
-        poster="{% if section.settings.background_image != blank %}{{ section.settings.background_image | image_url: width: 1920 }}{% endif %}"
-      >
-        {% for source in section.settings.background_video.sources %}
-          <source src="{{ source.url }}" type="{{ source.mime_type }}">
-        {% endfor %}
-      </video>
+      {%- assign hero_video_poster = blank -%}
+      {%- if section.settings.background_image != blank -%}
+        {%- assign hero_video_poster = section.settings.background_image | image_url: width: 1920 -%}
+      {%- endif -%}
+
+      {{ section.settings.background_video | video_tag: class: 'hero-video h-full w-full object-cover object-center opacity-60', autoplay: true, muted: true, loop: true, playsinline: true, preload: 'metadata', poster: hero_video_poster }}
     {% elsif section.settings.background_image != blank %}
       <img
         src="{{ section.settings.background_image | image_url: width: 1920 }}"
