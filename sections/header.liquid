@@ -2,13 +2,11 @@
   assign nav_link_blocks = section.blocks | where: 'type', 'nav_link'
   assign logo_width = section.settings.logo_width | default: 180
   assign logo_width_desktop = logo_width | at_most: 280
+  assign desktop_background_opacity = section.settings.desktop_background_opacity | default: 96 | divided_by: 100.0
+  assign mobile_background_opacity = section.settings.mobile_background_opacity | default: 100 | divided_by: 100.0
 -%}
 
-<header
-  class="dx-header"
-  data-section-id="{{ section.id }}"
-  style="--dx-header-desktop-bg: {{ section.settings.desktop_background | default: '#fafaf9' }}; --dx-header-mobile-bg: {{ section.settings.mobile_background | default: '#000000' }};"
->
+<header class="dx-header" data-section-id="{{ section.id }}">
   <div class="dx-header__inner">
     <div class="dx-header__left">
       <button
@@ -178,7 +176,25 @@
 
 <style>
   .dx-header[data-section-id="{{ section.id }}"] {
-    background: var(--dx-header-desktop-bg, #fafaf9);
+    background: {{ section.settings.desktop_background | default: '#fafaf9' | color_modify: 'alpha', desktop_background_opacity }};
+    color: {{ section.settings.desktop_text_color | default: '#0c0a09' }};
+    border-bottom-color: {{ section.settings.border_color | default: '#0c0a09' | color_modify: 'alpha', 0.12 }};
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
+    border-bottom-color: {{ section.settings.border_color | default: '#0c0a09' | color_modify: 'alpha', 0.22 }};
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-nav-link,
+  .dx-header[data-section-id="{{ section.id }}"] .dx-logo,
+  .dx-header[data-section-id="{{ section.id }}"] .dx-logo__text,
+  .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn,
+  .dx-header[data-section-id="{{ section.id }}"] .dx-menu-btn {
+    color: {{ section.settings.desktop_text_color | default: '#0c0a09' }};
+  }
+
+  .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn:hover {
+    background: {{ section.settings.desktop_text_color | default: '#0c0a09' | color_modify: 'alpha', 0.08 }};
   }
 
   .dx-header__inner {
@@ -187,8 +203,9 @@
 
   @media (max-width: 767px) {
     .dx-header[data-section-id="{{ section.id }}"] {
-      background: var(--dx-header-mobile-bg, #000);
-      color: #fff;
+      background: {{ section.settings.mobile_background | default: '#000000' | color_modify: 'alpha', mobile_background_opacity }};
+      color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
+      border-bottom-color: {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.18 }};
     }
 
     .dx-header__inner {
@@ -221,7 +238,7 @@
       padding: 0;
       border: 0;
       background: transparent;
-      color: #fff;
+      color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
       cursor: pointer;
     }
 
@@ -251,7 +268,7 @@
       padding-inline: 0.25rem;
       overflow: hidden;
       z-index: 1;
-      color: #fff;
+      color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
     }
 
     .dx-logo__image {
@@ -270,7 +287,7 @@
       justify-content: center;
       width: 100%;
       height: 100%;
-      color: #fff;
+      color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
       font-size: 20px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -296,7 +313,7 @@
       padding: 0;
       border: 0;
       background: transparent;
-      color: #fff;
+      color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
     }
 
     .dx-icon-btn--account {
@@ -442,10 +459,51 @@
     },
     {
       "type": "color",
+      "id": "desktop_text_color",
+      "label": "Desktop Text & Icons",
+      "default": "#0c0a09",
+      "info": "Affects navigation and icons. Uploaded logo images keep their own color on desktop."
+    },
+    {
+      "type": "range",
+      "id": "desktop_background_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Desktop Transparency",
+      "default": 96
+    },
+    {
+      "type": "color",
       "id": "mobile_background",
       "label": "Mobile Background",
       "default": "#000000",
       "info": "Use a dark color for best results because the uploaded logo is inverted to white on mobile."
+    },
+    {
+      "type": "color",
+      "id": "mobile_text_color",
+      "label": "Mobile Text & Icons",
+      "default": "#ffffff",
+      "info": "Affects mobile icons and fallback text. The uploaded logo image remains white on mobile."
+    },
+    {
+      "type": "range",
+      "id": "mobile_background_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile Transparency",
+      "default": 100
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#0c0a09",
+      "info": "Controls the bottom border color for the header."
     },
     {
       "type": "header",
