@@ -14,7 +14,7 @@
       </div>
 
       <!-- ── FAQ Items ── -->
-      <div class="hc-faq-list" style="overflow: hidden;">
+      <div class="hc-faq-list" style="overflow: visible;">
 
         {%- if section.blocks.size > 0 -%}
           {%- comment -%} Block-based rendering — merchant adds FAQ items via Theme Editor {%- endcomment -%}
@@ -205,6 +205,7 @@
           item.style.borderRadius = '0';
           item.style.marginInline = '0';
           item.style.paddingInline = '0';
+          item.style.zIndex = '0';
           question.style.color = '#0a0a0a';
           icon.style.backgroundColor = '#0a0a0a';
           iconPlus.style.display = '';
@@ -226,6 +227,7 @@
               otherItem.style.borderRadius = '0';
               otherItem.style.marginInline = '0';
               otherItem.style.paddingInline = '0';
+              otherItem.style.zIndex = '0';
               otherQuestion.style.color = '#0a0a0a';
               otherIcon.style.backgroundColor = '#0a0a0a';
               otherPlus.style.display = '';
@@ -241,6 +243,7 @@
           item.style.borderRadius = '12px';
           item.style.marginInline = `calc(${sidePad} * -1)`;
           item.style.paddingInline = '0';
+          item.style.zIndex = '2';
           question.style.color = '#ffffff';
           icon.style.backgroundColor = '#333333';
           iconPlus.style.display = 'none';
