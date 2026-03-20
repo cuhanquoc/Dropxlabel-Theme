@@ -139,6 +139,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 34%;
   }
 
   hero-banner[data-section-id="{{ section.id }}"] .hero-poster {
@@ -237,6 +238,12 @@
     hero-banner[data-section-id="{{ section.id }}"] .hero-poster {
       opacity: 1 !important;
       visibility: visible;
+    }
+
+    hero-banner[data-section-id="{{ section.id }}"] .hero-poster,
+    hero-banner[data-section-id="{{ section.id }}"] .hero-video,
+    hero-banner[data-section-id="{{ section.id }}"] .hero-image {
+      object-position: center center;
     }
   }
 
