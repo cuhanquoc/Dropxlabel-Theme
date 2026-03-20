@@ -146,12 +146,12 @@
     inset: 0;
     z-index: 0;
     opacity: 1;
-    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   hero-banner[data-section-id="{{ section.id }}"] .hero-video {
     opacity: 0;
-    transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   hero-banner[data-section-id="{{ section.id }}"].is-video-ready .hero-video {
@@ -282,10 +282,16 @@
     var heroVideo = root.querySelector('.hero-video');
     if (!heroVideo) return;
     var readyEvents = ['loadeddata', 'canplay', 'playing'];
+    var posterHoldTimer = null;
 
     function markVideoReady() {
       if (!window.matchMedia('(min-width: 768px)').matches) return;
-      root.classList.add('is-video-ready');
+      if (root.classList.contains('is-video-ready')) return;
+
+      window.clearTimeout(posterHoldTimer);
+      posterHoldTimer = window.setTimeout(function () {
+        root.classList.add('is-video-ready');
+      }, 2000);
     }
 
     readyEvents.forEach(function (eventName) {
@@ -296,6 +302,7 @@
       var isMobile = window.matchMedia('(max-width: 767px)').matches;
 
       if (isMobile) {
+        window.clearTimeout(posterHoldTimer);
         root.classList.remove('is-video-ready');
         heroVideo.removeAttribute('autoplay');
         heroVideo.pause();
