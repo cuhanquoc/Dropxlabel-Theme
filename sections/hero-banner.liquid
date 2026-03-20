@@ -64,54 +64,70 @@
       {% for block in section.blocks %}
         {% case block.type %}
           {% when 'eyebrow' %}
-            <p {{ block.shopify_attributes }} class="hero-eyebrow font-body text-[9px] tracking-[0.3em] uppercase text-accent mb-8">
-              {{ block.settings.text }}
-            </p>
+            {% if block.settings.text != blank %}
+              <p {{ block.shopify_attributes }} class="hero-eyebrow font-body text-[9px] tracking-[0.3em] uppercase text-accent mb-8">
+                {{ block.settings.text }}
+              </p>
+            {% endif %}
           {% when 'heading' %}
-            <h1 {{ block.shopify_attributes }} class="hero-headline font-heading text-[clamp(2.2rem,10vw,9rem)] font-semibold leading-[0.9] text-white max-w-[780px] tracking-[0.02em] mb-7">
-              {{ block.settings.text }}
-            </h1>
+            {% if block.settings.text != blank %}
+              <h1 {{ block.shopify_attributes }} class="hero-headline font-heading text-[clamp(2.2rem,10vw,9rem)] font-semibold leading-[0.9] text-white max-w-[780px] tracking-[0.02em] mb-7">
+                {{ block.settings.text }}
+              </h1>
+            {% endif %}
           {% when 'subheadline' %}
-            <p {{ block.shopify_attributes }} class="hero-copy font-body text-[0.9rem] leading-[1.8] text-white/[0.72] max-w-[380px] tracking-[0.02em] mb-10">
-              {{ block.settings.text }}
-            </p>
+            {% if block.settings.text != blank %}
+              <p {{ block.shopify_attributes }} class="hero-copy font-body text-[0.9rem] leading-[1.8] text-white/[0.72] max-w-[380px] tracking-[0.02em] mb-10">
+                {{ block.settings.text }}
+              </p>
+            {% endif %}
           {% when 'button' %}
-            <a {{ block.shopify_attributes }} href="{{ block.settings.url | default: '#' }}" class="maya-merge-btn hero-cta group relative inline-flex h-[52px] w-max cursor-pointer items-center no-underline max-md:h-10">
-              <span class="relative z-10 flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full bg-[#0a0a0a] text-white transition-colors duration-500 group-hover:bg-[#333333] max-md:h-10 max-md:w-10">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M7 17 17 7M7 7h10v10"/>
-                </svg>
-              </span>
-              <span class="relative z-0 flex h-full -ml-[26px] items-center rounded-full bg-white pl-[44px] pr-8 font-body text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-[#0a0a0a] transition-all duration-500 group-hover:pl-[56px] max-md:pl-[36px] max-md:pr-6 max-md:text-[0.65rem] max-md:tracking-[0.15em]">
-                {{ block.settings.label }}
-              </span>
-            </a>
+            {% if block.settings.label != blank %}
+              <a {{ block.shopify_attributes }} href="{{ block.settings.url | default: '#' }}" class="maya-merge-btn hero-cta group relative inline-flex h-[52px] w-max cursor-pointer items-center no-underline max-md:h-10">
+                <span class="relative z-10 flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full bg-[#0a0a0a] text-white transition-colors duration-500 group-hover:bg-[#333333] max-md:h-10 max-md:w-10">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17 17 7M7 7h10v10"/>
+                  </svg>
+                </span>
+                <span class="relative z-0 flex h-full -ml-[26px] items-center rounded-full bg-white pl-[44px] pr-8 font-body text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-[#0a0a0a] transition-all duration-500 group-hover:pl-[56px] max-md:pl-[36px] max-md:pr-6 max-md:text-[0.65rem] max-md:tracking-[0.15em]">
+                  {{ block.settings.label }}
+                </span>
+              </a>
+            {% endif %}
         {% endcase %}
       {% endfor %}
     {% else %}
       <!-- Backward-compatible fallback -->
-      <p class="hero-eyebrow font-body text-[9px] tracking-[0.3em] uppercase text-accent mb-8">
-        {{ section.settings.eyebrow_text }}
-      </p>
+      {% if section.settings.eyebrow_text != blank %}
+        <p class="hero-eyebrow font-body text-[9px] tracking-[0.3em] uppercase text-accent mb-8">
+          {{ section.settings.eyebrow_text }}
+        </p>
+      {% endif %}
 
-      <h1 class="hero-headline font-heading text-[clamp(2.2rem,10vw,9rem)] font-semibold leading-[0.9] text-white max-w-[780px] tracking-[0.02em] mb-7">
-        {{ section.settings.headline }}
-      </h1>
+      {% if section.settings.headline != blank %}
+        <h1 class="hero-headline font-heading text-[clamp(2.2rem,10vw,9rem)] font-semibold leading-[0.9] text-white max-w-[780px] tracking-[0.02em] mb-7">
+          {{ section.settings.headline }}
+        </h1>
+      {% endif %}
 
-      <p class="hero-copy font-body text-[0.9rem] leading-[1.8] text-white/[0.72] max-w-[380px] tracking-[0.02em] mb-10">
-        {{ section.settings.subheadline }}
-      </p>
+      {% if section.settings.subheadline != blank %}
+        <p class="hero-copy font-body text-[0.9rem] leading-[1.8] text-white/[0.72] max-w-[380px] tracking-[0.02em] mb-10">
+          {{ section.settings.subheadline }}
+        </p>
+      {% endif %}
 
-      <a href="{{ section.settings.cta_url }}" class="maya-merge-btn hero-cta group relative inline-flex h-[52px] w-max cursor-pointer items-center no-underline max-md:h-10">
-        <span class="relative z-10 flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full bg-[#0a0a0a] text-white transition-colors duration-500 group-hover:bg-[#333333] max-md:h-10 max-md:w-10">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M7 17 17 7M7 7h10v10"/>
-          </svg>
-        </span>
-        <span class="relative z-0 flex h-full -ml-[26px] items-center rounded-full bg-white pl-[44px] pr-8 font-body text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-[#0a0a0a] transition-all duration-500 group-hover:pl-[56px] max-md:pl-[36px] max-md:pr-6 max-md:text-[0.65rem] max-md:tracking-[0.15em]">
-          {{ section.settings.cta_text }}
-        </span>
-      </a>
+      {% if section.settings.cta_text != blank %}
+        <a href="{{ section.settings.cta_url }}" class="maya-merge-btn hero-cta group relative inline-flex h-[52px] w-max cursor-pointer items-center no-underline max-md:h-10">
+          <span class="relative z-10 flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-full bg-[#0a0a0a] text-white transition-colors duration-500 group-hover:bg-[#333333] max-md:h-10 max-md:w-10">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M7 17 17 7M7 7h10v10"/>
+            </svg>
+          </span>
+          <span class="relative z-0 flex h-full -ml-[26px] items-center rounded-full bg-white pl-[44px] pr-8 font-body text-[0.78rem] font-semibold uppercase tracking-[0.2em] text-[#0a0a0a] transition-all duration-500 group-hover:pl-[56px] max-md:pl-[36px] max-md:pr-6 max-md:text-[0.65rem] max-md:tracking-[0.15em]">
+            {{ section.settings.cta_text }}
+          </span>
+        </a>
+      {% endif %}
     {% endif %}
 
   </div>
