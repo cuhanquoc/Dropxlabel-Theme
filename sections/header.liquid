@@ -207,7 +207,7 @@
     min-height: var(--dx-desktop-header-height);
     padding: 0 clamp(1.5rem, 2.2vw, 2rem);
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     column-gap: clamp(1.25rem, 1.8vw, 2.1rem);
   }
@@ -218,14 +218,18 @@
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-logo {
-    order: 1;
-    justify-self: start;
-    width: min(100%, var(--dx-logo-desktop-width, 64px));
-    max-width: var(--dx-logo-desktop-width, 64px);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    justify-self: center;
+    width: min(100%, var(--dx-logo-desktop-width, 92px));
+    max-width: var(--dx-logo-desktop-width, 92px);
     min-height: auto;
     padding: 0;
     overflow: visible;
-    z-index: 2;
+    z-index: 4;
+    pointer-events: auto;
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-logo__image {
@@ -235,7 +239,7 @@
     height: auto;
     max-height: none;
     object-fit: contain;
-    object-position: left center;
+    object-position: center;
     filter: none;
     mix-blend-mode: normal;
   }
@@ -250,7 +254,7 @@
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-header__left {
-    order: 2;
+    order: 1;
     min-width: 0;
     display: flex;
     align-items: center;
@@ -260,7 +264,7 @@
   .dx-header[data-section-id="{{ section.id }}"] .dx-nav-desktop {
     display: flex;
     align-items: center;
-    gap: clamp(1.5rem, 1.9vw, 1.9rem);
+    gap: clamp(1.35rem, 1.7vw, 1.75rem);
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-nav-link,
@@ -282,7 +286,7 @@
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-header__right {
-    order: 3;
+    order: 2;
     justify-self: end;
     display: flex;
     align-items: center;
