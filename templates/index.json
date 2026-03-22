@@ -13,15 +13,15 @@
       "type": "hero-banner",
       "settings": {
         "background_image": "shopify://shop_images/hf_20260311_063831_a3ba6aeb-254b-4237-b118-da4b74340486.png",
-        "background_video": "shopify://files/videos/hf_20260311_073759_4f7a9f9f-0d9a-4b40-9272-79cfef9c6dff.mp4",
-        "eyebrow_text": "Women's Spring Summer 2026",
+        "background_video": "shopify://files/videos/Background.mov",
+        "eyebrow_text": "Méliac Collection",
         "headline": "Heritage Revisited",
         "subheadline": "",
-        "cta_text": "Discover the Collection",
+        "cta_text": "Discover The Collections",
         "cta_url": "shopify://collections/all",
         "marquee_text": "ELEGANCE • STYLE • LUXURY • FOREVER •",
         "marquee_color": "#ffffff",
-        "marquee_speed": 19,
+        "marquee_speed": 21,
         "marquee_direction": "left"
       }
     },
