@@ -179,9 +179,13 @@
 
 <style>
   #shopify-section-{{ section.id }} {
-    --dx-desktop-overlap: 72px;
+    --dx-desktop-overlap: 0px;
     position: relative;
     z-index: 40;
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero {
     margin-bottom: calc(var(--dx-desktop-overlap) * -1);
   }
 
@@ -543,23 +547,39 @@
 </script>
 
 <script>
-(function () {
-  var sectionRoot = document.getElementById('shopify-section-{{ section.id }}');
-  var header = sectionRoot ? sectionRoot.querySelector('.dx-header[data-section-id="{{ section.id }}"]') : null;
-  if (!sectionRoot || !header) return;
+  (function () {
+    var sectionRoot = document.getElementById('shopify-section-{{ section.id }}');
+    var header = sectionRoot ? sectionRoot.querySelector('.dx-header[data-section-id="{{ section.id }}"]') : null;
+    if (!sectionRoot || !header) return;
 
-  function syncDesktopHeaderMetrics() {
-    var isDesktop = window.matchMedia('(min-width: 768px)').matches;
+    function shouldOverlayHero() {
+      var isDesktop = window.matchMedia('(min-width: 768px)').matches;
+      if (!isDesktop) return false;
 
-    if (!isDesktop) {
-      sectionRoot.style.setProperty('--dx-desktop-overlap', '0px');
-      document.documentElement.style.setProperty('--dx-live-header-stack-height', '0px');
-      return;
+      var main = document.getElementById('main-content');
+      if (!main) return false;
+
+      var firstSection = main.querySelector(':scope > .shopify-section, :scope > [id^="shopify-section-"]');
+      if (!firstSection) return false;
+
+      return firstSection.querySelector('hero-banner') !== null;
     }
 
-    window.requestAnimationFrame(function () {
-      var stackHeight = Math.ceil(sectionRoot.getBoundingClientRect().height || header.getBoundingClientRect().height || 72);
-      if (stackHeight < 72) stackHeight = 72;
+    function syncDesktopHeaderMetrics() {
+      var overlayHero = shouldOverlayHero();
+
+      if (!overlayHero) {
+        sectionRoot.classList.remove('dx-header-section--overlay-hero');
+        sectionRoot.style.setProperty('--dx-desktop-overlap', '0px');
+        document.documentElement.style.setProperty('--dx-live-header-stack-height', '0px');
+        return;
+      }
+
+      sectionRoot.classList.add('dx-header-section--overlay-hero');
+
+      window.requestAnimationFrame(function () {
+        var stackHeight = Math.ceil(sectionRoot.getBoundingClientRect().height || header.getBoundingClientRect().height || 72);
+        if (stackHeight < 72) stackHeight = 72;
 
       sectionRoot.style.setProperty('--dx-desktop-overlap', stackHeight + 'px');
       document.documentElement.style.setProperty('--dx-live-header-stack-height', stackHeight + 'px');
