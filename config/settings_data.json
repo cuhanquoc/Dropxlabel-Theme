@@ -120,7 +120,7 @@
           "mobile_logo_image": "shopify://shop_images/Group_5_1.png",
           "logo_width": 500,
           "mobile_side_width": 88,
-          "invert_mobile_logo": true,
+          "invert_mobile_logo": false,
           "logo_text": "C E L I S I R A",
           "desktop_background": "#000000",
           "desktop_text_color": "#FFFFFF",
