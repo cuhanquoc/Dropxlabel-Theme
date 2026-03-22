@@ -1422,24 +1422,26 @@
       }
 
       this.hiddenCards = this.cards.slice(this.initial);
-      this.hiddenCards.forEach(function (card) { card.style.display = 'none'; });
+      this.hiddenCards.forEach(function (card) {
+        card.style.display = 'none';
+        card.setAttribute('aria-hidden', 'true');
+      });
       this.moreWrap.style.display = '';
 
       this.moreBtn.addEventListener('click', () => {
         const batch = this.hiddenCards.slice(this.revealed, this.revealed + this.perLoad);
         if (!batch.length) return;
         batch.forEach((card, index) => {
-          const clone = card.cloneNode(true);
-          clone.style.display = '';
-          clone.style.width = '100%';
-          clone.style.opacity = '0';
-          clone.style.transform = 'translateY(18px)';
-          this.moreGrid.appendChild(clone);
-          this.initCards(clone);
+          card.style.display = '';
+          card.style.width = '100%';
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(18px)';
+          card.removeAttribute('aria-hidden');
+          this.moreGrid.appendChild(card);
           setTimeout(() => {
-            clone.style.transition = 'opacity .35s ease, transform .35s ease';
-            clone.style.opacity = '1';
-            clone.style.transform = 'translateY(0)';
+            card.style.transition = 'opacity .35s ease, transform .35s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
           }, 40 + index * 60);
         });
         this.revealed += batch.length;
@@ -1450,7 +1452,9 @@
     }
   }
 
-  customElements.define('featured-collection', FeaturedCollection);
+  if (!customElements.get('featured-collection')) {
+    customElements.define('featured-collection', FeaturedCollection);
+  }
 })();
 </script>
 
