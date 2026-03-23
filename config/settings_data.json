@@ -123,7 +123,7 @@
           "invert_mobile_logo": false,
           "logo_text": "C E L I S I R A",
           "desktop_background": "#000000",
-          "desktop_text_color": "#222222",
+          "desktop_text_color": "#000000",
           "desktop_background_opacity": 0,
           "mobile_background": "#ffffff",
           "mobile_text_color": "#000000",
