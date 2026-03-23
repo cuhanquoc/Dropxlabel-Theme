@@ -183,8 +183,8 @@
     position: relative;
     z-index: 40;
     margin-bottom: 0;
-    background: transparent !important;
-    background-color: transparent !important;
+    background: transparent;
+    background-color: transparent;
   }
 
   #shopify-section-{{ section.id }}.dx-header-section--overlay-hero {
@@ -193,24 +193,14 @@
 
   .dx-header[data-section-id="{{ section.id }}"] {
     --dx-desktop-header-height: 72px;
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
     color: {{ section.settings.desktop_text_color | default: '#ffffff' }};
     border-bottom: 1px solid {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.24 }};
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    box-shadow: none !important;
+    box-shadow: none;
   }
 
   .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
     border-bottom-color: {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.24 }};
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    box-shadow: none !important;
+    box-shadow: none;
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
@@ -222,9 +212,6 @@
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
     column-gap: clamp(1.25rem, 1.8vw, 2.1rem);
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-logo,
@@ -326,9 +313,14 @@
 
     .dx-header[data-section-id="{{ section.id }}"] {
       --dx-mobile-side-width: {{ mobile_side_width }}px;
-      background: {{ section.settings.mobile_background | default: '#000000' | color_modify: 'alpha', mobile_background_opacity }};
+      background: {{ section.settings.mobile_background | default: '#000000' | color_modify: 'alpha', mobile_background_opacity }} !important;
+      background-color: {{ section.settings.mobile_background | default: '#000000' | color_modify: 'alpha', mobile_background_opacity }} !important;
+      background-image: none !important;
       color: {{ section.settings.mobile_text_color | default: '#ffffff' }};
       border-bottom-color: {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.18 }};
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      box-shadow: none !important;
     }
 
     .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
@@ -483,6 +475,37 @@
       text-align: center;
     }
   }
+
+  @media (min-width: 768px) {
+    #shopify-section-{{ section.id }} {
+      background: transparent !important;
+      background-color: transparent !important;
+    }
+
+    .dx-header[data-section-id="{{ section.id }}"] {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      box-shadow: none !important;
+    }
+
+    .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      box-shadow: none !important;
+    }
+
+    .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
+      background: transparent !important;
+      background-color: transparent !important;
+      background-image: none !important;
+    }
+  }
 </style>
 
 <script>
@@ -563,46 +586,64 @@
     var header = sectionRoot ? sectionRoot.querySelector('.dx-header[data-section-id="{{ section.id }}"]') : null;
     if (!sectionRoot || !header) return;
 
+    function resetHeaderOverlay() {
+      sectionRoot.classList.remove('dx-header-section--overlay-hero');
+      sectionRoot.style.setProperty('--dx-desktop-overlap', '0px');
+      document.documentElement.style.setProperty('--dx-live-header-stack-height', '0px');
+    }
+
+    function getFirstRenderableSection(main) {
+      return Array.from(main.children).find(function (child) {
+        return child.nodeType === 1;
+      }) || null;
+    }
+
     function shouldOverlayHero() {
-      var isDesktop = window.matchMedia('(min-width: 768px)').matches;
-      if (!isDesktop) return false;
+      if (!window.matchMedia('(min-width: 768px)').matches) return false;
 
       var main = document.getElementById('main-content');
       if (!main) return false;
 
-      var firstSection = main.querySelector(':scope > .shopify-section, :scope > [id^="shopify-section-"]');
+      var firstSection = getFirstRenderableSection(main);
       if (!firstSection) return false;
 
       return firstSection.querySelector('hero-banner') !== null;
     }
 
     function syncDesktopHeaderMetrics() {
-      var overlayHero = shouldOverlayHero();
-
-      if (!overlayHero) {
-        sectionRoot.classList.remove('dx-header-section--overlay-hero');
-        sectionRoot.style.setProperty('--dx-desktop-overlap', '0px');
-        document.documentElement.style.setProperty('--dx-live-header-stack-height', '0px');
+      if (!shouldOverlayHero()) {
+        resetHeaderOverlay();
         return;
       }
 
       sectionRoot.classList.add('dx-header-section--overlay-hero');
 
       window.requestAnimationFrame(function () {
-        var stackHeight = Math.ceil(sectionRoot.getBoundingClientRect().height || header.getBoundingClientRect().height || 72);
-        if (stackHeight < 72) stackHeight = 72;
+        var sectionHeight = Math.ceil(sectionRoot.getBoundingClientRect().height || 0);
+        var headerHeight = Math.ceil(header.getBoundingClientRect().height || 0);
+        var stackHeight = Math.max(sectionHeight, headerHeight, 72);
 
-      sectionRoot.style.setProperty('--dx-desktop-overlap', stackHeight + 'px');
-      document.documentElement.style.setProperty('--dx-live-header-stack-height', stackHeight + 'px');
-    });
-  }
+        sectionRoot.style.setProperty('--dx-desktop-overlap', stackHeight + 'px');
+        document.documentElement.style.setProperty('--dx-live-header-stack-height', stackHeight + 'px');
+      });
+    }
 
-  syncDesktopHeaderMetrics();
-  window.addEventListener('resize', syncDesktopHeaderMetrics, { passive: true });
-  document.addEventListener('shopify:section:load', syncDesktopHeaderMetrics);
-  document.addEventListener('shopify:section:select', syncDesktopHeaderMetrics);
-  document.addEventListener('shopify:block:select', syncDesktopHeaderMetrics);
-})();
+    function scheduleHeaderSync() {
+      window.requestAnimationFrame(syncDesktopHeaderMetrics);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', scheduleHeaderSync, { once: true });
+    } else {
+      scheduleHeaderSync();
+    }
+
+    window.addEventListener('load', scheduleHeaderSync, { once: true });
+    window.addEventListener('resize', syncDesktopHeaderMetrics, { passive: true });
+    document.addEventListener('shopify:section:load', syncDesktopHeaderMetrics);
+    document.addEventListener('shopify:section:select', syncDesktopHeaderMetrics);
+    document.addEventListener('shopify:block:select', syncDesktopHeaderMetrics);
+  })();
 </script>
 {% schema %}
 {
