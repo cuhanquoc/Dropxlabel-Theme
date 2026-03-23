@@ -28,7 +28,7 @@
     "featured-collection": {
       "type": "featured-collection",
       "settings": {
-        "eyebrow": "Celisira - top selling",
+        "eyebrow": "Curated selections from our digital atelier, blending modern silhouettes with timeless elegance.",
         "heading_line_1": "TRENDING",
         "heading_line_2": "PRODUCTS",
         "collection": "dress",
@@ -59,10 +59,10 @@
           "vivienne-bikini™-stripe-sexy-bikini",
           "ysabel-dress™-loose-strap-dress"
         ],
-        "more_label": "More",
-        "items_initial": 12,
-        "items_per_load": 8,
-        "helper_text": "Hover cards to reveal Quick View • Tap thumbnails to switch size"
+        "more_label": "Discover More Collections",
+        "items_initial": 4,
+        "items_per_load": 4,
+        "helper_text": ""
       }
     },
     "brand-story-bento": {
