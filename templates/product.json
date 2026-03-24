@@ -24,7 +24,7 @@
           "type": "info_action",
           "settings": {
             "title": "DISCOVER YOUR PERFECT SIZE",
-            "content": "<p><strong>Finding</strong> the right size has never been easier! Our detailed sizing guide helps you choose the perfect fit, ensuring you enjoy both comfort and style. Take the guesswork out of shopping and discover your perfect size today!</p>",
+            "content": "",
             "review_anchor_or_note": ""
           }
         }
@@ -33,6 +33,7 @@
         "info_action_Vf7p9q",
         "info_action_d4HyeN"
       ],
+      "custom_css": [],
       "settings": {
         "gallery_gap": 2,
         "price_promo_text": "WE MADE TOO MUCH",
@@ -46,7 +47,7 @@
         "choose_color_text": "Choose color",
         "select_size_button_text": "Select a size",
         "add_to_cart_button_text": "Add to cart",
-        "size_chart_text": "<p>S (Chest: 36\", Length: 28\")</p><p>M (Chest: 38\", Length: 29\")</p><p>L (Chest: 40\", Length: 30\")</p>",
+        "size_chart_text": "<h3>Size Chart</h3><p>SizeUSBust (cm)Underbust (cm)Waist (cm)Hips (cm)XXS079–8265–6859–6186–89XS283–8669–7262–6590–93S487–9073–7666–6994–97M691–9477–8070–7398–101L895–9881–8474–77102–105XL1099–10285–8878–81106–109XXL12103–10689–9282–85110–113ONE SIZE—87–98—66–7794–105</p>",
         "pickup_title": "Pickup available at California Warehouse",
         "pickup_time": "Usually ready in 24 hours",
         "delivery_text": "Free delivery within 2 days",
