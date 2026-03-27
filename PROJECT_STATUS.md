@@ -53,12 +53,14 @@ Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
 - `Footer`
   - Desktop đã redesign theo hướng editorial/luxury (off-black, spacious, quiet) trong `sections/footer.liquid`.
   - Desktop footer đã được mount vào `layout/theme.liquid` để render thật trên storefront.
-  - Giữ nguyên contract: logo, brand_description, newsletter form, link_list blocks, social URLs, payment icons, copyright.
-  - Mobile footer accordion không bị thay đổi.
+  - Desktop footer giờ lấy `Quick links`, `Support`, và `Follow us on` từ dữ liệu do mobile footer phát ra, để hai bên đồng bộ nội dung.
+  - Giữ nguyên contract: logo, brand_description, newsletter form, social URLs, payment icons, copyright.
+  - Mobile footer accordion không đổi UI/behavior; hiện đóng vai trò nguồn dữ liệu chuẩn cho 3 cột desktop.
 
 ## Recent Completed Work
 
 7. Desktop footer rebuilt toward the approved reference: marquee statement, left newsletter capsule, right link columns, and bottom locale/copyright/payment bar while keeping Shopify footer schema intact.
+8. Đồng bộ `Quick links`, `Support`, và `Follow us on` từ mobile footer sang desktop footer bằng data bridge JSON, để desktop không còn drift nội dung so với mobile.
 1. Tích hợp UI `featured-collection` theo Stitch reference trong khi giữ backend Shopify.
 2. Chỉnh hero poster-first để tránh video mở đầu đen/mờ.
 3. Tách hành vi overlay của header để chỉ đè lên hero banner homepage.
@@ -77,6 +79,7 @@ Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
    - footer desktop trên nhiều viewport lớn (1024/1280/1440)
 3. Mọi chỉnh sửa UI mới nên cập nhật lại file này ngay sau khi hoàn tất.
 4. Footer desktop visual QA across 1024 / 1280 / 1440 after the new reference-driven redesign.
+5. Kiểm tra trong Theme Editor rằng đổi link/social ở mobile footer sẽ cập nhật đúng 3 cột desktop footer.
 
 ## Files/Paths To Avoid Touching Unless Asked
 
@@ -96,3 +99,4 @@ Sau mỗi task hoàn tất, cập nhật tối thiểu 4 mục sau:
 
 Nếu task thay đổi rule làm việc hoặc theme contract, cập nhật luôn các section tương ứng trong file này.
 - 2026-03-27: Footer desktop render hardened in Theme Editor by removing `hidden md:block` from root and hiding mobile via section CSS only.
+- 2026-03-27: Desktop footer now reads `Quick links`, `Support`, and `Follow us on` from JSON emitted by the mobile footer section, keeping both surfaces aligned without changing mobile behavior.

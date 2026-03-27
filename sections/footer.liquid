@@ -62,25 +62,19 @@
         {%- endif -%}
       </div>
 
-      <div class="dx-footer__link-grid">
-        {%- for block in section.blocks -%}
-          {%- if block.type == 'link_list' -%}
-            <div class="dx-footer__menu-col" data-footer-col {{ block.shopify_attributes }}>
-              {%- if block.settings.title != blank -%}
-                <h3 class="dx-footer__menu-title font-body">{{ block.settings.title }}</h3>
-              {%- endif -%}
-              {%- if block.settings.menu != blank -%}
-                <ul class="dx-footer__menu-list" role="list">
-                  {%- for link in block.settings.menu.links -%}
-                    <li>
-                      <a href="{{ link.url }}" class="dx-footer__menu-link font-body">{{ link.title }}</a>
-                    </li>
-                  {%- endfor -%}
-                </ul>
-              {%- endif -%}
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
+      <div class="dx-footer__link-grid" id="dx-footer-link-grid">
+        <div class="dx-footer__menu-col" data-footer-col data-footer-group="quick-links">
+          <h3 class="dx-footer__menu-title font-body">Quick links</h3>
+          <ul class="dx-footer__menu-list" role="list" data-footer-list="quick-links"></ul>
+        </div>
+        <div class="dx-footer__menu-col" data-footer-col data-footer-group="support">
+          <h3 class="dx-footer__menu-title font-body">Support</h3>
+          <ul class="dx-footer__menu-list" role="list" data-footer-list="support"></ul>
+        </div>
+        <div class="dx-footer__menu-col" data-footer-col data-footer-group="follow-us">
+          <h3 class="dx-footer__menu-title font-body">Follow us on</h3>
+          <ul class="dx-footer__menu-list" role="list" data-footer-list="follow-us"></ul>
+        </div>
       </div>
     </div>
 
@@ -112,6 +106,56 @@
   </div>
 
 </footer-section>
+
+<script>
+  (() => {
+    const renderDesktopFooterFromMobile = () => {
+      const dataNode = document.getElementById('fam2-footer-data');
+      const host = document.getElementById('dx-footer-link-grid');
+      if (!dataNode || !host) return;
+
+      let payload;
+      try {
+        payload = JSON.parse(dataNode.textContent);
+      } catch (_error) {
+        return;
+      }
+
+      const renderList = (key, items) => {
+        const list = host.querySelector(`[data-footer-list="${key}"]`);
+        if (!list) return;
+        list.innerHTML = '';
+        items.forEach((item) => {
+          if (!item || !item.title) return;
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.className = 'dx-footer__menu-link font-body';
+          a.textContent = item.title;
+          a.href = item.url || '#';
+          if (item.external) {
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+          }
+          li.appendChild(a);
+          list.appendChild(li);
+        });
+      };
+
+      renderList('quick-links', payload.quickLinks || []);
+      renderList('support', payload.support || []);
+      renderList('follow-us', payload.social || []);
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', renderDesktopFooterFromMobile, { once: true });
+    } else {
+      renderDesktopFooterFromMobile();
+    }
+
+    document.addEventListener('shopify:section:load', renderDesktopFooterFromMobile);
+    document.addEventListener('shopify:section:reorder', renderDesktopFooterFromMobile);
+  })();
+</script>
 
 <style>
   .dx-footer {

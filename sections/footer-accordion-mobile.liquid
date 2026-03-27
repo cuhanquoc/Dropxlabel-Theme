@@ -737,6 +737,155 @@
     </a>
   {%- endif -%}
 
+  {%- capture fam2_quick_links_json -%}
+    {%- assign fam2_has_quick_links = false -%}
+    [
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'accordion_group' -%}
+        {%- assign fam2_group_key = block.settings.group_key | strip -%}
+        {%- if fam2_group_key == 'quick-links' -%}
+          {%- for cb in section.blocks -%}
+            {%- if cb.type == 'accordion_link' -%}
+              {%- assign fam2_parent_key = cb.settings.parent_group_key | strip -%}
+              {%- assign fam2_label = cb.settings.label | strip -%}
+              {%- if fam2_parent_key == fam2_group_key and fam2_label != blank -%}
+                {%- assign fam2_label_down = fam2_label | downcase -%}
+                {%- assign fam2_auto_url = '' -%}
+                {%- if fam2_label_down == 'home' -%}
+                  {%- assign fam2_auto_url = routes.root_url -%}
+                {%- elsif fam2_label_down == 'search' -%}
+                  {%- assign fam2_auto_url = routes.search_url -%}
+                {%- elsif fam2_label_down == 'collections' or fam2_label_down == 'all products' -%}
+                  {%- assign fam2_auto_url = routes.collections_url -%}
+                {%- elsif fam2_label_down == 'about us' or fam2_label_down == 'about' -%}
+                  {%- assign fam2_auto_url = '/pages/about-us' -%}
+                {%- elsif fam2_label_down == 'news' -%}
+                  {%- assign fam2_auto_url = '/pages/news' -%}
+                {%- elsif fam2_label_down == 'privacy policy' -%}
+                  {%- assign fam2_auto_url = shop.privacy_policy.url | default: '/policies/privacy-policy' -%}
+                {%- elsif fam2_label_down == 'refund policy' -%}
+                  {%- assign fam2_auto_url = shop.refund_policy.url | default: '/policies/refund-policy' -%}
+                {%- elsif fam2_label_down == 'shipping policy' -%}
+                  {%- assign fam2_auto_url = shop.shipping_policy.url | default: '/policies/shipping-policy' -%}
+                {%- elsif fam2_label_down == 'terms of service' -%}
+                  {%- assign fam2_auto_url = shop.terms_of_service.url | default: '/policies/terms-of-service' -%}
+                {%- elsif fam2_label_down == 'contact' or fam2_label_down == 'contact us' -%}
+                  {%- assign fam2_auto_url = '/pages/contact' -%}
+                {%- elsif fam2_label_down == 'faq' -%}
+                  {%- assign fam2_auto_url = '/pages/faq' -%}
+                {%- elsif fam2_label_down == 'track order' -%}
+                  {%- assign fam2_auto_url = '/pages/track-order' -%}
+                {%- endif -%}
+                {%- assign fam2_resolved_url = cb.settings.url -%}
+                {%- if fam2_resolved_url == blank and fam2_auto_url != blank -%}
+                  {%- assign fam2_resolved_url = fam2_auto_url -%}
+                {%- endif -%}
+                {%- if fam2_has_quick_links -%},{%- endif -%}
+                {%- assign fam2_has_quick_links = true -%}
+                {"title":{{ fam2_label | json }},"url":{{ fam2_resolved_url | json }},"external":{{ cb.settings.open_in_new_tab | json }}}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+    ]
+  {%- endcapture -%}
+
+  {%- capture fam2_support_json -%}
+    {%- assign fam2_has_support_links = false -%}
+    [
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'accordion_group' -%}
+        {%- assign fam2_group_key = block.settings.group_key | strip -%}
+        {%- if fam2_group_key == 'support' -%}
+          {%- for cb in section.blocks -%}
+            {%- if cb.type == 'accordion_link' -%}
+              {%- assign fam2_parent_key = cb.settings.parent_group_key | strip -%}
+              {%- assign fam2_label = cb.settings.label | strip -%}
+              {%- if fam2_parent_key == fam2_group_key and fam2_label != blank -%}
+                {%- assign fam2_label_down = fam2_label | downcase -%}
+                {%- assign fam2_auto_url = '' -%}
+                {%- if fam2_label_down == 'home' -%}
+                  {%- assign fam2_auto_url = routes.root_url -%}
+                {%- elsif fam2_label_down == 'search' -%}
+                  {%- assign fam2_auto_url = routes.search_url -%}
+                {%- elsif fam2_label_down == 'collections' or fam2_label_down == 'all products' -%}
+                  {%- assign fam2_auto_url = routes.collections_url -%}
+                {%- elsif fam2_label_down == 'about us' or fam2_label_down == 'about' -%}
+                  {%- assign fam2_auto_url = '/pages/about-us' -%}
+                {%- elsif fam2_label_down == 'news' -%}
+                  {%- assign fam2_auto_url = '/pages/news' -%}
+                {%- elsif fam2_label_down == 'privacy policy' -%}
+                  {%- assign fam2_auto_url = shop.privacy_policy.url | default: '/policies/privacy-policy' -%}
+                {%- elsif fam2_label_down == 'refund policy' -%}
+                  {%- assign fam2_auto_url = shop.refund_policy.url | default: '/policies/refund-policy' -%}
+                {%- elsif fam2_label_down == 'shipping policy' -%}
+                  {%- assign fam2_auto_url = shop.shipping_policy.url | default: '/policies/shipping-policy' -%}
+                {%- elsif fam2_label_down == 'terms of service' -%}
+                  {%- assign fam2_auto_url = shop.terms_of_service.url | default: '/policies/terms-of-service' -%}
+                {%- elsif fam2_label_down == 'contact' or fam2_label_down == 'contact us' -%}
+                  {%- assign fam2_auto_url = '/pages/contact' -%}
+                {%- elsif fam2_label_down == 'faq' -%}
+                  {%- assign fam2_auto_url = '/pages/faq' -%}
+                {%- elsif fam2_label_down == 'track order' -%}
+                  {%- assign fam2_auto_url = '/pages/track-order' -%}
+                {%- endif -%}
+                {%- assign fam2_resolved_url = cb.settings.url -%}
+                {%- if fam2_resolved_url == blank and fam2_auto_url != blank -%}
+                  {%- assign fam2_resolved_url = fam2_auto_url -%}
+                {%- endif -%}
+                {%- if fam2_has_support_links -%},{%- endif -%}
+                {%- assign fam2_has_support_links = true -%}
+                {"title":{{ fam2_label | json }},"url":{{ fam2_resolved_url | json }},"external":{{ cb.settings.open_in_new_tab | json }}}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+    ]
+  {%- endcapture -%}
+
+  {%- capture fam2_social_json -%}
+    {%- assign fam2_has_social_items = false -%}
+    [
+    {%- if section.settings.social_instagram != blank -%}
+      {%- if fam2_has_social_items -%},{%- endif -%}
+      {%- assign fam2_has_social_items = true -%}
+      {"title":"Instagram","url":{{ section.settings.social_instagram | json }},"external":true}
+    {%- endif -%}
+    {%- if section.settings.social_tiktok != blank -%}
+      {%- if fam2_has_social_items -%},{%- endif -%}
+      {%- assign fam2_has_social_items = true -%}
+      {"title":"TikTok","url":{{ section.settings.social_tiktok | json }},"external":true}
+    {%- endif -%}
+    {%- if section.settings.social_facebook != blank -%}
+      {%- if fam2_has_social_items -%},{%- endif -%}
+      {%- assign fam2_has_social_items = true -%}
+      {"title":"Facebook","url":{{ section.settings.social_facebook | json }},"external":true}
+    {%- endif -%}
+    {%- if section.settings.social_pinterest != blank -%}
+      {%- if fam2_has_social_items -%},{%- endif -%}
+      {%- assign fam2_has_social_items = true -%}
+      {"title":"Pinterest","url":{{ section.settings.social_pinterest | json }},"external":true}
+    {%- endif -%}
+    {%- if section.settings.social_youtube != blank -%}
+      {%- if fam2_has_social_items -%},{%- endif -%}
+      {%- assign fam2_has_social_items = true -%}
+      {"title":"YouTube","url":{{ section.settings.social_youtube | json }},"external":true}
+    {%- endif -%}
+    ]
+  {%- endcapture -%}
+
+  <script id="fam2-footer-data" type="application/json">
+    {
+      "quickLinks": {{ fam2_quick_links_json | strip }},
+      "support": {{ fam2_support_json | strip }},
+      "social": {{ fam2_social_json | strip }}
+    }
+  </script>
+
 </footer-accordion-mobile>
 
 <script src="{{ 'fam2.js' | asset_url }}" defer></script>
