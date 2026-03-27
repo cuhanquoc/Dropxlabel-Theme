@@ -52,6 +52,7 @@ Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
   - Đã chỉnh accordion mobile nhiều vòng, vẫn nên test lại khi đụng section lân cận.
 - `Footer`
   - Desktop đã redesign theo hướng editorial/luxury (off-black, spacious, quiet) trong `sections/footer.liquid`.
+  - Desktop footer đã được mount vào `layout/theme.liquid` để render thật trên storefront.
   - Giữ nguyên contract: logo, brand_description, newsletter form, link_list blocks, social URLs, payment icons, copyright.
   - Mobile footer accordion không bị thay đổi.
 
@@ -62,6 +63,7 @@ Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
 3. Tách hành vi overlay của header để chỉ đè lên hero banner homepage.
 4. Redesign desktop footer theo hướng editorial/luxury, giữ nguyên schema/settings ID và behavior Shopify.
 5. Chốt Stitch design system project `5971681460518604700` làm quy tắc bắt buộc cho các task UI tiếp theo.
+6. Hardening lại logic header: desktop overlay chỉ bật khi trang bắt đầu bằng hero banner; mobile tiếp tục lấy màu theo Shopify settings.
 
 ## Open Focus Areas
 

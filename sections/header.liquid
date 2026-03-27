@@ -183,8 +183,9 @@
     position: relative;
     z-index: 40;
     margin-bottom: 0;
-    background: transparent;
-    background-color: transparent;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
   }
 
   #shopify-section-{{ section.id }}.dx-header-section--overlay-hero {
@@ -194,13 +195,27 @@
   .dx-header[data-section-id="{{ section.id }}"] {
     --dx-desktop-header-height: 72px;
     color: {{ section.settings.desktop_text_color | default: '#ffffff' }};
-    border-bottom: 1px solid {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.24 }};
+    border-bottom: 0;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
     box-shadow: none;
   }
 
   .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
-    border-bottom-color: {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.24 }};
+    border-bottom: 0;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
     box-shadow: none;
+  }
+
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"] {
+    border-bottom: 1px solid {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.24 }};
+  }
+
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
+    border-bottom: 1px solid {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.24 }};
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
@@ -480,6 +495,7 @@
     #shopify-section-{{ section.id }} {
       background: transparent !important;
       background-color: transparent !important;
+      background-image: none !important;
     }
 
     .dx-header[data-section-id="{{ section.id }}"] {
@@ -489,6 +505,7 @@
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
       box-shadow: none !important;
+      border-bottom: 0 !important;
     }
 
     .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
@@ -498,6 +515,7 @@
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
       box-shadow: none !important;
+      border-bottom: 0 !important;
     }
 
     .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
@@ -606,7 +624,10 @@
 
       var firstSection = getFirstRenderableSection(main);
       if (!firstSection) return false;
-
+      var sectionType = firstSection.getAttribute('data-section-type') || '';
+      if (sectionType.toLowerCase() === 'hero-banner') return true;
+      if (firstSection.id && firstSection.id.toLowerCase().indexOf('hero-banner') !== -1) return true;
+      if (firstSection.matches && firstSection.matches('hero-banner')) return true;
       return firstSection.querySelector('hero-banner') !== null;
     }
 
@@ -643,6 +664,15 @@
     document.addEventListener('shopify:section:load', syncDesktopHeaderMetrics);
     document.addEventListener('shopify:section:select', syncDesktopHeaderMetrics);
     document.addEventListener('shopify:block:select', syncDesktopHeaderMetrics);
+
+    var main = document.getElementById('main-content');
+    if (main && typeof MutationObserver !== 'undefined') {
+      var observer = new MutationObserver(scheduleHeaderSync);
+      observer.observe(main, { childList: true });
+    }
+
+    window.setTimeout(scheduleHeaderSync, 50);
+    window.setTimeout(scheduleHeaderSync, 180);
   })();
 </script>
 {% schema %}
