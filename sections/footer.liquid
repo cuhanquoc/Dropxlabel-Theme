@@ -1,143 +1,408 @@
-<footer-section class="block bg-[#0A0A0A] text-white">
+<footer-section id="site-footer" class="dx-footer hidden md:block text-white">
 
-  {%- if section.settings.show_newsletter -%}
-  <div class="border-b border-white/10 py-14 px-6 md:px-10 lg:px-14">
-    <div class="max-w-2xl mx-auto text-center">
-      {%- if section.settings.newsletter_heading != blank -%}
-        <h2 class="font-heading text-2xl md:text-3xl font-semibold mb-3 text-white">
-          {{ section.settings.newsletter_heading }}
-        </h2>
-      {%- endif -%}
-      {%- if section.settings.newsletter_subtext != blank -%}
-        <p class="text-white/60 font-body text-sm mb-6">{{ section.settings.newsletter_subtext }}</p>
-      {%- endif -%}
-      {% form 'customer', id: 'footer-newsletter-form' %}
-        {%- if form.posted_successfully? -%}
-          <p class="text-green-400 text-sm">{{ 'footer.newsletter.success' | t }}</p>
-        {%- else -%}
-          <div class="flex flex-col sm:flex-row gap-3 justify-center">
-            <label for="footer-email" class="sr-only">{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}</label>
-            <input
-              type="email"
-              name="contact[email]"
-              id="footer-email"
-              placeholder="{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}"
-              required
-              autocomplete="email"
-              class="flex-1 max-w-xs bg-white/5 border border-white/20 rounded px-4 py-3 text-sm text-white placeholder-white/40 font-body focus:outline-none focus:border-white/50 transition-colors"
-            >
-            <button
-              type="submit"
-              class="px-6 py-3 bg-white text-black text-sm font-semibold font-body rounded hover:bg-white/90 transition-colors cursor-pointer"
-            >
-              {{ section.settings.newsletter_button | default: 'Subscribe' }}
-            </button>
-          </div>
-        {%- endif -%}
-      {% endform %}
-    </div>
-  </div>
-  {%- endif -%}
+  <div class="dx-footer__shell">
+    {%- if section.settings.show_newsletter -%}
+      <div class="dx-footer__newsletter" data-footer-col>
+        <div class="dx-footer__newsletter-copy">
+          {%- if section.settings.newsletter_heading != blank -%}
+            <h2 class="dx-footer__newsletter-title font-heading">
+              {{ section.settings.newsletter_heading }}
+            </h2>
+          {%- endif -%}
+          {%- if section.settings.newsletter_subtext != blank -%}
+            <p class="dx-footer__newsletter-subtext font-body">{{ section.settings.newsletter_subtext }}</p>
+          {%- endif -%}
+        </div>
+        <div class="dx-footer__newsletter-form">
+          {% form 'customer', id: 'footer-newsletter-form' %}
+            {%- if form.posted_successfully? -%}
+              <p class="dx-footer__newsletter-state dx-footer__newsletter-state--success">{{ 'footer.newsletter.success' | t }}</p>
+            {%- elsif form.errors -%}
+              <p class="dx-footer__newsletter-state dx-footer__newsletter-state--error">
+                {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+              </p>
+            {%- else -%}
+              <div class="dx-footer__newsletter-row">
+                <label for="footer-email" class="sr-only">{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}</label>
+                <input
+                  type="email"
+                  name="contact[email]"
+                  id="footer-email"
+                  placeholder="{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}"
+                  required
+                  autocomplete="email"
+                  class="dx-footer__newsletter-input font-body"
+                >
+                <button
+                  type="submit"
+                  class="dx-footer__newsletter-btn font-body cursor-pointer"
+                >
+                  {{ section.settings.newsletter_button | default: 'Subscribe' }}
+                </button>
+              </div>
+            {%- endif -%}
+          {% endform %}
+        </div>
+      </div>
+    {%- endif -%}
 
-  <div class="max-w-screen-xl mx-auto px-6 md:px-10 lg:px-14 py-16">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-
-      <!-- Col 1: Brand -->
-      <div class="lg:col-span-1">
+    <div class="dx-footer__main{% if section.blocks.size == 0 %} dx-footer__main--single{% endif %}">
+      <div class="dx-footer__brand ft-brand-section" data-footer-col>
         {%- if section.settings.logo != blank -%}
-          <a href="{{ routes.root_url }}" class="inline-block mb-5">
-            {{- section.settings.logo | image_url: width: 160 | image_tag:
+          <a href="{{ routes.root_url }}" class="dx-footer__brand-logo ft-brand-name" aria-label="{{ shop.name }}">
+            {{- section.settings.logo | image_url: width: 320 | image_tag:
                 alt: shop.name,
                 loading: 'lazy',
-                class: 'h-8 w-auto object-contain brightness-0 invert'
+                class: 'dx-footer__brand-image'
             -}}
           </a>
         {%- else -%}
-          <a href="{{ routes.root_url }}" class="inline-block mb-5">
-            <span class="font-heading text-xl font-bold tracking-wide text-white">{{ shop.name }}</span>
+          <a href="{{ routes.root_url }}" class="dx-footer__brand-logo ft-brand-name">
+            <span class="dx-footer__brand-wordmark font-heading">{{ shop.name }}</span>
           </a>
         {%- endif -%}
 
         {%- if section.settings.brand_description != blank -%}
-          <p class="text-white/50 text-sm font-body leading-relaxed mb-6">{{ section.settings.brand_description }}</p>
+          <p class="dx-footer__brand-desc font-body">{{ section.settings.brand_description }}</p>
         {%- endif -%}
 
-        <!-- Social icons -->
-        <div class="flex items-center gap-4">
+        <div class="dx-footer__social" aria-label="Social links">
           {%- if settings.social_instagram_url != blank -%}
-            <a href="{{ settings.social_instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram" class="text-white/50 hover:text-white transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            <a href="{{ settings.social_instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram" class="dx-footer__social-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
             </a>
           {%- endif -%}
           {%- if settings.social_tiktok_url != blank -%}
-            <a href="{{ settings.social_tiktok_url }}" target="_blank" rel="noopener" aria-label="TikTok" class="text-white/50 hover:text-white transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.37 6.37 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.15 8.15 0 004.78 1.52V6.77a4.85 4.85 0 01-1.01-.08z"/></svg>
+            <a href="{{ settings.social_tiktok_url }}" target="_blank" rel="noopener" aria-label="TikTok" class="dx-footer__social-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.37 6.37 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.15 8.15 0 004.78 1.52V6.77a4.85 4.85 0 01-1.01-.08z"/></svg>
             </a>
           {%- endif -%}
           {%- if settings.social_facebook_url != blank -%}
-            <a href="{{ settings.social_facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook" class="text-white/50 hover:text-white transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073C24 5.404 18.627 0 12 0 5.383 0 0 5.404 0 12.073 0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            <a href="{{ settings.social_facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook" class="dx-footer__social-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073C24 5.404 18.627 0 12 0 5.383 0 0 5.404 0 12.073 0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
             </a>
           {%- endif -%}
           {%- if settings.social_pinterest_url != blank -%}
-            <a href="{{ settings.social_pinterest_url }}" target="_blank" rel="noopener" aria-label="Pinterest" class="text-white/50 hover:text-white transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+            <a href="{{ settings.social_pinterest_url }}" target="_blank" rel="noopener" aria-label="Pinterest" class="dx-footer__social-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
             </a>
           {%- endif -%}
           {%- if settings.social_youtube_url != blank -%}
-            <a href="{{ settings.social_youtube_url }}" target="_blank" rel="noopener" aria-label="YouTube" class="text-white/50 hover:text-white transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+            <a href="{{ settings.social_youtube_url }}" target="_blank" rel="noopener" aria-label="YouTube" class="dx-footer__social-link">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
             </a>
           {%- endif -%}
         </div>
       </div>
 
-      <!-- Col 2 & 3 & 4: Link blocks (from blocks) -->
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'link_list' -%}
-          <div {{ block.shopify_attributes }}>
-            {%- if block.settings.title != blank -%}
-              <h3 class="font-body text-xs font-semibold uppercase tracking-widest text-white/40 mb-5">{{ block.settings.title }}</h3>
-            {%- endif -%}
-            {%- if block.settings.menu != blank -%}
-              <ul class="flex flex-col gap-3" role="list">
-                {%- for link in block.settings.menu.links -%}
-                  <li>
-                    <a href="{{ link.url }}" class="text-white/60 hover:text-white text-sm font-body transition-colors">{{ link.title }}</a>
-                  </li>
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
+      <div class="dx-footer__link-grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'link_list' -%}
+            <div class="dx-footer__menu-col" data-footer-col {{ block.shopify_attributes }}>
+              {%- if block.settings.title != blank -%}
+                <h3 class="dx-footer__menu-title font-body">{{ block.settings.title }}</h3>
+              {%- endif -%}
+              {%- if block.settings.menu != blank -%}
+                <ul class="dx-footer__menu-list" role="list">
+                  {%- for link in block.settings.menu.links -%}
+                    <li>
+                      <a href="{{ link.url }}" class="dx-footer__menu-link font-body">{{ link.title }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="dx-footer__bar">
+      <div class="dx-footer__bar-inner" data-footer-col>
+        <p class="dx-footer__copyright font-body">
+          &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}.
+          {%- if section.settings.copyright_text != blank -%}
+            {{ section.settings.copyright_text }}
+          {%- else -%}
+            All rights reserved.
+          {%- endif -%}
+        </p>
+        {%- if section.settings.show_payment_icons -%}
+          <div class="dx-footer__payments" aria-label="Accepted payment methods">
+            {%- for type in shop.enabled_payment_types -%}
+              {{ type | payment_type_svg_tag: class: 'dx-footer__payment-icon' }}
+            {%- endfor -%}
           </div>
         {%- endif -%}
-      {%- endfor -%}
-
-    </div>
-  </div>
-
-  <!-- Bottom bar -->
-  <div class="border-t border-white/10 py-6 px-6 md:px-10 lg:px-14">
-    <div class="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-      <p class="text-white/30 text-xs font-body">
-        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}.
-        {%- if section.settings.copyright_text != blank -%}
-          {{ section.settings.copyright_text }}
-        {%- else -%}
-          All rights reserved.
-        {%- endif -%}
-      </p>
-      <!-- Payment icons -->
-      {%- if section.settings.show_payment_icons -%}
-        <div class="flex items-center gap-2 flex-wrap justify-center md:justify-end">
-          {%- for type in shop.enabled_payment_types -%}
-            {{ type | payment_type_svg_tag: class: 'h-6 w-auto opacity-40' }}
-          {%- endfor -%}
-        </div>
-      {%- endif -%}
+      </div>
     </div>
   </div>
 
 </footer-section>
+
+<style>
+  @media (min-width: 768px) {
+    .dx-footer {
+      background:
+        radial-gradient(110% 145% at 8% 0%, rgba(197, 168, 128, 0.07), transparent 45%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0) 18%),
+        #0a0a0a;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .dx-footer__shell {
+      width: min(100%, 1440px);
+      margin: 0 auto;
+      padding-inline: clamp(2.5rem, 4vw, 5rem);
+    }
+
+    .dx-footer__newsletter {
+      display: grid;
+      grid-template-columns: minmax(0, 1.06fr) minmax(0, 0.94fr);
+      gap: clamp(2rem, 4vw, 4.75rem);
+      align-items: end;
+      padding-top: clamp(4.75rem, 7vw, 6.4rem);
+      padding-bottom: clamp(3.2rem, 5vw, 4.4rem);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .dx-footer__newsletter-title {
+      margin: 0;
+      max-width: 13ch;
+      font-size: clamp(2.25rem, 3vw, 3.3rem);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.028em;
+    }
+
+    .dx-footer__newsletter-subtext {
+      max-width: 28rem;
+      margin: 1.1rem 0 0;
+      font-size: 0.97rem;
+      line-height: 1.72;
+      color: rgba(255, 255, 255, 0.54);
+    }
+
+    .dx-footer__newsletter-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+      padding-bottom: 0.35rem;
+    }
+
+    .dx-footer__newsletter-state {
+      margin: 0;
+      font-size: 0.76rem;
+      line-height: 1.6;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .dx-footer__newsletter-state--success {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .dx-footer__newsletter-state--error {
+      color: #f1c7bf;
+    }
+
+    .dx-footer__newsletter-input {
+      flex: 1 1 0;
+      max-width: none;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      min-height: 0;
+      padding: 0.85rem 0 0.5rem;
+      font-size: 0.76rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.92);
+      box-shadow: none;
+    }
+
+    .dx-footer__newsletter-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+      letter-spacing: 0.16em;
+    }
+
+    .dx-footer__newsletter-input:focus {
+      outline: none;
+    }
+
+    .dx-footer__newsletter-btn {
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.92);
+      min-height: 0;
+      padding: 0 0 0.52rem 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dx-footer__newsletter-btn:hover {
+      background: transparent;
+      color: #ffffff;
+      opacity: 0.78;
+      border-bottom-color: rgba(255, 255, 255, 0.42);
+    }
+
+    .dx-footer__main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(0, 1.88fr);
+      gap: clamp(2.5rem, 5vw, 6rem);
+      align-items: start;
+      padding-top: clamp(3.8rem, 6vw, 5rem);
+      padding-bottom: clamp(3.7rem, 5vw, 4.5rem);
+    }
+
+    .dx-footer__main--single {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .dx-footer__brand-logo {
+      display: inline-flex;
+      margin-bottom: 1.55rem;
+    }
+
+    .dx-footer__brand-image {
+      width: auto;
+      height: auto;
+      max-height: 2.35rem;
+      filter: brightness(0) invert(1);
+    }
+
+    .dx-footer__brand-wordmark {
+      font-size: clamp(1.6rem, 2vw, 2.05rem);
+      line-height: 1;
+      letter-spacing: 0.03em;
+    }
+
+    .dx-footer__brand-desc {
+      max-width: 22rem;
+      margin: 0 0 1.65rem;
+      font-size: 0.95rem;
+      line-height: 1.78;
+      color: rgba(255, 255, 255, 0.54);
+    }
+
+    .dx-footer__social {
+      gap: 0.95rem;
+    }
+
+    .dx-footer__social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.46);
+      transition: color 0.24s ease, opacity 0.24s ease, transform 0.24s ease;
+    }
+
+    .dx-footer__social-link:hover {
+      color: #ffffff;
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    .dx-footer__link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr));
+      gap: clamp(1.75rem, 3vw, 3rem);
+    }
+
+    .dx-footer__menu-title {
+      margin: 0 0 1rem;
+      font-size: 0.66rem;
+      letter-spacing: 0.21em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.38);
+    }
+
+    .dx-footer__menu-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    .dx-footer__menu-link {
+      display: inline-block;
+      position: relative;
+      font-size: 0.98rem;
+      line-height: 1.55;
+      letter-spacing: 0.01em;
+      color: rgba(255, 255, 255, 0.64);
+      transition: color 0.24s ease;
+    }
+
+    .dx-footer__menu-link::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -0.12rem;
+      width: 100%;
+      height: 1px;
+      background: currentColor;
+      opacity: 0;
+      transform: scaleX(0.36);
+      transform-origin: left center;
+      transition: opacity 0.24s ease, transform 0.24s ease;
+    }
+
+    .dx-footer__menu-link:hover {
+      color: #ffffff;
+    }
+
+    .dx-footer__menu-link:hover::after {
+      opacity: 0.72;
+      transform: scaleX(1);
+    }
+
+    .dx-footer__bar {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 1.45rem;
+      padding-bottom: 2rem;
+    }
+
+    .dx-footer__bar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .dx-footer__copyright {
+      font-size: 0.72rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.36);
+    }
+
+    .dx-footer__payments {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.55rem;
+    }
+
+    .dx-footer__payment-icon {
+      height: 1.12rem;
+      width: auto;
+      opacity: 0.48;
+      transition: opacity 0.2s ease;
+    }
+
+    .dx-footer__payment-icon:hover {
+      opacity: 0.72;
+    }
+  }
+</style>
 
 {% schema %}
 {

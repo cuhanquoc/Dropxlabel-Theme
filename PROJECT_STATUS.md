@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-26 (Asia/Ho_Chi_Minh)
+Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
 
 ## Current Snapshot
 
@@ -9,6 +9,10 @@ Last updated: 2026-03-26 (Asia/Ho_Chi_Minh)
 - Latest pushed commit at setup: `a1f6a21`
 - Storefront direction: `mobile-first`
 - Current priority: polish UI while keeping Shopify backend behavior stable
+- Mandatory design system for UI work:
+  - Stitch project `5971681460518604700`
+  - direction: `Quiet Luxury / Digital Atelier`
+  - no heavy borders, rely on tonal shifts / spacing / soft dividers instead
 
 ## Working Rules
 
@@ -46,12 +50,18 @@ Last updated: 2026-03-26 (Asia/Ho_Chi_Minh)
   - Desktop và mobile dùng cùng backend Shopify hiện có.
 - `Customer Help Center`
   - Đã chỉnh accordion mobile nhiều vòng, vẫn nên test lại khi đụng section lân cận.
+- `Footer`
+  - Desktop đã redesign theo hướng editorial/luxury (off-black, spacious, quiet) trong `sections/footer.liquid`.
+  - Giữ nguyên contract: logo, brand_description, newsletter form, link_list blocks, social URLs, payment icons, copyright.
+  - Mobile footer accordion không bị thay đổi.
 
 ## Recent Completed Work
 
 1. Tích hợp UI `featured-collection` theo Stitch reference trong khi giữ backend Shopify.
 2. Chỉnh hero poster-first để tránh video mở đầu đen/mờ.
 3. Tách hành vi overlay của header để chỉ đè lên hero banner homepage.
+4. Redesign desktop footer theo hướng editorial/luxury, giữ nguyên schema/settings ID và behavior Shopify.
+5. Chốt Stitch design system project `5971681460518604700` làm quy tắc bắt buộc cho các task UI tiếp theo.
 
 ## Open Focus Areas
 
@@ -61,6 +71,7 @@ Last updated: 2026-03-26 (Asia/Ho_Chi_Minh)
    - featured collection
    - quick view
    - collection/search mobile
+   - footer desktop trên nhiều viewport lớn (1024/1280/1440)
 3. Mọi chỉnh sửa UI mới nên cập nhật lại file này ngay sau khi hoàn tất.
 
 ## Files/Paths To Avoid Touching Unless Asked
