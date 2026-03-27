@@ -93,3 +93,4 @@ Sau mỗi task hoàn tất, cập nhật tối thiểu 4 mục sau:
 4. `Open Focus Areas`
 
 Nếu task thay đổi rule làm việc hoặc theme contract, cập nhật luôn các section tương ứng trong file này.
+- 2026-03-27: Footer desktop render hardened in Theme Editor by removing `hidden md:block` from root and hiding mobile via section CSS only.

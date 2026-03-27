@@ -1,4 +1,4 @@
-<footer-section id="site-footer" class="dx-footer hidden md:block text-white">
+<footer-section id="site-footer" class="dx-footer text-white">
 
   <div class="dx-footer__shell">
     {%- if section.settings.show_newsletter -%}
@@ -141,6 +141,16 @@
 </footer-section>
 
 <style>
+  .dx-footer {
+    display: block;
+  }
+
+  @media (max-width: 767px) {
+    .dx-footer {
+      display: none;
+    }
+  }
+
   @media (min-width: 768px) {
     .dx-footer {
       background:
