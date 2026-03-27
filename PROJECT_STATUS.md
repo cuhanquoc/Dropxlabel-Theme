@@ -58,6 +58,7 @@ Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
 
 ## Recent Completed Work
 
+7. Desktop footer rebuilt toward the approved reference: marquee statement, left newsletter capsule, right link columns, and bottom locale/copyright/payment bar while keeping Shopify footer schema intact.
 1. Tích hợp UI `featured-collection` theo Stitch reference trong khi giữ backend Shopify.
 2. Chỉnh hero poster-first để tránh video mở đầu đen/mờ.
 3. Tách hành vi overlay của header để chỉ đè lên hero banner homepage.
@@ -75,6 +76,7 @@ Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
    - collection/search mobile
    - footer desktop trên nhiều viewport lớn (1024/1280/1440)
 3. Mọi chỉnh sửa UI mới nên cập nhật lại file này ngay sau khi hoàn tất.
+4. Footer desktop visual QA across 1024 / 1280 / 1440 after the new reference-driven redesign.
 
 ## Files/Paths To Avoid Touching Unless Asked
 
