@@ -36,7 +36,9 @@ class HeroBanner extends HTMLElement {
     });
   }
 }
-customElements.define('hero-banner', HeroBanner);
+if (!customElements.get('hero-banner')) {
+  customElements.define('hero-banner', HeroBanner);
+}
 
 /* ═══ Web Component: <character-morph> ═══
    JolyUI Character Morph → GSAP translation
@@ -144,7 +146,9 @@ class CharacterMorph extends HTMLElement {
     this._tl.to(this._chars, exitProps);
   }
 }
-customElements.define('character-morph', CharacterMorph);
+if (!customElements.get('character-morph')) {
+  customElements.define('character-morph', CharacterMorph);
+}
 
 document.addEventListener('DOMContentLoaded', function () {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
