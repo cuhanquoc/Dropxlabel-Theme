@@ -292,7 +292,7 @@
 .fcv2__heading {
   margin: 0;
   color: #1a1c1b;
-  font-family: var(--font-heading-family, var(--font-body-family));
+  font-family: var(--font-heading, var(--font-heading-family, serif));
   font-size: clamp(2.05rem, 5.3vw, 3.35rem);
   font-weight: 500;
   letter-spacing: -0.02em;
@@ -993,21 +993,37 @@
 
 @media (min-width: 1024px) {
   .fcv2__header {
-    padding: 76px 40px 0;
+    padding: 58px 40px 0;
   }
 
   .fcv2__body {
-    padding-bottom: 62px;
+    padding-top: 22px;
+    padding-bottom: 58px;
   }
 
   .fcv2__heading {
-    font-size: clamp(2.7rem, 4.2vw, 3.8rem);
+    font-family: var(--font-heading, var(--font-heading-family, serif));
+    font-size: clamp(2.35rem, 3.8vw, 3.35rem);
+    font-weight: 500;
+    letter-spacing: -0.028em;
+    line-height: 0.94;
+    text-transform: none;
   }
 
   .fcv2__eyebrow {
-    max-width: 64ch;
-    margin-top: 2px;
-    font-size: 19px;
+    max-width: 44ch;
+    margin-top: 10px;
+    color: #4f4a43;
+    font-family: var(--font-body, var(--font-body-family, sans-serif));
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.015em;
+    line-height: 1.45;
+  }
+
+  .fcv2__header-rule {
+    margin-top: 16px;
   }
 
   .fcv2__card {
@@ -1018,7 +1034,7 @@
   .fcv2__track {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 30px;
+    gap: 26px;
     padding: 0 40px 10px;
     overflow: visible;
     scroll-snap-type: none;
@@ -1026,19 +1042,53 @@
   }
 
   .fcv2__content {
-    padding-top: 14px;
+    padding-top: 16px;
   }
 
   .fcv2__title {
-    font-size: 18px;
+    font-size: 1.32rem;
+    line-height: 1.16;
   }
 
   .fcv2__subtitle {
     font-size: 14px;
   }
 
+  .fcv2__price-row {
+    gap: 12px;
+    margin-top: 8px;
+    min-height: 28px;
+  }
+
   .fcv2__price {
-    font-size: 14px;
+    color: #161412;
+    font-size: 1.18rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .fcv2__compare {
+    color: #8e867c;
+    font-size: 0.86rem;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-decoration-thickness: 1px;
+    text-decoration-color: rgba(142, 134, 124, 0.7);
+  }
+
+  .fcv2__swatches {
+    gap: 10px;
+    margin-top: 14px;
+    min-height: 28px;
+  }
+
+  .fcv2__swatch {
+    width: 26px;
+    height: 26px;
+    border-width: 1px;
+    border-color: rgba(143, 118, 106, 0.28);
+    background: #d8d1c7;
   }
 
   .fcv2__quick-view {

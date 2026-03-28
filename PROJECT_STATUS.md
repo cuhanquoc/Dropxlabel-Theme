@@ -6,7 +6,7 @@ Last updated: 2026-03-28 (Asia/Ho_Chi_Minh)
 
 - Repo: `Dropxlabel-Theme`
 - Branch: `main`
-- Latest pushed commit at setup: `a1f6a21`
+- Latest pushed commit at setup: `a6d6b90`
 - Storefront direction: `mobile-first`
 - Current priority: polish UI while keeping Shopify backend behavior stable
 - Mandatory design system for UI work:
@@ -49,6 +49,7 @@ Last updated: 2026-03-28 (Asia/Ho_Chi_Minh)
   - Mobile không autoplay video.
 - `Featured Collection`
   - Đã restyle theo Stitch reference.
+  - Desktop vừa được polish thêm theo screen Stitch đã duyệt: heading editorial hơn, swatches lớn hơn, price hierarchy rõ hơn, layout bớt trống trải.
   - Desktop và mobile dùng cùng backend Shopify hiện có.
 - `Customer Help Center`
   - Đã chỉnh accordion mobile nhiều vòng, vẫn nên test lại khi đụng section lân cận.
@@ -62,6 +63,7 @@ Last updated: 2026-03-28 (Asia/Ho_Chi_Minh)
 
 ## Recent Completed Work
 
+10. Featured Collection desktop được tinh lại theo phương án Stitch đã duyệt: swatches/variants lớn hơn, heading dùng hệ editorial đúng font dự án, giá chính và giá gạch nổi bật hơn, nhịp card gọn hơn.
 7. Desktop footer rebuilt toward the approved reference: marquee statement, left newsletter capsule, right link columns, and bottom locale/copyright/payment bar while keeping Shopify footer schema intact.
 8. Đồng bộ `Quick links`, `Support`, và `Follow us on` từ mobile footer sang desktop footer bằng data bridge JSON, để desktop không còn drift nội dung so với mobile.
 9. Chốt và áp typography parity cho desktop footer theo phương án Stitch đã duyệt: display marquee dùng `Playfair Display`, còn menu/utility dùng `Inter`.
