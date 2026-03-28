@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
+Last updated: 2026-03-28 (Asia/Ho_Chi_Minh)
 
 ## Current Snapshot
 
@@ -17,6 +17,8 @@ Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
 ## Working Rules
 
 - Push trực tiếp lên `main` trừ khi người dùng yêu cầu khác.
+- Với mọi task design mới, phải tạo và refine design trong `Stitch` trước.
+- Chỉ được implement code và push GitHub sau khi người dùng duyệt phương án design trong `Stitch`.
 - Sau mỗi lần push phải báo rõ:
   - đã push hay chưa
   - branch nào
@@ -50,10 +52,11 @@ Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
   - Desktop và mobile dùng cùng backend Shopify hiện có.
 - `Customer Help Center`
   - Đã chỉnh accordion mobile nhiều vòng, vẫn nên test lại khi đụng section lân cận.
-- `Footer`
+ - `Footer`
   - Desktop đã redesign theo hướng editorial/luxury (off-black, spacious, quiet) trong `sections/footer.liquid`.
   - Desktop footer đã được mount vào `layout/theme.liquid` để render thật trên storefront.
   - Desktop footer giờ lấy `Quick links`, `Support`, và `Follow us on` từ dữ liệu do mobile footer phát ra, để hai bên đồng bộ nội dung.
+  - Typography desktop footer đã được khóa lại theo font system dự án: `Playfair Display` cho display marquee và `Inter` cho menu/utility text.
   - Giữ nguyên contract: logo, brand_description, newsletter form, social URLs, payment icons, copyright.
   - Mobile footer accordion không đổi UI/behavior; hiện đóng vai trò nguồn dữ liệu chuẩn cho 3 cột desktop.
 
@@ -61,6 +64,7 @@ Last updated: 2026-03-27 (Asia/Ho_Chi_Minh)
 
 7. Desktop footer rebuilt toward the approved reference: marquee statement, left newsletter capsule, right link columns, and bottom locale/copyright/payment bar while keeping Shopify footer schema intact.
 8. Đồng bộ `Quick links`, `Support`, và `Follow us on` từ mobile footer sang desktop footer bằng data bridge JSON, để desktop không còn drift nội dung so với mobile.
+9. Chốt và áp typography parity cho desktop footer theo phương án Stitch đã duyệt: display marquee dùng `Playfair Display`, còn menu/utility dùng `Inter`.
 1. Tích hợp UI `featured-collection` theo Stitch reference trong khi giữ backend Shopify.
 2. Chỉnh hero poster-first để tránh video mở đầu đen/mờ.
 3. Tách hành vi overlay của header để chỉ đè lên hero banner homepage.
