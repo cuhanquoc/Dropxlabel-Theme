@@ -567,6 +567,11 @@
         "type": "shopify://apps/trustwill-trustoo/blocks/trustoo-review-switch/c8f15077-6475-4e86-ad06-b66038d5ba2c",
         "disabled": false,
         "settings": {}
+      },
+      "1513253815146976218": {
+        "type": "shopify://apps/omnisend-email-marketing-sms/blocks/app-embed/44704aa2-794f-4c5d-8c8e-039c841158e9",
+        "disabled": false,
+        "settings": {}
       }
     }
   }
