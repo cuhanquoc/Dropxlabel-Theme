@@ -8,58 +8,49 @@
         <span class="dx-footer__headline-solid">{{ footer_marquee }}</span>
         <span class="dx-footer__headline-outline">{{ footer_marquee }}</span>
       </div>
+      <span class="dx-footer__headline-blur dx-footer__headline-blur--left"></span>
+      <span class="dx-footer__headline-blur dx-footer__headline-blur--right"></span>
     </div>
-
-    {%- if section.settings.show_newsletter -%}
-      <div class="dx-footer__newsletter" data-footer-col>
-        <div class="dx-footer__newsletter-copy">
-          {%- if section.settings.newsletter_heading != blank -%}
-            <h2 class="dx-footer__newsletter-title font-heading">
-              {{ section.settings.newsletter_heading }}
-            </h2>
-          {%- endif -%}
-          {%- if section.settings.newsletter_subtext != blank -%}
-            <p class="dx-footer__newsletter-subtext font-body">{{ section.settings.newsletter_subtext }}</p>
-          {%- endif -%}
-        </div>
-        <div class="dx-footer__newsletter-form">
-          {% form 'customer', id: 'footer-newsletter-form' %}
-            {%- if form.posted_successfully? -%}
-              <p class="dx-footer__newsletter-state dx-footer__newsletter-state--success">{{ 'footer.newsletter.success' | t }}</p>
-            {%- elsif form.errors -%}
-              <p class="dx-footer__newsletter-state dx-footer__newsletter-state--error">
-                {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
-              </p>
-            {%- else -%}
-              <div class="dx-footer__newsletter-row">
-                <label for="footer-email" class="sr-only">{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}</label>
-                <input
-                  type="email"
-                  name="contact[email]"
-                  id="footer-email"
-                  placeholder="{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}"
-                  required
-                  autocomplete="email"
-                  class="dx-footer__newsletter-input font-body"
-                >
-                <button
-                  type="submit"
-                  class="dx-footer__newsletter-btn font-body cursor-pointer"
-                >
-                  {{ section.settings.newsletter_button | default: 'Subscribe' }}
-                </button>
-              </div>
-            {%- endif -%}
-          {% endform %}
-        </div>
-      </div>
-    {%- endif -%}
 
     <div class="dx-footer__main{% if section.blocks.size == 0 %} dx-footer__main--single{% endif %}">
       <div class="dx-footer__brand ft-brand-section" data-footer-col>
-        {%- if section.settings.brand_description != blank -%}
-          <p class="dx-footer__brand-desc font-body">{{ section.settings.brand_description }}</p>
-        {%- endif -%}
+        <div class="dx-footer__brand-stack">
+          {%- if section.settings.brand_description != blank -%}
+            <p class="dx-footer__brand-desc font-body">{{ section.settings.brand_description }}</p>
+          {%- endif -%}
+          {%- if section.settings.show_newsletter -%}
+            <div class="dx-footer__newsletter-form">
+              {% form 'customer', id: 'footer-newsletter-form' %}
+                {%- if form.posted_successfully? -%}
+                  <p class="dx-footer__newsletter-state dx-footer__newsletter-state--success">{{ 'footer.newsletter.success' | t }}</p>
+                {%- elsif form.errors -%}
+                  <p class="dx-footer__newsletter-state dx-footer__newsletter-state--error">
+                    {{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}
+                  </p>
+                {%- else -%}
+                  <div class="dx-footer__newsletter-row">
+                    <label for="footer-email" class="sr-only">{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}</label>
+                    <input
+                      type="email"
+                      name="contact[email]"
+                      id="footer-email"
+                      placeholder="{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}"
+                      required
+                      autocomplete="email"
+                      class="dx-footer__newsletter-input font-body"
+                    >
+                    <button
+                      type="submit"
+                      class="dx-footer__newsletter-btn font-body cursor-pointer"
+                    >
+                      {{ section.settings.newsletter_button | default: 'Subscribe' }}
+                    </button>
+                  </div>
+                {%- endif -%}
+              {% endform %}
+            </div>
+          {%- endif -%}
+        </div>
       </div>
 
       <div class="dx-footer__link-grid" id="dx-footer-link-grid">
@@ -78,7 +69,7 @@
       </div>
     </div>
 
-    <div class="dx-footer__bar">
+    <div class="dx-footer__bar" aria-hidden="true">
       <div class="dx-footer__bar-inner" data-footer-col>
         <div class="dx-footer__locale font-body" aria-label="Store locale">
           <span class="dx-footer__locale-globe" aria-hidden="true">
@@ -136,6 +127,13 @@
             a.target = '_blank';
             a.rel = 'noopener noreferrer';
           }
+          if (key === 'follow-us' && item.external) {
+            const icon = document.createElement('span');
+            icon.className = 'dx-footer__menu-link-external';
+            icon.textContent = '↗';
+            icon.setAttribute('aria-hidden', 'true');
+            a.appendChild(icon);
+          }
           li.appendChild(a);
           list.appendChild(li);
         });
@@ -177,100 +175,96 @@
     }
 
     .dx-footer__shell {
-      width: min(100%, 1600px);
+      width: min(100%, 2048px);
       margin: 0 auto;
-      padding-inline: clamp(1.5rem, 3vw, 3.5rem);
+      padding-inline: 0;
     }
 
     .dx-footer__headline-band {
+      position: relative;
       overflow: hidden;
-      padding-top: 1rem;
-      padding-bottom: clamp(2.5rem, 4vw, 3.75rem);
+      padding-top: 0;
+      padding-bottom: clamp(1.25rem, 2vw, 1.9rem);
     }
 
     .dx-footer__headline-rail {
       display: flex;
       align-items: baseline;
-      gap: clamp(1.25rem, 2vw, 2rem);
+      gap: clamp(1.8rem, 2.4vw, 2.8rem);
       width: max-content;
       min-width: 100%;
       white-space: nowrap;
+      transform: translateX(-24%);
     }
 
     .dx-footer__headline-solid,
     .dx-footer__headline-outline {
-      font-family: var(--font-heading, serif);
-      font-size: clamp(4rem, 7vw, 7rem);
-      font-weight: 600;
-      line-height: 0.92;
-      letter-spacing: -0.03em;
+      font-family: var(--font-heading, sans-serif);
+      font-size: clamp(4.8rem, 8vw, 8rem);
+      font-weight: 500;
+      line-height: 0.88;
+      letter-spacing: -0.055em;
       text-transform: none;
     }
 
     .dx-footer__headline-solid {
-      color: rgba(255, 255, 255, 0.96);
+      color: rgba(255, 255, 255, 0.97);
     }
 
     .dx-footer__headline-outline {
       color: transparent;
-      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.18);
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.2);
     }
 
-    .dx-footer__newsletter {
+    .dx-footer__headline-blur {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: clamp(4rem, 11vw, 14rem);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .dx-footer__headline-blur--left {
+      left: 0;
+      background: linear-gradient(90deg, #222225 0%, rgba(34, 34, 37, 0.86) 40%, rgba(34, 34, 37, 0) 100%);
+    }
+
+    .dx-footer__headline-blur--right {
+      right: 0;
+      background: linear-gradient(270deg, #222225 0%, rgba(34, 34, 37, 0.86) 40%, rgba(34, 34, 37, 0) 100%);
+    }
+
+    .dx-footer__main {
       display: grid;
-      grid-template-columns: minmax(0, 1.14fr) minmax(0, 1.56fr);
-      gap: clamp(2.25rem, 4vw, 5rem);
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1.52fr);
+      gap: clamp(3rem, 4vw, 5rem);
       align-items: start;
       padding-top: 0;
-      padding-bottom: clamp(3rem, 4.5vw, 4rem);
-    }
-
-    .dx-footer__newsletter-title {
-      margin: 0;
-      max-width: 32rem;
-      font-family: var(--font-heading, serif);
-      font-size: clamp(1.15rem, 1.7vw, 1.5rem);
-      font-weight: 600;
-      line-height: 1.2;
-      letter-spacing: -0.015em;
-    }
-
-    .dx-footer__newsletter-subtext {
-      max-width: 43rem;
-      margin: 0 0 1.8rem;
-      font-size: clamp(1rem, 1.08vw, 1.08rem);
-      line-height: 1.58;
-      color: rgba(255, 255, 255, 0.78);
-    }
-
-    .dx-footer__newsletter-copy {
-      padding-right: clamp(1rem, 2vw, 2rem);
-    }
-
-    .dx-footer__newsletter-form {
-      align-self: end;
+      padding-inline: clamp(1.5rem, 3vw, 2rem);
+      padding-bottom: clamp(4.4rem, 5vw, 5.4rem);
     }
 
     .dx-footer__newsletter-row {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      padding: 0.5rem;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 0.4rem;
+      padding: 0.35rem;
+      border: 1px solid rgba(112, 118, 171, 0.18);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.01);
+      background: rgba(0, 0, 0, 0.06);
+      width: min(100%, 45rem);
     }
 
     .dx-footer__newsletter-state {
       margin: 0;
-      font-size: 0.76rem;
-      line-height: 1.6;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+      font-size: 0.92rem;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, 0.8);
     }
 
     .dx-footer__newsletter-state--success {
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.88);
     }
 
     .dx-footer__newsletter-state--error {
@@ -284,8 +278,9 @@
       border-radius: 999px;
       background: transparent;
       min-height: 0;
-      padding: 0.95rem 1rem;
+      padding: 1rem 1.35rem;
       font-size: 1rem;
+      font-weight: 400;
       letter-spacing: -0.01em;
       text-transform: none;
       color: rgba(255, 255, 255, 0.92);
@@ -307,9 +302,9 @@
       background: #f4f1ec;
       color: #111111;
       min-height: 0;
-      padding: 0.95rem 2.2rem;
-      font-size: 0.92rem;
-      font-weight: 500;
+      padding: 1rem 3.45rem;
+      font-size: 1rem;
+      font-weight: 400;
       letter-spacing: -0.01em;
       text-transform: none;
       white-space: nowrap;
@@ -321,51 +316,48 @@
       opacity: 1;
     }
 
-    .dx-footer__main {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(0, 1.42fr);
-      gap: clamp(2rem, 4vw, 5.5rem);
-      align-items: start;
-      padding-top: 0;
-      padding-bottom: clamp(3rem, 4.5vw, 4rem);
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
-    }
-
     .dx-footer__main--single {
       grid-template-columns: minmax(0, 1fr);
     }
 
+    .dx-footer__brand-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 2.4rem;
+      padding-right: clamp(2rem, 3.5vw, 4rem);
+    }
+
     .dx-footer__brand-desc {
-      max-width: 42rem;
+      max-width: 44rem;
       margin: 0;
-      padding-right: clamp(1rem, 3vw, 3.5rem);
-      font-size: clamp(1rem, 1.08vw, 1.08rem);
-      line-height: 1.58;
-      color: rgba(255, 255, 255, 0.78);
+      padding-right: 0;
+      font-size: clamp(1rem, 1.12vw, 1.12rem);
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.84);
     }
 
     .dx-footer__link-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: clamp(1.5rem, 2vw, 2.5rem);
-      padding-left: clamp(2rem, 3vw, 3rem);
+      gap: clamp(2rem, 2vw, 3rem);
+      padding-left: clamp(2.25rem, 3vw, 3.25rem);
       border-left: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .dx-footer__menu-title {
-      margin: 0 0 1rem;
+      margin: 0 0 1.35rem;
       font-family: var(--font-body, sans-serif);
-      font-size: 1rem;
+      font-size: 1.08rem;
       font-weight: 600;
-      letter-spacing: 0.01em;
+      letter-spacing: -0.01em;
       text-transform: none;
-      color: rgba(255, 255, 255, 0.92);
+      color: rgba(255, 255, 255, 0.96);
     }
 
     .dx-footer__menu-list {
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 0.88rem;
       margin: 0;
       padding: 0;
     }
@@ -373,34 +365,48 @@
     .dx-footer__menu-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.3rem;
       position: relative;
+      width: fit-content;
+      padding-bottom: 0.1rem;
       font-size: 0.98rem;
-      line-height: 1.55;
+      line-height: 1.42;
       letter-spacing: -0.01em;
-      color: rgba(255, 255, 255, 0.72);
+      color: rgba(255, 255, 255, 0.76);
       transition: color 0.24s ease;
+      text-transform: uppercase;
     }
 
-    .dx-footer__menu-col:last-child .dx-footer__menu-link::after {
-      content: '↗';
-      position: static;
-      width: auto;
-      height: auto;
-      background: none;
-      opacity: 1;
-      transform: none;
-      font-size: 0.9em;
+    .dx-footer__menu-link::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -0.18rem;
+      width: 100%;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: right center;
+      transition: transform 0.28s ease;
+    }
+
+    .dx-footer__menu-link:hover::after {
+      transform: scaleX(1);
+      transform-origin: left center;
     }
 
     .dx-footer__menu-link:hover {
       color: #ffffff;
     }
 
+    .dx-footer__menu-link-external {
+      font-size: 0.9em;
+      line-height: 1;
+      transform: translateY(-0.02em);
+    }
+
     .dx-footer__bar {
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
-      padding-top: 1rem;
-      padding-bottom: 1rem;
+      display: none;
     }
 
     .dx-footer__bar-inner {
@@ -452,7 +458,6 @@
   }
 
   @media (min-width: 768px) and (max-width: 1120px) {
-    .dx-footer__newsletter,
     .dx-footer__main,
     .dx-footer__bar-inner {
       grid-template-columns: 1fr;
@@ -461,9 +466,13 @@
     .dx-footer__link-grid {
       padding-left: 0;
       border-left: 0;
-      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       padding-top: 2rem;
       grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .dx-footer__brand-stack {
+      padding-right: 0;
     }
 
     .dx-footer__payments,

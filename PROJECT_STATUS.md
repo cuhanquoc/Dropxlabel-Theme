@@ -6,7 +6,7 @@ Last updated: 2026-03-30 (Asia/Ho_Chi_Minh)
 
 - Repo: `Dropxlabel-Theme`
 - Branch: `main`
-- Latest pushed commit at setup: `56e8282`
+- Latest pushed commit at setup: `pending current task`
 - Storefront direction: `mobile-first`
 - Current priority: polish UI while keeping Shopify backend behavior stable
 - Typography system update in progress:
@@ -57,11 +57,11 @@ Last updated: 2026-03-30 (Asia/Ho_Chi_Minh)
   - Desktop và mobile dùng cùng backend Shopify hiện có.
 - `Customer Help Center`
   - Đã chỉnh accordion mobile nhiều vòng, vẫn nên test lại khi đụng section lân cận.
- - `Footer`
-  - Desktop đã redesign theo hướng editorial/luxury (off-black, spacious, quiet) trong `sections/footer.liquid`.
+- `Footer`
+  - Desktop đang được map trực tiếp từ Stitch screen `Footer with Underline Hover & Flush Edge Blurs` (`85a75d08a52e4e298b58a7ab84b5abe9`).
   - Desktop footer đã được mount vào `layout/theme.liquid` để render thật trên storefront.
   - Desktop footer giờ lấy `Quick links`, `Support`, và `Follow us on` từ dữ liệu do mobile footer phát ra, để hai bên đồng bộ nội dung.
-  - Typography desktop footer đã được khóa lại theo font system dự án: `Playfair Display` cho display marquee và `Inter` cho menu/utility text.
+  - Typography desktop footer phải tuân theo font system hiện tại của dự án: `Rubik` cho display/headings, `Inter` cho utility/body.
   - Giữ nguyên contract: logo, brand_description, newsletter form, social URLs, payment icons, copyright.
   - Mobile footer accordion không đổi UI/behavior; hiện đóng vai trò nguồn dữ liệu chuẩn cho 3 cột desktop.
 
@@ -69,6 +69,7 @@ Last updated: 2026-03-30 (Asia/Ho_Chi_Minh)
 
 10. Featured Collection desktop được tinh lại theo phương án Stitch đã duyệt: swatches/variants lớn hơn, heading dùng hệ editorial đúng font dự án, giá chính và giá gạch nổi bật hơn, nhịp card gọn hơn.
 11. Typography tokens toàn cục đã được chuyển sang `Rubik / Inter / Bricolage Grotesque` với alias ngược để tránh làm vỡ UI hiện có; các section quan trọng bắt đầu được đổi fallback/font hardcode theo hệ mới.
+12. Desktop footer đang được remap sát Stitch screen `85a75d08a52e4e298b58a7ab84b5abe9`: headline flush-edge blur, dark shell, newsletter capsule trái, 3 cột link phải, và hover underline cho link.
 7. Desktop footer rebuilt toward the approved reference: marquee statement, left newsletter capsule, right link columns, and bottom locale/copyright/payment bar while keeping Shopify footer schema intact.
 8. Đồng bộ `Quick links`, `Support`, và `Follow us on` từ mobile footer sang desktop footer bằng data bridge JSON, để desktop không còn drift nội dung so với mobile.
 9. Chốt và áp typography parity cho desktop footer theo phương án Stitch đã duyệt: display marquee dùng `Playfair Display`, còn menu/utility dùng `Inter`.
