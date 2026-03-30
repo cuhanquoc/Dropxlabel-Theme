@@ -1,14 +1,18 @@
 # Project Status
 
-Last updated: 2026-03-28 (Asia/Ho_Chi_Minh)
+Last updated: 2026-03-30 (Asia/Ho_Chi_Minh)
 
 ## Current Snapshot
 
 - Repo: `Dropxlabel-Theme`
 - Branch: `main`
-- Latest pushed commit at setup: `a6d6b90`
+- Latest pushed commit at setup: `56e8282`
 - Storefront direction: `mobile-first`
 - Current priority: polish UI while keeping Shopify backend behavior stable
+- Typography system update in progress:
+  - Heading: `Rubik`
+  - Body: `Inter`
+  - Accent: `Bricolage Grotesque`
 - Mandatory design system for UI work:
   - Stitch project `5971681460518604700`
   - direction: `Quiet Luxury / Digital Atelier`
@@ -64,6 +68,7 @@ Last updated: 2026-03-28 (Asia/Ho_Chi_Minh)
 ## Recent Completed Work
 
 10. Featured Collection desktop được tinh lại theo phương án Stitch đã duyệt: swatches/variants lớn hơn, heading dùng hệ editorial đúng font dự án, giá chính và giá gạch nổi bật hơn, nhịp card gọn hơn.
+11. Typography tokens toàn cục đã được chuyển sang `Rubik / Inter / Bricolage Grotesque` với alias ngược để tránh làm vỡ UI hiện có; các section quan trọng bắt đầu được đổi fallback/font hardcode theo hệ mới.
 7. Desktop footer rebuilt toward the approved reference: marquee statement, left newsletter capsule, right link columns, and bottom locale/copyright/payment bar while keeping Shopify footer schema intact.
 8. Đồng bộ `Quick links`, `Support`, và `Follow us on` từ mobile footer sang desktop footer bằng data bridge JSON, để desktop không còn drift nội dung so với mobile.
 9. Chốt và áp typography parity cho desktop footer theo phương án Stitch đã duyệt: display marquee dùng `Playfair Display`, còn menu/utility dùng `Inter`.
@@ -86,6 +91,7 @@ Last updated: 2026-03-28 (Asia/Ho_Chi_Minh)
 3. Mọi chỉnh sửa UI mới nên cập nhật lại file này ngay sau khi hoàn tất.
 4. Footer desktop visual QA across 1024 / 1280 / 1440 after the new reference-driven redesign.
 5. Kiểm tra trong Theme Editor rằng đổi link/social ở mobile footer sẽ cập nhật đúng 3 cột desktop footer.
+6. Tiếp tục rà các section còn hardcoded font cũ ngoài nhóm critical UI nếu thấy drift thị giác sau đợt đổi typography toàn cục.
 
 ## Files/Paths To Avoid Touching Unless Asked
 

@@ -14,11 +14,11 @@
   <!-- Shopify Required -->
   {{ content_for_header }}
 
-  <!-- Google Fonts: Playfair Display (Serif) + Inter (Sans-serif) -->
+  <!-- Google Fonts: Rubik (Heading) + Inter (Body) + Bricolage Grotesque (Accent) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@400;500;600&display=swap"
     rel="stylesheet"
   />
 
@@ -45,8 +45,29 @@
       --color-border:    #E8E5DF; /* Viền tinh tế    */
 
       /* Typography */
-      --font-heading:    'Playfair Display', serif;
-      --font-body:       'Inter', sans-serif;
+      --heading-font-family: Rubik, sans-serif;
+      --heading-font-weight: 500;
+      --heading-font-style: normal;
+      --heading-font-scale: 1;
+      --heading-line-height: 1.1;
+      --heading-letter-spacing: 0;
+      --body-font-family: Inter, sans-serif;
+      --body-font-weight: 400;
+      --body-font-style: normal;
+      --body-font-scale: 1;
+      --body-line-height: 1.5;
+      --body-letter-spacing: 0;
+      --accent-font-family: 'Bricolage Grotesque', sans-serif;
+      --accent-font-weight: 400;
+      --accent-font-style: normal;
+      --accent-font-scale: 1;
+      --accent-line-height: 1.1;
+      --accent-letter-spacing: 0;
+
+      /* Backward-compatible aliases */
+      --font-heading:    var(--heading-font-family);
+      --font-body:       var(--body-font-family);
+      --font-accent:     var(--accent-font-family);
 
       /* Spacing Scale */
       --space-xs:  4px;
@@ -81,16 +102,45 @@
       color:            var(--color-text);
       font-family:      var(--font-body);
       font-size:        16px;
-      line-height:      1.7;
+      font-style:       var(--body-font-style);
+      font-weight:      var(--body-font-weight);
+      line-height:      var(--body-line-height);
+      letter-spacing:   var(--body-letter-spacing);
       min-height:       100dvh;
     }
 
     /* ─── Heading Typography ─── */
     h1, h2, h3, h4, h5, h6 {
       font-family: var(--font-heading);
-      line-height: 1.2;
-      font-weight: 600;
+      font-style:  var(--heading-font-style);
+      line-height: var(--heading-line-height);
+      font-weight: var(--heading-font-weight);
+      letter-spacing: var(--heading-letter-spacing);
       color:       var(--color-text);
+    }
+
+    .font-heading {
+      font-family: var(--font-heading);
+      font-style: var(--heading-font-style);
+      font-weight: var(--heading-font-weight);
+      line-height: var(--heading-line-height);
+      letter-spacing: var(--heading-letter-spacing);
+    }
+
+    .font-body {
+      font-family: var(--font-body);
+      font-style: var(--body-font-style);
+      font-weight: var(--body-font-weight);
+      line-height: var(--body-line-height);
+      letter-spacing: var(--body-letter-spacing);
+    }
+
+    .font-accent {
+      font-family: var(--font-accent);
+      font-style: var(--accent-font-style);
+      font-weight: var(--accent-font-weight);
+      line-height: var(--accent-line-height);
+      letter-spacing: var(--accent-letter-spacing);
     }
 
     /* ─── Link Base ─── */

@@ -5,10 +5,10 @@
 
       <div class="hc-intro">
         <!-- ── Heading ── -->
-        <h2 style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 800; line-height: 1.1; color: #0a0a0a; margin-bottom: 1rem; font-family: var(--font-heading, 'Playfair Display', serif);">
+        <h2 style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 500; line-height: 1.1; color: #0a0a0a; margin-bottom: 1rem; font-family: var(--font-heading, 'Rubik', sans-serif);">
           {{ section.settings.heading | default: 'Customer Help Center' }}
         </h2>
-        <p style="font-size: 0.92rem; line-height: 1.75; color: #666; margin-bottom: 2rem; max-width: 600px; font-family: var(--font-body, 'Inter', sans-serif);">
+        <p style="font-size: 0.92rem; line-height: 1.5; color: #666; margin-bottom: 2rem; max-width: 600px; font-family: var(--font-body, 'Inter', sans-serif);">
           {{ section.settings.description | default: "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here." }}
         </p>
       </div>
@@ -21,7 +21,7 @@
           {%- for block in section.blocks -%}
             {%- if block.type == "category_header" -%}
               <div class="hc-category-header" {{ block.shopify_attributes }} style="padding: 2rem 0 0.5rem; border-bottom: 2px solid #0a0a0a; margin-bottom: 0.5rem;">
-                <h3 style="font-family: var(--font-heading, 'Playfair Display', serif); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #0a0a0a;">
+                <h3 style="font-family: var(--font-accent, 'Bricolage Grotesque', sans-serif); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #0a0a0a;">
                   {{ block.settings.title }}
                 </h3>
               </div>
@@ -31,7 +31,7 @@
                 <div class="hc-faq-item" {{ block.shopify_attributes }} style="border-top: 1px solid #e5e5e5; transition: background-color 0.4s ease;">
                   <button class="hc-faq-btn" aria-expanded="false"
                           style="width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 32px; align-items: center; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
-                    <span class="hc-faq-question" style="font-family: var(--font-heading, 'Playfair Display', serif); font-weight: 700; font-size: 1.1rem; line-height: 1.3; color: #0a0a0a; transition: color 0.3s ease;">
+                    <span class="hc-faq-question" style="font-family: var(--font-heading, 'Rubik', sans-serif); font-weight: 500; font-size: 1.1rem; line-height: 1.1; color: #0a0a0a; transition: color 0.3s ease;">
                       {{ block.settings.question }}
                     </span>
                     <span class="hc-faq-icon" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
@@ -47,7 +47,7 @@
                   </button>
                   <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.62s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;">
                     <div class="hc-faq-answer-inner" style="padding: 0 0.5rem 0.65rem 0.5rem;">
-                      <p style="font-family: var(--font-body, 'Inter', sans-serif); font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.75); transition: color 0.3s ease;">
+                      <p style="font-family: var(--font-body, 'Inter', sans-serif); font-size: 0.88rem; line-height: 1.5; color: rgba(255,255,255,0.75); transition: color 0.3s ease;">
                         {{ block.settings.answer }}
                       </p>
                     </div>
@@ -69,7 +69,7 @@
 
                 <button class="hc-faq-btn" aria-expanded="false"
                         style="width: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 32px; align-items: center; padding: 1.25rem 0.5rem; gap: 1rem; text-align: left; background: none; border: none; cursor: pointer;">
-                  <span class="hc-faq-question" style="font-family: var(--font-heading, 'Playfair Display', serif); font-weight: 700; font-size: 1.1rem; line-height: 1.3; color: #0a0a0a; transition: color 0.3s ease;">
+                  <span class="hc-faq-question" style="font-family: var(--font-heading, 'Rubik', sans-serif); font-weight: 500; font-size: 1.1rem; line-height: 1.1; color: #0a0a0a; transition: color 0.3s ease;">
                     {{ question }}
                   </span>
                   <span class="hc-faq-icon" style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background-color: #0a0a0a; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease;">
@@ -88,7 +88,7 @@
 
                 <div class="hc-faq-answer" style="max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.62s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;">
                   <div class="hc-faq-answer-inner" style="padding: 0 0.5rem 0.65rem 0.5rem;">
-                    <p style="font-family: var(--font-body, 'Inter', sans-serif); font-size: 0.88rem; line-height: 1.75; color: rgba(255,255,255,0.75); transition: color 0.3s ease;">
+                    <p style="font-family: var(--font-body, 'Inter', sans-serif); font-size: 0.88rem; line-height: 1.5; color: rgba(255,255,255,0.75); transition: color 0.3s ease;">
                       {{ answer }}
                     </p>
                   </div>
