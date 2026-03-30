@@ -489,7 +489,8 @@
     }
 
     .dx-footer__bar {
-      display: none;
+      display: block;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .dx-footer__bar-inner {
@@ -497,6 +498,7 @@
       grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
       align-items: center;
       gap: 1.5rem;
+      padding: 1.15rem clamp(1.5rem, 3vw, 2rem) 1.35rem;
     }
 
     .dx-footer__locale {
