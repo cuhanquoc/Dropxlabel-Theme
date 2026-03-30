@@ -114,8 +114,8 @@
           "mega_column_GK8mxQ"
         ],
         "settings": {
-          "desktop_logo_image": "shopify://shop_images/rmbglogo_fc0af077-1464-4437-8430-036dced9a764.png",
-          "desktop_logo_width": 80,
+          "desktop_logo_image": "shopify://shop_images/Celisiralogowhite_18811a51-1f3a-43ae-819f-c92856c176b2.png",
+          "desktop_logo_width": 52,
           "invert_desktop_logo": false,
           "mobile_logo_image": "shopify://shop_images/Group_5_1.png",
           "logo_width": 500,
@@ -123,7 +123,7 @@
           "invert_mobile_logo": false,
           "logo_text": "C E L I S I R A",
           "desktop_background": "#000000",
-          "desktop_text_color": "#8A8A8A",
+          "desktop_text_color": "#ffffff",
           "desktop_background_opacity": 0,
           "mobile_background": "#ffffff",
           "mobile_text_color": "#000000",
@@ -165,34 +165,6 @@
       },
       "footer": {
         "type": "footer",
-        "blocks": {
-          "footer-0": {
-            "type": "link_list",
-            "settings": {
-              "title": "Shop",
-              "menu": "main-menu"
-            }
-          },
-          "footer-1": {
-            "type": "link_list",
-            "settings": {
-              "title": "Support",
-              "menu": "footer"
-            }
-          },
-          "footer-2": {
-            "type": "link_list",
-            "settings": {
-              "title": "Company",
-              "menu": "footer"
-            }
-          }
-        },
-        "block_order": [
-          "footer-0",
-          "footer-1",
-          "footer-2"
-        ],
         "settings": {
           "brand_description": "Premium fashion for the modern lifestyle.",
           "show_newsletter": true,
