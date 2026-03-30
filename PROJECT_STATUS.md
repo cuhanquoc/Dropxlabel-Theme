@@ -70,6 +70,7 @@ Last updated: 2026-03-30 (Asia/Ho_Chi_Minh)
 10. Featured Collection desktop được tinh lại theo phương án Stitch đã duyệt: swatches/variants lớn hơn, heading dùng hệ editorial đúng font dự án, giá chính và giá gạch nổi bật hơn, nhịp card gọn hơn.
 11. Typography tokens toàn cục đã được chuyển sang `Rubik / Inter / Bricolage Grotesque` với alias ngược để tránh làm vỡ UI hiện có; các section quan trọng bắt đầu được đổi fallback/font hardcode theo hệ mới.
 12. Desktop footer đang được remap sát Stitch screen `85a75d08a52e4e298b58a7ab84b5abe9`: headline flush-edge blur, dark shell, newsletter capsule trái, 3 cột link phải, và hover underline cho link.
+13. Desktop footer đã bỏ hẳn schema menu blocks cũ trong Theme Editor; từ giờ `Quick Links`, `Support`, và `Follow us on` chỉ chỉnh ở `Footer Accordion Mobile`, còn desktop footer chỉ đọc và render theo nguồn đó.
 7. Desktop footer rebuilt toward the approved reference: marquee statement, left newsletter capsule, right link columns, and bottom locale/copyright/payment bar while keeping Shopify footer schema intact.
 8. Đồng bộ `Quick links`, `Support`, và `Follow us on` từ mobile footer sang desktop footer bằng data bridge JSON, để desktop không còn drift nội dung so với mobile.
 9. Chốt và áp typography parity cho desktop footer theo phương án Stitch đã duyệt: display marquee dùng `Playfair Display`, còn menu/utility dùng `Inter`.

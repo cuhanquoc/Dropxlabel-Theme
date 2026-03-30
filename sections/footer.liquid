@@ -12,7 +12,7 @@
       <span class="dx-footer__headline-blur dx-footer__headline-blur--right"></span>
     </div>
 
-    <div class="dx-footer__main{% if section.blocks.size == 0 %} dx-footer__main--single{% endif %}">
+    <div class="dx-footer__main">
       <div class="dx-footer__brand ft-brand-section" data-footer-col>
         <div class="dx-footer__brand-stack">
           {%- if section.settings.brand_description != blank -%}
@@ -560,51 +560,6 @@
       "label": "Show payment icons",
       "default": true
     }
-  ],
-  "blocks": [
-    {
-      "type": "link_list",
-      "name": "Menu",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Heading",
-          "default": "Quick Links"
-        },
-        {
-          "type": "link_list",
-          "id": "menu",
-          "label": "Menu",
-          "default": "footer"
-        }
-      ]
-    }
-  ],
-  "default": {
-    "blocks": [
-      {
-        "type": "link_list",
-        "settings": {
-          "title": "Shop",
-          "menu": "main-menu"
-        }
-      },
-      {
-        "type": "link_list",
-        "settings": {
-          "title": "Support",
-          "menu": "footer"
-        }
-      },
-      {
-        "type": "link_list",
-        "settings": {
-          "title": "Company",
-          "menu": "footer"
-        }
-      }
-    ]
-  }
+  ]
 }
 {% endschema %}
