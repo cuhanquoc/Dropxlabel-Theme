@@ -72,6 +72,7 @@ Last updated: 2026-03-30 (Asia/Ho_Chi_Minh)
 12. Desktop footer đang được remap sát Stitch screen `85a75d08a52e4e298b58a7ab84b5abe9`: headline flush-edge blur, dark shell, newsletter capsule trái, 3 cột link phải, và hover underline cho link.
 13. Desktop footer đã bỏ hẳn schema menu blocks cũ trong Theme Editor; từ giờ `Quick Links`, `Support`, và `Follow us on` chỉ chỉnh ở `Footer Accordion Mobile`, còn desktop footer chỉ đọc và render theo nguồn đó.
 14. Meta Facebook domain verification đã được cập nhật lại cho domain `www.celisira.com`; cần chờ Shopify sync và xác nhận lại trên HTML live trước khi bấm verify trong Meta.
+15. Desktop header đã được khóa lại theo 2 trạng thái: homepage có `Hero Banner` đầu trang giữ overlay + line mỏng, còn các trang desktop khác trở về header nền trắng bình thường và không đè lên nội dung.
 7. Desktop footer rebuilt toward the approved reference: marquee statement, left newsletter capsule, right link columns, and bottom locale/copyright/payment bar while keeping Shopify footer schema intact.
 8. Đồng bộ `Quick links`, `Support`, và `Follow us on` từ mobile footer sang desktop footer bằng data bridge JSON, để desktop không còn drift nội dung so với mobile.
 9. Chốt và áp typography parity cho desktop footer theo phương án Stitch đã duyệt: display marquee dùng `Playfair Display`, còn menu/utility dùng `Inter`.
@@ -116,3 +117,4 @@ Nếu task thay đổi rule làm việc hoặc theme contract, cập nhật luô
 - 2026-03-27: Footer desktop render hardened in Theme Editor by removing `hidden md:block` from root and hiding mobile via section CSS only.
 - 2026-03-27: Desktop footer now reads `Quick links`, `Support`, and `Follow us on` from JSON emitted by the mobile footer section, keeping both surfaces aligned without changing mobile behavior.
 - 2026-03-30: Desktop footer bridge now falls back to parsing rendered `Footer Accordion Mobile` DOM in Theme Editor/storefront, so `Quick links` and `Support` stay in sync even if internal mobile `group_key` data drifts.
+- 2026-03-30: Desktop header now has homepage-only overlay with a thin line and a separate white non-overlay state for product/collection/about/search/blog pages.

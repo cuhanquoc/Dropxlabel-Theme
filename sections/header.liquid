@@ -183,8 +183,8 @@
     position: relative;
     z-index: 40;
     margin-bottom: 0;
-    background: transparent !important;
-    background-color: transparent !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
     background-image: none !important;
   }
 
@@ -194,28 +194,32 @@
 
   .dx-header[data-section-id="{{ section.id }}"] {
     --dx-desktop-header-height: 72px;
-    color: {{ section.settings.desktop_text_color | default: '#ffffff' }};
+    color: #171717;
     border-bottom: 0;
-    background: transparent !important;
-    background-color: transparent !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
     background-image: none !important;
     box-shadow: none;
   }
 
   .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
     border-bottom: 0;
-    background: transparent !important;
-    background-color: transparent !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
     background-image: none !important;
     box-shadow: none;
   }
 
   #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"] {
-    border-bottom: 1px solid {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.24 }};
+    border-bottom: 1px solid {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.32 }};
+    background: transparent !important;
+    background-color: transparent !important;
   }
 
   #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
-    border-bottom: 1px solid {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.24 }};
+    border-bottom: 1px solid {{ section.settings.border_color | default: '#ffffff' | color_modify: 'alpha', 0.32 }};
+    background: transparent !important;
+    background-color: transparent !important;
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
@@ -231,7 +235,7 @@
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-logo,
   .dx-header[data-section-id="{{ section.id }}"] .dx-logo__text {
-    color: {{ section.settings.desktop_text_color | default: '#ffffff' }};
+    color: #171717;
   }
 
   .dx-header[data-section-id="{{ section.id }}"] .dx-logo {
@@ -287,6 +291,24 @@
   .dx-header[data-section-id="{{ section.id }}"] .dx-nav-link,
   .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn,
   .dx-header[data-section-id="{{ section.id }}"] .dx-menu-btn {
+    color: #171717;
+  }
+
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero {
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"],
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
+    color: {{ section.settings.desktop_text_color | default: '#ffffff' }};
+  }
+
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"] .dx-logo,
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"] .dx-logo__text,
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"] .dx-nav-link,
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"] .dx-icon-btn,
+  #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"] .dx-menu-btn {
     color: {{ section.settings.desktop_text_color | default: '#ffffff' }};
   }
 
@@ -493,14 +515,14 @@
 
   @media (min-width: 768px) {
     #shopify-section-{{ section.id }} {
-      background: transparent !important;
-      background-color: transparent !important;
+      background: #ffffff !important;
+      background-color: #ffffff !important;
       background-image: none !important;
     }
 
     .dx-header[data-section-id="{{ section.id }}"] {
-      background: transparent !important;
-      background-color: transparent !important;
+      background: #ffffff !important;
+      background-color: #ffffff !important;
       background-image: none !important;
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
@@ -509,8 +531,8 @@
     }
 
     .dx-header[data-section-id="{{ section.id }}"].is-scrolled {
-      background: transparent !important;
-      background-color: transparent !important;
+      background: #ffffff !important;
+      background-color: #ffffff !important;
       background-image: none !important;
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
@@ -519,6 +541,19 @@
     }
 
     .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      background-image: none !important;
+    }
+
+    #shopify-section-{{ section.id }}.dx-header-section--overlay-hero {
+      background: transparent !important;
+      background-color: transparent !important;
+    }
+
+    #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"],
+    #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"].is-scrolled,
+    #shopify-section-{{ section.id }}.dx-header-section--overlay-hero .dx-header[data-section-id="{{ section.id }}"] .dx-header__inner {
       background: transparent !important;
       background-color: transparent !important;
       background-image: none !important;
