@@ -100,17 +100,80 @@
 
 <script>
   (() => {
-    const renderDesktopFooterFromMobile = () => {
+    const normalizeFooterGroup = (value) =>
+      (value || '')
+        .toLowerCase()
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    const parseMobileFooterDom = () => {
+      const mobileFooter = document.querySelector('footer-accordion-mobile.fam2');
+      if (!mobileFooter) return null;
+
+      const groups = {};
+      mobileFooter.querySelectorAll('.fam2__item').forEach((item) => {
+        const title = normalizeFooterGroup(item.querySelector('.fam2__title')?.textContent);
+        if (!title) return;
+
+        const links = [];
+        item.querySelectorAll('.fam2__link-item').forEach((linkItem) => {
+          const anchor = linkItem.querySelector('a.fam2__link');
+          const label = anchor?.textContent?.trim() || linkItem.textContent?.trim();
+          if (!label) return;
+
+          links.push({
+            title: label,
+            url: anchor?.getAttribute('href') || '#',
+            external: anchor?.target === '_blank'
+          });
+        });
+
+        if (links.length) {
+          groups[title] = links;
+        }
+      });
+
+      return {
+        quickLinks: groups['quick links'] || groups['quicklinks'] || [],
+        support: groups['support'] || [],
+        social:
+          groups['follow us on'] ||
+          groups['flow us on'] ||
+          groups['follow us'] ||
+          groups['social'] ||
+          []
+      };
+    };
+
+    const renderDesktopFooterFromMobile = (attempt = 0) => {
       const dataNode = document.getElementById('fam2-footer-data');
       const host = document.getElementById('dx-footer-link-grid');
-      if (!dataNode || !host) return;
+      if (!host) return;
 
       let payload;
-      try {
-        payload = JSON.parse(dataNode.textContent);
-      } catch (_error) {
-        return;
+      if (dataNode) {
+        try {
+          payload = JSON.parse(dataNode.textContent);
+        } catch (_error) {
+          payload = {};
+        }
+      } else {
+        payload = {};
       }
+
+      const domPayload = parseMobileFooterDom() || {};
+      const quickLinks =
+        (domPayload.quickLinks && domPayload.quickLinks.length ? domPayload.quickLinks : null) ||
+        payload.quickLinks ||
+        [];
+      const supportLinks =
+        (domPayload.support && domPayload.support.length ? domPayload.support : null) ||
+        payload.support ||
+        [];
+      const socialLinks =
+        (domPayload.social && domPayload.social.length ? domPayload.social : null) ||
+        payload.social ||
+        [];
 
       const renderList = (key, items) => {
         const list = host.querySelector(`[data-footer-list="${key}"]`);
@@ -139,9 +202,17 @@
         });
       };
 
-      renderList('quick-links', payload.quickLinks || []);
-      renderList('support', payload.support || []);
-      renderList('follow-us', payload.social || []);
+      renderList('quick-links', quickLinks);
+      renderList('support', supportLinks);
+      renderList('follow-us', socialLinks);
+
+      if (
+        attempt < 12 &&
+        (!quickLinks.length || !supportLinks.length) &&
+        document.documentElement.classList.contains('shopify-design-mode')
+      ) {
+        window.setTimeout(() => renderDesktopFooterFromMobile(attempt + 1), 150);
+      }
     };
 
     if (document.readyState === 'loading') {
@@ -156,6 +227,16 @@
 </script>
 
 <style>
+  @keyframes dx-footer-marquee {
+    from {
+      transform: translateX(-24%);
+    }
+
+    to {
+      transform: translateX(-52%);
+    }
+  }
+
   .dx-footer {
     display: block;
   }
@@ -195,6 +276,8 @@
       min-width: 100%;
       white-space: nowrap;
       transform: translateX(-24%);
+      animation: dx-footer-marquee 22s linear infinite;
+      will-change: transform;
     }
 
     .dx-footer__headline-solid,
@@ -479,6 +562,13 @@
     .dx-footer__copyright {
       justify-self: start;
       text-align: left;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dx-footer__headline-rail {
+      animation: none;
+      transform: translateX(-24%);
     }
   }
 </style>

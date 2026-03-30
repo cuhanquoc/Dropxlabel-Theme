@@ -114,3 +114,4 @@ Sau mỗi task hoàn tất, cập nhật tối thiểu 4 mục sau:
 Nếu task thay đổi rule làm việc hoặc theme contract, cập nhật luôn các section tương ứng trong file này.
 - 2026-03-27: Footer desktop render hardened in Theme Editor by removing `hidden md:block` from root and hiding mobile via section CSS only.
 - 2026-03-27: Desktop footer now reads `Quick links`, `Support`, and `Follow us on` from JSON emitted by the mobile footer section, keeping both surfaces aligned without changing mobile behavior.
+- 2026-03-30: Desktop footer bridge now falls back to parsing rendered `Footer Accordion Mobile` DOM in Theme Editor/storefront, so `Quick links` and `Support` stay in sync even if internal mobile `group_key` data drifts.
