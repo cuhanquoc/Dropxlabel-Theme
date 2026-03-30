@@ -115,7 +115,7 @@
         ],
         "settings": {
           "desktop_logo_image": "shopify://shop_images/Celisiralogowhite.png",
-          "desktop_logo_width": 60,
+          "desktop_logo_width": 80,
           "invert_desktop_logo": false,
           "mobile_logo_image": "shopify://shop_images/Group_5_1.png",
           "logo_width": 500,
@@ -123,7 +123,7 @@
           "invert_mobile_logo": false,
           "logo_text": "C E L I S I R A",
           "desktop_background": "#000000",
-          "desktop_text_color": "#ffffff",
+          "desktop_text_color": "#8A8A8A",
           "desktop_background_opacity": 0,
           "mobile_background": "#ffffff",
           "mobile_text_color": "#000000",
@@ -566,11 +566,6 @@
     "blocks": {
       "1143683040400472741": {
         "type": "shopify://apps/trustwill-trustoo/blocks/trustoo-review-switch/c8f15077-6475-4e86-ad06-b66038d5ba2c",
-        "disabled": false,
-        "settings": {}
-      },
-      "1513253815146976218": {
-        "type": "shopify://apps/omnisend-email-marketing-sms/blocks/app-embed/44704aa2-794f-4c5d-8c8e-039c841158e9",
         "disabled": false,
         "settings": {}
       }
