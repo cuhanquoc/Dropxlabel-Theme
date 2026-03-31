@@ -1,6 +1,6 @@
 # Project Status
 
-Last updated: 2026-03-30 (Asia/Ho_Chi_Minh)
+Last updated: 2026-03-31 (Asia/Ho_Chi_Minh)
 
 ## Current Snapshot
 
@@ -64,9 +64,15 @@ Last updated: 2026-03-30 (Asia/Ho_Chi_Minh)
   - Typography desktop footer phải tuân theo font system hiện tại của dự án: `Rubik` cho display/headings, `Inter` cho utility/body.
   - Giữ nguyên contract: logo, brand_description, newsletter form, social URLs, payment icons, copyright.
   - Mobile footer accordion không đổi UI/behavior; hiện đóng vai trò nguồn dữ liệu chuẩn cho 3 cột desktop.
+- `BIKINIES / Trending Styles`
+  - Section `marquee-ticker` trên homepage đã được refactor khỏi bản firework/sticky cũ.
+  - Desktop giờ dùng layout 2 cột bám ref `Rounded Horizontal Gallery`: intro trái, stack card ngang bo tròn bên phải.
+  - Mobile dùng cùng contract dữ liệu nhưng trình bày lại thành stack gọn hơn, giữ cùng visual language với desktop.
+  - Contract Shopify giữ nguyên: `heading`, `description_1`, `description_2`, `cta_text`, `cta_url`, `bg_color`, và block `product_card`.
 
 ## Recent Completed Work
 
+17. Section `BIKINIES` / `marquee-ticker` trên homepage đã được thay presentation theo layout rounded horizontal gallery: bỏ firework canvas + sticky text cũ, giữ nguyên schema/data contract Shopify, và dựng lại desktop/mobile theo cùng design language.
 10. Featured Collection desktop được tinh lại theo phương án Stitch đã duyệt: swatches/variants lớn hơn, heading dùng hệ editorial đúng font dự án, giá chính và giá gạch nổi bật hơn, nhịp card gọn hơn.
 11. Typography tokens toàn cục đã được chuyển sang `Rubik / Inter / Bricolage Grotesque` với alias ngược để tránh làm vỡ UI hiện có; các section quan trọng bắt đầu được đổi fallback/font hardcode theo hệ mới.
 12. Desktop footer đang được remap sát Stitch screen `85a75d08a52e4e298b58a7ab84b5abe9`: headline flush-edge blur, dark shell, newsletter capsule trái, 3 cột link phải, và hover underline cho link.
@@ -89,6 +95,7 @@ Last updated: 2026-03-30 (Asia/Ho_Chi_Minh)
 1. Tiếp tục polish mobile trước khi mở rộng desktop.
 2. Kiểm tra trực quan lại:
    - homepage hero/header
+   - homepage `BIKINIES` section ở desktop/mobile sau refactor mới
    - featured collection
    - quick view
    - collection/search mobile
