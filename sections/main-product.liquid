@@ -1624,6 +1624,19 @@
             </div>
           {%- endif -%}
 
+          {%- assign custom_liquid_blocks = section.blocks | where: 'type', 'custom_liquid' -%}
+          {%- if custom_liquid_blocks.size > 0 -%}
+            <div class="product-custom-liquid-blocks" style="padding: 0 1rem; margin: 0.5rem 0 1rem; display: grid; gap: 0.75rem;">
+              {%- for block in custom_liquid_blocks -%}
+                {%- if block.settings.custom_liquid != blank -%}
+                  <div class="product-custom-liquid-block" {{ block.shopify_attributes }}>
+                    {{ block.settings.custom_liquid }}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+
           <!-- ── INLINE DESCRIPTION (above Pairs Well With) ── -->
           {%- assign desc_blocks = section.blocks | where: 'type', 'description' -%}
           {%- if desc_blocks.size > 0 -%}
@@ -3088,6 +3101,18 @@
           "id": "heading",
           "label": "Heading",
           "default": "DESCRIPTION"
+        }
+      ]
+    },
+    {
+      "type": "custom_liquid",
+      "name": "Custom Liquid",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "custom_liquid",
+          "label": "Custom Liquid",
+          "info": "Add custom Liquid, HTML, or app snippets for this product layout."
         }
       ]
     },
