@@ -1,0 +1,1432 @@
+{%- comment -%}
+  WARNING: UNAUTHORIZED MODIFICATION PROHIBITED
+  This code is proprietary property of Versio Studio. Any unauthorized tampering,
+  alteration, or distribution of this file is strictly forbidden and will be prosecuted to the maximum extent permitted by law.
+  All modifications are logged.
+
+  If you require assistance or have questions regarding this code, please contact support@versio.studio.
+{%- endcomment -%}
+
+{% style %}
+  .vso-dt-section-{{ section.id }} {
+    width: 100%;
+    margin-top: {{ section.settings.margin_top }}px;
+    margin-bottom: {{ section.settings.margin_bottom }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .vso-dt-section-{{ section.id }} {
+      margin-top: {{ section.settings.margin_top_desktop }}px;
+      margin-bottom: {{ section.settings.margin_bottom_desktop }}px;
+    }
+  }
+
+  .vso-dt-wrap-{{ section.id }} {
+    border-radius: {{ section.settings.border_radius }}px;
+    overflow: hidden;
+    border: 1px solid {{ section.settings.border_color }};
+  }
+
+  .vso-dt-bar-{{ section.id }} {
+    display: flex;
+    background: {{ section.settings.tab_bar_bg }};
+    padding: 5px;
+    gap: 2px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .vso-dt-bar-{{ section.id }}::-webkit-scrollbar { display: none; }
+
+  .vso-dt-btn-{{ section.id }} {
+    flex: 0 0 auto;
+    min-width: 0;
+    padding: 9px 16px;
+    border: none;
+    background: transparent;
+    color: {{ section.settings.tab_text_color }};
+    font-size: {{ section.settings.tab_font_size_mobile }}px;
+    cursor: pointer;
+    border-radius: {{ section.settings.tab_radius }}px;
+    transition: background 0.2s, color 0.2s;
+    text-align: center;
+    white-space: nowrap;
+    font-family: inherit;
+    line-height: 1.3;
+  }
+
+  @media screen and (min-width: 750px) {
+    .vso-dt-btn-{{ section.id }} {
+      font-size: {{ section.settings.tab_font_size }}px;
+      padding: 10px 20px;
+    }
+  }
+
+  .vso-dt-btn-{{ section.id }}.is-active {
+    background: {{ section.settings.tab_active_bg }};
+    color: {{ section.settings.tab_active_text }};
+  }
+
+  .vso-dt-panel-{{ section.id }} {
+    display: none;
+    padding: 16px 16px;
+    background: {{ section.settings.content_bg }};
+  }
+
+  .vd-l { display: none !important; }
+
+  @media screen and (min-width: 750px) {
+    .vso-dt-panel-{{ section.id }} {
+      padding: 16px 16px;
+    }
+  }
+
+  .vso-dt-panel-{{ section.id }}.is-active { display: block; }
+
+  /* Expert Review */
+  .vso-dt-quote-{{ section.id }} {
+    font-style: italic;
+    line-height: 1.65;
+    color: {{ section.settings.text_color }};
+    margin: 0 0 24px;
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+
+  .vso-dt-author-{{ section.id }} {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .vso-dt-avatar-{{ section.id }} {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .vso-dt-avatar-{{ section.id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .vso-dt-author-info-{{ section.id }} { display: flex; flex-direction: column; gap: 1px; }
+
+  .vso-dt-author-name-{{ section.id }} {
+    font-size: 14px;
+    color: {{ section.settings.text_color }};
+  }
+
+  .vso-dt-author-cred-{{ section.id }} {
+    color: {{ section.settings.accent_color }};
+  }
+
+  .vso-dt-author-meta-{{ section.id }} {
+    font-size: 13px;
+    color: {{ section.settings.secondary_text }};
+  }
+
+  /* Comparison */
+  .vso-dt-comp-head-{{ section.id }} {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 12px;
+  }
+
+  .vso-dt-comp-label-{{ section.id }} {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .vso-dt-comp-col-{{ section.id }} {
+    width: 90px;
+    text-align: center;
+    font-size: 12px;
+    padding: 7px 14px;
+    border-radius: 20px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .vso-dt-comp-col-{{ section.id }} { width: 110px; }
+  }
+
+  .vso-dt-comp-col-{{ section.id }}.is-others {
+    background: transparent;
+    color: {{ section.settings.secondary_text }};
+  }
+
+  .vso-dt-comp-row-{{ section.id }} {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+  }
+
+  .vso-dt-comp-row-{{ section.id }}:last-child { border-bottom: none; }
+
+  .vso-dt-comp-feat-{{ section.id }} {
+    flex: 1;
+    font-size: 13px;
+    color: {{ section.settings.text_color }};
+    min-width: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .vso-dt-comp-feat-{{ section.id }} { font-size: 14px; }
+  }
+
+  .vso-dt-comp-icon-{{ section.id }} {
+    width: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .vso-dt-comp-icon-{{ section.id }} { width: 110px; }
+  }
+
+  .vso-dt-ci { border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .vso-dt-ci svg { width: 14px; height: 14px; }
+
+  /* About */
+  .vso-dt-about-sub-{{ section.id }} {
+    color: {{ section.settings.accent_color }};
+    margin-bottom: 8px;
+  }
+
+  .vso-dt-about-h-{{ section.id }} {
+    line-height: 1.3;
+    color: {{ section.settings.text_color }};
+    margin: 0 0 16px;
+  }
+
+  .vso-dt-about-body-{{ section.id }} {
+    font-size: 14px;
+    line-height: 1.7;
+    color: {{ section.settings.secondary_text }};
+  }
+
+  .vso-dt-about-body-{{ section.id }} p { margin: 0 0 14px; }
+  .vso-dt-about-body-{{ section.id }} p:last-child { margin-bottom: 0; }
+
+  .vso-dt-tags-{{ section.id }} {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .vso-dt-tag-{{ section.id }} {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+  }
+
+  .vso-dt-tag-icon-{{ section.id }} {
+    flex-shrink: 0;
+    width: {{ section.settings.tag_icon_size }}px;
+    height: {{ section.settings.tag_icon_size }}px;
+  }
+
+  .vso-dt-tag-icon-{{ section.id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Results */
+  .vso-dt-timeline-{{ section.id }} {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 20px;
+    padding: 0 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .vso-dt-timeline-{{ section.id }}::-webkit-scrollbar { display: none; }
+
+  .vso-dt-timeline-{{ section.id }}::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 26px;
+    right: 26px;
+    height: 2px;
+  }
+
+  .vso-dt-ms-btn-{{ section.id }} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    padding: 0;
+    min-width: 60px;
+  }
+
+  .vso-dt-ms-dot-{{ section.id }} {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: {{ section.settings.content_bg }};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s;
+  }
+
+  .vso-dt-ms-dot-{{ section.id }} .dot-inner {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transition: all 0.25s;
+  }
+
+  .vso-dt-ms-btn-{{ section.id }}.is-active .vso-dt-ms-dot-{{ section.id }} .dot-inner {
+    width: 14px;
+    height: 14px;
+  }
+
+  .vso-dt-ms-label-{{ section.id }} {
+    font-size: 10px;
+    color: {{ section.settings.secondary_text }};
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  .vso-dt-ms-btn-{{ section.id }}.is-active .vso-dt-ms-label-{{ section.id }} {
+    color: {{ section.settings.text_color }};
+  }
+
+  .vso-dt-ms-check-{{ section.id }} { display: none; }
+
+  .vso-dt-ms-btn-{{ section.id }}.has-check .dot-inner { display: none; }
+  .vso-dt-ms-btn-{{ section.id }}.has-check .vso-dt-ms-check-{{ section.id }} {
+    display: block;
+    width: 14px;
+    height: 14px;
+  }
+
+  .vso-dt-r-card-{{ section.id }} {
+    display: none;
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .vso-dt-r-card-{{ section.id }}.is-active { display: block; }
+
+  .vso-dt-r-label-{{ section.id }} {
+    font-size: 13px;
+    color: {{ section.settings.accent_color }};
+    margin-bottom: 4px;
+  }
+
+  .vso-dt-r-heading-{{ section.id }} {
+    font-size: 17px;
+    color: {{ section.settings.text_color }};
+    margin-bottom: 6px;
+  }
+
+  .vso-dt-r-text-{{ section.id }} {
+    font-size: 14px;
+    line-height: 1.6;
+    color: {{ section.settings.secondary_text }};
+    margin: 0;
+  }
+
+  .vso-dt-r-bars-{{ section.id }} {
+    display: flex;
+    gap: 4px;
+    margin-top: 16px;
+  }
+
+  .vso-dt-r-bar-{{ section.id }} {
+    flex: 1;
+    height: 4px;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+
+  /* Block-specific styles (driven by tab block settings) */
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'tab_expert' -%}
+      .vso-dt-quote-{{ section.id }} { font-size: {{ block.settings.quote_size_mobile }}px; }
+      @media screen and (min-width: 750px) {
+        .vso-dt-quote-{{ section.id }} { font-size: {{ block.settings.quote_size }}px; }
+      }
+      .vso-dt-avatar-{{ section.id }} {
+        background: {{ block.settings.avatar_bg }};
+        color: {{ block.settings.avatar_text_color }};
+      }
+    {%- endif -%}
+
+    {%- if block.type == 'tab_comparison' -%}
+      .vso-dt-comp-label-{{ section.id }} {
+        color: {{ block.settings.comp_label_color }};
+      }
+      .vso-dt-ci {
+        width: {{ block.settings.icon_size }}px;
+        height: {{ block.settings.icon_size }}px;
+      }
+      .vso-dt-ci svg {
+        width: {{ block.settings.icon_size | times: 0.54 | round }}px;
+        height: {{ block.settings.icon_size | times: 0.54 | round }}px;
+      }
+      .vso-dt-ci.is-yes {
+        background: {{ block.settings.check_bg }};
+        color: {{ block.settings.check_color }};
+      }
+      .vso-dt-ci.is-no {
+        background: {{ block.settings.cross_bg }};
+        color: {{ block.settings.cross_color }};
+      }
+      .vso-dt-comp-col-{{ section.id }}.is-product {
+        background: {{ block.settings.comp_pill_bg }};
+        color: {{ block.settings.comp_pill_text }};
+      }
+      .vso-dt-comp-head-{{ section.id }} {
+        border-bottom: 1px solid {{ block.settings.row_border }};
+      }
+      .vso-dt-comp-row-{{ section.id }} {
+        border-bottom: 1px solid {{ block.settings.row_border }};
+      }
+    {%- endif -%}
+
+    {%- if block.type == 'tab_about' -%}
+      .vso-dt-about-h-{{ section.id }} { font-size: {{ block.settings.about_heading_size_mobile }}px; }
+      @media screen and (min-width: 750px) {
+        .vso-dt-about-h-{{ section.id }} { font-size: {{ block.settings.about_heading_size }}px; }
+      }
+      .vso-dt-tag-{{ section.id }} {
+        border: 1px solid {{ block.settings.tag_border }};
+        color: {{ block.settings.tag_text }};
+        background: {{ block.settings.tag_bg }};
+      }
+    {%- endif -%}
+
+    {%- if block.type == 'tab_results' -%}
+      .vso-dt-timeline-{{ section.id }}::before { background: {{ block.settings.timeline_line }}; }
+      .vso-dt-ms-dot-{{ section.id }} { border: 2px solid {{ block.settings.timeline_line }}; }
+      .vso-dt-ms-dot-{{ section.id }} .dot-inner { background: {{ block.settings.timeline_line }}; }
+      .vso-dt-ms-btn-{{ section.id }}.is-active .vso-dt-ms-dot-{{ section.id }} { border-color: {{ block.settings.timeline_active }}; }
+      .vso-dt-ms-btn-{{ section.id }}.is-active .vso-dt-ms-dot-{{ section.id }} .dot-inner { background: {{ block.settings.timeline_active }}; }
+      .vso-dt-ms-check-{{ section.id }} { color: {{ block.settings.timeline_line }}; }
+      .vso-dt-ms-btn-{{ section.id }}.is-active.has-check .vso-dt-ms-check-{{ section.id }} { color: {{ block.settings.timeline_active }}; }
+      .vso-dt-r-card-{{ section.id }} {
+        background: {{ block.settings.results_card_bg }};
+        border: 1px solid {{ block.settings.results_card_border }};
+      }
+      .vso-dt-r-bar-{{ section.id }} { background: {{ block.settings.timeline_line }}; }
+      .vso-dt-r-bar-{{ section.id }}.is-active { background: {{ block.settings.timeline_active }}; }
+    {%- endif -%}
+  {%- endfor -%}
+{% endstyle %}
+
+<script>
+(function() {
+  var SID = '{{ section.id }}';
+
+  function position() {
+    var tpl = document.querySelector('#vso-detail-tabs-' + SID);
+    if (!tpl) return;
+    var content = tpl.content.cloneNode(true);
+    var el = content.firstElementChild;
+    if (!el) return;
+
+    var custom = document.querySelector('#vso-detail-tabs-placement');
+    if (custom) {
+      if (custom.parentNode) custom.parentNode.replaceChild(el, custom);
+      else return;
+    } else {
+      var target = document.querySelector(
+        '{% if section.settings.position == "below_title" or section.settings.position == "above_title" %}.product__title{% elsif section.settings.position == "below_description" %}.product__description{% else %}.button--add-to-cart, .product .product-form, .product-single__add-to-cart, .shopify-payment-button, .shopify-payment-button__button, .ProductForm__BuyButtons, .add-to-cart{% endif %}'
+      );
+      if (target) {
+        var mode = '{% if section.settings.position == "below_buy" or section.settings.position == "below_title" or section.settings.position == "below_description" %}afterend{% else %}beforebegin{% endif %}';
+        target.insertAdjacentElement(mode, el);
+      } else {
+        var form = document.querySelector('form[action$="/cart/add"], form.product-form, #product-form, [data-product-form], .product-form__buttons');
+        if (form) {
+          var pos = '{{ section.settings.position }}';
+          form.insertAdjacentElement(pos.indexOf('above') > -1 ? 'beforebegin' : 'afterend', el);
+        } else return;
+      }
+    }
+
+    if (el.isConnected) {
+      document.querySelectorAll('.vso-dt-section-' + SID).forEach(function(n) {
+        if (n !== el) n.parentNode && n.parentNode.removeChild(n);
+      });
+      init(el);
+    }
+  }
+
+  function init(root) {
+    var btns = root.querySelectorAll('[data-dt-tab]');
+    var panels = root.querySelectorAll('[data-dt-panel]');
+
+    var bar = root.querySelector('[role="tablist"]');
+
+    function checkBarFit() {
+      if (!bar) return;
+      var totalWidth = 0;
+      btns.forEach(function(b) { totalWidth += b.offsetWidth; });
+      var gap = 2 * Math.max(0, btns.length - 1);
+      var fits = (totalWidth + gap + 10) <= bar.clientWidth;
+      btns.forEach(function(b) { b.style.flex = fits ? '1 1 0%' : '0 0 auto'; });
+    }
+
+    checkBarFit();
+    window.addEventListener('resize', checkBarFit);
+
+    function scrollActiveIntoView(btn) {
+      if (!bar || bar.scrollWidth <= bar.clientWidth) return;
+      var idx = Array.prototype.indexOf.call(btns, btn);
+      var scrollLeft;
+      if (idx === 0) {
+        scrollLeft = 0;
+      } else if (idx === btns.length - 1) {
+        scrollLeft = bar.scrollWidth - bar.clientWidth;
+      } else {
+        scrollLeft = btn.offsetLeft - (bar.clientWidth / 2) + (btn.offsetWidth / 2);
+      }
+      bar.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' });
+    }
+
+    function switchTab(name, fromBtn) {
+      btns.forEach(function(b) { b.classList.toggle('is-active', b.getAttribute('data-dt-tab') === name); });
+      panels.forEach(function(p) { p.classList.toggle('is-active', p.getAttribute('data-dt-panel') === name); });
+      if (fromBtn) scrollActiveIntoView(fromBtn);
+    }
+
+    btns.forEach(function(b) {
+      b.addEventListener('click', function() { switchTab(b.getAttribute('data-dt-tab'), b); });
+    });
+
+    if (btns.length) switchTab(btns[0].getAttribute('data-dt-tab'));
+
+    var msBtns = root.querySelectorAll('[data-dt-ms]');
+    var msCards = root.querySelectorAll('[data-dt-ms-card]');
+    var msBars = root.querySelectorAll('[data-dt-ms-bar]');
+
+    function switchMs(idx) {
+      msBtns.forEach(function(b, i) { b.classList.toggle('is-active', i == idx); });
+      msCards.forEach(function(c, i) { c.classList.toggle('is-active', i == idx); });
+      msBars.forEach(function(b, i) { b.classList.toggle('is-active', i == idx); });
+    }
+
+    msBtns.forEach(function(b, i) {
+      b.addEventListener('click', function() { switchMs(i); });
+    });
+
+    if (msBtns.length) switchMs(0);
+  }
+
+  window.addEventListener('DOMContentLoaded', position);
+
+  document.addEventListener('shopify:section:load', function(e) {
+    if (e.detail.sectionId === SID) position();
+  });
+  document.addEventListener('shopify:section:reorder', function(e) {
+    if (e.detail.sectionId === SID) position();
+  });
+  document.addEventListener('shopify:section:select', function(e) {
+    if (e.detail.sectionId === SID) position();
+  });
+  document.addEventListener('shopify:block:select', function(e) {
+    if (e.detail.sectionId !== SID) return;
+    position();
+    setTimeout(function() {
+      var blockEl = document.querySelector('.vso-dt-section-' + SID + ' [data-block-id="' + e.detail.blockId + '"]');
+      if (!blockEl) return;
+      var root = blockEl.closest('.vso-dt-section-' + SID);
+      if (!root) return;
+
+      if (blockEl.hasAttribute('data-dt-tab')) {
+        var name = blockEl.getAttribute('data-dt-tab');
+        root.querySelectorAll('[data-dt-tab]').forEach(function(b) { b.classList.toggle('is-active', b.getAttribute('data-dt-tab') === name); });
+        root.querySelectorAll('[data-dt-panel]').forEach(function(p) { p.classList.toggle('is-active', p.getAttribute('data-dt-panel') === name); });
+        return;
+      }
+
+      var panel = blockEl.closest('[data-dt-panel]');
+      if (panel) {
+        var name = panel.getAttribute('data-dt-panel');
+        root.querySelectorAll('[data-dt-tab]').forEach(function(b) { b.classList.toggle('is-active', b.getAttribute('data-dt-tab') === name); });
+        root.querySelectorAll('[data-dt-panel]').forEach(function(p) { p.classList.toggle('is-active', p.getAttribute('data-dt-panel') === name); });
+      }
+
+      if (blockEl.hasAttribute('data-dt-ms')) {
+        var msPanel = blockEl.closest('[data-dt-panel]');
+        if (msPanel) {
+          var allMs = msPanel.querySelectorAll('[data-dt-ms]');
+          var allCards = msPanel.querySelectorAll('[data-dt-ms-card]');
+          var allBars = msPanel.querySelectorAll('[data-dt-ms-bar]');
+          var idx = Array.prototype.indexOf.call(allMs, blockEl);
+          allMs.forEach(function(b, i) { b.classList.toggle('is-active', i === idx); });
+          allCards.forEach(function(c, i) { c.classList.toggle('is-active', i === idx); });
+          allBars.forEach(function(b, i) { b.classList.toggle('is-active', i === idx); });
+        }
+      }
+    }, 100);
+  });
+})();
+</script>
+
+<template id="vso-detail-tabs-{{ section.id }}">
+  <div class="vso-dt-section-{{ section.id }} vd-l">
+    <div class="vso-dt-wrap-{{ section.id }}">
+      <div class="vso-dt-bar-{{ section.id }}" role="tablist">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'tab_expert' or block.type == 'tab_comparison' or block.type == 'tab_about' or block.type == 'tab_results' -%}
+            <button class="vso-dt-btn-{{ section.id }}" data-dt-tab="{{ block.type }}" data-block-id="{{ block.id }}" {{ block.shopify_attributes }} role="tab">{{ block.settings.title }}</button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'tab_expert' -%}
+        <div class="vso-dt-panel-{{ section.id }}" data-dt-panel="tab_expert" role="tabpanel">
+          <div class="vso-dt-quote-{{ section.id }}">{{ block.settings.quote | escape }}</div>
+          <div class="vso-dt-author-{{ section.id }}">
+            {%- if block.settings.avatar_image != blank -%}
+              <div class="vso-dt-avatar-{{ section.id }}">
+                {{ block.settings.avatar_image | image_url: width: 84 | image_tag: loading: 'lazy', alt: block.settings.author_name }}
+              </div>
+            {%- else -%}
+              <div class="vso-dt-avatar-{{ section.id }}">{{ block.settings.avatar_initials }}</div>
+            {%- endif -%}
+            <div class="vso-dt-author-info-{{ section.id }}">
+              <div class="vso-dt-author-name-{{ section.id }}">{{ block.settings.author_name }}</div>
+              {%- if block.settings.author_credential != blank -%}
+                <div class="vso-dt-author-cred-{{ section.id }}">{{ block.settings.author_credential }}</div>
+              {%- endif -%}
+              {%- if block.settings.author_meta != blank -%}
+                <div class="vso-dt-author-meta-{{ section.id }}">{{ block.settings.author_meta }}</div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+
+        {%- elsif block.type == 'tab_comparison' -%}
+        <div class="vso-dt-panel-{{ section.id }}" data-dt-panel="tab_comparison" role="tabpanel">
+          <div class="vso-dt-comp-head-{{ section.id }}">
+            {%- if block.settings.comp_label != blank -%}
+              <span class="vso-dt-comp-label-{{ section.id }}">{{ block.settings.comp_label }}</span>
+            {%- endif -%}
+            <span class="vso-dt-comp-col-{{ section.id }} is-product">{{ block.settings.product_name }}</span>
+            <span class="vso-dt-comp-col-{{ section.id }} is-others">{{ block.settings.others_name }}</span>
+          </div>
+          {%- for b in section.blocks -%}
+            {%- if b.type == 'comparison_row' -%}
+            <div class="vso-dt-comp-row-{{ section.id }}" data-block-id="{{ b.id }}" {{ b.shopify_attributes }}>
+              <span class="vso-dt-comp-feat-{{ section.id }}">{{ b.settings.feature }}</span>
+              <span class="vso-dt-comp-icon-{{ section.id }}">
+                {%- if b.settings.product_has -%}
+                  <span class="vso-dt-ci is-yes"><svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                {%- else -%}
+                  <span class="vso-dt-ci is-no"><svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5L10.5 10.5M10.5 3.5L3.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                {%- endif -%}
+              </span>
+              <span class="vso-dt-comp-icon-{{ section.id }}">
+                {%- if b.settings.others_have -%}
+                  <span class="vso-dt-ci is-yes"><svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                {%- else -%}
+                  <span class="vso-dt-ci is-no"><svg viewBox="0 0 14 14" fill="none"><path d="M3.5 3.5L10.5 10.5M10.5 3.5L3.5 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                {%- endif -%}
+              </span>
+            </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- elsif block.type == 'tab_about' -%}
+        <div class="vso-dt-panel-{{ section.id }}" data-dt-panel="tab_about" role="tabpanel">
+          {%- if block.settings.subtitle != blank -%}
+            <div class="vso-dt-about-sub-{{ section.id }}">{{ block.settings.subtitle }}</div>
+          {%- endif -%}
+          {%- if block.settings.heading != blank -%}
+            <h3 class="vso-dt-about-h-{{ section.id }}">{{ block.settings.heading }}</h3>
+          {%- endif -%}
+          {%- if block.settings.content != blank -%}
+            <div class="vso-dt-about-body-{{ section.id }} rte">{{ block.settings.content }}</div>
+          {%- endif -%}
+          {%- assign has_tags = false -%}
+          {%- for b in section.blocks -%}
+            {%- if b.type == 'about_tag' and b.settings.tag != blank -%}
+              {%- assign has_tags = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if has_tags -%}
+          <div class="vso-dt-tags-{{ section.id }}">
+            {%- for b in section.blocks -%}
+              {%- if b.type == 'about_tag' and b.settings.tag != blank -%}
+                <span class="vso-dt-tag-{{ section.id }}" data-block-id="{{ b.id }}" {{ b.shopify_attributes }}>
+                  {%- if b.settings.icon != blank -%}
+                    <span class="vso-dt-tag-icon-{{ section.id }}">{{ b.settings.icon | image_url: width: 64 | image_tag: loading: 'lazy' }}</span>
+                  {%- endif -%}
+                  {{ b.settings.tag }}
+                </span>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- endif -%}
+        </div>
+
+        {%- elsif block.type == 'tab_results' -%}
+        <div class="vso-dt-panel-{{ section.id }}" data-dt-panel="tab_results" role="tabpanel">
+          <div class="vso-dt-timeline-{{ section.id }}">
+            {%- for b in section.blocks -%}
+              {%- if b.type == 'results_milestone' -%}
+              <button class="vso-dt-ms-btn-{{ section.id }}{% if b.settings.show_checkmark %} has-check{% endif %}" data-dt-ms data-block-id="{{ b.id }}" {{ b.shopify_attributes }}>
+                <span class="vso-dt-ms-dot-{{ section.id }}">
+                  <span class="dot-inner"></span>
+                  <svg class="vso-dt-ms-check-{{ section.id }}" viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="vso-dt-ms-label-{{ section.id }}">{{ b.settings.label }}</span>
+              </button>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          {%- for b in section.blocks -%}
+            {%- if b.type == 'results_milestone' -%}
+            <div class="vso-dt-r-card-{{ section.id }}" data-dt-ms-card>
+              <div class="vso-dt-r-label-{{ section.id }}">{{ b.settings.label }}</div>
+              <div class="vso-dt-r-heading-{{ section.id }}">{{ b.settings.heading }}</div>
+              <p class="vso-dt-r-text-{{ section.id }}">{{ b.settings.content }}</p>
+            </div>
+            {%- endif -%}
+          {%- endfor -%}
+
+          <div class="vso-dt-r-bars-{{ section.id }}">
+            {%- for b in section.blocks -%}
+              {%- if b.type == 'results_milestone' -%}
+                <div class="vso-dt-r-bar-{{ section.id }}" data-dt-ms-bar></div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</template>
+
+{% schema %}
+{
+  "name": "VSO - Detail Tabs 01",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Position"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "default": "below_description",
+      "options": [
+        { "label": "Above Buy Buttons", "value": "above_buy" },
+        { "label": "Below Buy Buttons", "value": "below_buy" },
+        { "label": "Above Product Title", "value": "above_title" },
+        { "label": "Below Product Title", "value": "below_title" },
+        { "label": "Below Product Description", "value": "below_description" }
+      ],
+      "info": "Choose a default position, or for custom placement, add a 'Custom Liquid' block and paste: <div id='vso-detail-tabs-placement'></div>"
+    },
+    {
+      "type": "header",
+      "content": "Tab Bar Style"
+    },
+    {
+      "type": "color",
+      "id": "tab_bar_bg",
+      "label": "Tab bar background",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "tab_text_color",
+      "label": "Tab text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_bg",
+      "label": "Active tab background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_text",
+      "label": "Active tab text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "tab_radius",
+      "label": "Tab border radius",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "tab_font_size",
+      "label": "Desktop tab font size",
+      "min": 11,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "tab_font_size_mobile",
+      "label": "Mobile tab font size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Content Style"
+    },
+    {
+      "type": "color",
+      "id": "content_bg",
+      "label": "Content background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text",
+      "label": "Secondary text color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "default": "#333333"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Container border radius",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Container border color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "header",
+      "content": "About Tags"
+    },
+    {
+      "type": "range",
+      "id": "tag_icon_size",
+      "label": "Tag icon size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_desktop",
+      "label": "Desktop margin top",
+      "min": -30,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_desktop",
+      "label": "Desktop margin bottom",
+      "min": -30,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "label": "Mobile margin top",
+      "min": -30,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "label": "Mobile margin bottom",
+      "min": -30,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab_expert",
+      "name": "Tab: Expert Review",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Tab title",
+          "default": "<b>Expert</b>"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "\"I recommend Versio to patients seeking a results-driven routine without irritation. The ceramide-rich formulas repair the barrier while active botanicals target dark spots and fine lines. Clean, effective, and ideal for reactive skin.\""
+        },
+        {
+          "type": "image_picker",
+          "id": "avatar_image",
+          "label": "Avatar image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "avatar_initials",
+          "label": "Avatar initials (if no image)",
+          "default": "<b>SK</b>"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "author_name",
+          "label": "Author name",
+          "default": "<b>Dr. Sofia Kim, MD</b>"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "author_credential",
+          "label": "Credential",
+          "default": "<b>BOARD-CERTIFIED DERMATOLOGIST</b>"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "author_meta",
+          "label": "Details",
+          "default": "New York · 15 Years Experience"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "range",
+          "id": "quote_size",
+          "label": "Desktop quote size",
+          "min": 14,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "default": 17
+        },
+        {
+          "type": "range",
+          "id": "quote_size_mobile",
+          "label": "Mobile quote size",
+          "min": 13,
+          "max": 20,
+          "step": 1,
+          "unit": "px",
+          "default": 15
+        },
+        {
+          "type": "color",
+          "id": "avatar_bg",
+          "label": "Avatar background",
+          "default": "#F0F0F0"
+        },
+        {
+          "type": "color",
+          "id": "avatar_text_color",
+          "label": "Avatar text color",
+          "default": "#1A1A1A"
+        }
+      ]
+    },
+    {
+      "type": "tab_comparison",
+      "name": "Tab: Comparison",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Tab title",
+          "default": "<b>Comparison</b>"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "product_name",
+          "label": "Product column name",
+          "default": "<b>Versio</b>"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "others_name",
+          "label": "Others column name",
+          "default": "<b>Others</b>"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "comp_label",
+          "label": "Header label",
+          "default": "<b>HOW WE COMPARE</b>",
+          "info": "Small label shown top-left above the comparison rows"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "color",
+          "id": "comp_label_color",
+          "label": "Header label color",
+          "default": "#1A1A1A"
+        },
+        {
+          "type": "color",
+          "id": "comp_pill_bg",
+          "label": "Product pill background",
+          "default": "#1A1A1A"
+        },
+        {
+          "type": "color",
+          "id": "comp_pill_text",
+          "label": "Product pill text",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "row_border",
+          "label": "Row border color",
+          "default": "#E5E5E5"
+        },
+        {
+          "type": "header",
+          "content": "Check & Cross Icons"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "label": "Icon size",
+          "min": 18,
+          "max": 40,
+          "step": 2,
+          "unit": "px",
+          "default": 26
+        },
+        {
+          "type": "color",
+          "id": "check_bg",
+          "label": "Check background",
+          "default": "#E8F5E9"
+        },
+        {
+          "type": "color",
+          "id": "check_color",
+          "label": "Check color",
+          "default": "#4CAF50"
+        },
+        {
+          "type": "color",
+          "id": "cross_bg",
+          "label": "Cross background",
+          "default": "#FFEBEE"
+        },
+        {
+          "type": "color",
+          "id": "cross_color",
+          "label": "Cross color",
+          "default": "#E57373"
+        }
+      ]
+    },
+    {
+      "type": "tab_about",
+      "name": "Tab: About",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Tab title",
+          "default": "<b>About</b>"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "<b>THE VERSIO DIFFERENCE</b>"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<b>Skincare that works with your skin, not against it</b>"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<p>Versio is a clinical-grade skincare line formulated with ceramides, niacinamide, and sustainably sourced botanicals. Every product strengthens your skin barrier while targeting dark spots, uneven texture, and fine lines.</p><p>Free from parabens, sulfates, and synthetic fragrance. Dermatologist-tested and approved for all skin types including sensitive and acne-prone skin.</p>"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "range",
+          "id": "about_heading_size",
+          "label": "Desktop heading size",
+          "min": 18,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "about_heading_size_mobile",
+          "label": "Mobile heading size",
+          "min": 16,
+          "max": 28,
+          "step": 1,
+          "unit": "px",
+          "default": 20
+        },
+        {
+          "type": "color",
+          "id": "tag_bg",
+          "label": "Tag background",
+          "default": "#F5F5F5"
+        },
+        {
+          "type": "color",
+          "id": "tag_border",
+          "label": "Tag border",
+          "default": "#D5D5D5"
+        },
+        {
+          "type": "color",
+          "id": "tag_text",
+          "label": "Tag text",
+          "default": "#1A1A1A"
+        }
+      ]
+    },
+    {
+      "type": "tab_results",
+      "name": "Tab: Results",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "Tab title",
+          "default": "<b>Results</b>"
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "color",
+          "id": "timeline_line",
+          "label": "Timeline line color",
+          "default": "#D5D5D5"
+        },
+        {
+          "type": "color",
+          "id": "timeline_active",
+          "label": "Timeline active color",
+          "default": "#1A1A1A"
+        },
+        {
+          "type": "color",
+          "id": "results_card_bg",
+          "label": "Results card background",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "color",
+          "id": "results_card_border",
+          "label": "Results card border",
+          "default": "#E5E5E5"
+        }
+      ]
+    },
+    {
+      "type": "comparison_row",
+      "name": "Comparison Row",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "feature",
+          "label": "Feature",
+          "default": "Feature name"
+        },
+        {
+          "type": "checkbox",
+          "id": "product_has",
+          "label": "Product has this",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "others_have",
+          "label": "Others have this",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "about_tag",
+      "name": "About Tag",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "tag",
+          "label": "Tag text",
+          "default": "Feature"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        }
+      ]
+    },
+    {
+      "type": "results_milestone",
+      "name": "Results Milestone",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "label",
+          "label": "Timeline label",
+          "default": "<b>WEEK 1</b>"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "<b>Heading text</b>"
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "Content",
+          "default": "Description of results at this milestone."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_checkmark",
+          "label": "Show checkmark icon",
+          "default": false,
+          "info": "Shows a checkmark instead of a dot in the timeline"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VSO - Detail Tabs 01",
+      "blocks": [
+        {
+          "type": "tab_about",
+          "settings": {
+            "title": "<b>About</b>",
+            "subtitle": "<b>THE VERSIO DIFFERENCE</b>",
+            "heading": "<b>Skincare that works with your skin, not against it</b>",
+            "content": "<p>Versio is a clinical-grade skincare line formulated with ceramides, niacinamide, and sustainably sourced botanicals. Every product strengthens your skin barrier while targeting dark spots, uneven texture, and fine lines.</p><p>Free from parabens, sulfates, and synthetic fragrance. Dermatologist-tested and approved for all skin types including sensitive and acne-prone skin.</p>"
+          }
+        },
+        {
+          "type": "tab_comparison",
+          "settings": {
+            "title": "<b>Comparison</b>",
+            "product_name": "<b>Versio</b>",
+            "others_name": "<b>Others</b>",
+            "comp_label": "<b>HOW WE COMPARE</b>"
+          }
+        },
+        {
+          "type": "tab_results",
+          "settings": {
+            "title": "<b>Results</b>"
+          }
+        },
+        {
+          "type": "tab_expert",
+          "settings": {
+            "title": "<b>Expert</b>",
+            "quote": "\"I recommend Versio to patients seeking a results-driven routine without irritation. The ceramide-rich formulas repair the barrier while active botanicals target dark spots and fine lines. Clean, effective, and ideal for reactive skin.\"",
+            "avatar_initials": "<b>SK</b>",
+            "author_name": "<b>Dr. Sofia Kim, MD</b>",
+            "author_credential": "<b>BOARD-CERTIFIED DERMATOLOGIST</b>",
+            "author_meta": "New York · 15 Years Experience"
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Ceramide Barrier Repair",
+            "product_has": true,
+            "others_have": false
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Clean & Fragrance-Free",
+            "product_has": true,
+            "others_have": false
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Clinically Tested Results",
+            "product_has": true,
+            "others_have": false
+          }
+        },
+        {
+          "type": "comparison_row",
+          "settings": {
+            "feature": "Suitable for Sensitive Skin",
+            "product_has": true,
+            "others_have": true
+          }
+        },
+        {
+          "type": "about_tag",
+          "settings": { "tag": "Dermatologist tested" }
+        },
+        {
+          "type": "about_tag",
+          "settings": { "tag": "Fragrance free" }
+        },
+        {
+          "type": "about_tag",
+          "settings": { "tag": "Vegan & cruelty free" }
+        },
+        {
+          "type": "about_tag",
+          "settings": { "tag": "All skin types" }
+        },
+        {
+          "type": "about_tag",
+          "settings": { "tag": "Clean formula" }
+        },
+        {
+          "type": "results_milestone",
+          "settings": {
+            "label": "<b>FIRST USE</b>",
+            "heading": "<b>Instant glow, zero irritation</b>",
+            "content": "Skin feels hydrated and calm from the first application. The ceramide-rich formula absorbs quickly without greasy residue or stinging.",
+            "show_checkmark": false
+          }
+        },
+        {
+          "type": "results_milestone",
+          "settings": {
+            "label": "<b>DAY 3</b>",
+            "heading": "<b>Softer, smoother texture</b>",
+            "content": "Dry patches start to fade as your moisture barrier begins to repair. Skin feels plumper and more even to the touch.",
+            "show_checkmark": false
+          }
+        },
+        {
+          "type": "results_milestone",
+          "settings": {
+            "label": "<b>WEEK 1</b>",
+            "heading": "<b>Visible tone improvement</b>",
+            "content": "Dark spots and redness begin to soften. The niacinamide complex evens out your complexion and reduces visible pore size.",
+            "show_checkmark": false
+          }
+        },
+        {
+          "type": "results_milestone",
+          "settings": {
+            "label": "<b>WEEK 2</b>",
+            "heading": "<b>Radiance returns</b>",
+            "content": "Friends start noticing the difference. Your skin looks brighter, healthier, and more balanced — even without makeup.",
+            "show_checkmark": false
+          }
+        },
+        {
+          "type": "results_milestone",
+          "settings": {
+            "label": "<b>MONTH 1</b>",
+            "heading": "<b>Your best skin yet</b>",
+            "content": "Fine lines appear softer, dark spots have visibly faded, and your skin barrier is stronger than ever.",
+            "show_checkmark": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
