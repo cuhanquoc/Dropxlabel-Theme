@@ -1,12 +1,12 @@
 # Project Status
 
-Last updated: 2026-03-31 (Asia/Ho_Chi_Minh)
+Last updated: 2026-04-09 (Asia/Ho_Chi_Minh)
 
 ## Current Snapshot
 
 - Repo: `Dropxlabel-Theme`
 - Branch: `main`
-- Latest pushed commit at setup: `pending current task`
+- Latest pushed commit at setup: `168efff`
 - Storefront direction: `mobile-first`
 - Current priority: polish UI while keeping Shopify backend behavior stable
 - Typography system update in progress:
@@ -72,6 +72,8 @@ Last updated: 2026-03-31 (Asia/Ho_Chi_Minh)
 
 ## Recent Completed Work
 
+18. Added a reusable `Custom Liquid` section with preset support so Theme Editor can insert custom Liquid across JSON templates, not only inside `Product Layout`.
+
 17. Section `BIKINIES` / `marquee-ticker` trên homepage đã được thay presentation theo layout rounded horizontal gallery: bỏ firework canvas + sticky text cũ, giữ nguyên schema/data contract Shopify, và dựng lại desktop/mobile theo cùng design language.
 10. Featured Collection desktop được tinh lại theo phương án Stitch đã duyệt: swatches/variants lớn hơn, heading dùng hệ editorial đúng font dự án, giá chính và giá gạch nổi bật hơn, nhịp card gọn hơn.
 11. Typography tokens toàn cục đã được chuyển sang `Rubik / Inter / Bricolage Grotesque` với alias ngược để tránh làm vỡ UI hiện có; các section quan trọng bắt đầu được đổi fallback/font hardcode theo hệ mới.
@@ -92,7 +94,8 @@ Last updated: 2026-03-31 (Asia/Ho_Chi_Minh)
 
 ## Open Focus Areas
 
-1. Tiếp tục polish mobile trước khi mở rộng desktop.
+1. Kiểm tra trực quan section `Custom Liquid` mới trong Theme Editor trên homepage/product/page để xác nhận vị trí add section và spacing đúng ý.
+2. Tiếp tục polish mobile trước khi mở rộng desktop.
 2. Kiểm tra trực quan lại:
    - homepage hero/header
    - homepage `BIKINIES` section ở desktop/mobile sau refactor mới
