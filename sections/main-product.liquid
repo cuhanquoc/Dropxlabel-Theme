@@ -1106,13 +1106,17 @@
 
 {%- assign has_pdp_builder_core = false -%}
 {%- assign has_pdp_builder_media = false -%}
+{%- assign has_social_links_block = false -%}
 {%- for block in section.blocks -%}
   {%- case block.type -%}
-    {%- when 'product_media', 'product_thumbnails', 'product_title', 'product_price', 'variant_picker', 'quantity_selector', 'buy_buttons', 'trust_badges', 'related_products' -%}
+    {%- when 'product_media', 'product_thumbnails', 'product_title', 'product_price', 'variant_picker', 'quantity_selector', 'buy_buttons', 'trust_badges', 'related_products', 'social_links' -%}
       {%- assign has_pdp_builder_core = true -%}
   {%- endcase -%}
   {%- if block.type == 'product_media' or block.type == 'product_thumbnails' -%}
     {%- assign has_pdp_builder_media = true -%}
+  {%- endif -%}
+  {%- if block.type == 'social_links' -%}
+    {%- assign has_social_links_block = true -%}
   {%- endif -%}
 {%- endfor -%}
 
@@ -1605,6 +1609,26 @@
                     {%- endif -%}
                   {% when 'related_products' %}
                     <div class="product-builder-block product-builder-block--related" {{ block.shopify_attributes }}>{{ pdp_related_products_markup }}</div>
+                  {% when 'social_links' %}
+                    {% assign social_blocks = section.blocks | where: "type", "social_icon" %}
+                    {% if social_blocks.size > 0 %}
+                      <div class="product-builder-block product-builder-block--social" style="padding: 0 1rem;" {{ block.shopify_attributes }}>
+                        <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                          <strong style="font-size: 1.1rem; font-weight: 700;">Social:</strong>
+                          <div style="display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap;">
+                            {% for social_block in social_blocks %}
+                              <a href="{{ social_block.settings.social_url | default: '#' }}" target="_blank" rel="noopener noreferrer" style="display: flex; justify-content: center; align-items: center; width: 40px; height: 40px; color: #111;" {{ social_block.shopify_attributes }}>
+                                {% if social_block.settings.social_icon_svg != blank %}
+                                  {{ social_block.settings.social_icon_svg }}
+                                {% else %}
+                                  <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                                {% endif %}
+                              </a>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
                 {% endcase %}
               {% endfor %}
             </div>
@@ -2195,7 +2219,7 @@
 
           <!-- ── Social Icons (Dynamic Blocks) ── -->
           {% assign social_blocks = section.blocks | where: "type", "social_icon" %}
-          {% if social_blocks.size > 0 %}
+          {% if social_blocks.size > 0 and has_social_links_block == false %}
           <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1rem; padding: 0 1rem;">
             <strong style="font-size: 1.1rem; font-weight: 700;">Social:</strong>
             <div style="display: flex; gap: 1.25rem; align-items: center;">
@@ -3571,6 +3595,12 @@
       "settings": []
     },
     {
+      "type": "social_links",
+      "name": "Social links",
+      "limit": 1,
+      "settings": []
+    },
+    {
       "type": "social_icon",
       "name": "Social Icon",
       "settings": [
@@ -3689,6 +3719,10 @@
         },
         {
           "type": "trust_badges",
+          "settings": {}
+        },
+        {
+          "type": "social_links",
           "settings": {}
         },
         {
