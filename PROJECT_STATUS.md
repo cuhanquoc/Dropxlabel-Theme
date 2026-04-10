@@ -72,7 +72,7 @@ Last updated: 2026-04-10 (Asia/Ho_Chi_Minh)
 
 ## Recent Completed Work
 
-19. Started Phase 1 PDP builder refactor: `main-product` now supports core movable blocks for media, thumbnails, title, price, variant picker, quantity, buy buttons, trust badges, social links, description, custom liquid, info rows, app blocks, and related products, while keeping a legacy fallback path during migration.
+19. Started Phase 1 PDP builder refactor: `main-product` now supports core movable blocks for media, thumbnails, title, price, variant picker, quantity, buy buttons, trust badges, social links, description, custom liquid, info rows, app blocks, and related products, while keeping a legacy fallback path during migration. Core builder blocks now also expose initial block-level settings for title, price, and buy buttons.
 18. Added a reusable `Custom Liquid` section with preset support so Theme Editor can insert custom Liquid across JSON templates, not only inside `Product Layout`.
 
 17. Section `BIKINIES` / `marquee-ticker` trên homepage đã được thay presentation theo layout rounded horizontal gallery: bỏ firework canvas + sticky text cũ, giữ nguyên schema/data contract Shopify, và dựng lại desktop/mobile theo cùng design language.
