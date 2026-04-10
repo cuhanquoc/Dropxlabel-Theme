@@ -72,6 +72,7 @@ Last updated: 2026-04-10 (Asia/Ho_Chi_Minh)
 
 ## Recent Completed Work
 
+24. PDP builder cleanup pass: removed the remaining intermediate `capture` helper blocks in `main-product`, so the builder now renders its core blocks more directly with less legacy layering.
 23. Phase 4 homepage continuation: `customer-help-center` now supports editor-visible intro blocks (`intro_heading`, `intro_body`) and `templates/index.json` now wires intro + FAQ blocks by default.
 22. Phase 4 homepage continuation: `marquee-ticker` intro now supports editor-visible intro blocks (`intro_heading`, `intro_description`, `intro_cta`) and `templates/index.json` now wires those blocks by default.
 21. Phase 3 homepage editability pass: `featured-collection` now supports editor-visible header blocks (`section_heading`, `section_eyebrow`, `helper_note`) plus editable quick-view labels/badges, and `templates/index.json` now wires those blocks by default.
@@ -100,7 +101,7 @@ Last updated: 2026-04-10 (Asia/Ho_Chi_Minh)
 ## Open Focus Areas
 
 1. QA trực quan toàn bộ 4 phase trong Theme Editor/storefront, ưu tiên PDP variant switching, add to cart, quick view modal ở featured collection, collection filter/sort labels, search empty state, marquee intro block order, và help center intro/FAQ block order.
-2. Tiếp tục giảm logic legacy/fallback còn sót trong `main-product` khi builder mới đã ổn định.
+2. Tiếp tục giảm logic legacy/fallback còn sót trong `main-product` khi builder mới đã ổn định, nhưng phần capture trung gian cũ đã được dọn xong.
 3. Cân nhắc builder hóa sâu hơn cho `main-collection` card/composition và các homepage sections còn lại nếu cần kéo-thả mức component chi tiết hơn.
 4. Kiểm tra trực quan section `Custom Liquid` mới trong Theme Editor trên homepage/product/page để xác nhận vị trí add section và spacing đúng ý.
 5. Tiếp tục polish mobile trước khi mở rộng desktop.
