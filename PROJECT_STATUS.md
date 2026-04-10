@@ -72,6 +72,7 @@ Last updated: 2026-04-10 (Asia/Ho_Chi_Minh)
 
 ## Recent Completed Work
 
+27. Deep card/gallery controls pass: `main-collection` now also exposes price visibility and card/image corner radius; `main-search` now also exposes product image and price visibility; `featured-collection` now also exposes quick-view quantity/Buy Now/compare-price/variant-picker toggles plus swatch count; `main-product` thumbnails now also expose show/hide and ratio controls.
 26. Collection/search card system pass: `main-collection` now exposes product-card controls for secondary image hover, badges, compare-at price, and the price-varies prefix; `main-search` now exposes excerpt visibility/length and compare-at price controls; `featured-collection` now exposes deeper card/quick-view controls for badges, quick-view button visibility, swatches, gallery controls, and modal accessibility labels; `main-product` now exposes gallery block controls for media background/shadow/radius and thumbnail density/radius/background.
 25. PDP builder cleanup pass: removed the legacy info-column fallback branch and social fallback branch from `main-product`, leaving the block-based builder as the primary render path for the product template.
 24. PDP builder cleanup pass: removed the remaining intermediate `capture` helper blocks in `main-product`, so the builder now renders its core blocks more directly with less legacy layering.
@@ -102,7 +103,7 @@ Last updated: 2026-04-10 (Asia/Ho_Chi_Minh)
 
 ## Open Focus Areas
 
-1. QA trực quan toàn bộ 4 phase trong Theme Editor/storefront, ưu tiên PDP variant switching, add to cart, gallery block controls, quick view modal ở featured collection, collection/search card controls, marquee intro block order, và help center intro/FAQ block order.
+1. QA trực quan toàn bộ 4 phase trong Theme Editor/storefront, ưu tiên PDP variant switching, add to cart, gallery block controls, featured collection quick view toggles, collection/search card visibility controls, marquee intro block order, và help center intro/FAQ block order.
 2. Tiếp tục giảm logic legacy/fallback còn sót trong `main-product` khi builder mới đã ổn định, nhưng phần capture trung gian cũ và nhánh fallback info/social cũ đã được dọn xong.
 3. Cân nhắc builder hóa sâu hơn cho `main-collection` card/composition và các homepage sections còn lại nếu cần kéo-thả mức component chi tiết hơn.
 4. Kiểm tra trực quan section `Custom Liquid` mới trong Theme Editor trên homepage/product/page để xác nhận vị trí add section và spacing đúng ý.

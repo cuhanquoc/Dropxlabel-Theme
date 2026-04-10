@@ -1132,6 +1132,7 @@
       {% assign default_media_radius = 8 %}
       {% assign default_thumb_radius = 6 %}
       {% assign default_thumbs_per_row = 4 %}
+      {% assign default_thumb_ratio = '4 / 5' %}
       <div class="product-gallery-stack" style="display: flex; flex-direction: column; gap: {{ gallery_gap }}px; background-color: transparent; width: 100%;">
 
         {% if has_pdp_builder_media %}
@@ -1152,16 +1153,18 @@
                   {% endif %}
                 </div>
               {% when 'product_thumbnails' %}
+                {% assign show_thumbnails = block.settings.show_thumbnails %}
                 {% assign thumbs_per_row = block.settings.thumbs_per_row | default: default_thumbs_per_row %}
                 {% assign thumb_radius = block.settings.corner_radius | default: default_thumb_radius %}
                 {% assign thumb_bg = block.settings.background_color | default: default_media_bg %}
+                {% assign thumb_ratio = block.settings.thumb_ratio | default: default_thumb_ratio %}
                 {% assign gap_compensate = gallery_gap | times: 0.75 %}
-                {% if product.media.size > 1 %}
+                {% if show_thumbnails and product.media.size > 1 %}
                   <div id="ProductThumbnails" {{ block.shopify_attributes }} style="display: flex; flex-wrap: nowrap; gap: {{ gallery_gap }}px; overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%;">
                     {% for media in product.media %}
                       <button type="button" aria-label="Thumbnail {{ forloop.index }}" class="product-thumbnail-btn"
                               data-thumb-url="{{ media.preview_image | image_url: width: 1200 }}"
-                              style="flex: 0 0 calc({{ 100.0 | divided_by: thumbs_per_row }}% - {{ gap_compensate }}px); min-width: 0; border: 1px solid #e5e5e5; background-color: {{ thumb_bg }}; padding: 0; cursor: pointer; aspect-ratio: 4/5; overflow: hidden; display: block; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-radius: {{ thumb_radius }}px; box-sizing: border-box;">
+                              style="flex: 0 0 calc({{ 100.0 | divided_by: thumbs_per_row }}% - {{ gap_compensate }}px); min-width: 0; border: 1px solid #e5e5e5; background-color: {{ thumb_bg }}; padding: 0; cursor: pointer; aspect-ratio: {{ thumb_ratio }}; overflow: hidden; display: block; box-shadow: 0 2px 6px rgba(0,0,0,0.04); border-radius: {{ thumb_radius }}px; box-sizing: border-box;">
                         <img src="{{ media.preview_image | image_url: width: 400 }}" alt="{{ media.alt | escape }}" width="{{ media.preview_image.width }}" height="{{ media.preview_image.height }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                       </button>
                     {% endfor %}
@@ -2936,6 +2939,12 @@
       "limit": 1,
       "settings": [
         {
+          "type": "checkbox",
+          "id": "show_thumbnails",
+          "label": "Show thumbnails",
+          "default": true
+        },
+        {
           "type": "range",
           "id": "thumbs_per_row",
           "label": "Thumbnails per row",
@@ -2959,6 +2968,17 @@
           "id": "background_color",
           "label": "Thumbnail background color",
           "default": "#f5f4f1"
+        },
+        {
+          "type": "select",
+          "id": "thumb_ratio",
+          "label": "Thumbnail ratio",
+          "options": [
+            { "value": "1 / 1", "label": "Square" },
+            { "value": "4 / 5", "label": "Portrait" },
+            { "value": "3 / 4", "label": "Tall portrait" }
+          ],
+          "default": "4 / 5"
         }
       ]
     },

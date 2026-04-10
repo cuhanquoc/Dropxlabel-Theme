@@ -10,6 +10,9 @@
   assign sale_badge_label = section.settings.sale_badge_label | default: 'Sale'
   assign sold_out_badge_label = section.settings.sold_out_badge_label | default: 'Sold out'
   assign price_from_label = section.settings.price_from_label | default: 'From'
+  assign show_price = section.settings.show_price
+  assign card_corner_radius = section.settings.card_corner_radius | default: 18
+  assign image_corner_radius = section.settings.image_corner_radius | default: 18
 %}
 
 <div id="main-collection">
@@ -168,6 +171,7 @@
           <a
             href="{{ product.url }}"
             class="mc-card"
+            style="border-radius: {{ card_corner_radius }}px;"
             data-mc-card
             data-product-handle="{{ product.handle }}"
             aria-label="{{ product.title | escape }}"
@@ -243,7 +247,7 @@
             <!-- Product Info -->
             <div class="mc-card__meta text-left">
               <p class="mc-product-title">{{ product.title }}</p>
-              <div class="mc-product-price-row">
+              {% if show_price %}<div class="mc-product-price-row">
                 <p class="mc-product-price">
                   {%- if product.price_varies -%}
                     {{ price_from_label }} {{ product.price_min | money }}
@@ -644,6 +648,32 @@
       "id": "price_from_label",
       "label": "Price varies prefix",
       "default": "From"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show product price",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "card_corner_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "image_corner_radius",
+      "label": "Image corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 18
     }
   ],
   "presets": [

@@ -31,6 +31,11 @@
   assign fc_modal_next_label = section.settings.modal_next_label | default: 'Next image'
   assign fc_qty_decrease_label = section.settings.qty_decrease_label | default: 'Decrease quantity'
   assign fc_qty_increase_label = section.settings.qty_increase_label | default: 'Increase quantity'
+  assign fc_show_qty_selector = section.settings.show_qty_selector
+  assign fc_show_buy_now_button = section.settings.show_buy_now_button
+  assign fc_show_compare_price_in_modal = section.settings.show_compare_price_in_modal
+  assign fc_show_variant_picker_in_modal = section.settings.show_variant_picker_in_modal
+  assign fc_swatches_limit = section.settings.swatches_limit | default: 5
 -%}
 
 <featured-collection class="fcv2 block relative overflow-hidden" data-section-id="{{ section.id }}">
@@ -256,7 +261,7 @@
           <span class="fcv2-modal__price" id="{{ fc_section_id }}-qv-price"></span>
           <span class="fcv2-modal__compare hidden" id="{{ fc_section_id }}-qv-compare"></span>
         </div>
-        <div class="fcv2-modal__variants" id="{{ fc_section_id }}-qv-variants"></div>
+        {% if fc_show_variant_picker_in_modal %}<div class="fcv2-modal__variants" id="{{ fc_section_id }}-qv-variants"></div>{% endif %}
         <div class="fcv2-modal__qty-row" id="{{ fc_section_id }}-qv-qty-row">
           <span class="fcv2-modal__qty-label">{{ fc_modal_quantity_label }}</span>
           <div class="fcv2-modal__qty-ctrl">
@@ -269,7 +274,7 @@
     </div>
     <div class="fcv2-modal__footer">
       <button type="button" class="fcv2-modal__button is-secondary" id="{{ fc_section_id }}-qv-atc">{{ fc_modal_add_to_cart_label }}</button>
-      <button type="button" class="fcv2-modal__button is-primary" id="{{ fc_section_id }}-qv-bin">{{ fc_modal_buy_now_label }}</button>
+      {% if fc_show_buy_now_button %}<button type="button" class="fcv2-modal__button is-primary" id="{{ fc_section_id }}-qv-bin">{{ fc_modal_buy_now_label }}</button>{% endif %}
     </div>
   </div>
 </div>
@@ -1825,6 +1830,39 @@
       "id": "qty_increase_label",
       "label": "Quantity increase label",
       "default": "Increase quantity"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_qty_selector",
+      "label": "Show quick view quantity selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_now_button",
+      "label": "Show quick view buy now button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_price_in_modal",
+      "label": "Show compare price in quick view",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_variant_picker_in_modal",
+      "label": "Show variant picker in quick view",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "swatches_limit",
+      "label": "Card swatches limit",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 5
     }
   ],
   "blocks": [

@@ -13,6 +13,8 @@
   assign excerpt_word_count = section.settings.excerpt_word_count | default: 14
   assign show_compare_price = section.settings.show_compare_price
   assign price_from_label = section.settings.price_from_label | default: 'From'
+  assign show_product_image = section.settings.show_product_image
+  assign show_price = section.settings.show_price
 %}
 
 <section id="main-search" class="ms block" style="background:#fff;color:#0a0a0a;">
@@ -57,7 +59,7 @@
         {% for item in search.results %}
           {% if item.object_type == 'product' %}
             <article class="ms-card" role="listitem">
-              <a href="{{ item.url }}" class="ms-card__media">
+              {% if show_product_image %}<a href="{{ item.url }}" class="ms-card__media">
                 {% if item.featured_image %}
                   {{ item.featured_image | image_url: width: 900 | image_tag:
                     class: 'ms-card__image',
@@ -364,6 +366,18 @@
       "id": "price_from_label",
       "label": "Price varies prefix",
       "default": "From"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_image",
+      "label": "Show product image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price",
+      "label": "Show product price",
+      "default": true
     }
   ]
 }
