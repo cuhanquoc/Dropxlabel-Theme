@@ -1,12 +1,12 @@
 # Project Status
 
-Last updated: 2026-04-09 (Asia/Ho_Chi_Minh)
+Last updated: 2026-04-10 (Asia/Ho_Chi_Minh)
 
 ## Current Snapshot
 
 - Repo: `Dropxlabel-Theme`
 - Branch: `main`
-- Latest pushed commit at setup: `168efff`
+- Latest pushed commit at setup: `pending current task`
 - Storefront direction: `mobile-first`
 - Current priority: polish UI while keeping Shopify backend behavior stable
 - Typography system update in progress:
@@ -72,6 +72,7 @@ Last updated: 2026-04-09 (Asia/Ho_Chi_Minh)
 
 ## Recent Completed Work
 
+19. Started Phase 1 PDP builder refactor: `main-product` now supports core movable blocks for media, thumbnails, title, price, variant picker, quantity, buy buttons, trust badges, description, custom liquid, info rows, app blocks, and related products, while keeping a legacy fallback path during migration.
 18. Added a reusable `Custom Liquid` section with preset support so Theme Editor can insert custom Liquid across JSON templates, not only inside `Product Layout`.
 
 17. Section `BIKINIES` / `marquee-ticker` trên homepage đã được thay presentation theo layout rounded horizontal gallery: bỏ firework canvas + sticky text cũ, giữ nguyên schema/data contract Shopify, và dựng lại desktop/mobile theo cùng design language.
@@ -94,8 +95,10 @@ Last updated: 2026-04-09 (Asia/Ho_Chi_Minh)
 
 ## Open Focus Areas
 
-1. Kiểm tra trực quan section `Custom Liquid` mới trong Theme Editor trên homepage/product/page để xác nhận vị trí add section và spacing đúng ý.
-2. Tiếp tục polish mobile trước khi mở rộng desktop.
+1. QA trực quan Phase 1 PDP builder trong Theme Editor và storefront, nhất là block order, variant switching, add to cart, size chart, lightbox, và khoảng cách mobile.
+2. Tiếp tục tách các phần còn lại của PDP sang block architecture sạch hơn, giảm logic legacy/fallback khi template mới đã ổn định.
+3. Kiểm tra trực quan section `Custom Liquid` mới trong Theme Editor trên homepage/product/page để xác nhận vị trí add section và spacing đúng ý.
+4. Tiếp tục polish mobile trước khi mở rộng desktop.
 2. Kiểm tra trực quan lại:
    - homepage hero/header
    - homepage `BIKINIES` section ở desktop/mobile sau refactor mới
