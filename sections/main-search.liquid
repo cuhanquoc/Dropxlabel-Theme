@@ -9,6 +9,10 @@
   assign search_button_label = section.settings.search_button_label | default: 'Search'
   assign empty_heading = section.settings.empty_heading | default: 'No results found'
   assign empty_body = section.settings.empty_body | default: 'Try a shorter keyword or search by product type.'
+  assign show_product_excerpt = section.settings.show_product_excerpt
+  assign excerpt_word_count = section.settings.excerpt_word_count | default: 14
+  assign show_compare_price = section.settings.show_compare_price
+  assign price_from_label = section.settings.price_from_label | default: 'From'
 %}
 
 <section id="main-search" class="ms block" style="background:#fff;color:#0a0a0a;">
@@ -333,6 +337,33 @@
       "id": "empty_body",
       "label": "Empty state description",
       "default": "Try a shorter keyword or search by product type."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_excerpt",
+      "label": "Show product excerpt",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "excerpt_word_count",
+      "label": "Excerpt word count",
+      "min": 6,
+      "max": 30,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "checkbox",
+      "id": "show_compare_price",
+      "label": "Show compare-at price",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "price_from_label",
+      "label": "Price varies prefix",
+      "default": "From"
     }
   ]
 }

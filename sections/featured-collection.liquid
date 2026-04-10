@@ -21,6 +21,16 @@
   assign fc_modal_buy_now_label = section.settings.modal_buy_now_label | default: 'Buy it now'
   assign fc_sale_badge_label = section.settings.sale_badge_label | default: 'SALE'
   assign fc_new_badge_label = section.settings.new_badge_label | default: 'NEW'
+  assign fc_sold_out_badge_label = section.settings.sold_out_badge_label | default: 'SOLD OUT'
+  assign fc_show_quick_view = section.settings.show_quick_view
+  assign fc_show_badges = section.settings.show_badges
+  assign fc_show_swatches = section.settings.show_swatches
+  assign fc_show_modal_gallery_controls = section.settings.show_modal_gallery_controls
+  assign fc_modal_close_label = section.settings.modal_close_label | default: 'Close quick view'
+  assign fc_modal_prev_label = section.settings.modal_prev_label | default: 'Previous image'
+  assign fc_modal_next_label = section.settings.modal_next_label | default: 'Next image'
+  assign fc_qty_decrease_label = section.settings.qty_decrease_label | default: 'Decrease quantity'
+  assign fc_qty_increase_label = section.settings.qty_increase_label | default: 'Increase quantity'
 -%}
 
 <featured-collection class="fcv2 block relative overflow-hidden" data-section-id="{{ section.id }}">
@@ -178,7 +188,7 @@
               </div>
 
               {% if product.variants.size > 1 %}
-                <div class="fcv2__swatches">
+                {% if fc_show_swatches %}<div class="fcv2__swatches">
                   {% for variant in product.variants limit: 6 %}
                     {% liquid
                       assign swatch_image = variant.featured_media.preview_image | default: product.images[forloop.index0] | default: product.featured_media.preview_image
@@ -227,17 +237,17 @@
 </featured-collection>
 
 <div id="{{ fc_section_id }}-qv-modal" class="fcv2-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Quick view">
-  <button class="fcv2-modal__backdrop" id="{{ fc_section_id }}-qv-backdrop" aria-label="Close quick view"></button>
+  <button class="fcv2-modal__backdrop" id="{{ fc_section_id }}-qv-backdrop" aria-label="{{ fc_modal_close_label }}"></button>
   <div class="fcv2-modal__panel" id="{{ fc_section_id }}-qv-panel" role="document">
     <div class="fcv2-modal__header">
       <div class="fcv2-modal__handle"></div>
-      <button class="fcv2-modal__close" id="{{ fc_section_id }}-qv-close-btn" aria-label="Close quick view">×</button>
+      <button class="fcv2-modal__close" id="{{ fc_section_id }}-qv-close-btn" aria-label="{{ fc_modal_close_label }}">×</button>
     </div>
     <div class="fcv2-modal__scroll">
       <div class="fcv2-modal__gallery-shell">
         <div class="fcv2-modal__gallery-track" id="{{ fc_section_id }}-qv-gallery-track"></div>
-        <button class="fcv2-modal__arrow is-prev" id="{{ fc_section_id }}-qv-prev" aria-label="Previous image">‹</button>
-        <button class="fcv2-modal__arrow is-next" id="{{ fc_section_id }}-qv-next" aria-label="Next image">›</button>
+        <button class="fcv2-modal__arrow is-prev" id="{{ fc_section_id }}-qv-prev" aria-label="{{ fc_modal_prev_label }}">‹</button>
+        <button class="fcv2-modal__arrow is-next" id="{{ fc_section_id }}-qv-next" aria-label="{{ fc_modal_next_label }}">›</button>
         <div class="fcv2-modal__dots" id="{{ fc_section_id }}-qv-dots"></div>
       </div>
       <div class="fcv2-modal__info">
@@ -250,9 +260,9 @@
         <div class="fcv2-modal__qty-row" id="{{ fc_section_id }}-qv-qty-row">
           <span class="fcv2-modal__qty-label">{{ fc_modal_quantity_label }}</span>
           <div class="fcv2-modal__qty-ctrl">
-            <button type="button" id="{{ fc_section_id }}-qv-qty-dec" aria-label="Decrease quantity">−</button>
+            <button type="button" id="{{ fc_section_id }}-qv-qty-dec" aria-label="{{ fc_qty_decrease_label }}">−</button>
             <span id="{{ fc_section_id }}-qv-qty-val">1</span>
-            <button type="button" id="{{ fc_section_id }}-qv-qty-inc" aria-label="Increase quantity">+</button>
+            <button type="button" id="{{ fc_section_id }}-qv-qty-inc" aria-label="{{ fc_qty_increase_label }}">+</button>
           </div>
         </div>
       </div>
@@ -1755,6 +1765,66 @@
       "id": "new_badge_label",
       "label": "New badge label",
       "default": "NEW"
+    },
+    {
+      "type": "text",
+      "id": "sold_out_badge_label",
+      "label": "Sold out badge label",
+      "default": "SOLD OUT"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show card badges",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_view",
+      "label": "Show quick view button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_swatches",
+      "label": "Show card swatches",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_modal_gallery_controls",
+      "label": "Show quick view gallery controls",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "modal_close_label",
+      "label": "Quick view close label",
+      "default": "Close quick view"
+    },
+    {
+      "type": "text",
+      "id": "modal_prev_label",
+      "label": "Quick view previous image label",
+      "default": "Previous image"
+    },
+    {
+      "type": "text",
+      "id": "modal_next_label",
+      "label": "Quick view next image label",
+      "default": "Next image"
+    },
+    {
+      "type": "text",
+      "id": "qty_decrease_label",
+      "label": "Quantity decrease label",
+      "default": "Decrease quantity"
+    },
+    {
+      "type": "text",
+      "id": "qty_increase_label",
+      "label": "Quantity increase label",
+      "default": "Increase quantity"
     }
   ],
   "blocks": [
