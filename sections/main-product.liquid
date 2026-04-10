@@ -1601,7 +1601,98 @@
                       </div>
                     </div>
                   {% when 'variant_picker' %}
-                    <div class="product-builder-block product-builder-block--variant-picker" {{ block.shopify_attributes }}>{{ pdp_variant_picker_markup }}</div>
+                    {%- assign builder_choose_size_text = block.settings.choose_size_text | default: section.settings.choose_size_text | default: 'Choose size' -%}
+                    {%- assign builder_choose_color_text = block.settings.choose_color_text | default: section.settings.choose_color_text | default: 'Choose color' -%}
+                    {%- assign builder_size_chart_text = block.settings.size_chart_text | default: section.settings.size_chart_text -%}
+                    <div class="product-builder-block product-builder-block--variant-picker" {{ block.shopify_attributes }}>
+                      {% unless product.has_only_default_variant %}
+                        <div class="product-variants-wrap" style="padding: 0 1rem; width: 100%; box-sizing: border-box;">
+                          {% for option in product.options_with_values %}
+                            {%- assign option_name_lower = option.name | downcase -%}
+                            <div class="mb-7 product-option-item">
+                              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; gap: 0.5rem;">
+                                {%- assign option_default_label = 'Choose ' | append: option.name -%}
+                                {% if option_name_lower == 'size' or option_name_lower == 'kích thước' %}
+                                  {%- assign option_default_label = builder_choose_size_text -%}
+                                {% elsif option_name_lower == 'color' or option_name_lower == 'colour' or option_name_lower == 'màu' %}
+                                  {%- assign option_default_label = builder_choose_color_text -%}
+                                {% endif %}
+                                <div style="font-family: Arial, sans-serif; font-weight: 700; font-size: 0.9rem; text-transform: uppercase;">
+                                  {{ option.name }} :
+                                  <span id="selected-{{ option.name | handleize }}" data-option-label="{{ option.position }}" data-default-label="{{ option_default_label | escape }}" style="font-weight: 700;">{{ option_default_label }}</span>
+                                </div>
+                                {% if option_name_lower == 'size' or option_name_lower == 'kích thước' %}
+                                  <button type="button" data-action="open-size-chart" style="display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.9rem; background: none; border: none; cursor: pointer; color: #111;">
+                                    Size chart
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 8v8"/><path d="M11 8v4"/><path d="M15 8v8"/></svg>
+                                  </button>
+                                {% endif %}
+                              </div>
+
+                              {% if option_name_lower == 'color' or option_name_lower == 'colour' or option_name_lower == 'màu' %}
+                                <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ option.name }}" data-option-group data-option-position="{{ option.position }}" data-option-name="{{ option_name_lower }}">
+                                  {% for value in option.values %}
+                                    {%- assign swatch_name = value | downcase | strip -%}
+                                    {%- assign swatch_background = '#f5f5f5' -%}
+                                    {%- case swatch_name -%}
+                                      {%- when 'black', 'đen' -%}{%- assign swatch_background = '#1f1f1f' -%}
+                                      {%- when 'white', 'trắng' -%}{%- assign swatch_background = '#f5f5f5' -%}
+                                      {%- when 'red', 'đỏ' -%}{%- assign swatch_background = '#d33636' -%}
+                                      {%- when 'blue', 'xanh dương' -%}{%- assign swatch_background = '#3b82f6' -%}
+                                      {%- when 'green', 'xanh lá' -%}{%- assign swatch_background = '#2e7d32' -%}
+                                      {%- when 'yellow', 'vàng' -%}{%- assign swatch_background = '#f4d03f' -%}
+                                      {%- when 'orange', 'cam' -%}{%- assign swatch_background = '#f97316' -%}
+                                      {%- when 'purple', 'tím' -%}{%- assign swatch_background = '#8b5cf6' -%}
+                                      {%- when 'pink', 'hồng' -%}{%- assign swatch_background = '#ec4899' -%}
+                                      {%- when 'brown', 'nâu' -%}{%- assign swatch_background = '#8b5a2b' -%}
+                                      {%- when 'coffee', 'coffee brown', 'nâu cà phê', 'coffee-brown' -%}{%- assign swatch_background = '#6f4e37' -%}
+                                      {%- when 'grey', 'gray', 'xám' -%}{%- assign swatch_background = '#9ca3af' -%}
+                                      {%- when 'navy' -%}{%- assign swatch_background = '#1e3a8a' -%}
+                                      {%- when 'beige' -%}{%- assign swatch_background = '#d6c6a8' -%}
+                                      {%- when 'cream', 'kem' -%}{%- assign swatch_background = '#f5f1e6' -%}
+                                      {%- when 'khaki' -%}{%- assign swatch_background = '#c3b091' -%}
+                                      {%- when 'olive' -%}{%- assign swatch_background = '#6b8e23' -%}
+                                      {%- when 'teal' -%}{%- assign swatch_background = '#0f766e' -%}
+                                      {%- when 'cyan' -%}{%- assign swatch_background = '#06b6d4' -%}
+                                      {%- when 'maroon' -%}{%- assign swatch_background = '#7f1d1d' -%}
+                                      {%- when 'burgundy', 'wine' -%}{%- assign swatch_background = '#7c2d12' -%}
+                                      {%- when 'coral' -%}{%- assign swatch_background = '#fb7185' -%}
+                                      {%- when 'salmon' -%}{%- assign swatch_background = '#fda4af' -%}
+                                      {%- when 'gold' -%}{%- assign swatch_background = '#d4af37' -%}
+                                      {%- when 'silver' -%}{%- assign swatch_background = '#c0c0c0' -%}
+                                      {%- when 'tan' -%}{%- assign swatch_background = '#d2b48c' -%}
+                                      {%- when 'ivory' -%}{%- assign swatch_background = '#fffff0' -%}
+                                      {%- when 'lavender' -%}{%- assign swatch_background = '#c4b5fd' -%}
+                                      {%- when 'mint' -%}{%- assign swatch_background = '#a7f3d0' -%}
+                                      {%- when 'charcoal' -%}{%- assign swatch_background = '#36454f' -%}
+                                      {%- when 'ash' -%}{%- assign swatch_background = '#b2beb5' -%}
+                                      {%- when 'sand' -%}{%- assign swatch_background = '#c2b280' -%}
+                                      {%- when 'sage' -%}{%- assign swatch_background = '#9caf88' -%}
+                                    {%- endcase -%}
+                                    <button type="button" class="color-swatch" style="background-color: {{ swatch_background }}; border: 1px solid #ddd;" title="{{ value }}" aria-label="{{ option.name }}: {{ value }}" aria-pressed="false" data-option-position="{{ option.position }}" data-option-value="{{ value }}"></button>
+                                  {% endfor %}
+                                </div>
+                              {% else %}
+                                <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="{{ option.name }}" data-option-group data-option-position="{{ option.position }}" data-option-name="{{ option_name_lower }}">
+                                  {% for value in option.values %}
+                                    <button type="button" class="size-btn" style="min-width: 64px; height: 48px; border: 1px solid #111; border-radius: 4px; font-weight: 500; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; background: transparent; cursor: pointer; transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;" data-option-position="{{ option.position }}" data-option-value="{{ value }}" aria-label="{{ option.name }}: {{ value }}" aria-pressed="false">{{ value }}</button>
+                                  {% endfor %}
+                                </div>
+                              {% endif %}
+                            </div>
+                          {% endfor %}
+                        </div>
+                      {% endunless %}
+                      <dialog id="size-chart-modal" style="padding: 2rem; border-radius: 12px; border: 1px solid #eaeaea; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 600px; z-index: 100;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                          <h2 style="font-weight: 700; font-size: 1.2rem; margin: 0;">Size Chart</h2>
+                          <button data-action="close-size-chart" style="background: none; border: none; font-size: 2rem; cursor: pointer; line-height: 1;">&times;</button>
+                        </div>
+                        <div id="size-chart-content" style="font-size: 0.95rem; line-height: 1.6;">
+                          {{ builder_size_chart_text | default: "Please select a size chart text block in the Theme Editor." }}
+                        </div>
+                      </dialog>
+                    </div>
                   {% when 'quantity_selector' %}
                     <div class="product-builder-block product-builder-block--quantity" {{ block.shopify_attributes }}>{{ pdp_quantity_block_markup }}</div>
                   {% when 'buy_buttons' %}
@@ -1671,7 +1762,45 @@
                       </div>
                     </div>
                   {% when 'trust_badges' %}
-                    <div class="product-builder-block product-builder-block--trust" {{ block.shopify_attributes }}>{{ pdp_trust_badges_block_markup }}</div>
+                    {%- assign builder_delivery_text = block.settings.delivery_text | default: section.settings.delivery_text -%}
+                    {%- assign builder_returns_text = block.settings.returns_text | default: section.settings.returns_text -%}
+                    <div class="product-builder-block product-builder-block--trust" {{ block.shopify_attributes }}>
+                      {%- assign has_delivery_text = false -%}
+                      {%- assign has_returns_text = false -%}
+                      {%- if builder_delivery_text != blank -%}{%- assign has_delivery_text = true -%}{%- endif -%}
+                      {%- if builder_returns_text != blank -%}{%- assign has_returns_text = true -%}{%- endif -%}
+                      {%- if has_delivery_text or has_returns_text -%}
+                        <div class="product-benefits-wrap" style="display: flex; gap: 1rem; justify-content: space-between; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 1.5rem 1rem; margin-bottom: 3rem; width: 100%; box-sizing: border-box;">
+                          {%- if has_delivery_text -%}
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                              <span style="display:inline-flex; width:24px; height:24px; align-items:center; justify-content:center;">
+                                {%- if section.settings.delivery_icon_image != blank -%}
+                                  {{ section.settings.delivery_icon_image | image_url: width: 48 | image_tag: loading: 'lazy', alt: 'Delivery icon', widths: '24,48', sizes: '24px', style: 'width:24px;height:24px;object-fit:contain;display:block;' }}
+                                {%- elsif section.settings.delivery_icon_svg != blank -%}
+                                  {{ section.settings.delivery_icon_svg }}
+                                {%- endif -%}
+                              </span>
+                              <span style="font-size: 0.95rem;">{{ builder_delivery_text }}</span>
+                            </div>
+                          {%- endif -%}
+                          {%- if has_delivery_text and has_returns_text -%}
+                            <div style="width: 1px; height: 24px; background-color: #eee;"></div>
+                          {%- endif -%}
+                          {%- if has_returns_text -%}
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                              <span style="display:inline-flex; width:24px; height:24px; align-items:center; justify-content:center;">
+                                {%- if section.settings.returns_icon_image != blank -%}
+                                  {{ section.settings.returns_icon_image | image_url: width: 48 | image_tag: loading: 'lazy', alt: 'Returns icon', widths: '24,48', sizes: '24px', style: 'width:24px;height:24px;object-fit:contain;display:block;' }}
+                                {%- elsif section.settings.returns_icon_svg != blank -%}
+                                  {{ section.settings.returns_icon_svg }}
+                                {%- endif -%}
+                              </span>
+                              <span style="font-size: 0.95rem; padding: 2px 4px; border-radius: 4px;">{{ builder_returns_text }}</span>
+                            </div>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
                   {% when 'description' %}
                     <div class="pw-desc-inline" style="margin-top: 0.75rem; padding: 0 1rem; max-width: 100%; box-sizing: border-box;" {{ block.shopify_attributes }}>
                       <h3 style="font-family: var(--font-heading, sans-serif); font-weight: 800; font-size: 1.1rem; letter-spacing: 0em; text-transform: uppercase; margin: 0 0 1rem; color: #000;">{{ block.settings.heading | default: 'DESCRIPTION' }}</h3>
@@ -1710,7 +1839,57 @@
                       <div class="product-custom-liquid-block" style="padding: 0 1rem; margin: 0.5rem 0 1rem;" {{ block.shopify_attributes }}>{{ block.settings.custom_liquid }}</div>
                     {%- endif -%}
                   {% when 'related_products' %}
-                    <div class="product-builder-block product-builder-block--related" {{ block.shopify_attributes }}>{{ pdp_related_products_markup }}</div>
+                    {%- assign builder_pairs_collection = block.settings.pairs_collection | default: section.settings.pairs_collection -%}
+                    {%- assign pairs_collection_obj = blank -%}
+                    {%- if builder_pairs_collection != blank -%}
+                      {%- assign pairs_collection_obj = collections[builder_pairs_collection] -%}
+                    {%- endif -%}
+                    {%- if pairs_collection_obj == blank and product.collections.size > 0 -%}
+                      {%- assign pairs_collection_obj = product.collections.first -%}
+                    {%- endif -%}
+                    {%- if pairs_collection_obj == blank -%}
+                      {%- assign pairs_collection_obj = collections.all -%}
+                    {%- endif -%}
+                    {%- assign pairs_max = block.settings.pairs_limit | default: section.settings.pairs_limit | default: 12 | plus: 0 -%}
+                    {%- assign pairs_initial = block.settings.pairs_initial | default: section.settings.pairs_initial | default: 3 | plus: 0 -%}
+                    {%- assign pairs_heading_text = block.settings.pairs_heading | default: section.settings.pairs_heading | default: 'PAIRS WELL WITH' -%}
+                    {%- assign pairs_more_text = block.settings.pairs_more_label | default: section.settings.pairs_more_label | default: 'More' -%}
+                    {%- assign pairs_less_text = block.settings.pairs_less_label | default: section.settings.pairs_less_label | default: 'Less' -%}
+                    {%- assign shown_pairs = 0 -%}
+                    <div class="product-builder-block product-builder-block--related" {{ block.shopify_attributes }}>
+                      {%- if pairs_collection_obj != blank and pairs_collection_obj.products_count > 0 -%}
+                        <div class="pw-container" data-pw-grid-wrap data-initial-visible="{{ pairs_initial }}" data-product-tags="{{ product.tags | join: '||' | escape }}" style="margin-top: 1rem; padding: 0 1rem 1rem;">
+                          <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <h3 style="margin: 0; font-size: 1.05rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 800; color: #111;">{{ pairs_heading_text | escape }}</h3>
+                          </div>
+                          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.65rem;">
+                            {%- for p in pairs_collection_obj.products limit: pairs_max -%}
+                              {%- if p.id != product.id -%}
+                                {%- assign shown_pairs = shown_pairs | plus: 1 -%}
+                                <a href="{{ p.url }}" class="pw-card" data-pw-item data-pw-tags="{{ p.tags | join: '||' | escape }}" {% if shown_pairs > pairs_initial %}hidden{% endif %} style="text-decoration: none; color: inherit; border: 1px solid #ececec; border-radius: 10px; overflow: hidden; background: #fff;">
+                                  <div style="aspect-ratio: 3/4; background: #f7f7f7;">
+                                    {%- if p.featured_image -%}
+                                      <img src="{{ p.featured_image | image_url: width: 420 }}" alt="{{ p.title | escape }}" loading="lazy" width="{{ p.featured_image.width }}" height="{{ p.featured_image.height }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                                    {%- else -%}
+                                      {{ 'product-1' | placeholder_svg_tag: 'w-full h-full text-gray-300 object-contain' }}
+                                    {%- endif -%}
+                                  </div>
+                                  <div style="padding: 0.55rem 0.6rem 0.65rem;">
+                                    <p style="margin: 0 0 0.35rem; font-size: 0.72rem; line-height: 1.35; color: #111; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ p.title }}</p>
+                                    <p style="margin: 0; font-size: 0.73rem; font-weight: 700; color: #111;">{{ p.price | money }}</p>
+                                  </div>
+                                </a>
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </div>
+                          {%- if shown_pairs > pairs_initial -%}
+                            <div style="display: flex; justify-content: center; align-items: center; width: 100%; margin-top: 0.9rem;">
+                              <button type="button" data-pw-more-btn data-more-label="{{ pairs_more_text | escape }}" data-less-label="{{ pairs_less_text | escape }}" style="display: inline-flex; align-items: center; justify-content: center; text-align: center; min-width: 160px; height: 38px; border: 1px solid #111; border-radius: 999px; background: #fff; color: #111; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; padding: 0 1rem; line-height: 1; -webkit-tap-highlight-color: transparent; appearance: none;">{{ pairs_more_text | escape }}</button>
+                            </div>
+                          {%- endif -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
                   {% when 'social_links' %}
                     {% assign social_blocks = section.blocks | where: "type", "social_icon" %}
                     {% if social_blocks.size > 0 %}
@@ -3734,7 +3913,26 @@
       "type": "variant_picker",
       "name": "Variant picker",
       "limit": 1,
-      "settings": []
+      "settings": [
+        {
+          "type": "text",
+          "id": "choose_size_text",
+          "label": "Choose size text",
+          "default": "Choose size"
+        },
+        {
+          "type": "text",
+          "id": "choose_color_text",
+          "label": "Choose color text",
+          "default": "Choose color"
+        },
+        {
+          "type": "richtext",
+          "id": "size_chart_text",
+          "label": "Size chart content",
+          "default": "<p>S (Chest: 36\", Length: 28\")</p><p>M (Chest: 38\", Length: 29\")</p><p>L (Chest: 40\", Length: 30\")</p>"
+        }
+      ]
     },
     {
       "type": "quantity_selector",
@@ -3771,13 +3969,68 @@
       "type": "trust_badges",
       "name": "Trust badges",
       "limit": 1,
-      "settings": []
+      "settings": [
+        {
+          "type": "text",
+          "id": "delivery_text",
+          "label": "Delivery text",
+          "default": "Free delivery within 2 days"
+        },
+        {
+          "type": "text",
+          "id": "returns_text",
+          "label": "Returns text",
+          "default": "Free + easy returns"
+        }
+      ]
     },
     {
       "type": "related_products",
       "name": "Related products",
       "limit": 1,
-      "settings": []
+      "settings": [
+        {
+          "type": "collection",
+          "id": "pairs_collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "pairs_heading",
+          "label": "Heading",
+          "default": "PAIRS WELL WITH"
+        },
+        {
+          "type": "range",
+          "id": "pairs_limit",
+          "label": "Max products",
+          "min": 2,
+          "max": 12,
+          "step": 1,
+          "default": 12
+        },
+        {
+          "type": "range",
+          "id": "pairs_initial",
+          "label": "Initial visible on mobile",
+          "min": 3,
+          "max": 12,
+          "step": 3,
+          "default": 3
+        },
+        {
+          "type": "text",
+          "id": "pairs_more_label",
+          "label": "More label",
+          "default": "More"
+        },
+        {
+          "type": "text",
+          "id": "pairs_less_label",
+          "label": "Less label",
+          "default": "Less"
+        }
+      ]
     },
     {
       "type": "social_links",
