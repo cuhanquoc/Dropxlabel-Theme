@@ -1,22 +1,46 @@
+{%- assign has_intro_blocks = false -%}
+{%- assign has_faq_blocks = false -%}
+{%- for block in section.blocks -%}
+  {%- if block.type == 'intro_heading' or block.type == 'intro_body' -%}
+    {%- assign has_intro_blocks = true -%}
+  {%- endif -%}
+  {%- if block.type == 'category_header' or block.type == 'faq_item' -%}
+    {%- assign has_faq_blocks = true -%}
+  {%- endif -%}
+{%- endfor -%}
+
 <help-center-section class="block">
   <!-- ── Section with white bg and generous padding ── -->
   <div style="background-color: {{ section.settings.bg_color | default: '#ffffff' }}; padding-top: 3rem; padding-bottom: 0;" class="md:py-20">
     <div class="hc-shell max-w-[720px] mx-auto px-5 md:px-8">
 
       <div class="hc-intro">
-        <!-- ── Heading ── -->
-        <h2 style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 500; line-height: 1.1; color: #0a0a0a; margin-bottom: 1rem; font-family: var(--font-heading, 'Rubik', sans-serif);">
-          {{ section.settings.heading | default: 'Customer Help Center' }}
-        </h2>
-        <p style="font-size: 0.92rem; line-height: 1.5; color: #666; margin-bottom: 2rem; max-width: 600px; font-family: var(--font-body, 'Inter', sans-serif);">
-          {{ section.settings.description | default: "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here." }}
-        </p>
+        {% if has_intro_blocks %}
+          {% for block in section.blocks %}
+            {% if block.type == 'intro_heading' %}
+              <h2 style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 500; line-height: 1.1; color: #0a0a0a; margin-bottom: 1rem; font-family: var(--font-heading, 'Rubik', sans-serif);" {{ block.shopify_attributes }}>
+                {{ block.settings.text | default: section.settings.heading | default: 'Customer Help Center' }}
+              </h2>
+            {% elsif block.type == 'intro_body' %}
+              <p style="font-size: 0.92rem; line-height: 1.5; color: #666; margin-bottom: 2rem; max-width: 600px; font-family: var(--font-body, 'Inter', sans-serif);" {{ block.shopify_attributes }}>
+                {{ block.settings.text | default: section.settings.description | default: "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here." }}
+              </p>
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <h2 style="font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 500; line-height: 1.1; color: #0a0a0a; margin-bottom: 1rem; font-family: var(--font-heading, 'Rubik', sans-serif);">
+            {{ section.settings.heading | default: 'Customer Help Center' }}
+          </h2>
+          <p style="font-size: 0.92rem; line-height: 1.5; color: #666; margin-bottom: 2rem; max-width: 600px; font-family: var(--font-body, 'Inter', sans-serif);">
+            {{ section.settings.description | default: "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here." }}
+          </p>
+        {% endif %}
       </div>
 
       <!-- ── FAQ Items ── -->
       <div class="hc-faq-list" style="overflow: visible;">
 
-        {%- if section.blocks.size > 0 -%}
+        {%- if has_faq_blocks -%}
           {%- comment -%} Block-based rendering — merchant adds FAQ items via Theme Editor {%- endcomment -%}
           {%- for block in section.blocks -%}
             {%- if block.type == "category_header" -%}
@@ -457,6 +481,32 @@
   ],
   "blocks": [
     {
+      "type": "intro_heading",
+      "name": "Intro heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Heading text",
+          "default": "Customer Help Center"
+        }
+      ]
+    },
+    {
+      "type": "intro_body",
+      "name": "Intro body",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description text",
+          "default": "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here."
+        }
+      ]
+    },
+    {
       "type": "category_header",
       "name": "Category Header",
       "settings": [
@@ -491,6 +541,12 @@
     {
       "name": "Customer Help Center",
       "blocks": [
+        {
+          "type": "intro_heading"
+        },
+        {
+          "type": "intro_body"
+        },
         {
           "type": "faq_item",
           "settings": {

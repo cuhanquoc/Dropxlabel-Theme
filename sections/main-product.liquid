@@ -1543,18 +1543,6 @@
           {% endcapture %}
 
           {% if has_pdp_builder_core %}
-            <dialog id="size-chart-modal" style="padding: 2rem; border-radius: 12px; border: 1px solid #eaeaea; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 600px; z-index: 100;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h2 style="font-weight: 700; font-size: 1.2rem; margin: 0;">Size Chart</h2>
-                <button data-action="close-size-chart" style="background: none; border: none; font-size: 2rem; cursor: pointer; line-height: 1;">&times;</button>
-              </div>
-              <div id="size-chart-content" style="font-size: 0.95rem; line-height: 1.6;">
-                {{ section.settings.size_chart_text | default: "Please select a size chart text block in the Theme Editor." }}
-              </div>
-            </dialog>
-          {% endif %}
-
-          {% if has_pdp_builder_core %}
             <div class="product-builder-stack" style="display: grid; gap: 1rem;">
               {% for block in section.blocks %}
                 {% case block.type %}

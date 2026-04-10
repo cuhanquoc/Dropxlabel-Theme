@@ -279,6 +279,64 @@
     },
     "customer-help-center": {
       "type": "customer-help-center",
+      "blocks": {
+        "chc_intro_heading": {
+          "type": "intro_heading",
+          "settings": {
+            "text": "Customer Help Center"
+          }
+        },
+        "chc_intro_body": {
+          "type": "intro_body",
+          "settings": {
+            "text": "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here."
+          }
+        },
+        "chc_faq_1": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What is your return and exchange policy?",
+            "answer": "We offer a hassle-free return and exchange policy within 30 days of delivery. Items must be unused, in original packaging, and with tags intact. For exchanges, simply initiate a request through our return portal or contact support."
+          }
+        },
+        "chc_faq_2": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What if I received a damaged or incorrect item?",
+            "answer": "If you receive a damaged or incorrect item, please contact our support team within 48 hours of delivery with photos of the issue. We'll arrange a replacement or full refund as quickly as possible."
+          }
+        },
+        "chc_faq_3": {
+          "type": "faq_item",
+          "settings": {
+            "question": "How can I track my order?",
+            "answer": "Once your order is shipped, you'll receive a confirmation email with a tracking number. You can use this number on our website or the carrier's site to track your package in real time."
+          }
+        },
+        "chc_faq_4": {
+          "type": "faq_item",
+          "settings": {
+            "question": "What payment methods do you accept?",
+            "answer": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, Google Pay, and Shop Pay. All transactions are secured with SSL encryption."
+          }
+        },
+        "chc_faq_5": {
+          "type": "faq_item",
+          "settings": {
+            "question": "Can I modify or cancel my order after placing it?",
+            "answer": "You can modify or cancel your order within 1 hour of placing it by contacting our support team. After that window, orders enter processing and cannot be changed."
+          }
+        }
+      },
+      "block_order": [
+        "chc_intro_heading",
+        "chc_intro_body",
+        "chc_faq_1",
+        "chc_faq_2",
+        "chc_faq_3",
+        "chc_faq_4",
+        "chc_faq_5"
+      ],
       "settings": {
         "heading": "Customer Help Center",
         "description": "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here.",
