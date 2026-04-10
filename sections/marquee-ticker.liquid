@@ -2,6 +2,13 @@
 
 {% assign section_bg = section.settings.bg_color | default: '#0a0a0a' %}
 {% assign section_heading = section.settings.heading | default: 'BIKINIES' %}
+{% assign has_intro_blocks = false %}
+{% for block in section.blocks %}
+  {% if block.type == 'intro_heading' or block.type == 'intro_description' or block.type == 'intro_cta' %}
+    {% assign has_intro_blocks = true %}
+    {% break %}
+  {% endif %}
+{% endfor %}
 
 <section
   id="mt-gallery-{{ section.id }}"
@@ -11,36 +18,68 @@
   <div class="mx-auto max-w-[1680px] px-4 py-14 md:px-8 md:py-16 xl:px-10 xl:py-20">
     <div class="grid gap-10 xl:grid-cols-[minmax(320px,0.72fr)_minmax(0,1.28fr)] xl:gap-12 2xl:gap-16">
       <div class="xl:sticky xl:top-28">
-        <h2 class="font-heading text-[clamp(3.25rem,7vw,5.75rem)] font-medium uppercase tracking-[-0.06em] leading-[0.88] text-white">
-          {{ section_heading }}
-        </h2>
+        {% if has_intro_blocks %}
+          {% for block in section.blocks %}
+            {% case block.type %}
+              {% when 'intro_heading' %}
+                <h2 class="font-heading text-[clamp(3.25rem,7vw,5.75rem)] font-medium uppercase tracking-[-0.06em] leading-[0.88] text-white" {{ block.shopify_attributes }}>
+                  {{ block.settings.text | default: section_heading }}
+                </h2>
+              {% when 'intro_description' %}
+                <p class="{% if block.settings.tone == 'secondary' %}mt-4 text-white/60{% else %}mt-6 text-white/68{% endif %} max-w-[38rem] font-body text-base leading-[1.65] md:text-[1.05rem]" {{ block.shopify_attributes }}>
+                  {{ block.settings.text }}
+                </p>
+              {% when 'intro_cta' %}
+                {% if block.settings.text != blank %}
+                  <a
+                    href="{{ block.settings.url | default: section.settings.cta_url | default: '/collections/all' }}"
+                    class="group mt-9 inline-flex min-h-[56px] items-center gap-4 rounded-full border border-white/18 bg-transparent px-2 py-2 pr-7 text-white transition-[border-color,background-color,transform] duration-300 hover:border-white/28 hover:bg-white/5"
+                    {{ block.shopify_attributes }}
+                  >
+                    <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-black transition-transform duration-300 group-hover:scale-105">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10" />
+                      </svg>
+                    </span>
+                    <span class="font-body text-[0.92rem] font-semibold uppercase tracking-[0.14em]">
+                      {{ block.settings.text }}
+                    </span>
+                  </a>
+                {% endif %}
+            {% endcase %}
+          {% endfor %}
+        {% else %}
+          <h2 class="font-heading text-[clamp(3.25rem,7vw,5.75rem)] font-medium uppercase tracking-[-0.06em] leading-[0.88] text-white">
+            {{ section_heading }}
+          </h2>
 
-        {% if section.settings.description_1 != blank %}
-          <p class="mt-6 max-w-[38rem] font-body text-base leading-[1.65] text-white/68 md:text-[1.05rem]">
-            {{ section.settings.description_1 }}
-          </p>
-        {% endif %}
+          {% if section.settings.description_1 != blank %}
+            <p class="mt-6 max-w-[38rem] font-body text-base leading-[1.65] text-white/68 md:text-[1.05rem]">
+              {{ section.settings.description_1 }}
+            </p>
+          {% endif %}
 
-        {% if section.settings.description_2 != blank %}
-          <p class="mt-4 max-w-[38rem] font-body text-base leading-[1.65] text-white/60 md:text-[1.05rem]">
-            {{ section.settings.description_2 }}
-          </p>
-        {% endif %}
+          {% if section.settings.description_2 != blank %}
+            <p class="mt-4 max-w-[38rem] font-body text-base leading-[1.65] text-white/60 md:text-[1.05rem]">
+              {{ section.settings.description_2 }}
+            </p>
+          {% endif %}
 
-        {% if section.settings.cta_text != blank %}
-          <a
-            href="{{ section.settings.cta_url | default: '/collections/all' }}"
-            class="group mt-9 inline-flex min-h-[56px] items-center gap-4 rounded-full border border-white/18 bg-transparent px-2 py-2 pr-7 text-white transition-[border-color,background-color,transform] duration-300 hover:border-white/28 hover:bg-white/5"
-          >
-            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-black transition-transform duration-300 group-hover:scale-105">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10" />
-              </svg>
-            </span>
-            <span class="font-body text-[0.92rem] font-semibold uppercase tracking-[0.14em]">
-              {{ section.settings.cta_text }}
-            </span>
-          </a>
+          {% if section.settings.cta_text != blank %}
+            <a
+              href="{{ section.settings.cta_url | default: '/collections/all' }}"
+              class="group mt-9 inline-flex min-h-[56px] items-center gap-4 rounded-full border border-white/18 bg-transparent px-2 py-2 pr-7 text-white transition-[border-color,background-color,transform] duration-300 hover:border-white/28 hover:bg-white/5"
+            >
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-white text-black transition-transform duration-300 group-hover:scale-105">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4.5 11.5L11.5 4.5M11.5 4.5H6M11.5 4.5V10" />
+                </svg>
+              </span>
+              <span class="font-body text-[0.92rem] font-semibold uppercase tracking-[0.14em]">
+                {{ section.settings.cta_text }}
+              </span>
+            </a>
+          {% endif %}
         {% endif %}
       </div>
 
@@ -180,8 +219,60 @@
       "info": "Dark backgrounds work best with light-colored card accents"
     }
   ],
-  "max_blocks": 8,
+  "max_blocks": 12,
   "blocks": [
+    {
+      "type": "intro_heading",
+      "name": "Intro heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Heading text",
+          "default": "BIKINIES"
+        }
+      ]
+    },
+    {
+      "type": "intro_description",
+      "name": "Intro description",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description text"
+        },
+        {
+          "type": "select",
+          "id": "tone",
+          "label": "Tone",
+          "options": [
+            { "value": "primary", "label": "Primary" },
+            { "value": "secondary", "label": "Secondary" }
+          ],
+          "default": "primary"
+        }
+      ]
+    },
+    {
+      "type": "intro_cta",
+      "name": "Intro CTA",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Button text",
+          "default": "SHOP NOW"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Button URL"
+        }
+      ]
+    },
     {
       "type": "product_card",
       "name": "Product Card",

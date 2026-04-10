@@ -197,6 +197,26 @@
     "marquee_ticker_6CKgye": {
       "type": "marquee-ticker",
       "blocks": {
+        "marquee_intro_heading": {
+          "type": "intro_heading",
+          "settings": {
+            "text": "bikinies"
+          }
+        },
+        "marquee_intro_description_1": {
+          "type": "intro_description",
+          "settings": {
+            "text": "Explore our collection of top-selling fashion favorites, featuring the latest trends and must-have styles loved by our customers.",
+            "tone": "primary"
+          }
+        },
+        "marquee_intro_cta": {
+          "type": "intro_cta",
+          "settings": {
+            "text": "SHOP NOW",
+            "url": "shopify://collections/bikini"
+          }
+        },
         "product_card_YqGwLD": {
           "type": "product_card",
           "settings": {
@@ -239,6 +259,9 @@
         }
       },
       "block_order": [
+        "marquee_intro_heading",
+        "marquee_intro_description_1",
+        "marquee_intro_cta",
         "product_card_YqGwLD",
         "product_card_ceXyFx",
         "product_card_imJtbT",
