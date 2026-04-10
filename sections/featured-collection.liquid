@@ -15,18 +15,50 @@
   assign fc_heading_line_2 = section.settings.heading_line_2 | default: 'PRODUCTS'
   assign fc_eyebrow = section.settings.eyebrow | default: 'Curated selections from our digital atelier.'
   assign fc_helper_text = section.settings.helper_text | default: 'Hover cards to reveal Quick View • Tap thumbnails to switch color'
+  assign fc_quick_view_label = section.settings.quick_view_label | default: 'Quick View'
+  assign fc_modal_quantity_label = section.settings.modal_quantity_label | default: 'Quantity'
+  assign fc_modal_add_to_cart_label = section.settings.modal_add_to_cart_label | default: 'Add to cart'
+  assign fc_modal_buy_now_label = section.settings.modal_buy_now_label | default: 'Buy it now'
+  assign fc_sale_badge_label = section.settings.sale_badge_label | default: 'SALE'
+  assign fc_new_badge_label = section.settings.new_badge_label | default: 'NEW'
 -%}
 
 <featured-collection class="fcv2 block relative overflow-hidden" data-section-id="{{ section.id }}">
   <div class="fcv2__header">
-    <div class="fcv2__heading-row">
-      <span class="fcv2__index">01</span>
-      <h2 class="fcv2__heading" aria-label="{{ fc_heading_line_1 }} {{ fc_heading_line_2 }}">
-        <span class="fcv2__heading-line fcv2__heading-line--top">{{ fc_heading_line_1 }}</span>
-        <span class="fcv2__heading-line fcv2__heading-line--bottom">{{ fc_heading_line_2 }}</span>
-      </h2>
-    </div>
-    <p class="fcv2__eyebrow">{{ fc_eyebrow }}</p>
+    {% if section.blocks.size > 0 %}
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'section_heading' %}
+            <div class="fcv2__heading-row" {{ block.shopify_attributes }}>
+              {% if block.settings.section_index != blank %}
+                <span class="fcv2__index">{{ block.settings.section_index }}</span>
+              {% endif %}
+              <h2 class="fcv2__heading" aria-label="{{ block.settings.heading_line_1 | default: fc_heading_line_1 }} {{ block.settings.heading_line_2 | default: fc_heading_line_2 }}">
+                <span class="fcv2__heading-line fcv2__heading-line--top">{{ block.settings.heading_line_1 | default: fc_heading_line_1 }}</span>
+                <span class="fcv2__heading-line fcv2__heading-line--bottom">{{ block.settings.heading_line_2 | default: fc_heading_line_2 }}</span>
+              </h2>
+            </div>
+          {% when 'section_eyebrow' %}
+            <p class="fcv2__eyebrow" {{ block.shopify_attributes }}>{{ block.settings.text | default: fc_eyebrow }}</p>
+          {% when 'helper_note' %}
+            {% if block.settings.text != blank %}
+              <p class="fcv2__eyebrow" style="margin-top: 0.9rem; color:#7a7978;" {{ block.shopify_attributes }}>{{ block.settings.text }}</p>
+            {% endif %}
+        {% endcase %}
+      {% endfor %}
+    {% else %}
+      <div class="fcv2__heading-row">
+        <span class="fcv2__index">01</span>
+        <h2 class="fcv2__heading" aria-label="{{ fc_heading_line_1 }} {{ fc_heading_line_2 }}">
+          <span class="fcv2__heading-line fcv2__heading-line--top">{{ fc_heading_line_1 }}</span>
+          <span class="fcv2__heading-line fcv2__heading-line--bottom">{{ fc_heading_line_2 }}</span>
+        </h2>
+      </div>
+      <p class="fcv2__eyebrow">{{ fc_eyebrow }}</p>
+      {% if fc_helper_text != blank %}
+        <p class="fcv2__eyebrow" style="margin-top: 0.9rem; color:#7a7978;">{{ fc_helper_text }}</p>
+      {% endif %}
+    {% endif %}
     <div class="fcv2__header-rule"></div>
   </div>
 
@@ -78,9 +110,9 @@
           {%- assign main_image = featured_variant.featured_media.preview_image | default: product.featured_media.preview_image -%}
           {%- assign badge_label = '' -%}
           {%- if product.compare_at_price_max > product.price -%}
-            {%- assign badge_label = 'SALE' -%}
+            {%- assign badge_label = fc_sale_badge_label -%}
           {%- elsif product.tags contains 'new' or product.tags contains 'NEW' -%}
-            {%- assign badge_label = 'NEW' -%}
+            {%- assign badge_label = fc_new_badge_label -%}
           {%- endif -%}
 
           <article
@@ -121,8 +153,8 @@
                 </div>
               {% endif %}
 
-              <button type="button" class="fcv2__quick-view" data-card-id="{{ product.id }}" aria-label="Quick view {{ product.title | escape }}">
-                <span>Quick View</span>
+              <button type="button" class="fcv2__quick-view" data-card-id="{{ product.id }}" aria-label="{{ fc_quick_view_label }} {{ product.title | escape }}">
+                <span>{{ fc_quick_view_label }}</span>
                 <span class="fcv2__quick-view-plus" aria-hidden="true">+</span>
               </button>
             </div>
@@ -216,7 +248,7 @@
         </div>
         <div class="fcv2-modal__variants" id="{{ fc_section_id }}-qv-variants"></div>
         <div class="fcv2-modal__qty-row" id="{{ fc_section_id }}-qv-qty-row">
-          <span class="fcv2-modal__qty-label">Quantity</span>
+          <span class="fcv2-modal__qty-label">{{ fc_modal_quantity_label }}</span>
           <div class="fcv2-modal__qty-ctrl">
             <button type="button" id="{{ fc_section_id }}-qv-qty-dec" aria-label="Decrease quantity">−</button>
             <span id="{{ fc_section_id }}-qv-qty-val">1</span>
@@ -226,8 +258,8 @@
       </div>
     </div>
     <div class="fcv2-modal__footer">
-      <button type="button" class="fcv2-modal__button is-secondary" id="{{ fc_section_id }}-qv-atc">Add to cart</button>
-      <button type="button" class="fcv2-modal__button is-primary" id="{{ fc_section_id }}-qv-bin">Buy it now</button>
+      <button type="button" class="fcv2-modal__button is-secondary" id="{{ fc_section_id }}-qv-atc">{{ fc_modal_add_to_cart_label }}</button>
+      <button type="button" class="fcv2-modal__button is-primary" id="{{ fc_section_id }}-qv-bin">{{ fc_modal_buy_now_label }}</button>
     </div>
   </div>
 </div>
@@ -1687,11 +1719,111 @@
       "id": "helper_text",
       "label": "Helper text",
       "default": "Hover cards to reveal Quick View • Tap thumbnails to switch color"
+    },
+    {
+      "type": "text",
+      "id": "quick_view_label",
+      "label": "Quick view label",
+      "default": "Quick View"
+    },
+    {
+      "type": "text",
+      "id": "modal_quantity_label",
+      "label": "Quick view quantity label",
+      "default": "Quantity"
+    },
+    {
+      "type": "text",
+      "id": "modal_add_to_cart_label",
+      "label": "Quick view add to cart label",
+      "default": "Add to cart"
+    },
+    {
+      "type": "text",
+      "id": "modal_buy_now_label",
+      "label": "Quick view buy now label",
+      "default": "Buy it now"
+    },
+    {
+      "type": "text",
+      "id": "sale_badge_label",
+      "label": "Sale badge label",
+      "default": "SALE"
+    },
+    {
+      "type": "text",
+      "id": "new_badge_label",
+      "label": "New badge label",
+      "default": "NEW"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "section_heading",
+      "name": "Section heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "section_index",
+          "label": "Section index",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "heading_line_1",
+          "label": "Heading line 1",
+          "default": "TRENDING"
+        },
+        {
+          "type": "text",
+          "id": "heading_line_2",
+          "label": "Heading line 2",
+          "default": "PRODUCTS"
+        }
+      ]
+    },
+    {
+      "type": "section_eyebrow",
+      "name": "Section eyebrow",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Eyebrow text",
+          "default": "Curated selections from our digital atelier."
+        }
+      ]
+    },
+    {
+      "type": "helper_note",
+      "name": "Helper note",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Helper text",
+          "default": "Hover cards to reveal Quick View • Tap thumbnails to switch color"
+        }
+      ]
     }
   ],
   "presets": [
     {
-      "name": "Featured Collection"
+      "name": "Featured Collection",
+      "blocks": [
+        {
+          "type": "section_heading"
+        },
+        {
+          "type": "section_eyebrow"
+        },
+        {
+          "type": "helper_note"
+        }
+      ]
     }
   ]
 }

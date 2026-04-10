@@ -72,6 +72,8 @@ Last updated: 2026-04-10 (Asia/Ho_Chi_Minh)
 
 ## Recent Completed Work
 
+21. Phase 3 homepage editability pass: `featured-collection` now supports editor-visible header blocks (`section_heading`, `section_eyebrow`, `helper_note`) plus editable quick-view labels/badges, and `templates/index.json` now wires those blocks by default.
+20. Phase 2 collection/search editability pass: `main-search` now exposes editor settings for heading, placeholder, search button, and empty state copy; `main-collection` now exposes editor labels for sort/filter and empty-state messaging.
 19. Started Phase 1 PDP builder refactor: `main-product` now supports core movable blocks for media, thumbnails, title, price, variant picker, quantity, buy buttons, trust badges, social links, description, custom liquid, info rows, app blocks, related products, and a dedicated description sheet trigger, while keeping a legacy fallback path during migration. Core builder blocks now also expose initial block-level settings for title, price, buy buttons, variant picker, trust badges, related products, and social/description trigger controls.
 18. Added a reusable `Custom Liquid` section with preset support so Theme Editor can insert custom Liquid across JSON templates, not only inside `Product Layout`.
 
@@ -95,10 +97,11 @@ Last updated: 2026-04-10 (Asia/Ho_Chi_Minh)
 
 ## Open Focus Areas
 
-1. QA trực quan Phase 1 PDP builder trong Theme Editor và storefront, nhất là block order, variant switching, add to cart, size chart, lightbox, và khoảng cách mobile.
-2. Tiếp tục tách các phần còn lại của PDP sang block architecture sạch hơn, giảm logic legacy/fallback khi template mới đã ổn định.
-3. Kiểm tra trực quan section `Custom Liquid` mới trong Theme Editor trên homepage/product/page để xác nhận vị trí add section và spacing đúng ý.
-4. Tiếp tục polish mobile trước khi mở rộng desktop.
+1. QA trực quan toàn bộ 3 phase trong Theme Editor/storefront, ưu tiên PDP variant switching, add to cart, quick view modal ở featured collection, collection filter/sort labels, và search empty state.
+2. Tiếp tục giảm logic legacy/fallback còn sót trong `main-product` khi builder mới đã ổn định.
+3. Cân nhắc builder hóa sâu hơn cho `main-collection` card/composition và các homepage sections còn lại nếu cần kéo-thả mức component chi tiết hơn.
+4. Kiểm tra trực quan section `Custom Liquid` mới trong Theme Editor trên homepage/product/page để xác nhận vị trí add section và spacing đúng ý.
+5. Tiếp tục polish mobile trước khi mở rộng desktop.
 2. Kiểm tra trực quan lại:
    - homepage hero/header
    - homepage `BIKINIES` section ở desktop/mobile sau refactor mới

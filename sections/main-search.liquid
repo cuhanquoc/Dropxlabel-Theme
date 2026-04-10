@@ -1,17 +1,25 @@
 {% liquid
   assign search_terms = search.terms | default: ''
   assign result_count = search.results_count | default: 0
+  assign search_eyebrow = section.settings.search_eyebrow | default: 'Search'
+  assign search_heading_prefix = section.settings.search_heading_prefix | default: 'Results for'
+  assign empty_search_heading = section.settings.empty_search_heading | default: 'Search the collection'
+  assign search_placeholder = section.settings.search_placeholder | default: 'Search dresses, skirts, bikinis...'
+  assign search_aria_label = section.settings.search_aria_label | default: 'Search store'
+  assign search_button_label = section.settings.search_button_label | default: 'Search'
+  assign empty_heading = section.settings.empty_heading | default: 'No results found'
+  assign empty_body = section.settings.empty_body | default: 'Try a shorter keyword or search by product type.'
 %}
 
 <section id="main-search" class="ms block" style="background:#fff;color:#0a0a0a;">
   <div class="ms__shell">
     <header class="ms__hero">
-      <p class="ms__eyebrow">Search</p>
+      <p class="ms__eyebrow">{{ search_eyebrow }}</p>
       <h1 class="ms__title">
         {% if search.performed %}
-          Results for "{{ search_terms }}"
+          {{ search_heading_prefix }} "{{ search_terms }}"
         {% else %}
-          Search the collection
+          {{ empty_search_heading }}
         {% endif %}
       </h1>
       <form action="{{ routes.search_url }}" method="get" role="search" class="ms__form">
@@ -21,10 +29,10 @@
           type="search"
           name="q"
           value="{{ search_terms | escape }}"
-          placeholder="Search dresses, skirts, bikinis..."
-          aria-label="Search store"
+          placeholder="{{ search_placeholder | escape }}"
+          aria-label="{{ search_aria_label | escape }}"
         >
-        <button class="ms__submit" type="submit">Search</button>
+        <button class="ms__submit" type="submit">{{ search_button_label }}</button>
       </form>
       {% if search.performed %}
         <p class="ms__count">
@@ -35,8 +43,8 @@
 
     {% if search.performed and result_count == 0 %}
       <div class="ms__empty">
-        <p class="ms__empty-title">No results found</p>
-        <p class="ms__empty-copy">Try a shorter keyword or search by product type.</p>
+        <p class="ms__empty-title">{{ empty_heading }}</p>
+        <p class="ms__empty-copy">{{ empty_body }}</p>
       </div>
     {% endif %}
 
@@ -277,6 +285,55 @@
   "name": "Main Search",
   "tag": "section",
   "class": "main-search-section",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "search_eyebrow",
+      "label": "Eyebrow",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "search_heading_prefix",
+      "label": "Results heading prefix",
+      "default": "Results for"
+    },
+    {
+      "type": "text",
+      "id": "empty_search_heading",
+      "label": "Heading when search is empty",
+      "default": "Search the collection"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search dresses, skirts, bikinis..."
+    },
+    {
+      "type": "text",
+      "id": "search_aria_label",
+      "label": "Search accessibility label",
+      "default": "Search store"
+    },
+    {
+      "type": "text",
+      "id": "search_button_label",
+      "label": "Search button label",
+      "default": "Search"
+    },
+    {
+      "type": "text",
+      "id": "empty_heading",
+      "label": "Empty state heading",
+      "default": "No results found"
+    },
+    {
+      "type": "textarea",
+      "id": "empty_body",
+      "label": "Empty state description",
+      "default": "Try a shorter keyword or search by product type."
+    }
+  ]
 }
 {% endschema %}

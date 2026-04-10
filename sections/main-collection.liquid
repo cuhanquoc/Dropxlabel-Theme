@@ -1,5 +1,11 @@
 {% comment %} MAIN COLLECTION — CSS → src/input.css {% endcomment %}
 
+{% liquid
+  assign sort_by_label = section.settings.sort_by_label | default: 'Sort by'
+  assign filter_and_sort_label = section.settings.filter_and_sort_label | default: 'Filter & Sort'
+  assign empty_heading = section.settings.empty_heading | default: 'No products found in this collection.'
+%}
+
 <div id="main-collection">
 
   <!-- ── Collection Hero Header ── -->
@@ -65,7 +71,7 @@
       <!-- Filter Panel (collapsible) -->
       <div class="mc-filter-panel" id="mc-filter-panel">
         <div class="py-5 flex flex-wrap gap-2 items-center">
-          <span style="font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); margin-right: 0.5rem;">Sort by</span>
+          <span style="font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-muted); margin-right: 0.5rem;">{{ sort_by_label }}</span>
           {%- assign sort_options = 'manual,Featured|date-descending,Newest|price-ascending,Price: Low to High|price-descending,Price: High to Low|title-ascending,A–Z|title-descending,Z–A' | split: '|' -%}
           {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
           {%- for opt in sort_options -%}
@@ -94,7 +100,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
             </svg>
-            Filter &amp; Sort
+            {{ filter_and_sort_label }}
           </button>
           <span class="mc-count">
             {{ collection.products_count }} {{ collection.products_count | pluralize: 'product', 'products' }}
@@ -144,7 +150,7 @@
 
         {%- if collection.products.size == 0 -%}
           <div class="col-span-full text-center py-20">
-            <p style="font-family: var(--font-body); font-size: 0.88rem; color: var(--color-muted); letter-spacing: 0.08em;">No products found in this collection.</p>
+            <p style="font-family: var(--font-body); font-size: 0.88rem; color: var(--color-muted); letter-spacing: 0.08em;">{{ empty_heading }}</p>
           </div>
         {%- else -%}
 
@@ -578,6 +584,24 @@
       "id": "quick_view_label",
       "label": "Quick View button text",
       "default": "Quick View"
+    },
+    {
+      "type": "text",
+      "id": "sort_by_label",
+      "label": "Sort by label",
+      "default": "Sort by"
+    },
+    {
+      "type": "text",
+      "id": "filter_and_sort_label",
+      "label": "Filter button label",
+      "default": "Filter & Sort"
+    },
+    {
+      "type": "text",
+      "id": "empty_heading",
+      "label": "Empty state heading",
+      "default": "No products found in this collection."
     }
   ],
   "presets": [
