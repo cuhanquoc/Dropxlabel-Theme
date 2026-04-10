@@ -44,10 +44,22 @@
           "type": "trust_badges",
           "settings": {}
         },
+        "description_sheet_trigger_builder": {
+          "type": "description_sheet_trigger",
+          "settings": {
+            "title": "Product details"
+          }
+        },
         "description_builder": {
           "type": "description",
           "settings": {
             "heading": "DESCRIPTION"
+          }
+        },
+        "social_links_builder": {
+          "type": "social_links",
+          "settings": {
+            "heading_text": "Social:"
           }
         },
         "related_products_builder": {
@@ -82,7 +94,9 @@
         "quantity_selector_builder",
         "buy_buttons_builder",
         "trust_badges_builder",
+        "description_sheet_trigger_builder",
         "description_builder",
+        "social_links_builder",
         "related_products_builder",
         "info_action_Vf7p9q",
         "info_action_d4HyeN"

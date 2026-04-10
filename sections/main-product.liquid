@@ -1109,7 +1109,7 @@
 {%- assign has_social_links_block = false -%}
 {%- for block in section.blocks -%}
   {%- case block.type -%}
-    {%- when 'product_media', 'product_thumbnails', 'product_title', 'product_price', 'variant_picker', 'quantity_selector', 'buy_buttons', 'trust_badges', 'related_products', 'social_links' -%}
+    {%- when 'product_media', 'product_thumbnails', 'product_title', 'product_price', 'variant_picker', 'quantity_selector', 'buy_buttons', 'trust_badges', 'related_products', 'social_links', 'description_sheet_trigger' -%}
       {%- assign has_pdp_builder_core = true -%}
   {%- endcase -%}
   {%- if block.type == 'product_media' or block.type == 'product_thumbnails' -%}
@@ -1812,6 +1812,21 @@
                         {%- endif -%}
                       </div>
                     </div>
+                  {% when 'description_sheet_trigger' %}
+                    {%- assign description_sheet_title = block.settings.title | default: 'Product details' -%}
+                    <div class="product-info-actions" style="padding: 0 1rem;" {{ block.shopify_attributes }}>
+                      <button type="button" class="product-info-action-btn" data-info-action-open data-sheet-source="sheet-content-description-{{ block.id }}" data-sheet-title="{{ description_sheet_title | escape }}">
+                        <span class="product-info-action-btn__title">{{ description_sheet_title | escape }}</span>
+                        <svg class="product-info-action-btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+                      </button>
+                      <div id="sheet-content-description-{{ block.id }}" hidden>
+                        {%- if product.description != blank -%}
+                          {{ product.description }}
+                        {%- else -%}
+                          <p>{{ product.title | escape }}</p>
+                        {%- endif -%}
+                      </div>
+                    </div>
                   {% when 'info_action' %}
                     {%- assign action_title = block.settings.title | default: 'Info' -%}
                     <div class="product-info-actions" style="padding: 0 1rem;" {{ block.shopify_attributes }}>
@@ -1895,7 +1910,7 @@
                     {% if social_blocks.size > 0 %}
                       <div class="product-builder-block product-builder-block--social" style="padding: 0 1rem;" {{ block.shopify_attributes }}>
                         <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                          <strong style="font-size: 1.1rem; font-weight: 700;">Social:</strong>
+                          <strong style="font-size: 1.1rem; font-weight: 700;">{{ block.settings.heading_text | default: 'Social:' }}</strong>
                           <div style="display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap;">
                             {% for social_block in social_blocks %}
                               <a href="{{ social_block.settings.social_url | default: '#' }}" target="_blank" rel="noopener noreferrer" style="display: flex; justify-content: center; align-items: center; width: 40px; height: 40px; color: #111;" {{ social_block.shopify_attributes }}>
@@ -3985,6 +4000,19 @@
       ]
     },
     {
+      "type": "description_sheet_trigger",
+      "name": "Description sheet trigger",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Button label",
+          "default": "Product details"
+        }
+      ]
+    },
+    {
       "type": "related_products",
       "name": "Related products",
       "limit": 1,
@@ -4036,7 +4064,14 @@
       "type": "social_links",
       "name": "Social links",
       "limit": 1,
-      "settings": []
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading_text",
+          "label": "Heading text",
+          "default": "Social:"
+        }
+      ]
     },
     {
       "type": "social_icon",
@@ -4160,8 +4195,16 @@
           "settings": {}
         },
         {
+          "type": "description_sheet_trigger",
+          "settings": {
+            "title": "Product details"
+          }
+        },
+        {
           "type": "social_links",
-          "settings": {}
+          "settings": {
+            "heading_text": "Social:"
+          }
         },
         {
           "type": "social_icon",
