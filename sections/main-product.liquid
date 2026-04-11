@@ -1358,9 +1358,12 @@
                       </dialog>
                     </div>
                   {% when 'quantity_selector' %}
+                    {%- assign quantity_label = block.settings.label | default: 'Quantity' -%}
                     <div class="product-builder-block product-builder-block--quantity" {{ block.shopify_attributes }}>
                       <div class="product-quantity-wrap" style="margin-bottom: 2rem; padding: 0 1rem; width: 100%; box-sizing: border-box;">
-                        <p style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.75rem;">Quantity</p>
+                        {%- if quantity_label != blank -%}
+                          <p style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.75rem;">{{ quantity_label | escape }}</p>
+                        {%- endif -%}
                         <div style="display: inline-flex; border: 1px solid var(--color-text); border-radius: 6px; overflow: hidden; width: 140px; height: 50px;">
                           <button type="button" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; font-size: 1.5rem; font-weight: 300;" aria-label="Decrease quantity" data-qty-btn="-1">−</button>
                           <input id="qty-input" type="number" name="quantity" value="1" min="1" aria-label="Quantity" style="flex: 1; min-width: 0; text-align: center; border: none; font-family: var(--font-body); font-size: 1.1rem; color: var(--color-text); background: transparent; appearance: textfield;" />
@@ -1475,8 +1478,12 @@
                       {%- endif -%}
                     </div>
                   {% when 'description' %}
+                    {%- assign description_heading = block.settings.heading | default: 'DESCRIPTION' -%}
+                    {%- assign show_description_heading = block.settings.show_heading -%}
                     <div class="pw-desc-inline" style="margin-top: 0.75rem; padding: 0 1rem; max-width: 100%; box-sizing: border-box;" {{ block.shopify_attributes }}>
-                      <h3 style="font-family: var(--font-heading, sans-serif); font-weight: 800; font-size: 1.1rem; letter-spacing: 0em; text-transform: uppercase; margin: 0 0 1rem; color: #000;">{{ block.settings.heading | default: 'DESCRIPTION' }}</h3>
+                      {%- if show_description_heading and description_heading != blank -%}
+                        <h3 style="font-family: var(--font-heading, sans-serif); font-weight: 800; font-size: 1.1rem; letter-spacing: 0em; text-transform: uppercase; margin: 0 0 1rem; color: #000;">{{ description_heading }}</h3>
+                      {%- endif -%}
                       <div style="font-family: var(--font-body, sans-serif); font-size: .88rem; line-height: 1.7; color: #444;">
                         {%- if product.description != blank -%}
                           {{ product.description }}
@@ -1525,6 +1532,27 @@
                   {% when 'custom_liquid' %}
                     {%- if block.settings.custom_liquid != blank -%}
                       <div class="product-custom-liquid-block" style="padding: 0 1rem; margin: 0.5rem 0 1rem;" {{ block.shopify_attributes }}>{{ block.settings.custom_liquid }}</div>
+                    {%- endif -%}
+                  {% when 'accordion' %}
+                    {%- if section.settings.accordion_layout == 'inline' -%}
+                      <div class="product-builder-block product-builder-block--accordion" style="padding: 0 1rem;" {{ block.shopify_attributes }}>
+                        <div class="product-accordion">
+                          <div class="product-accordion-item">
+                            <button type="button" class="product-accordion-trigger" aria-expanded="false">
+                              <span>{{ block.settings.heading | escape }}</span>
+                              <div class="accordion-icon-circle">
+                                <svg class="accordion-icon-plus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <svg class="accordion-icon-minus" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                              </div>
+                            </button>
+                            <div class="product-accordion-body">
+                              <div class="prose" style="padding-bottom: 1.25rem;">
+                                {{ block.settings.content }}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     {%- endif -%}
                   {% when 'related_products' %}
                     {%- assign builder_pairs_collection = block.settings.pairs_collection | default: section.settings.pairs_collection -%}
@@ -1611,16 +1639,18 @@
   </div>
 </div>
 
-<!-- ── Full Width Accordion Area (non-description blocks only) ── -->
-{% assign has_accordions = false %}
-{% for block in section.blocks %}
-  {% if block.type == 'accordion' %}
-    {% assign has_accordions = true %}
-    {% break %}
-  {% endif %}
-{% endfor %}
+<!-- ── Full Width Accordion Area (optional builder placement) ── -->
+{% assign has_footer_accordions = false %}
+{% if section.settings.accordion_layout == 'full_width_below' %}
+  {% for block in section.blocks %}
+    {% if block.type == 'accordion' %}
+      {% assign has_footer_accordions = true %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
 
-{% if has_accordions %}
+{% if has_footer_accordions %}
 <div class="accordion-full-width-wrapper">
   <div class="mx-auto" style="max-width: 900px; padding: 2rem 1rem;">
     <div class="product-accordion">
@@ -2624,6 +2654,22 @@
       "content": "Product Information"
     },
     {
+      "type": "select",
+      "id": "accordion_layout",
+      "label": "Accordion block placement",
+      "default": "full_width_below",
+      "options": [
+        {
+          "value": "full_width_below",
+          "label": "Full width below product"
+        },
+        {
+          "value": "inline",
+          "label": "Inline with product info blocks"
+        }
+      ]
+    },
+    {
       "type": "header",
       "content": "Price Row"
     },
@@ -3087,7 +3133,14 @@
       "type": "quantity_selector",
       "name": "Quantity selector",
       "limit": 1,
-      "settings": []
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Quantity"
+        }
+      ]
     },
     {
       "type": "buy_buttons",
@@ -3252,6 +3305,12 @@
           "id": "heading",
           "label": "Heading",
           "default": "DESCRIPTION"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_heading",
+          "label": "Show heading",
+          "default": true
         }
       ]
     },
