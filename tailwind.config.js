@@ -17,8 +17,9 @@ module.exports = {
                 border: '#E8E5DF',
             },
             fontFamily: {
-                heading: ['"Playfair Display"', 'serif'],
+                heading: ['Rubik', 'sans-serif'],
                 body: ['Inter', 'sans-serif'],
+                accent: ['"Bricolage Grotesque"', 'sans-serif'],
             },
         },
     },

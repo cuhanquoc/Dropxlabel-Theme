@@ -1,6 +1,6 @@
 {% comment %} BRAND STORY BENTO — Swipeable Card Carousel {% endcomment %}
 
-<section class="bsb-section" id="brand-story-bento" style="background-color: {{ section.settings.bg_color | default: '#f2f0ec' }}; {% if section.settings.bg_image != blank %}background-image: url('{{ section.settings.bg_image | image_url: width: 1920 }}'); background-size: cover; background-position: center;{% else %}background-image: url('{{ 'paper-texture-bg.png' | asset_url }}'); background-size: cover; background-position: center;{% endif %}">
+<section class="bsb-section" id="brand-story-bento" style="background-color: {{ section.settings.bg_color | default: '#f2f0ec' }}; {% if section.settings.bg_image != blank %}background-image: url('{{ section.settings.bg_image | image_url: width: 1920 }}'); background-size: cover; background-position: center;{% else %}background-image: url('{{ 'paper-texture-bg.webp' | asset_url }}'); background-size: cover; background-position: center;{% endif %}">
 
   {%- if section.settings.title != blank -%}
     <div style="padding: 2.5rem 1.5rem 0; text-align: {{ section.settings.title_align | default: 'left' }};">

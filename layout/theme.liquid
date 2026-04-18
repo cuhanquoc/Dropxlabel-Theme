@@ -17,22 +17,32 @@
   <!-- Google Fonts: Rubik (Heading) + Inter (Body) + Bricolage Grotesque (Accent) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Preload critical font subsets (Latin, woff2) for Rubik + Inter -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@400;500;600&display=swap" />
   <link
     href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@400;500;600&display=swap"
     rel="stylesheet"
+    media="print"
+    onload="this.media='all'"
   />
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </noscript>
 
   <!-- Tailwind CSS (compiled + minified) -->
   <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}" />
 
   <meta name="facebook-domain-verification" content="spftndh641hvhnap995k988ctmxskg" />
 
-  <!-- Alpine.js v3 — UI state management (defer) -->
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js" defer></script>
+  <!-- Alpine.js v3 — UI state management (local asset, defer) -->
+  <script src="{{ 'alpine.min.js' | asset_url }}" defer></script>
 
-  <!-- GSAP (GreenSock Animation Platform) v3.12.5 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <!-- GSAP 3.12.5 + ScrollTrigger (local asset, defer) -->
+  <script src="{{ 'gsap.min.js' | asset_url }}" defer></script>
+  <script src="{{ 'ScrollTrigger.min.js' | asset_url }}" defer></script>
 
   <!-- Global CSS: Quiet Luxury Design System -->
   <style>
