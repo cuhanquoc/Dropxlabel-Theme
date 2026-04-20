@@ -3,13 +3,13 @@
   assign card_bg = section.settings.card_background_color | default: 'var(--color-background, #ffffff)'
   assign hero_overlay_opacity = section.settings.hero_overlay_opacity | divided_by: 100.0
   assign form_id = 'SupportContactForm-' | append: section.id
-  assign success_message = 'Thanks for contacting us. We will reply as soon as possible.'
+  assign success_message = 'Thanks for contacting Celisira. We will reply as soon as possible.'
   assign first_name_label = 'First name'
   assign last_name_label = 'Last name'
   assign email_label = 'Email'
   assign phone_label = 'Phone number'
   assign comment_label = 'Comment'
-  assign success_heading = section.settings.success_heading | default: 'Thank you for contacting us'
+  assign success_heading = section.settings.success_heading | default: 'Thank you for contacting Celisira'
   assign success_description = section.settings.success_description | default: 'We received your message and will get back to you as soon as possible.'
 -%}
 
@@ -631,13 +631,13 @@
       "type": "text",
       "id": "hero_title",
       "label": "Hero heading",
-      "default": "Get in Touch"
+      "default": "Contact Celisira"
     },
     {
       "type": "textarea",
       "id": "hero_description",
       "label": "Hero description",
-      "default": "Reach out to us anytime — we're here to assist with your questions, feedback, or support needs."
+      "default": "Need help with your order, shipping, return, or customs question? Send us a message and our team will get back to you as soon as possible."
     },
     {
       "type": "text",
@@ -649,7 +649,7 @@
       "type": "textarea",
       "id": "form_description",
       "label": "Form description",
-      "default": "Have a question or request? Send us a message and we'll get back to you shortly."
+      "default": "Please include your order number and the email used at checkout for faster support."
     },
     {
       "type": "text",
@@ -661,7 +661,7 @@
       "type": "text",
       "id": "success_heading",
       "label": "Success heading",
-      "default": "Thank you for contacting us"
+      "default": "Thank you for contacting Celisira"
     },
     {
       "type": "textarea",
@@ -673,13 +673,13 @@
       "type": "text",
       "id": "info_heading",
       "label": "Info heading",
-      "default": "We are always ready to help you and answer your questions"
+      "default": "Customer Support"
     },
     {
       "type": "textarea",
       "id": "info_description",
       "label": "Info description",
-      "default": "We are always ready to help you and answer your questions with prompt, friendly support tailored to your needs."
+      "default": "Celisira is operated by JK E-COMMERCE LLC. For order support, shipping questions, return requests, or customs inquiries, please contact us below."
     },
     {
       "type": "header",
@@ -689,37 +689,37 @@
       "type": "text",
       "id": "fallback_card_1_label",
       "label": "Fallback card 1 title",
-      "default": "Office Address:"
+      "default": "Business Address:"
     },
     {
       "type": "textarea",
       "id": "fallback_card_1_content",
       "label": "Fallback card 1 content",
-      "default": "3556 Hartford Way Vlg, Mount Pleasant, SC, 29466, Australia."
+      "default": "JK E-COMMERCE LLC, 16192 COASTAL HIGWAY, LEWES, DELAWARE 19958, United States"
     },
     {
       "type": "text",
       "id": "fallback_card_2_label",
       "label": "Fallback card 2 title",
-      "default": "Call Us For Help:"
+      "default": "Support Hours:"
     },
     {
       "type": "text",
       "id": "fallback_card_2_content",
       "label": "Fallback card 2 content",
-      "default": "+159-2563-2562 , +159-2563-2562"
+      "default": "Monday to Friday · We aim to respond within 1–2 business days."
     },
     {
       "type": "text",
       "id": "fallback_card_3_label",
       "label": "Fallback card 3 title",
-      "default": "Customer services"
+      "default": "Support Email"
     },
     {
       "type": "text",
       "id": "fallback_card_3_content",
       "label": "Fallback card 3 content",
-      "default": "shop@yourstore.com"
+      "default": "billing@jk-ecomerce.com"
     }
   ],
   "blocks": [
@@ -731,13 +731,13 @@
           "type": "text",
           "id": "label",
           "label": "Label",
-          "default": "Office Address:"
+          "default": "Business Address:"
         },
         {
           "type": "textarea",
           "id": "content",
           "label": "Address",
-          "default": "3556 Hartford Way Vlg, Mount Pleasant, SC, 29466, Australia."
+          "default": "JK E-COMMERCE LLC, 16192 COASTAL HIGWAY, LEWES, DELAWARE 19958, United States"
         }
       ]
     },
@@ -749,13 +749,13 @@
           "type": "text",
           "id": "label",
           "label": "Label",
-          "default": "Call Us For Help:"
+          "default": "Support Hours:"
         },
         {
           "type": "text",
           "id": "content",
           "label": "Phone number",
-          "default": "+159-2563-2562"
+          "default": "Monday to Friday · We aim to respond within 1–2 business days."
         }
       ]
     },
@@ -767,13 +767,13 @@
           "type": "text",
           "id": "label",
           "label": "Label",
-          "default": "Customer Services"
+          "default": "Support Email"
         },
         {
           "type": "text",
           "id": "content",
           "label": "Email address",
-          "default": "shop@yourstore.com"
+          "default": "billing@jk-ecomerce.com"
         }
       ]
     },
