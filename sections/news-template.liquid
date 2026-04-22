@@ -110,7 +110,7 @@
               {%- if section.settings.show_author or section.settings.show_date -%}
                 <p class="news-card__meta">
                   {%- if section.settings.show_author -%}
-                    <span>BY {{ article.author | upcase }}</span>
+                    <span>{{ section.settings.author_prefix | default: 'BY' }} {{ article.author | upcase }}</span>
                   {%- endif -%}
 
                   {%- if section.settings.show_author and section.settings.show_date -%}
@@ -756,6 +756,12 @@
       "id": "show_author",
       "label": "Show author",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "author_prefix",
+      "label": "Author prefix",
+      "default": "BY"
     },
     {
       "type": "checkbox",

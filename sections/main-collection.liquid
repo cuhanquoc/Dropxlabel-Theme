@@ -121,7 +121,7 @@
           <!-- 2-col icon -->
           <button
             class="mc-grid-btn"
-            aria-label="2 column grid"
+            aria-label="{{ section.settings.grid_two_columns_label | default: '2 column grid' | escape }}"
             data-grid-cols="2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -132,7 +132,7 @@
           <!-- 4-col icon (default active) -->
           <button
             class="mc-grid-btn active"
-            aria-label="4 column grid"
+            aria-label="{{ section.settings.grid_four_columns_label | default: '4 column grid' | escape }}"
             data-grid-cols="4"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -223,7 +223,7 @@
               {% if section.settings.show_quick_view %}
               <button
                 class="mc-quick-view"
-                aria-label="Quick view {{ product.title | escape }}"
+                aria-label="{{ section.settings.quick_view_aria_prefix | default: 'Quick view' | escape }} {{ product.title | escape }}"
                 data-product-handle="{{ product.handle }}"
                 data-quick-view
               >
@@ -237,9 +237,9 @@
 
               <!-- Badges -->
               {%- if product.available == false -%}
-                <span class="mc-badge mc-badge--sold" style="position:absolute;top:0.75rem;left:0.75rem;font-family:var(--font-body);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;background:#0a0a0a;color:#fff;padding:0.3rem 0.6rem;">Sold Out</span>
+                <span class="mc-badge mc-badge--sold" style="position:absolute;top:0.75rem;left:0.75rem;font-family:var(--font-body);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;background:#0a0a0a;color:#fff;padding:0.3rem 0.6rem;">{{ sold_out_badge_label }}</span>
               {%- elsif product.compare_at_price > product.price -%}
-                <span class="mc-badge mc-badge--sale" style="position:absolute;top:0.75rem;left:0.75rem;font-family:var(--font-body);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;background:#c0392b;color:#fff;padding:0.3rem 0.6rem;">Sale</span>
+                <span class="mc-badge mc-badge--sale" style="position:absolute;top:0.75rem;left:0.75rem;font-family:var(--font-body);font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;background:#c0392b;color:#fff;padding:0.3rem 0.6rem;">{{ sale_badge_label }}</span>
               {%- endif -%}
             </div>
             <!-- / Image Wrapper -->
@@ -597,6 +597,12 @@
     },
     {
       "type": "text",
+      "id": "quick_view_aria_prefix",
+      "label": "Quick View aria label prefix",
+      "default": "Quick view"
+    },
+    {
+      "type": "text",
       "id": "sort_by_label",
       "label": "Sort by label",
       "default": "Sort by"
@@ -606,6 +612,18 @@
       "id": "filter_and_sort_label",
       "label": "Filter button label",
       "default": "Filter & Sort"
+    },
+    {
+      "type": "text",
+      "id": "grid_two_columns_label",
+      "label": "2-column grid toggle aria label",
+      "default": "2 column grid"
+    },
+    {
+      "type": "text",
+      "id": "grid_four_columns_label",
+      "label": "4-column grid toggle aria label",
+      "default": "4 column grid"
     },
     {
       "type": "text",

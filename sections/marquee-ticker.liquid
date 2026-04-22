@@ -2,6 +2,8 @@
 
 {% assign section_bg = section.settings.bg_color | default: '#0a0a0a' %}
 {% assign section_heading = section.settings.heading | default: 'BIKINIES' %}
+{% assign placeholder_product_title = section.settings.placeholder_product_title | default: 'Select a product' %}
+{% assign placeholder_product_price = section.settings.placeholder_product_price | default: '$0.00' %}
 {% assign has_intro_blocks = false %}
 {% for block in section.blocks %}
   {% if block.type == 'intro_heading' or block.type == 'intro_description' or block.type == 'intro_cta' %}
@@ -144,11 +146,11 @@
 
                     <div class="min-w-0">
                       <p class="font-heading text-[1.25rem] font-medium uppercase tracking-[-0.04em] leading-[1] text-[#111111] md:text-[1.55rem] xl:text-[1.75rem]">
-                        Select a product
+                        {{ placeholder_product_title }}
                       </p>
                       <div class="mt-3">
                         <span class="font-body text-[1.15rem] font-semibold tracking-[-0.02em] text-[#111111] md:text-[1.3rem]">
-                          $0.00
+                          {{ placeholder_product_price }}
                         </span>
                       </div>
                     </div>
@@ -206,6 +208,18 @@
       "type": "url",
       "id": "cta_url",
       "label": "Button URL"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_product_title",
+      "label": "Placeholder product title",
+      "default": "Select a product"
+    },
+    {
+      "type": "text",
+      "id": "placeholder_product_price",
+      "label": "Placeholder product price",
+      "default": "$0.00"
     },
     {
       "type": "header",

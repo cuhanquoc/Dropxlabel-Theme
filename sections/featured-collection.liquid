@@ -267,8 +267,15 @@
       </div>
     </div>
     <div class="fcv2-modal__footer">
-      <button type="button" class="fcv2-modal__button is-secondary" id="{{ fc_section_id }}-qv-atc">{{ fc_modal_add_to_cart_label }}</button>
-      {% if fc_show_buy_now_button %}<button type="button" class="fcv2-modal__button is-primary" id="{{ fc_section_id }}-qv-bin">{{ fc_modal_buy_now_label }}</button>{% endif %}
+      <button type="button" class="fcv2-modal__button is-secondary" id="{{ fc_section_id }}-qv-atc"
+        data-add-label="{{ fc_modal_add_to_cart_label | escape }}"
+        data-sold-out-label="{{ fc_sold_out_badge_label | escape }}"
+        data-adding-label="{{ section.settings.modal_adding_to_cart_label | default: 'Adding…' | escape }}"
+        data-added-label="{{ section.settings.modal_added_to_cart_label | default: '✓ Added' | escape }}"
+        data-error-label="{{ section.settings.modal_add_to_cart_error_label | default: 'Error — try again' | escape }}">{{ fc_modal_add_to_cart_label }}</button>
+      {% if fc_show_buy_now_button %}<button type="button" class="fcv2-modal__button is-primary" id="{{ fc_section_id }}-qv-bin"
+        data-buy-now-label="{{ fc_modal_buy_now_label | escape }}"
+        data-processing-label="{{ section.settings.modal_buy_now_processing_label | default: 'Processing…' | escape }}">{{ fc_modal_buy_now_label }}</button>{% endif %}
     </div>
   </div>
 </div>
@@ -1350,8 +1357,10 @@
       setGalleryIndex(galleryImages.indexOf(variant.img));
     }
 
+    var addLabel = atcBtn ? (atcBtn.dataset.addLabel || 'Add to cart') : 'Add to cart';
+    var soldOutLabel = atcBtn ? (atcBtn.dataset.soldOutLabel || 'Sold out') : 'Sold out';
     atcBtn.disabled = variant.available === false;
-    atcBtn.textContent = variant.available === false ? 'Sold out' : 'Add to cart';
+    atcBtn.textContent = variant.available === false ? soldOutLabel : addLabel;
   }
 
   function buildVariants(variants) {
@@ -1426,7 +1435,7 @@
       variantsEl.innerHTML = '';
       qtyRow.style.display = 'none';
       atcBtn.disabled = false;
-      atcBtn.textContent = 'Add to cart';
+      atcBtn.textContent = atcBtn.dataset.addLabel || 'Add to cart';
     }
 
     modal.classList.add('is-open');
@@ -1462,7 +1471,7 @@
       const variantId = currentVariantId || (currentProduct && currentProduct.variants[0] && currentProduct.variants[0].id);
       if (!variantId) return;
       atcBtn.disabled = true;
-      atcBtn.textContent = 'Adding…';
+      atcBtn.textContent = atcBtn.dataset.addingLabel || 'Adding…';
       try {
         const res = await fetch('/cart/add.js', {
           method: 'POST',
@@ -1470,17 +1479,17 @@
           body: JSON.stringify({ id: variantId, quantity: quantity })
         });
         if (!res.ok) throw new Error('Failed');
-        atcBtn.textContent = '✓ Added';
+        atcBtn.textContent = atcBtn.dataset.addedLabel || '✓ Added';
         await syncCartCount();
         setTimeout(function () {
-          atcBtn.textContent = 'Add to cart';
+          atcBtn.textContent = atcBtn.dataset.addLabel || 'Add to cart';
           atcBtn.disabled = false;
           closeModal();
         }, 900);
       } catch (error) {
-        atcBtn.textContent = 'Error — try again';
+        atcBtn.textContent = atcBtn.dataset.errorLabel || 'Error — try again';
         atcBtn.disabled = false;
-        setTimeout(function () { atcBtn.textContent = 'Add to cart'; }, 1200);
+        setTimeout(function () { atcBtn.textContent = atcBtn.dataset.addLabel || 'Add to cart'; }, 1200);
       }
     });
   }
@@ -1489,7 +1498,7 @@
     buyBtn.addEventListener('click', async function () {
       const variantId = currentVariantId || (currentProduct && currentProduct.variants[0] && currentProduct.variants[0].id);
       if (!variantId) return;
-      buyBtn.textContent = 'Processing…';
+      buyBtn.textContent = buyBtn.dataset.processingLabel || 'Processing…';
       try {
         await fetch('/cart/add.js', {
           method: 'POST',
@@ -1498,7 +1507,7 @@
         });
         window.location.href = '/checkout';
       } catch (error) {
-        buyBtn.textContent = 'Buy it now';
+        buyBtn.textContent = buyBtn.dataset.buyNowLabel || 'Buy it now';
       }
     });
   }
@@ -1753,9 +1762,33 @@
     },
     {
       "type": "text",
+      "id": "modal_adding_to_cart_label",
+      "label": "Quick view adding-to-cart label",
+      "default": "Adding…"
+    },
+    {
+      "type": "text",
+      "id": "modal_added_to_cart_label",
+      "label": "Quick view added-to-cart label",
+      "default": "✓ Added"
+    },
+    {
+      "type": "text",
+      "id": "modal_add_to_cart_error_label",
+      "label": "Quick view add-to-cart error label",
+      "default": "Error — try again"
+    },
+    {
+      "type": "text",
       "id": "modal_buy_now_label",
       "label": "Quick view buy now label",
       "default": "Buy it now"
+    },
+    {
+      "type": "text",
+      "id": "modal_buy_now_processing_label",
+      "label": "Quick view buy-now processing label",
+      "default": "Processing…"
     },
     {
       "type": "text",

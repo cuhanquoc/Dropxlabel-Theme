@@ -1287,7 +1287,7 @@
                                 </div>
                                 {% if option_name_lower == 'size' or option_name_lower == 'kích thước' %}
                                   <button type="button" data-action="open-size-chart" style="display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.9rem; background: none; border: none; cursor: pointer; color: #111;">
-                                    Size chart
+                                    {{ block.settings.size_chart_button_label | default: 'Size chart' }}
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 8v8"/><path d="M11 8v4"/><path d="M15 8v8"/></svg>
                                   </button>
                                 {% endif %}
@@ -1349,7 +1349,7 @@
                       {% endunless %}
                       <dialog id="size-chart-modal" style="padding: 2rem; border-radius: 12px; border: 1px solid #eaeaea; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 600px; z-index: 100;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                          <h2 style="font-weight: 700; font-size: 1.2rem; margin: 0;">Size Chart</h2>
+                          <h2 style="font-weight: 700; font-size: 1.2rem; margin: 0;">{{ block.settings.size_chart_heading | default: 'Size Chart' }}</h2>
                           <button data-action="close-size-chart" style="background: none; border: none; font-size: 2rem; cursor: pointer; line-height: 1;">&times;</button>
                         </div>
                         <div id="size-chart-content" style="font-size: 0.95rem; line-height: 1.6;">
@@ -1359,15 +1359,17 @@
                     </div>
                   {% when 'quantity_selector' %}
                     {%- assign quantity_label = block.settings.label | default: 'Quantity' -%}
+                    {%- assign quantity_decrease_label = block.settings.decrease_label | default: 'Decrease quantity' -%}
+                    {%- assign quantity_increase_label = block.settings.increase_label | default: 'Increase quantity' -%}
                     <div class="product-builder-block product-builder-block--quantity" {{ block.shopify_attributes }}>
                       <div class="product-quantity-wrap" style="margin-bottom: 2rem; padding: 0 1rem; width: 100%; box-sizing: border-box;">
                         {%- if quantity_label != blank -%}
                           <p style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.75rem;">{{ quantity_label | escape }}</p>
                         {%- endif -%}
                         <div style="display: inline-flex; border: 1px solid var(--color-text); border-radius: 6px; overflow: hidden; width: 140px; height: 50px;">
-                          <button type="button" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; font-size: 1.5rem; font-weight: 300;" aria-label="Decrease quantity" data-qty-btn="-1">−</button>
-                          <input id="qty-input" type="number" name="quantity" value="1" min="1" aria-label="Quantity" style="flex: 1; min-width: 0; text-align: center; border: none; font-family: var(--font-body); font-size: 1.1rem; color: var(--color-text); background: transparent; appearance: textfield;" />
-                          <button type="button" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; font-size: 1.5rem; font-weight: 400;" aria-label="Increase quantity" data-qty-btn="1">+</button>
+                          <button type="button" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; font-size: 1.5rem; font-weight: 300;" aria-label="{{ quantity_decrease_label | escape }}" data-qty-btn="-1">−</button>
+                          <input id="qty-input" type="number" name="quantity" value="1" min="1" aria-label="{{ quantity_label | escape }}" style="flex: 1; min-width: 0; text-align: center; border: none; font-family: var(--font-body); font-size: 1.1rem; color: var(--color-text); background: transparent; appearance: textfield;" />
+                          <button type="button" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; font-size: 1.5rem; font-weight: 400;" aria-label="{{ quantity_increase_label | escape }}" data-qty-btn="1">+</button>
                         </div>
                       </div>
                     </div>
@@ -1403,7 +1405,7 @@
                             {% endif %}
                           </span>
                         </button>
-                        <button type="button" class="btn-wishlist" aria-label="Add to wishlist" style="border-radius: 8px; height: 60px; width: 60px; border: 1px solid var(--color-border);">
+                        <button type="button" class="btn-wishlist" aria-label="{{ block.settings.wishlist_aria_label | default: 'Add to wishlist' | escape }}" style="border-radius: 8px; height: 60px; width: 60px; border: 1px solid var(--color-border);">
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                           </svg>
@@ -3126,6 +3128,18 @@
           "id": "size_chart_text",
           "label": "Size chart content",
           "default": "<p>S (Chest: 36\", Length: 28\")</p><p>M (Chest: 38\", Length: 29\")</p><p>L (Chest: 40\", Length: 30\")</p>"
+        },
+        {
+          "type": "text",
+          "id": "size_chart_button_label",
+          "label": "Size chart button label",
+          "default": "Size chart"
+        },
+        {
+          "type": "text",
+          "id": "size_chart_heading",
+          "label": "Size chart modal heading",
+          "default": "Size Chart"
         }
       ]
     },
@@ -3139,6 +3153,18 @@
           "id": "label",
           "label": "Label",
           "default": "Quantity"
+        },
+        {
+          "type": "text",
+          "id": "decrease_label",
+          "label": "Decrease button aria label",
+          "default": "Decrease quantity"
+        },
+        {
+          "type": "text",
+          "id": "increase_label",
+          "label": "Increase button aria label",
+          "default": "Increase quantity"
         }
       ]
     },
@@ -3164,6 +3190,12 @@
           "id": "more_payment_options_color",
           "label": "More payment options color",
           "default": "#9ca3af"
+        },
+        {
+          "type": "text",
+          "id": "wishlist_aria_label",
+          "label": "Wishlist button aria label",
+          "default": "Add to wishlist"
         }
       ]
     },
