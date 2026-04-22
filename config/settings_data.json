@@ -215,7 +215,7 @@
             "name": "Quick links",
             "settings": {
               "group_key": "nhom-1",
-              "heading": "QUIck links",
+              "heading": "Quick Links",
               "default_open": false
             }
           },
@@ -333,7 +333,7 @@
             "name": "FLOW US ON",
             "settings": {
               "group_key": "nhom-3",
-              "heading": "Follow us On",
+              "heading": "Follow Us",
               "default_open": false
             }
           },

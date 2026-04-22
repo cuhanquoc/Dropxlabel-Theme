@@ -150,7 +150,7 @@
           "settings": {
             "image": "shopify://shop_images/hf_20260311_110313_725fd38d-030b-4e1d-bdc8-ac664c70b866.jpg",
             "tag_text": "Enchanting",
-            "title": "Séxy",
+            "title": "Sultry Edit",
             "button_text": "SHOP NOW",
             "link_url": "shopify://collections/sexy"
           }
@@ -159,7 +159,7 @@
           "type": "story_card",
           "settings": {
             "image": "shopify://shop_images/Thi_t_k_ch_a_co_ten_10_25d6cfe9-1939-4bf6-9888-579e96174597.png",
-            "tag_text": "Bring Europian Vibes",
+            "tag_text": "Bring European Vibes",
             "title": "Dark/Light Academia",
             "button_text": "SHOP NOW",
             "link_url": "shopify://collections/dark-light-academia"
@@ -289,42 +289,42 @@
         "chc_intro_body": {
           "type": "intro_body",
           "settings": {
-            "text": "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here."
+            "text": "Need help with shipping, returns, order updates, or payment questions? Our help center covers the essentials so you can shop with confidence."
           }
         },
         "chc_faq_1": {
           "type": "faq_item",
           "settings": {
-            "question": "What is your return and exchange policy?",
-            "answer": "We offer a hassle-free return and exchange policy within 30 days of delivery. Items must be unused, in original packaging, and with tags intact. For exchanges, simply initiate a request through our return portal or contact support."
+            "question": "How can I track my order?",
+            "answer": "Once your order has shipped, you will receive a shipping confirmation email with tracking details. Please allow a short time for carrier scans to update after dispatch."
           }
         },
         "chc_faq_2": {
           "type": "faq_item",
           "settings": {
-            "question": "What if I received a damaged or incorrect item?",
-            "answer": "If you receive a damaged or incorrect item, please contact our support team within 48 hours of delivery with photos of the issue. We'll arrange a replacement or full refund as quickly as possible."
+            "question": "What if my item arrives damaged or incorrect?",
+            "answer": "If your item arrives damaged, defective, or incorrect, please contact our support team as soon as possible and include your order number together with clear photos of the issue so we can review it and assist you."
           }
         },
         "chc_faq_3": {
           "type": "faq_item",
           "settings": {
-            "question": "How can I track my order?",
-            "answer": "Once your order is shipped, you'll receive a confirmation email with a tracking number. You can use this number on our website or the carrier's site to track your package in real time."
+            "question": "Can I change or cancel my order?",
+            "answer": "If you need to change or cancel your order, please contact us as soon as possible after placing it. Once an order has entered processing, changes may no longer be possible."
           }
         },
         "chc_faq_4": {
           "type": "faq_item",
           "settings": {
             "question": "What payment methods do you accept?",
-            "answer": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, Google Pay, and Shop Pay. All transactions are secured with SSL encryption."
+            "answer": "We accept major payment methods displayed at checkout. All payments are processed securely."
           }
         },
         "chc_faq_5": {
           "type": "faq_item",
           "settings": {
-            "question": "Can I modify or cancel my order after placing it?",
-            "answer": "You can modify or cancel your order within 1 hour of placing it by contacting our support team. After that window, orders enter processing and cannot be changed."
+            "question": "How do returns and refunds work?",
+            "answer": "If you would like to request a return, please contact our support team first. Approved refunds are issued to the original payment method after the returned item is received and inspected."
           }
         }
       },
@@ -339,18 +339,18 @@
       ],
       "settings": {
         "heading": "Customer Help Center",
-        "description": "Welcome to our Customer Help Center! We're here to assist you with any questions or concerns you may have. Whether you need help with orders, shipping, returns, or product details, you'll find all the answers right here.",
+        "description": "Need help with shipping, returns, order updates, or payment questions? Our help center covers the essentials so you can shop with confidence.",
         "bg_color": "#ffffff",
-        "q1": "What is your return and exchange policy?",
-        "a1": "We offer a hassle-free return and exchange policy within 30 days of delivery. Items must be unused, in original packaging, and with tags intact. For exchanges, simply initiate a request through our return portal or contact support.",
-        "q2": "What if I received a damaged or incorrect item?",
-        "a2": "If you receive a damaged or incorrect item, please contact our support team within 48 hours of delivery with photos of the issue. We'll arrange a replacement or full refund as quickly as possible.",
-        "q3": "How can I track my order?",
-        "a3": "Once your order is shipped, you'll receive a confirmation email with a tracking number. You can use this number on our website or the carrier's site to track your package in real time.",
+        "q1": "How can I track my order?",
+        "a1": "Once your order has shipped, you will receive a shipping confirmation email with tracking details. Please allow a short time for carrier scans to update after dispatch.",
+        "q2": "What if my item arrives damaged or incorrect?",
+        "a2": "If your item arrives damaged, defective, or incorrect, please contact our support team as soon as possible and include your order number together with clear photos of the issue so we can review it and assist you.",
+        "q3": "Can I change or cancel my order?",
+        "a3": "If you need to change or cancel your order, please contact us as soon as possible after placing it. Once an order has entered processing, changes may no longer be possible.",
         "q4": "What payment methods do you accept?",
-        "a4": "We accept all major credit cards (Visa, MasterCard, American Express), PayPal, Apple Pay, Google Pay, and Shop Pay. All transactions are secured with SSL encryption.",
-        "q5": "Can I modify or cancel my order after placing it?",
-        "a5": "You can modify or cancel your order within 1 hour of placing it by contacting our support team. After that window, orders enter processing and cannot be changed.",
+        "a4": "We accept major payment methods displayed at checkout. All payments are processed securely.",
+        "q5": "How do returns and refunds work?",
+        "a5": "If you would like to request a return, please contact our support team first. Approved refunds are issued to the original payment method after the returned item is received and inspected.",
         "q6": "",
         "a6": "",
         "q7": "",
