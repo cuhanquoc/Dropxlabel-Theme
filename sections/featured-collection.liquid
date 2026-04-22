@@ -3,13 +3,13 @@
 {%- liquid
   assign fc_section_id = 'fcv2-' | append: section.id
   assign fc_source = section.settings.product_list
-  assign fc_limit = section.settings.max_products | default: 12
+  assign fc_limit = 4
   if fc_source == blank and section.settings.collection != blank
     assign fc_source = section.settings.collection.products
   endif
 
-  assign fc_initial = section.settings.items_initial | default: 4
-  assign fc_per_load = section.settings.items_per_load | default: 4
+  assign fc_initial = 4
+  assign fc_per_load = 0
   assign fc_more_label = section.settings.more_label | default: 'More'
   assign fc_heading_line_1 = section.settings.heading_line_1 | default: 'TRENDING'
   assign fc_heading_line_2 = section.settings.heading_line_2 | default: 'PRODUCTS'
@@ -229,15 +229,7 @@
       <div class="fcv2__pager" id="{{ fc_section_id }}-pager" aria-hidden="true"></div>
     </div>
 
-    <div class="fcv2__more-wrap" id="{{ fc_section_id }}-more-wrap"{% if fc_source == blank %} style="display:none"{% endif %}>
-      <button type="button" class="fcv2__more-btn" id="{{ fc_section_id }}-more-btn" aria-label="{{ fc_more_label }}">
-        <span>{{ fc_more_label }}</span>
-        <span class="fcv2__more-icon" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-        </span>
-      </button>
-    </div>
-
+    
   </div>
 </featured-collection>
 
@@ -1688,7 +1680,7 @@
       "min": 4,
       "max": 24,
       "step": 2,
-      "default": 12
+      "default": 4
     },
     {
       "type": "product_list",
@@ -1706,6 +1698,10 @@
       "id": "more_label",
       "label": "More Button Label",
       "default": "More"
+    },
+    {
+      "type": "paragraph",
+      "content": "Trending Products is temporarily fixed to 4 items with no load-more button."
     },
     {
       "type": "range",
