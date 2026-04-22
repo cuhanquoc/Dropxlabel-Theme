@@ -193,31 +193,33 @@
               </div>
 
               {% if product.variants.size > 1 %}
-                {% if fc_show_swatches %}<div class="fcv2__swatches">
-                  {% for variant in product.variants limit: 6 %}
-                    {% liquid
-                      assign swatch_image = variant.featured_media.preview_image | default: product.images[forloop.index0] | default: product.featured_media.preview_image
-                    %}
-                    <button
-                      type="button"
-                      class="fcv2__swatch{% if forloop.first %} is-active{% endif %}"
-                      aria-label="{{ variant.title | escape }}"
-                      data-variant-id="{{ variant.id }}"
-                    >
-                      {% if swatch_image != blank %}
-                        {{ swatch_image | image_url: width: 120 | image_tag:
-                          class: 'fcv2__swatch-image',
-                          loading: 'lazy',
-                          alt: variant.title,
-                          width: swatch_image.width,
-                          height: swatch_image.height
-                        }}
-                      {% else %}
-                        <span class="fcv2__swatch-fallback">{{ variant.option1 | default: variant.title | slice: 0, 1 }}</span>
-                      {% endif %}
-                    </button>
-                  {% endfor %}
-                </div>
+                {% if fc_show_swatches %}
+                  <div class="fcv2__swatches">
+                    {% for variant in product.variants limit: 6 %}
+                      {% liquid
+                        assign swatch_image = variant.featured_media.preview_image | default: product.images[forloop.index0] | default: product.featured_media.preview_image
+                      %}
+                      <button
+                        type="button"
+                        class="fcv2__swatch{% if forloop.first %} is-active{% endif %}"
+                        aria-label="{{ variant.title | escape }}"
+                        data-variant-id="{{ variant.id }}"
+                      >
+                        {% if swatch_image != blank %}
+                          {{ swatch_image | image_url: width: 120 | image_tag:
+                            class: 'fcv2__swatch-image',
+                            loading: 'lazy',
+                            alt: variant.title,
+                            width: swatch_image.width,
+                            height: swatch_image.height
+                          }}
+                        {% else %}
+                          <span class="fcv2__swatch-fallback">{{ variant.option1 | default: variant.title | slice: 0, 1 }}</span>
+                        {% endif %}
+                      </button>
+                    {% endfor %}
+                  </div>
+                {% endif %}
               {% endif %}
             </div>
           </article>
